@@ -1,0 +1,85 @@
+os: linux
+dist: bionic
+language: python
+python:
+  - "3.7"
+cache:
+  pip: true
+  
+  directories:
+   - docs
+addons:
+  apt:
+    packages:
+      - libxkbcommon-x11-0
+services:
+  - xvfb
+  
+git:
+  submodules: false
+
+stages:
+ - test
+# - 'deploy to pypi'
+ - 'deploy docs'
+  
+jobs:
+  include:
+    - stage: test
+      before_install:
+      - python -m pip install --upgrade pip
+      - pip install vtk xvfbwrapper
+      - pip install -r requirements.txt
+      - pip install black
+      - black --check .
+      - pip install --upgrade "pytest<5.4" pytest-sugar pytest-cov pytest-mock pytest-timeout
+
+      install:
+      - python setup.py install
+
+      script:
+      - pytest ./tests
+      - pytest --cov=bfieldtools ./tests
+      # Push coverage to codecov.io
+      - bash <(curl -s https://codecov.io/bash)
+      
+      deploy:
+        provider: pypi
+        user: "__token__"
+        password: $PYPI_TOKEN
+        on:
+          tags: true
+#          
+#    - stage: 'deploy docs'
+#      env:
+#        - CACHE_NAME=DEPLOY_DOCS
+#    # Run stage if a tag is present or if commit message includes "deploy"
+#      if: tag IS present OR commit_message =~ deploy
+#      before_install:
+#        - python -m pip install --upgrade pip
+#        - pip install vtk xvfbwrapper
+#        - pip install -r requirements.txt
+#        - pip install -r requirements_docs.txt
+#        
+#      install:
+#        - python setup.py install
+#        
+#      script:
+#        - cd $TRAVIS_BUILD_DIR/docs
+#        # Generate autosummary stuff separately
+#        - sphinx-autogen -o generated -t _templates *.rst
+#        # Use Sphinx to make the html docs without running examples
+#        - make html-noplot
+#        # Tell GitHub not to use jekyll to compile the docs
+#        - touch $TRAVIS_BUILD_DIR/docs/_build/html/.nojekyll
+#
+#      # Tell Travis CI to copy the documentation to the master branch of
+#      # the organization page GitHub repository.
+#      deploy:
+#        provider: pages
+#        skip_cleanup: true
+#        github_token: $GITHUB_TOKEN  # Set in travis-ci.org dashboard, marked secure
+#        repo: bfieldtools/bfieldtools.github.io
+#        target_branch: master
+#        keep_history: true
+#        local_dir: $TRAVIS_BUILD_DIR/docs/_build/html/
