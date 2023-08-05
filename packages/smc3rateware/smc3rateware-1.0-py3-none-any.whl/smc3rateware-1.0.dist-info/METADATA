@@ -1,0 +1,94 @@
+Metadata-Version: 2.1
+Name: smc3rateware
+Version: 1.0
+Summary: A python package for SCM3 Rateware integrations.
+Home-page: https://github.com/NFI-Industries/python_SMCRateware
+Author: Chris Pryer
+Author-email: christophpryer@gmail.com
+License: PUBLIC
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
+
+![](https://github.com/NFI-Industries/python_SMCRateware/workflows/build/badge.svg)
+
+# python_SMCRateware
+Python project for [SMC3 Rateware](https://www.smc3.com/rateware.htm) SOAP API integrations.
+
+# Package Development
+
+## Examples:
+
+### Sample CsvDataFrame Integration
+
+#### tests/shipments.csv
+
+    ```csv
+    ship_id,ship_date,origin_zip,origin_country,dest_zip,dest_country,freight_class,weight
+    0,1/01/19,19106,USA,07981,USA,125,456.2
+    0,1/01/19,19106,USA,07981,USA,125,500.41
+    1,1/01/19,07981,USA,07981,USA,200,201.0
+    2,1/01/19,07981,USA,07981,USA,200,502.1
+    ```
+
+#### .env
+
+    ```dotenv
+    API_LICENSE_KEY=
+    API_USERNAME=
+    API_PASSWORD=
+    ```
+
+#### [install](https://pypi.org/project/smcrateware/)
+
+```pip install smc3rateware```
+
+#### .py
+
+    ```python
+    import smcrateware as smc
+    import pandas as pd
+
+    df = smc.rate_usingLTLRateShipmentMultipleRequest_fromdf('shipments.csv')
+    ```
+
+# Under Development Usage
+Prior to packaging this python up for python-smcrateware the code will be finalized for a specific scope.
+From there contributions will be allowed on a feature improvement/addition/deletion basis. Until then
+this project is to be used with the following steps:
+
+Setup .env
+
+    ```dotenv
+    API_LICENSE_KEY=
+    API_USERNAME=
+    API_PASSWORD=
+    ```
+
+For windows CMD (need bash configured):
+
+1. ```git clone https://github.com/NFI-Industries/python_SMCRateware.git```
+2. ```cd python_SMCRateware```
+3. ```start .```
+4. drop .env in python_SMCRateware
+5. ```bash```
+6. ```/run.sh```
+
+else:
+
+1. ```git clone https://github.com/NFI-Industries/python_SMCRateware.git```
+2. ```cd python_SMCRateware```
+3. ```start .```
+4. drop .env in python_SMCRateware
+5. ```pip install -r requirements.txt```
+6. ```python main.py -T='TariffNAme' -F='Full/Filepath.csv```
+
+or use the *./run.sh* method if you'd like.
+
+**NOTE:** you may need to restart & re-run the notebook after the initial run if you're trying to use *examples/notebooks/example_csv_to_pddataframe.ipynb*.
+The kernel needs to know the package exists.
+
+**TODO:** 
+
+- design (rate_usingLTLRateShipmentMultipleRequest_fromdf is too explicit)
+- non-LTLRateShipmentMultiple usage
+
