@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block jumbotron %}
+
+  {% if page.index_title %}
+    <h1 class="sitetitle"> {{ page.index_title }} </h1>
+  {% endif %}
+
+  {{ super() }}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container index_container">
+  <div class="topblock">
+
+
+    <h1>{{ page.site_title }}</h1>
+      <div>
+        {% set clsname= 'current_tag tag_index' if not group_value else "tag_index" %}
+        {{ page.link_to('/index.yml', attrs={'class':clsname}, text="ALL") }}
+        {% for tag in contents.tags %}
+          {% set clsname= 'current_tag tag_index' if tag == group_value else "tag_index"%}
+          {{ page.link_to('/index_tags.yml', group_value=tag, text=tag, attrs={'class':clsname}) }}
+        {% endfor %}
+      </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="articleindex">
+  {% for article in articles %}
+
+    <div class="articlebox" onclick="
+        (function (ev) {
+            window.location = '{{page.path_to(article)}}';
+            ev.preventDefault();
+         })()">
+      
+      <div class="article_summary">
+        {% if article.get_config('title', '') %}
+            <div class="entry-title article_summary_title">{{article.title}}</div>
+        {% endif %}
+        <div class='article_summary_body'>{{ article.get_abstract(256)}}</div>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+</div>
+
+<div class="container">
+  {% import "blog_macros.html" as blog_macros %}
+  {{ blog_macros.index_pagination(page, group_value, num_pages, cur_page, is_last) }}
+</div>
+{% endblock content %}
+
+
+
+
