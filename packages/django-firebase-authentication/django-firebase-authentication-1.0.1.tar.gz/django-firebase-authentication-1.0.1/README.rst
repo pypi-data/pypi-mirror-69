@@ -1,0 +1,50 @@
+==============================
+django-firebase-authentication
+==============================
+
+django-firebase-authentication is an auth provider for `Firebase Authentication Service <https://firebase.google.com/products/auth/>`_.
+
+Installation
+------------
+
+Install via pip::
+
+    pip install django-firebase-authentication
+
+Also installed dependencies:
+`django-rest-framework <https://github.com/encode/django-rest-framework/>`_ and
+`firebase-admin <https://github.com/firebase/firebase-admin-python/>`_.
+
+Django setup
+------------
+1. Add "firebase_auth" to your INSTALLED_APPS::
+
+    INSTALLED_APPS = [
+        ...
+        'firebase_authentication',
+    ]
+
+2. Specify a location for your Firebase keyfile with the settings::
+
+    FIREBASE_KEY_PATH = os.path.join(BASE_DIR, 'keyfile.json')
+
+   And place the json key inside ``BASE_DIR``.
+
+3. Add FirebaseAuthentication to default authentication classes in DRF settings, like::
+
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'firebase_authentication.authentication.FirebaseAuthentication',
+        ),
+    }
+
+   Or use ``FirebaseAuthMixin`` in DRF views like::
+
+    from firebase_auth import FirebaseAuthMixin
+    class MyModelViewSet(FirebaseAuthMixin, viewsets.ModelViewSet)
+        ...
+
+   **Attention!** This mixin must be first in inheritance order.
+
+4. Create your users with the Firebase user ID as user ID.
+   Inside your views, you can access the user reference like you're used to with  request.user
