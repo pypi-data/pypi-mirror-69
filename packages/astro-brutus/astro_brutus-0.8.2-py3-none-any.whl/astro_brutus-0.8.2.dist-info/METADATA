@@ -1,0 +1,91 @@
+Metadata-Version: 2.1
+Name: astro-brutus
+Version: 0.8.2
+Summary: Brute-force Bayesian inference for photometric distances, reddenings, and stellar properties
+Home-page: https://github.com/joshspeagle/brutus
+Author: Joshua S Speagle
+Author-email: jspeagle@cfa.harvard.edu
+License: MIT
+Keywords: brute force,photometry,bayesian,stellar,star,cluster,isochrone,dust,reddening,parallax,distance,template fitting
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Scientific/Engineering :: Astronomy
+Classifier: Intended Audience :: Science/Research
+Requires-Dist: numpy
+Requires-Dist: scipy
+Requires-Dist: matplotlib
+Requires-Dist: six
+Requires-Dist: h5py
+Requires-Dist: healpy
+Requires-Dist: numba
+
+# brutus
+#### _**Et tu, Brute?**_
+
+`brutus` is a Pure Python package whose core modules involve using
+"brute force" Bayesian inference to derive distances, reddenings, and 
+stellar properties from photometry using a grid of stellar models.
+
+The package is designed to be highly modular, with current modules including
+utilities for modeling individual stars, star clusters, and
+stellar-based 3-D dust mapping.
+
+### Documentation
+**Currently nonexistent.**
+
+### Data
+
+**Various files needed to run different `brutus` modules can be downloaded
+[here](https://www.dropbox.com/sh/ozq9tk8iyy8fhte/AAC_G0wA9eQ8shHbZzAKwLe-a?dl=0).**
+Various components of these are described below.
+
+#### Stellar Models
+Note that while `brutus` can (in theory) be run over an arbitrary set of
+stellar models, it is configured for two by default: 
+[MIST](http://waps.cfa.harvard.edu/MIST/)
+and [Bayestar](https://arxiv.org/abs/1401.1508).
+
+#### Zero-points
+Zero-point offsets in several bands have been estimated using Gaia data
+and can be included during runtime. 
+**These are currently not thoroughly vetted, so use at your own risk.**
+
+#### Dust Map
+`brutus` is able to incorporate a 3-D dust prior. The current prior is
+based on the "Bayestar19" dust map from
+[Green et al. (2019)](https://arxiv.org/abs/1905.02734).
+
+#### Generating SEDs
+`brutus` contains built-in SED generation utilities based on the MIST
+stellar models, modeled off of
+[`minesweeper`](https://github.com/pacargile/MINESweeper).
+These are optimized for either generating photometry from stellar mass
+tracks or for a single-age stellar isochrone based on
+artificial neural networks trained on bolometric correction tables.
+
+Empirical corrections to the MIST models derived using several clusters are
+implemented by default, which improves main sequence behavior
+down to ~0.5 solar masses.
+These can be easily disabled by users using the appropriate flag.
+**These are currently not thoroughly vetted.**
+
+Please contact Phil Cargile (pcargile@cfa.harvard.edu) and Josh Speagle
+(jspeagle@cfa.harvard.edu) for more information on the provided data files.
+
+### Installation
+`brutus` can be installed by running
+```
+python setup.py install
+```
+from inside the repository.
+
+### Demos
+Several Jupyter notebooks currently outline very basic usage of the code.
+Please contact Josh Speagle (jspeagle@cfa.harvard.edu) with any questions.
+
+
