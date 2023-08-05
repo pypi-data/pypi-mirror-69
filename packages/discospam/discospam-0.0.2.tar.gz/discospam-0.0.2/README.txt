@@ -1,0 +1,1 @@
+This is a simple library to help create python applications that spam discord webhooks. The two main functions are deleting and spamming.
