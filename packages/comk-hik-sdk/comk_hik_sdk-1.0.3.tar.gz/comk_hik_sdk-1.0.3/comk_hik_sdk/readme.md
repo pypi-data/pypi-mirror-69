@@ -1,0 +1,32 @@
+## 关于hik_sdk
+* 该sdk是为了方便Python开发人员很方便的调用海康设备而开发的sdk，是对官方二次开发包的封装。
+* [官方技术支持网站](https://www.hikvision.com/cn/download_61.html)
+* 当前版本已完成的功能有：
+    * 门禁相关功能：sdk初始化、登录登出、远程控制开关、卡创建获取删除、布防
+
+## 运行环境
+* 该sdk只能运行于 64位 linux，Python3  环境
+* 建议使用Python3的docker-compose构建开发环境，docker-compose 文件如下
+    
+        version: "3.0"
+            services:
+              centos7:
+                container_name: "python3"
+                image: "python:3"
+                command: tail -f /app/__init__.py
+                volumes:
+                  - "./:/app"
+                privileged:
+                  true
+
+## 使用方法
+    
+* 进入 callso 文件夹下，执行 make 命令，即可生成 call.so 文件
+* 参考 testso.py 进行使用
+
+## 注意事项
+* 本sdk对官方包的使用思路是，先写Cpp文件进行编译，然后Python调用该Cpp文件生成的动态链接库（so文件），尽可能的以基本数据类型进行交互，尽量少使用C的结构体和指针，保证程序的可靠性。
+* 因此需要用到ctypes模块，需要开发人员掌握ctypes的使用方法。
+* 少部分功能，需要依靠指针，返回功能的结果数据，需要用到结构体和指针，具体请参考卡获取功能。
+* 为方便省事，所有的long型数据都替换为int型数据使用，若发现功能无法通过的情况，可酌情改变参数类型。
+
