@@ -1,0 +1,38 @@
+(export (version D)
+  (design
+    (source "/media/devb/Main/xesscorp/KiCad/tools/skidl/tests/test_lib.py")
+    (date "05/19/2020 03:15 PM")
+    (tool "SKiDL (0.0.31dev)"))
+  (components
+    (comp (ref C1)
+      (value C)
+      (footprint null)
+      (fields
+        (field (name F0) C)
+        (field (name F1) C))
+      (libsource (lib Device) (part C))
+      (sheetpath (names /top/12057177865633353239) (tstamps /top/12057177865633353239)))
+    (comp (ref L1)
+      (value L)
+      (footprint null)
+      (fields
+        (field (name F0) L)
+        (field (name F1) L))
+      (libsource (lib Device) (part L))
+      (sheetpath (names /top/12785235542925572465) (tstamps /top/12785235542925572465)))
+    (comp (ref R1)
+      (value R)
+      (footprint null)
+      (fields
+        (field (name F0) R)
+        (field (name F1) R))
+      (libsource (lib Device) (part R))
+      (sheetpath (names /top/8771740843912077029) (tstamps /top/8771740843912077029))))
+  (nets
+    (net (code 0) (name N$1)
+      (node (ref C1) (pin 1))
+      (node (ref R1) (pin 2)))
+    (net (code 1) (name N$2)
+      (node (ref C1) (pin 2))
+      (node (ref L1) (pin 1))))
+)
