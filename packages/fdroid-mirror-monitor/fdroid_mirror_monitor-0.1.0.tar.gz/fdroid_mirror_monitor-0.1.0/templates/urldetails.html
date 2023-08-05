@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title%}F-Droid - {{ mirror['name'] }} - Mirror Details{% endblock %}
+
+{% block content %}
+<h2>URL Details: {{ mirror['url'] }}</h2>
+<table class="compact">
+    <tbody>
+        <tr>
+            <th>Name:</th>
+            <td>{{ mirror['name'] }}</td>
+        </tr>
+        <tr>
+            <th>Official:</th>
+            <td>Yes/No</td>
+        </tr>
+        <tr>
+            <th>Has archive:</th>
+            <td>Yes/No</td>
+        </tr>
+    </tbody>
+</table>
+<table class="compact">
+    <tbody>
+        <tr>
+            <th>URL:</th>
+            {% if 'https://' in mirror['url'] %}
+            <td><a href="{{ mirror['url'] }}">{{ mirror['url'] }}</a></td>
+            {% else %}
+            <td>{{ mirror['url'] }}</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <th>Mirror:</th>
+            <td><a href="{{ mirror['name'] }}.html">{{ mirror['name'] }}</a></td>
+        </tr>
+        <tr>
+            <th>Protocol:</th>
+            <td>rsync</td>
+        </tr>
+        <tr>
+            <th>Country:</th>
+            <td class="country"><span class="fam-flag fam-flag-ua" title="Ukraine"></span> Ukraine</td>
+        </tr>
+        <tr>
+            <th>IPv4:</th>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <th>IPv6:</th>
+            <td>Yes</td>
+        </tr>
+
+    </tbody>
+</table>
+<p>
+
+    Here are some details of {{ mirror['url'] }}
+    TODO: Has archive: Yes/No
+    TODO: Official: Yes/No
+</p>
+{{ table }}
+{% endblock %}
