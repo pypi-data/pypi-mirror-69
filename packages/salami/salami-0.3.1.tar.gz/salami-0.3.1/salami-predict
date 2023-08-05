@@ -1,0 +1,80 @@
+#! /usr/bin/env python
+
+from __future__ import print_function, division
+
+# Arguments to be specified by user
+import argparse
+parser = argparse.ArgumentParser(description='Make a K-factor and NLO xsec prediction, given a process, an SLHA file, and an LO xsec')
+parser.add_argument(dest='SLHA', help='Comma-separated SLHA model file(s) for point of interest')
+parser.add_argument(dest='XSEC_LO', help='LO xsec for the point of interest, in fb', type=float)
+parser.add_argument(dest='NN', nargs="?", default=None, help='Comma-separated ij(s) for chi_i chi_j pair production')
+parser.add_argument("-e", "--energy", dest='ENERGY', default="13000", help='collider sqrt(s) energy in GeV')
+parser.add_argument("--kmin", dest='KMIN', type=float, default=None, help='minimum permitted K-factor value')
+parser.add_argument("--kmax", dest='KMAX', type=float, default=None, help='maximum permitted K-factor value')
+parser.add_argument("--freeze", dest='FREEZE', action="store_true", default=False, help='freeze K-factor predictions at the boundaries of sampled feature space')
+parser.add_argument("--nquery", dest='NQUERY', type=int, default=1, help='query the interpolator N times, to check time-scaling')
+parser.add_argument("--timer", dest="TIMER", action="store_true", default=False, help='measure and print average time per evaluation')
+#parser.add_argument("-q", "--quiet", dest="VERBOSITY", action="store_const", const=0, default=1, help='quiet evaluation')
+args = parser.parse_args()
+
+## Get a timer function, using the Py 3.3 precision timer if possible
+import time
+try:
+    timer = time.perf_counter
+except:
+    timer = time.time
+
+## Load predictor machinery
+import salami
+subprocs = args.NN.split(",") if args.NN else ["11", "12", "13", "14", "15", "16", "17",
+                                               "18", "22", "23", "24", "25", "26", "27",
+                                               "28", "33", "34", "35", "36", "37", "38",
+                                               "44", "45", "46", "47", "48", "58", "76"]
+print("Using {:d} subprocess predictors: loading...".format(len(subprocs)))
+## Preferred method: lazy-load querying on demand via KPreds
+kpreds = salami.KPreds(args.ENERGY)
+## Or eager loading with the KPreds class:
+#kpreds = salami.KPreds(args.ENERGY, subprocs)
+## Alternatively, eagerly load into a dict rather than use KPreds
+#kpreds = { sp : salami.KPred("13000", sp) for sp in subprocs }
+
+## If timing, eagerly initialise the KPreds
+t0 = timer()
+if args.TIMER:
+    for sp in subprocs:
+        kpreds.kpred(sp)
+
+## Set a dummy LO cross-section to scale
+xsec_lo = args.XSEC_LO
+
+## Predict NLO xsecs from SLHA
+slhas = args.SLHA.split(",")
+import pyslha
+t1 = timer()
+for slha in slhas:
+    if not slha:
+        continue
+    print()
+    print("Evaluating {}".format(slha))
+    try:
+        spectrum = pyslha.read(slha)
+    except:
+        print("Parse error, skipping...")
+        continue
+
+    ## Evaluate the subprocs, Nquery times each
+    for i in range(args.NQUERY):
+        for sp in subprocs:
+            kpreds[sp]
+            kfac, xsec_nlo = kpreds[sp].predict_kfac_xsec(spectrum, xsec_lo, kmin=args.KMIN, kmax=args.KMAX, freeze_xpol=args.FREEZE)
+            ## or alternatively, call via the KPreds wrapper functions
+            #kfac, xsec_nlo = kpreds.predict_kfac_xsec(process, spectrum, xsec_lo, kmin=args.KMIN, kmax=args.KMAX, freeze_xpol=args.FREEZE)
+            if not args.TIMER: #< avoid costly printout when timing
+                print("{}: K={:#.4g}, sigmaLO={:#.4g} -> sigmaNLO={:#.4g}".format(sp, kfac, xsec_lo, xsec_nlo))
+t2 = timer()
+
+## Print out timing info
+if args.TIMER:
+    print()
+    print("Avg init time / process = {:.2g} seconds".format((t1-t0)/len(subprocs)))
+    print("Avg time / eval = {:.2g} milliseconds".format(1e3*(t2-t1)/len(subprocs)/args.NQUERY))
