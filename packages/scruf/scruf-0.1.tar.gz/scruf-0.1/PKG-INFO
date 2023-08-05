@@ -1,0 +1,69 @@
+Metadata-Version: 1.2
+Name: scruf
+Version: 0.1
+Summary: Functional testing for command line applications
+Home-page: https://gitlab.com/matthewhughes/scruf
+Author: Matthew Hughes
+License: GNU GPLv3
+Description: =====
+        Scruf
+        =====
+        
+        Scruf is a functional testing framework for command line applications. It is
+        heavily inspired by cram_. This is currently early in development and while I
+        aim to maintain the current interface breaking changes may occur.
+        
+        .. _cram: https://bitheap.org/cram/
+        
+        Test Structure
+        ==============
+        
+        This is a summary of the structure of tests expected by ``scruf``
+        
+        * Lines beginning with ``#`` are comments and are ignored
+        
+        * Non comment lines beginning with any non-space character are interpreted as
+          test descriptions
+        
+        * Lines beginning with 4 spaces followed by a ``$`` are commands to be tested
+        
+        * Lines beginning with 4 space followed by a ``>`` are continuations of
+          commands
+        
+        * Non command or continuation lines beginning with 4 spaces are expected
+          command outputs
+        
+        A quick example test::
+        
+           "printf" produces text
+           $ printf "hello\nworld!\n"
+           hello
+           world
+        
+        There are examples present under ``examples/``
+        
+        Expected Output Specification
+        -----------------------------
+        
+        Documentation coming soon
+        
+        Test Output
+        ===========
+        
+        By default ``scruf`` will output results in TAP_ (Test Anything Protocol)
+        
+        .. _TAP: http://testanything.org
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Software Development :: Testing
+Requires-Python: >=3.6
