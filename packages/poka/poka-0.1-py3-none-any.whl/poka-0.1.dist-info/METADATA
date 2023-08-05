@@ -1,0 +1,115 @@
+Metadata-Version: 2.1
+Name: poka
+Version: 0.1
+Summary: Poka database interface
+Home-page: https://github.com/whoamTati/poka
+Author: WhoAmTati
+Author-email: rickeyfsimple@gmail.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Description-Content-Type: text/markdown
+
+# Poka database interface
+Interface buildet on mysql-connector
+
+# Set up
+```
+pip install -r req.txt
+```
+
+# Usage
+
+Create Poka instance
+```
+from poka_constructor import Poka
+
+cfg = database config
+poka_instance_1 = Poka(cfg)  # Set database config
+```
+
+Select table
+```
+from poka_constructor import Poka
+
+cfg = database config
+poka_instance_1 = Poka(cfg)  # Set database config
+poka_instance_1.table("users")  # Set table
+```
+
+Select from table
+```
+from poka_constructor import Poka
+
+cfg = database config
+poka_instance_1 = Poka(cfg)  # Set database config
+poka_instance_1.table("users")  # Set table
+poka_instance_1.where("column", "=", value)  # Set where instruction
+poka_instance_1.whereNotNull("column", "=", value)  # Set is not null check
+poka_instance_1.whereIn("column", "args")  # Set where in instruction
+poka_instance_1.get()  # Fetch records from table 
+```
+
+Insert to db
+```
+from poka_constructor import Poka
+
+cfg = database config
+poka_instance_1 = Poka(cfg)  # Set database config
+poka_instance_1.table("users")  # Set table
+poka_instance_1.insert({"colum_name": "value", "column_name2": "value"})  # Set insert data
+```
+
+
+Update records 
+```
+from poka_constructor import Poka
+
+cfg = database config
+poka_instance_1 = Poka(cfg)  # Set database config
+poka_instance_1.table("users")  # Set table
+poka_instance_1.update({"colum_name": "value", "column_name2": "value"})  # Set update data
+```
+
+Limit
+```
+from poka_constructor import Poka
+
+cfg = database config
+poka_instance_1 = Poka(cfg)  # Set database config
+poka_instance_1.table("users")  # Set table
+poka_instance_1.where("column", "=", value)  # Set where instruction
+poka_instance_1.take(5)  # Set count of fetching records
+poka_instance_1.get()  # Fetch records from table
+```
+
+Order by ASC | DESC
+```
+from poka_constructor import Poka
+
+cfg = database config
+poka_instance_1 = Poka(cfg)  # Set database config
+poka_instance_1.table("users")  # Set table
+poka_instance_1.where("column", "=", value)  # Set where instruction
+poka_instance_1.take(5)  # Set count of fetching records
+poka_instance_1.orderBy("column", "ASC")  # Set order by instruction
+poka_instance_1.get()  # Fetch records from table
+```
+
+# One line requests
+For example: Select from table
+```
+from poka_constructor import Poka
+
+cfg = database config
+poka_instance_1 = Poka(cfg)
+                .table("users")
+                .where("column", "=", value)
+                .whereNotNull("column", "=", value)
+                .whereIn("column", "args")
+                .get() 
+```
+Other functions work the same.
+
+
+
