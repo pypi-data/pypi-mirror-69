@@ -1,0 +1,103 @@
+# Reading Image Python Package
+
+Reading Image is a text analysis tool for images files (png, jpg, jpeg) and pdf. The system will preform OCR on the document and return details of the text within. Examples of analysis include text strings, page location and entity analysis. Advanced OCR will also read and understand table formats, and translation is available to English from French.
+
+### Installation
+
+To use the python package you will need to be a registered user of Reading Image, which is free and available at [readingimage.com](http://www.readingimage.com/register).
+
+The package is avaiable from [PyPI](https://pypi.org/project/reading-image/) and can be installed via pip.
+
+```
+$ pip install reading-image
+```
+
+### Usage
+
+All interactions with Reading Image are through the Session object. This is initialised by passing through the user specific Python Key that is available after registering.
+
+```
+>>> import reading_image
+>>> reading_image_session = reading_image.Session(python_key="5FA7527DABA74ACDA96164814AE54E61")
+```
+A Reading Image session uses the standard Python requests session object which is stored as an attribute of reading_image.Session and available as .session. This means that more advanced features of requests.Session are still available, for example to set a proxy,
+
+```
+>>> proxies = {'http': 'http://xx.xx.x.xxx:xxxx'}
+>>> reading_image_session.session.proxies.update(proxies)
+```
+
+##### Demos
+
+Reading Image has preprocessed demonstration responses. These vary with file-type and also processes that were requested.
+
+```
+>>> reading_image_session.getDemos()
+[<reading_image.Processed.Processed object at 0x7fa6d701e050>, <reading_image.Processed.Processed object at 0x7fa6d756e8d0>, <reading_image.Processed.Processed object at 0x7fa6d7deb910>]
+```
+Notice that we have a list of reading_image.Processed objects. Each of these Processed objects are the result of a file that has been analysed.
+
+##### Processed Objects
+
+Each file that is analysed returns a reading_image.Processed object. The main properties of the Processed object are listed below,
+
+```
+>>> processed_object = reading_image_session.getDemos()[0]
+>>> processed_object.name # Returns the name of the original file (string)
+>>> processed_object.entities # Returns a pandas DataFrame with text entity data
+>>> processed_object.basicOCR # Returns a pandas DataFrame with text ocr data
+>>> processed_object.translation # Returns a pandas DataFrame with text translation data
+>>> processed_object.advancedOCR # Returns a pandas DataFrame with table data
+```
+
+##### Analyse New Files
+
+Files can be sent for analysis through the Session. Entity analysis and basic OCR are preformed on all files, advanced OCR and translation are optional.
+
+```
+>>> filepath = r“/home/user/myfile.pdf”
+>>> reading_image_session.analyseFile(filepath)
+<reading_image.Processed.Processed object at 0x7f430542fa50>
+>>> reading_image_session.analyseFile(filepath, advanced_ocr = True, translation = True)
+<reading_image.Processed.Processed object at 0x7f4302ce3050>
+```
+
+Each Processed object that has been returned via the analyseFile method exists for the lifetime of the current python session. They can be saved to your personal Reading Image online storage via the saveAnalysis method.
+
+```
+>>> analysis = reading_image_session.analyseFile(filepath)
+>>> reading_image_session.saveAnalysis(analysis, file_name = “My File”, folder_name = “My Saved Files”)
+```
+
+There is no requirement for uniqueness for file_name, if you duplicate names then you will not overwrite a previous named analysis but will create additional analysis with the the same name. Folders and analysis files can be managed [online](http://www.readingimage.com/files) and is not currently manageable through this package. By default all new users will be given an empty folder, “My Saved Files”. All processed files are allocated to folders. The active folders associated with the current user can be listed,
+
+```
+>>> reading_image_session.listFolders()
+["My Saved Files"]
+```
+
+##### Retrieving Previous Analysis
+
+The listSaved method returns a list of dictionaries, where each dictionary contains meta-data for a saved analysis.
+
+```
+>>> for f in reading_image_session.listSaved(): print(f)
+{'datetime': '2020-03-21 14:40:12.224949+00:00', 'advanced_ocr': False, 'translation': False, 'filetype': 'png', 'file_ref': '90bf9987-4786-429d-bc2e-54375c637976', 'cost': 0.0, 'folder': 'My Saved Files', 'saved_name': 'My File'}
+{'datetime': '2020-03-21 14:41:13.939670+00:00', 'advanced_ocr': False, 'translation': True, 'filetype': 'png', 'file_ref': '31386bbe-c427-4b54-97e8-d6eb1838aae5', 'cost': 0.02, 'folder': 'My Saved Files', 'saved_name': 'My Second File'}
+```
+To create a reading_image.Processed object from previously saved analysis use the ‘file_ref’ from the meta-data and use getAnalysis.
+
+```
+>>> reading_image_session.getAnalysis('31386bbe-c427-4b54-97e8-d6eb1838aae5')
+<reading_image.Processed.Processed object at 0x7f579afbda10>
+```
+
+##### Parse Downloaded Json
+
+The Processed class has the method fromJson() which can be used to create a Processed object without the need of a Session object if the analysis json has already been downloaded from the website.
+
+```
+>>> downloaded_json = r"/home/user/20200321154411kIylDy.json"
+>>> reading_image.Processed.fromJson(downloaded_json)
+<reading_image.Processed.Processed object at 0x7fbf11293590>
+```
