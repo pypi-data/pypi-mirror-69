@@ -1,0 +1,130 @@
+#!/usr/bin/env python3
+"""class_d v0.1.0"""
+
+import argparse
+import json
+import os
+import re
+import sys
+import time
+
+import inquirer
+import requests
+
+# disable erroneous pylint check in __main__
+# pylint: disable=C0103
+
+
+def init_settings(conf):
+    """create settings file"""
+    match = (r"^([A-Za-z0-9\\\/_\-]|"
+             r"([A-Za-z0-9\\\/_\-][A"
+             r"-Za-z0-9\\\/_\- ]{0,1"
+             r"8}[A-Za-z0-9\\\/_\-])"
+             r")$")
+    is_answer = inquirer.text(
+        message="Enter your name",
+        validate=lambda _,
+        x: re.match(
+            match,
+            x))
+    is_choice = inquirer.list_input(
+        "Select your favorite license",
+        choices=get_license_list().keys())
+    is_settings = {"name": is_answer, "favorite": is_choice}
+    with open(conf, "w") as ws_open_file:
+        json.dump(is_settings, ws_open_file)
+    return is_settings
+
+
+def create_settings():
+    """create settings"""
+    # global and local are separate for future XDG support
+    global_conf_dir = f"{os.getenv('HOME')}/.config"
+    local_conf_dir = f"{global_conf_dir}/class_d"
+    local_conf_name = f"{local_conf_dir}/settings.json"
+    example = {"name": "", "favorite": ""}
+    if not os.path.exists(local_conf_dir):
+        os.mkdir(local_conf_dir)
+    try:
+        with open(local_conf_name, "r") as gc_open_file:
+            gc_settings = json.load(gc_open_file)
+    except FileNotFoundError:
+        gc_settings = init_settings(local_conf_name)
+    except json.decoder.JSONDecodeError:
+        gc_settings = init_settings(local_conf_name)
+    if gc_settings.keys() != example.keys():
+        gc_settings = init_settings(local_conf_name)
+    for i in gc_settings.values():
+        if i == "":
+            gc_settings = init_settings(local_conf_name)
+            break
+    return gc_settings
+
+
+def get_license_list():
+    """get a list of current licenses available from GitHub"""
+    response = requests.get("https://api.github.com/licenses")
+    if not response:
+        raise Exception("Could not get 'https://api.github.com/licenses'")
+    return dict(zip([i["spdx_id"] for i in response.json()],
+                    [j["key"] for j in response.json()]))
+
+
+def get_license(key):
+    """get license from GitHub"""
+    response = requests.get(f"https://api.github.com/licenses/{key}")
+    if not response:
+        raise Exception(
+            f"Could not get 'https://api.github.com/licenses/{key}'")
+    return response.json()["body"]
+
+
+def create_license(key):
+    """create a license file"""
+    if os.path.exists("LICENSE"):
+        if not inquirer.confirm(
+            "A LICENSE file already exists. Do you wish to proceed?",
+                default=False):
+            sys.exit(1)
+    license_text = get_license(key)
+    license_text_parsed = license_text.split("\n")
+    license_text_parsed[2] = f"Copyright (c) {time.localtime().tm_year} {SETTINGS['name']}"
+    license_text = "\n".join(license_text_parsed)
+    with open("LICENSE", "w") as open_file:
+        open_file.write(license_text)
+
+
+def favorite():
+    """create favorite license"""
+    create_license(SETTINGS["favorite"])
+
+
+def normal():
+    """default behavior"""
+    license_list = get_license_list()
+    answer = inquirer.list_input(
+        "Select a license",
+        choices=license_list.keys())
+    create_license(license_list[answer])
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="An interactive utility for creating GitHub-style licenses.")
+    parser.add_argument("-v",
+                        "--version",
+                        action="version",
+                        version="class_d v0.1.0")
+    parser.add_argument("-f",
+                        "--favorite",
+                        action="store_true",
+                        help="use favorite license defined in settings.json")
+    args = parser.parse_args()
+
+    SETTINGS = create_settings()
+
+    if args.favorite:
+        favorite()
+    else:
+        normal()
