@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<p> To get the resulting diagram, click here: </p>
+<p>
+	<a href="{{ message['outfile']}}" class="btn">
+	    <svg class="icon" aria-hidden="true" style="padding-right: 0.5em;">
+		<use xlink:href="{{ url_for('static', filename='icons.svg')}}#download"></use>
+	    </svg>Download ember</a>
+</p>
+
+{{message['runreport']|safe}}
+<!-- Show warnings -->
+{% for aline in message['error'] %}
+	<p class="compact"> {{aline}} </p>
+{% endfor %}
+
+<p>
+<button onclick="logToggle()" class="btn">View / hide log information</button>
+<a href="{{ url_for('control.index') }}" class="btn">Back to home page</a>
+</p>
+
+<div id="log" class="hidden">
+	{% for aline in message['log'] %}
+		<p class="compact"> {{aline}} </p>
+	{% endfor %}
+</div>
+
+<script>
+function logToggle() {
+  var x = document.getElementById("log");
+  if (x.style.display != "block") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+</script>
+
+{% endblock %}

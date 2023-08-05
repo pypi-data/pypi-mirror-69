@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<p>All you have to do is to upload an Excel sheet containing the data in an appropriate format.
+Two formats are available:</p>
+<ul class="compact">
+        <li style="padding-bottom:1em;">
+            <a href="{{ url_for('control.examples', filename='Basic-fmt-SRCCL.xlsx')}}" class="btn" style="float: right;">
+            	<svg class="icon" aria-hidden="true" style="padding-right: 0.5em;">
+                	<use xlink:href="{{ url_for('static', filename='icons.svg')}}#download"></use>
+                </svg>Basic format example</a>
+            The basic format is identical to the presentation provided in IPCC's SRCCL supplementary material tables.
+        </li><li style="padding-bottom:1.2em;">
+            <a href="{{ url_for('control.examples', filename='Flex-fmt-RFC.xlsx')}}" class="btn" style="float: right;">
+                <svg class="icon" aria-hidden="true" style="padding-right: 0.5em;">
+                	<use xlink:href="{{ url_for('static', filename='icons.svg')}}#download"></use>
+                </svg>Fullflex format example</a>
+            The "full flexibility" format provides more flexibilty and control of the result 
+            (the first sheet from this Excel workbook provides more control on the risk levels, e.g. a transition that 
+            has a faster increase in risk at some temperature level; the second sheet provides
+            graphic parameters to customize the presentation of your data, and can be copied in the Basic format so
+            as to get an intermediate format, with simple presentation of data + more graphic parameters).
+        </li>
+</ul><p class="compact">
+You can use those examples as provided to test the application, and you can also use them 
+as templates to provide your own data. For a first test, we suggest that you simply download, 
+upload, and run the Basic format example. To make embers from your own data, start from the Basic 
+format and copy a standard IPCC-style table (see above). Documentation will be produced in the future, 
+but we think that at least the Basic format can be understood without it in many cases. 
+</p><p>
+Feedback is welcome, including on what you would like to have as input format. <br>
+Combinations of the Basic and Fullflex formats are possible 
+(start from the Basic format and add the parameter and/or color sheet(s) from the flex format).
+</p>
+<form enctype="multipart/form-data" id="fileUpload" action="{{ url_for('control.result')}}" method="post">
+  <fieldset class="innerframe">
+      <legend>Burning ember data</legend>
+      <p>To start, upload your data here (first select the file, then upload and process):</p>
+      <p class="compact"><input type="file" name="file" class="btn" style="width: 335px; max-width: 72vw">
+      <p style="margin-bottom: 6px;">Color mode (except for the full flexibility format, which defines its own colors): </p>
+      <p style="text-align:left; margin-top: 0px;">
+          <input type="radio" id="RGB" name="csys" value="RGB" >
+            <label for="RGB" class="check" >RGB (best choice with some PDF viewers: use if the red in your embers looks 'dark'; colours from IPCC SRCCL fig. 7.2)</label><br>
+          <input type="radio" id="CMYK" name="csys" value="CMYK" checked="checked"><br>
+             <label for="CMYK" class="check" >CMYK (IPCC guidelines)</label>
+	  </p>
+      <p style="text-align:left" class="efbox">
+        <input type="checkbox" id="delfile" name="delfile" checked="checked" style="margin-top: -1px; vertical-align: middle;" >
+ 		 <label for="delfile" class="check">Delete my file and the resulting diagram right after use
+             (uncheck if you want the app maintainers to see your work
+             and potentially improve the Ember Factory; nothing would be public; if you leave it checked, the resulting
+             diagram is deleted from the server when you download it)</label><br>
+	   </p>
+      <p><input type="submit" value="Upload and produce ember diagram" class="btn" style="width: 350px; max-width: 75vw; margin-bottom:0px"></p>
+  </fieldset>
+</form>
+<p>
+Thanks for your visit!
+</p>
+(Main version: {{version}}; ember drawing code version [embermaker]: {{mkeversion}})
+{% endblock %}

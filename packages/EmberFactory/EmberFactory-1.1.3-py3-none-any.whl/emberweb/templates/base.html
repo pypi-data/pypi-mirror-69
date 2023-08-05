@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='emberweb.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>The burning ember factory</title>
+</head>
+<body style="background-color: #FFF;">
+    <div class="outerbox outerbox-main" >
+        <img style="margin-bottom: 10px;" srcset="./static/emberfactory.png 2x" alt="The ember factory">
+        {% block topmessage %}
+                 <p class="innerframe"> The purpose of this page is to (re)produce burning ember diagrams
+                    of the style used in IPCC reports. It is based on open-source code written in Python,
+                    with the help of the <a href="https://www.reportlab.com">ReportLab</a> library.
+                    For more information, please e-mail philippe.marbaix -at- uclouvain.be. The code is open-source
+                    and is available here: <a href="https://framagit.org/marbaix/ember-factory">framagit.org</a>.
+                    The ability of this application to reproduce several figures (independently) published by the IPCC was
+                    carefully tested. However, this is not a product of the IPCC (which is
+                    not responsible for projects or researches).
+                </p>
+        {% endblock %}
+        {% block content %}{% endblock %}
+    </div>
+    <footer class="outerbox" >
+            <p style="margin: 15px 0 15px 0; padding: 5px 0 5px 0">Contact: philippe.marbaix -at- uclouvain.be</p>
+    </footer>
+</body>
+</html>

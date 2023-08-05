@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block topmessage %}
+    <h2> An error occurred !</h2>
+{% endblock %}
+
+{% block content %}
+    <p>
+        {{ message["error"] }}
+    </p>
+    {% for aline in message["log"] %}
+    <p class="compact"> {{aline}} </p>
+    {% endfor %}
+    <p>
+        Please try again
+    </p>
+    <button onclick="goBack()" class="btn" style="width: 15em;">Go Back</button>
+
+<script>
+		function goBack() {
+			window.history.back();
+			}
+</script>
+
+{% endblock %}

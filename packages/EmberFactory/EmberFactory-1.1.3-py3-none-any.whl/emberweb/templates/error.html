@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='mkembers.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>The burning ember factory</title>
+</head>
+<body style="background-color: #135;">
+    <div class="mybox" >
+        <img style="margin-bottom: 10px;" srcset="./static/emberfactory.png 2x" alt="The ember factory">
+        <div style="border: 1px solid grey; padding: 4px; ">
+        <h2> An error occurred !
+        </h2>
+        </div>
+    	  <p>
+             {{ message["error"] }}
+    	  </p>
+	        {% for aline in message["log"] %}
+		        <p class="compact"> {{aline}} </p>
+	        {% endfor %}
+    	  <p>
+    	  Please try again
+    	  </p>
+    	  <button onclick="goBack()" class="btn" style="width: 15em;">Go Back</button>
+
+	  <script>
+		function goBack() {
+			window.history.back();
+			}
+	  </script>
+
+    </div>
+   <footer>
+      <p>Contact: philippe.marbaix -at- uclouvain.be</p>
+    </footer>
+
+</body>
+</html>
