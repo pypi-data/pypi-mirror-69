@@ -1,0 +1,62 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+# vim:fenc=utf-8
+#
+# Copyright © 2020 fx-kirin <fx.kirin@gmail.com>
+#
+# Distributed under terms of the MIT license.
+
+"""
+
+"""
+
+import datetime
+import logging
+import os
+import time
+from pathlib import Path
+
+import fire
+import kanilog
+import stdlogging
+from croniter import CroniterBadCronError, croniter
+from text2cron.cronexp import CronExp
+
+
+def main(*args, debug=False):
+    if debug:
+        kanilog.setup_logger(level=logging.INFO)
+
+    conv_args = []
+
+    for a in args:
+        if a == Path(__file__).name:
+            conv_args.append("*")
+        else:
+            conv_args.append(str(a))
+    try:
+        int(args[0])
+        for _ in range(len(args), 5):
+            conv_args.append("*")
+    except ValueError:
+        pass
+
+    cron_text = " ".join(conv_args)
+    now = datetime.datetime.now()
+    try:
+        date_iter = croniter(cron_text, now)
+    except CroniterBadCronError:
+        if "@" not in cron_text:
+            cron_text = "@" + cron_text
+        cron_text = str(CronExp(schedule_phrase=cron_text))
+        date_iter = croniter(cron_text, now)
+
+    next_datetime = date_iter.get_next(datetime.datetime)
+
+    logging.info(f"Wait for {next_datetime}")
+    while next_datetime > datetime.datetime.now():
+        time.sleep(1)
+
+
+if __name__ == "__main__":
+    fire.Fire(main)

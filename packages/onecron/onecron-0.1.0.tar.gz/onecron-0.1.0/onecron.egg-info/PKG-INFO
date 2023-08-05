@@ -1,0 +1,68 @@
+Metadata-Version: 1.1
+Name: onecron
+Version: 0.1.0
+Summary: sleep until next specified time.
+Home-page: https://github.com/fx-kirin/onecron
+Author: fx-kirin
+Author-email: fx.kirin@gmail.com
+License: MIT
+Description: 
+        onecron
+        =======
+        
+        
+        .. image:: https://img.shields.io/pypi/v/package_name.svg
+           :target: https://pypi.python.org/pypi/onecron
+           :alt: Latest PyPI version
+        
+        
+        sleep until next specified time.
+        
+        Usage
+        -----
+        
+        .. code-block::
+        
+           $ onecron 12:00 --debug 2>/dev/null
+           [I|16910|200522 10:04:05.773 root:MainThread:onecron:56] Wait for 2020-05-22 12:00:00
+           ^C
+           $ onecron 0 12 * * * --debug 2>/dev/null
+           [I|17467|200522 10:04:20.802 root:MainThread:onecron:56] Wait for 2020-05-22 12:00:00
+           ^C
+           $ onecron 0 12 --debug 2>/dev/null
+           [I|17717|200522 10:04:30.514 root:MainThread:onecron:56] Wait for 2020-05-22 12:00:00
+           $ ./onecron 6 10 && echo $(date)
+           2020年 5月 22日 金曜日 10:06:00 JST
+        
+        Installation
+        ------------
+        
+        .. code-block::
+        
+           pip install onecron
+        
+        Requirements
+        ^^^^^^^^^^^^
+        
+        Compatibility
+        -------------
+        
+        Licence
+        -------
+        
+        Authors
+        -------
+        
+        package_name was written by `fx-kirin <fx.kirin@gmail.com>`_.
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
