@@ -1,0 +1,52 @@
+Metadata-Version: 2.1
+Name: document-variable-injector
+Version: 0.1.1
+Summary: Provides method for dynamically injecting variables into a document and/or HTML like object
+Home-page: https://github.com/alexpdr/document-variable-injector
+License: GPL-3.0-or-later
+Author: Alex Pedersen
+Author-email: me@alexpdr.dev
+Maintainer: Alex Pedersen
+Maintainer-email: me@alexpdr.dev
+Requires-Python: >=3.8,<4.0
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Project-URL: Repository, https://github.com/alexpdr/document-variable-injector
+Description-Content-Type: text/markdown
+
+# Document argument injector
+
+Provides a simple helper method
+
+Argument(s):
+- document      (str)   the document loaded as a string
+- params        (dict)  key,value == match,replacement
+- encapsulation (str)   variable encapsulation ('leftisde', 'rightside')
+
+Returns the provided document with injected parameters
+
+## Usage
+
+```py
+from injector import injector
+
+document: str
+with open('profile.html', 'r') as file:
+    document = file.read()
+
+payload: dict = {
+    'user.firstName': 'John',
+    'user.lastName': 'Smith',
+    'user.email': 'jsmith@example.com',
+    'user.phone': '+555111444'
+    'user.postcode': '1234 Town',
+    'user.address': '12 Street'
+}
+
+injector(
+    document=document,
+    params=params,
+    encapsulation=('{', '}')
+)
+```
