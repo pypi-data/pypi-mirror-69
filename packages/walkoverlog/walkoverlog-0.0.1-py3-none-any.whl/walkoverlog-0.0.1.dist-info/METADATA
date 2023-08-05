@@ -1,0 +1,26 @@
+Metadata-Version: 2.1
+Name: walkoverlog
+Version: 0.0.1
+Summary: python language agent
+Home-page: UNKNOWN
+Author: Priyansh
+Author-email: priyansh.tiwari99@gmail.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 2
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=2.6
+Description-Content-Type: text/markdown
+
+PLEASE READ THIS SECTION CAREFULLY
+
+This module provides you three main methods to use in your application:
+1.sendlog(message):this method send your string type log messages with appropriate buffering and time out facility. Your messages will remain in buffer for fixrd time or till buffer gets complelety filled and then batch of messages will be send to DB and bufferes get cleared for next batch.
+
+2.setBufferLength(len):this method is used to customize buffer length.(default length is 5)
+
+3.setTimerTime(time):this methods enables you to set time interval, after the expiry of this time,buffer data will be send,irrespective of buffer length.(default value=10)
+
+NOTE:first set bufferlength and timeout interval using method number 2 and 3 and then use sendlog() method in your code as many time as you wish.
+
