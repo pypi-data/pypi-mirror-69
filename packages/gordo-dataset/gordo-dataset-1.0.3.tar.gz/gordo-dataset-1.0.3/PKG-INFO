@@ -1,0 +1,50 @@
+Metadata-Version: 2.1
+Name: gordo-dataset
+Version: 1.0.3
+Summary: Gordo datasets and data providers
+Home-page: https://github.com/equinor/gordo-dataset
+Keywords: gordo
+Author: Equinor ASA
+Author-email: fg_gpl@equinor.com
+Requires-Python: >=3.7,<4.0
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Requires-Dist: azure-datalake-store (>=0.0.48,<0.0.49)
+Requires-Dist: cachetools (>=4.1.0,<5.0.0)
+Requires-Dist: influxdb (>=5.3.0,<6.0.0)
+Requires-Dist: pandas (>=1.0.3,<2.0.0)
+Requires-Dist: pyarrow (>=0.17.1,<0.18.0)
+Requires-Dist: typing_extensions (>=3.7.4,<4.0.0)
+Project-URL: Repository, https://github.com/equinor/gordo-dataset
+Description-Content-Type: text/markdown
+
+# Gordo dataset
+
+gordo dataset library essential to build datasets and data providers for [gordo](https://github.com/equinor/gordo) projects.
+
+## Usage
+
+### Data provider
+
+Extend [GordoBaseDataProvider](gordo_dataset/data_provider/base.py) to adapt it to your data source.
+
+See examples [NcsReader](gordo_data_set/data_provider/ncs_reader.py) that reads either parquet or csv files from Azure Datalake v1.
+
+### Dataset
+
+Extend [GordoBaseDataset](gordo_dataset/base.py).
+
+See example for [TimeSeriesDataset](gordo_dataset/datasets.py) that arranges the data into consecutive times series.
+
+### Install
+
+`pip install gordo-dataset`
+
+### Uninstall
+
+`pip uninstall gordo-datset`
+
