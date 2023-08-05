@@ -1,0 +1,74 @@
+Metadata-Version: 2.1
+Name: python-eyes
+Version: 0.0.4
+Summary: A package for Automation that compare two images and return if there is a difference between them
+Home-page: https://github.com/den-iaremenko/python_eye
+Author: Denys Iaremenko
+Author-email: denysiaremenko@gmail.com
+License: MIT
+Project-URL: Documentation, https://github.com/den-iaremenko/python_eye
+Project-URL: Funding, https://github.com/den-iaremenko/python_eye
+Project-URL: Say Thanks!, https://github.com/den-iaremenko/python_eye
+Project-URL: Source, https://github.com/den-iaremenko/python_eye
+Project-URL: Tracker, https://github.com/den-iaremenko/python_eye/issues
+Description: ![Logo](python_eyes_logo.jpeg)
+        
+        
+        # Python Eyes
+        [![PyPI version](https://badge.fury.io/py/python-eyes.svg)](https://badge.fury.io/py/python-eyes)
+        [![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
+        
+        Python package for Automation to compare expected UI on page or Mobile app screen with actual screen.
+        
+        # Notice
+        
+        **Since v0.0.1 only Python 3 is supported**
+        
+        # Getting the Python Eye
+        
+        1. Install from [PyPi](https://pypi.org), as
+        ['python_eyes'](https://pypi.org/project/python-eyes/).
+        
+        ```bash
+        pip install python_eyes
+        ```
+        
+        # Development
+        
+        - Docstring style: Google Style
+            - Refer [link](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html)
+        
+        # Run tests
+        
+        ```bash
+        pipenv run pytest
+        ```
+        
+        # Usage
+        
+        ```python
+        from python_eyes import PythonEyes
+        
+        
+        eyes = PythonEyes(driver, "screenshots", "results")
+        eyes.verify_screen("login_page_no_text.png")
+        eyes.verify_screen("login_page_error.png", hard_assert=False, timeout=2)
+        ```
+        
+        
+Keywords: image difference,image comparisonappium,selenium,automation,ui validation
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Environment :: Console
+Classifier: Environment :: MacOS X
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Other Audience
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development :: Quality Assurance
+Classifier: Topic :: Software Development :: Testing
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
