@@ -1,0 +1,134 @@
+.gitignore
+LICENSE.txt
+MANIFEST.in
+README.md
+apply-pyannotations.sh
+conftest.py
+environment.bare.yml
+environment.yml
+environmentdev.yml
+export-conda-environment-yml.sh
+lint-fix.sh
+mypy.ini
+requirements.txt
+requirements_dev.txt
+requirements_test.txt
+requirements_upcoming.txt
+setup-python-venv.sh
+setup.cfg
+setup.py
+clerkai/__init__.py
+clerkai/nb_helpers.py
+clerkai/utils.py
+clerkai.egg-info/PKG-INFO
+clerkai.egg-info/SOURCES.txt
+clerkai.egg-info/dependency_links.txt
+clerkai.egg-info/not-zip-safe
+clerkai.egg-info/requires.txt
+clerkai.egg-info/top_level.txt
+clerkai/location_history/__init__.py
+clerkai/location_history/defaults.py
+clerkai/location_history/flow.py
+clerkai/location_history/parse.py
+clerkai/location_history/test_flow.py
+clerkai/location_history/parsers/__init__.py
+clerkai/location_history/parsers/parse_utils.py
+clerkai/location_history/parsers/test_parse_utils.py
+clerkai/location_history/parsers/exiftool/__init__.py
+clerkai/location_history/parsers/exiftool/csv.py
+clerkai/location_history/parsers/exiftool/test_csv.py
+clerkai/location_history/parsers/exiftool/test_data/dropbox-camera-uploads.edited.csv
+clerkai/location_history/parsers/exiftool/test_data/dropbox-camera-uploads.edited.csv.expected.csv
+clerkai/location_history/parsers/google/__init__.py
+clerkai/location_history/parsers/google/takeout/__init__.py
+clerkai/location_history/parsers/google/takeout/json.py
+clerkai/location_history/parsers/google/takeout/test_json.py
+clerkai/location_history/parsers/google/takeout/test_data/Location History.edited.json
+clerkai/location_history/parsers/google/takeout/test_data/Location History.edited.json.expected.csv
+clerkai/location_history/test_data/possibly_edited_location_history_by_date_df.expected.csv
+clerkai/location_history/test_data/Input/Location History/Location History.edited.json
+clerkai/location_history/test_data/Input/Location History/dropbox-camera-uploads.edited.csv
+clerkai/location_history/test_data/Input/Location History/location_history_files_editable_data.csv
+clerkai/time_tracking/__init__.py
+clerkai/time_tracking/defaults.py
+clerkai/time_tracking/flow.py
+clerkai/time_tracking/parse.py
+clerkai/time_tracking/test_parse.py
+clerkai/time_tracking/parsers/neamtime/__init__.py
+clerkai/time_tracking/parsers/neamtime/test_tslog.py
+clerkai/time_tracking/parsers/neamtime/tslog.py
+clerkai/time_tracking/parsers/neamtime/test_data/correct/an-hour-of-something.tslog
+clerkai/time_tracking/parsers/neamtime/test_data/correct/an-hour-of-something.tslog.expected.csv
+clerkai/time_tracking/parsers/neamtime/test_data/correct/example-1-from-neamtime-reporting-2010-docs.with-paus-typo.tslog
+clerkai/time_tracking/parsers/neamtime/test_data/correct/example-1-from-neamtime-reporting-2010-docs.with-paus-typo.tslog.expected.csv
+clerkai/time_tracking/parsers/neamtime/test_data/correct/multiple-entries-with-the-same-timestamp.tslog
+clerkai/time_tracking/parsers/neamtime/test_data/correct/multiple-entries-with-the-same-timestamp.tslog.expected.csv
+clerkai/time_tracking/parsers/neamtime/test_data/correct/newly-cycled.tslog
+clerkai/time_tracking/parsers/neamtime/test_data/correct/newly-cycled.tslog.expected.csv
+clerkai/time_tracking/parsers/neamtime/test_data/correct/numbers-solo-should-not-be-interpreted-as-timestamps.tslog
+clerkai/time_tracking/parsers/neamtime/test_data/correct/numbers-solo-should-not-be-interpreted-as-timestamps.tslog.expected.csv
+clerkai/time_tracking/parsers/neamtime/test_data/correct/pause-handling.tslog
+clerkai/time_tracking/parsers/neamtime/test_data/correct/pause-handling.tslog.expected.csv
+clerkai/time_tracking/parsers/neamtime/test_data/incorrect/correctly-reported-processing-error-sourceline-1.tslog
+clerkai/time_tracking/parsers/neamtime/test_data/incorrect/correctly-reported-processing-error-sourceline-1.tslog.expected.csv
+clerkai/time_tracking/parsers/neamtime/test_data/incorrect/correctly-reported-processing-error-sourceline-1.tslog.parsing_metadata_df.expected.csv
+clerkai/time_tracking/parsers/neamtime/test_data/incorrect/correctly-reported-processing-error-sourceline-1.tslog.processing_errors_df.expected.csv
+clerkai/transactions/__init__.py
+clerkai/transactions/defaults.py
+clerkai/transactions/flow.py
+clerkai/transactions/parse.py
+clerkai/transactions/test_parse.py
+clerkai/transactions/parsers/__init__.py
+clerkai/transactions/parsers/parse_utils.py
+clerkai/transactions/parsers/test_parse_utils.py
+clerkai/transactions/parsers/ee/__init__.py
+clerkai/transactions/parsers/ee/lhv/__init__.py
+clerkai/transactions/parsers/ee/lhv/csv.py
+clerkai/transactions/parsers/ee/lhv/test_csv.py
+clerkai/transactions/parsers/ee/lhv/test_data/EE123456789012345678_Account_Statement_2019-08-17.edited.csv
+clerkai/transactions/parsers/ee/lhv/test_data/EE123456789012345678_Account_Statement_2019-08-17.edited.csv.expected.csv
+clerkai/transactions/parsers/fi/__init__.py
+clerkai/transactions/parsers/fi/nordea/personal/test_txt.py
+clerkai/transactions/parsers/fi/nordea/personal/txt.py
+clerkai/transactions/parsers/fi/nordea/personal/test_data/Transaktioner_FI1234567890123456_20190406_20190816.edited.txt
+clerkai/transactions/parsers/fi/nordea/personal/test_data/Transaktioner_FI1234567890123456_20190406_20190816.edited.txt.expected.csv
+clerkai/transactions/parsers/fi/nordea/personal/test_data/Transaktioner_FI1234567890123456_20191028_20200125.edited.2.txt
+clerkai/transactions/parsers/fi/nordea/personal/test_data/Transaktioner_FI1234567890123456_20191028_20200125.edited.2.txt.expected.csv
+clerkai/transactions/parsers/international/__init__.py
+clerkai/transactions/parsers/international/n26/__init__.py
+clerkai/transactions/parsers/international/n26/csv.py
+clerkai/transactions/parsers/international/n26/test_csv.py
+clerkai/transactions/parsers/international/n26/test_data/n26-csv-transactions.csv
+clerkai/transactions/parsers/international/n26/test_data/n26-csv-transactions.csv.expected.csv
+clerkai/transactions/parsers/international/xolo/__init__.py
+clerkai/transactions/parsers/international/xolo/csv.py
+clerkai/transactions/parsers/international/xolo/test_csv.py
+clerkai/transactions/parsers/international/xolo/test_data/Expenses  Xolo.edited.2.csv
+clerkai/transactions/parsers/international/xolo/test_data/Expenses  Xolo.edited.2.csv.expected.csv
+clerkai/transactions/parsers/international/xolo/test_data/Expenses  Xolo.edited.csv
+clerkai/transactions/parsers/international/xolo/test_data/Expenses  Xolo.edited.csv.expected.csv
+clerkai/transactions/parsers/se/__init__.py
+clerkai/transactions/parsers/se/banknorwegian/__init__.py
+clerkai/transactions/parsers/se/banknorwegian/test_xlsx.py
+clerkai/transactions/parsers/se/banknorwegian/xlsx.py
+clerkai/transactions/parsers/se/banknorwegian/test_data/Statement aug norwegian.xlsx
+clerkai/transactions/parsers/se/banknorwegian/test_data/Statement aug norwegian.xlsx.expected.csv
+clerkai/transactions/parsers/se/danskebank/personal/__init__.py
+clerkai/transactions/parsers/se/danskebank/personal/csv.py
+clerkai/transactions/parsers/se/danskebank/personal/test_csv.py
+clerkai/transactions/parsers/se/danskebank/personal/test_data/Transaktioner-12345678901-20190821.edited.csv
+clerkai/transactions/parsers/se/danskebank/personal/test_data/Transaktioner-12345678901-20190821.edited.csv.expected.csv
+clerkai/transactions/parsers/se/nordea/__init__.py
+clerkai/transactions/parsers/se/nordea/personal/__init__.py
+clerkai/transactions/parsers/se/nordea/personal/internetbanken_privat/__init__.py
+clerkai/transactions/parsers/se/nordea/personal/internetbanken_privat/test_xlsx.py
+clerkai/transactions/parsers/se/nordea/personal/internetbanken_privat/xlsx.py
+clerkai/transactions/parsers/se/nordea/personal/internetbanken_privat/test_data/export.personkonto.edited.2.xls
+clerkai/transactions/parsers/se/nordea/personal/internetbanken_privat/test_data/export.personkonto.edited.2.xls.expected.csv
+clerkai/transactions/parsers/se/nordea/personal/internetbanken_privat/test_data/export.personkonto.edited.xls
+clerkai/transactions/parsers/se/nordea/personal/internetbanken_privat/test_data/export.personkonto.edited.xls.expected.csv
+clerkai/transactions/parsers/se/nordea/personal/netbank/__init__.py
+clerkai/transactions/parsers/se/nordea/personal/netbank/csv.py
+clerkai/transactions/parsers/se/nordea/personal/netbank/test_csv.py
+clerkai/transactions/parsers/se/nordea/personal/netbank/test_data/PERSONKONTO 1234 56 78901 - 2020.01.25 16.47.edited.csv
+clerkai/transactions/parsers/se/nordea/personal/netbank/test_data/PERSONKONTO 1234 56 78901 - 2020.01.25 16.47.edited.csv.expected.csv
