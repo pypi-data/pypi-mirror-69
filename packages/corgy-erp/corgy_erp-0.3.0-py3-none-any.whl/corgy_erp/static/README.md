@@ -1,0 +1,1 @@
+*Here comes the static content of the project module.*
