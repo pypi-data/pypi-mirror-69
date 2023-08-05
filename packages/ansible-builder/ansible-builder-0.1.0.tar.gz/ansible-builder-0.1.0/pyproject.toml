@@ -1,0 +1,52 @@
+[tool.poetry]
+name = "ansible-builder"
+version = "0.1.0"
+description = ""
+authors = ["Matthew Jones <matburt@redhat.com>",
+	   "Shane McDonald <shanemcd@redhat.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+requests = "^2.23.0"
+
+[tool.poetry.scripts]
+ansible-builder = 'ansible_builder.cli:run'
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+flake8 = "^3.7.9"
+pylint = "^2.4.4"
+pyparsing = "^2.4.5"
+pyyaml = "^5.2"
+tox = "^3.14.5"
+yamllint = "^1.20.0"
+black = "^19.10b0"
+sphinx = "^2.4.4"
+ipdb = "^0.13.2"
+
+
+[tool.black]
+line-length = 100
+target-version = ['py36', 'py37', 'py38']
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | docs
+  | installer
+  | packaging
+)/
+'''
+
+[build-system]
+requires = ["poetry>=1.0.5"]
+build-backend = "poetry.masonry.api"
+
