@@ -1,0 +1,30 @@
+#!/usr/bin/evn python3
+
+import socket
+import struct
+import logging
+import argparse
+
+
+def main():
+    """
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--host', default='0.0.0.0')
+    parser.add_argument('--port', default=3306, type=int)
+
+    args = parser.parse_args()
+    host = args.host
+    port = args.port
+
+    server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 6)
+    server_sock.bind(host, port)
+    server_sock.listen(128)
+
+    #
+    client_sock, addrs = server_sock.accept()
+
+    client_sock.send(b'hello world.')
+
+
+main()
