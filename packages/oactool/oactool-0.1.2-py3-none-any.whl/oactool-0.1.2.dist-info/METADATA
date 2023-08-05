@@ -1,0 +1,53 @@
+Metadata-Version: 2.1
+Name: oactool
+Version: 0.1.2
+Summary: 
+Home-page: https://github.com/openautocomplete/oactool
+License: MIT
+Author: Alexander Shishenko
+Author-email: alex@shishenko.com
+Requires-Python: >=3.8,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Topic :: Software Development :: Build Tools
+Requires-Dist: click (>=7.1.2,<8.0.0)
+Requires-Dist: colorama (>=0.4.3,<0.5.0)
+Requires-Dist: jsonref (>=0.2,<0.3)
+Requires-Dist: more-itertools (>=8.3.0,<9.0.0)
+Requires-Dist: pydantic (>=1.5.1,<2.0.0)
+Project-URL: Repository, https://github.com/openautocomplete/oactool
+Description-Content-Type: text/markdown
+
+# oactool
+
+A tool to manipulate [OpenAutoComplete](https://github.com/openautocomplete/openautocomplete) definitions.
+
+## Installation
+
+Using pip:
+
+    pip install oactool
+
+Using [poetry](https://python-poetry.org/):
+
+    poetry add oactool
+
+## Validation
+
+Validate OpenAutoComplete definition:
+
+    oactool validate <file>
+    
+Export JSON Schema for OpenAutoComplete:
+
+    oactool jsonschema
+    
+Export Docopt usages (works on a subset of definitions):
+    
+    oactool make-docopt
+    
+Export fish autocomplete file (highly experimental!):
+    
+    oactool make-fish
+
