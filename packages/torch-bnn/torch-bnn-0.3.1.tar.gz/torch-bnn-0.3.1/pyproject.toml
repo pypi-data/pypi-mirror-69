@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "torch-bnn"
+version = "0.3.1"
+description = "Library implementing Bayesian Neural Networks in pytorch"
+authors = ["Antoine Lefebvre-Brossard <antoinelb@protonmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+numpy = "*"
+torch = {version = "*", allow-prereleases = true}
+
+[tool.poetry.dev-dependencies]
+bandit = "*"
+black = {version = "*", allow-prereleases = true}
+flake8 = "*"
+flake8-bugbear = "*"
+isort = "*"
+mypy = "*"
+pylint = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+safety = "*"
+pytest-rerunfailures = "^9.0"
+
+[tool.poetry.extras]
+examples = ["torchvision"]
+
+[tool.black]
+line_length = 79
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
