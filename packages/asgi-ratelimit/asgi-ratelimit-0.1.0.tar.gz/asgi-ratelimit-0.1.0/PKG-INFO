@@ -1,0 +1,65 @@
+Metadata-Version: 2.1
+Name: asgi-ratelimit
+Version: 0.1.0
+Summary: 
+Home-page: https://github.com/abersheeran/asgi-ratelimit
+License: Apache-2.0
+Author: abersheeran
+Author-email: me@abersheeran.com
+Requires-Python: >=3.6,<4.0
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Provides-Extra: redis
+Requires-Dist: aredis (>=1.1.8,<2.0.0); extra == "redis"
+Requires-Dist: dataclasses (>=0.6,<0.7); python_version >= "3.6" and python_version < "3.7"
+Requires-Dist: typing_extensions (>=3.7.4,<4.0.0); python_version < "3.8"
+Project-URL: Repository, https://github.com/abersheeran/asgi-ratelimit
+Description-Content-Type: text/markdown
+
+# ASGI RateLimit
+
+Limit user access frequency to specified URL. Base on ASGI.
+
+## Install
+
+```
+# Only install
+pip install asgi-ratelimit
+
+# Use redis
+pip install asgi-ratelimit[redis]
+```
+
+## Usage
+
+The following example will limit users under the `"default"` group to access `/second_limit` at most once per second and `/minute_limit` at most once per minute. And the users in the `"admin"` group have no restrictions.
+
+```python
+from typing import Tuple
+
+from ratelimit import RateLimitMiddleware, Rule
+from ratelimit.backends.redis import RedisBackend
+
+def auth_function(scope) -> Tuple[str, str]:
+    """
+    Resolve the user's unique identifier and the user's group from ASGI SCOPE.
+
+    If there is no group information, it should return "default".
+    """
+    return USER_UNIQUE_ID, GROUP_NAME
+
+
+rate_limit = RateLimitMiddleware(
+    ASGI_APP,
+    AUTH_FUNCTION,
+    RedisBackend(),
+    {
+        "/second_limit": [Rule(second=1), Rule(group="admin")],
+        "/minute_limit": [Rule(minute=1), Rule(group="admin")],
+    },
+)
+```
+
