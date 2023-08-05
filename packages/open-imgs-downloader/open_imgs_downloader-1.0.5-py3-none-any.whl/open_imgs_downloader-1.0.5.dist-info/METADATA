@@ -1,0 +1,26 @@
+Metadata-Version: 2.1
+Name: open-imgs-downloader
+Version: 1.0.5
+Summary: download class images from the OpenImages datasset.
+Home-page: UNKNOWN
+Author: xujin.huang
+Author-email: 409766147@qq.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: Chinese (Simplified)
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Topic :: Utilities
+Description-Content-Type: text/markdown
+Requires-Dist: awscli (>=1.18.61)
+
+cpu_counts = 4
+cls_file = "./class-descriptions-boxable.csv"
+ anno_file = "./oidv6-train-annotations-bbox.csv"
+geting_class =["A","Person","Apple"]
+save_path = "data"
+
+    downloader = Downloader(cpu_counts,cls_file,anno_file,save_path)
+	downloader.run(geting_class)
+
