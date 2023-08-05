@@ -1,0 +1,59 @@
+Metadata-Version: 2.1
+Name: pydemic-ui
+Version: 0.1.0
+Summary: Pydemic Web interface
+Home-page: https://github.com/pydemic/pydemic-ui
+License: UNKNOWN
+Author: Fábio Macêdo Mendes
+Author-email: fabiomacedomendes@gmail.com
+Description-Content-Type: text/x-rst
+Classifier: Intended Audience :: Developers
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Topic :: Software Development :: Libraries
+Requires-Dist: streamlit
+Requires-Dist: babel
+Requires-Dist: altair
+Requires-Dist: sidekick
+Requires-Dist: pydemic-models>=0.1.4
+Requires-Dist: mundi>=0.2.3
+Requires-Dist: mundi-demography
+Requires-Dist: mundi-healthcare
+Requires-Dist: black ; extra == "dev"
+Requires-Dist: twine ; extra == "dev"
+Requires-Dist: coverage~=5.0 ; extra == "dev"
+Requires-Dist: pytest~=5.0 ; extra == "dev"
+Provides-Extra: dev
+
+==========
+Pydemic UI
+==========
+
+A set of streamlit apps and utilities used in creating the UI for Pydemic apps.
+
+Usage
+=====
+
+Install it using ``pip install pydemic-ui`` or your method of choice. Now, you can just import
+it and load the desired functions. You can use pydemic-ui as a drop-in replacement for streamlit
+by using
+
+>>> from pydemic_ui import st
+>>> st.pydemic(locale="pt-BR")
+
+Apps
+====
+
+Pydemic-ui comes with a few Streamlit apps ready to deploy. Just execute the app module
+specifying the desired app::
+
+    $ python -m pydemic_ui.apps calc
+
+Currently, only the calc app is available, but other apps should arrive soon. For more
+options, execute it with the "--help" flag.
