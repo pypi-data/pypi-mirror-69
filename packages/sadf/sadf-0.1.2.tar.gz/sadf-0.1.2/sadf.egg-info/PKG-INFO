@@ -1,0 +1,72 @@
+Metadata-Version: 1.1
+Name: sadf
+Version: 0.1.2
+Summary: Parse sysstat (sa/sar) output into Pandas Dataframes
+Home-page: http://github.com/jpgxs/python-sadf
+Author: Joshua Griffiths
+Author-email: jgriffiths@x86-64.io
+License: UNKNOWN
+Description: =================================================
+        Parser for sadf/sar output into Pandas Dataframes
+        =================================================
+        
+        python-sadf provides a simple way to create system utilisation reports using sysstat and the Pandas api.
+        
+        
+        Example
+        =======
+        
+        ::
+        
+            import sadf
+            from sadf import fieldgroups as fg
+        
+            cmd = sadf.SadfCommand(start_time='09:00:00',
+                                   end_time='18:00:00')
+        
+            cmd.field_groups = [
+                fg.CPULoad(all_fields=True),
+                fg.Queue(),
+                fg.ProcessAndContextSwitch(),
+                fg.IO(),
+                fg.Memory(all_fields=True),
+            ]
+        
+            report = cmd.run()
+        
+            memory_report = report.reports['memory']\
+                .resample('30T').mean()
+        
+            ldavg_report = report.reports['queue']\
+                .resample('10T').rolling(window=3).mean()\
+                .dropna()\
+                .loc[:, ['ldavg-1', 'ldavg-5', 'ldavg-15']]
+        
+        
+        Author
+        ======
+        
+        Joshua Griffiths <jgriffiths@x86-64.io>
+        
+        License
+        =======
+        
+        Apache - See LICENSE file
+        
+Platform: POSIX
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.0
+Classifier: Programming Language :: Python :: 3.1
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
