@@ -1,0 +1,400 @@
+Metadata-Version: 2.1
+Name: qe-analyzer
+Version: 0.0.4
+Summary: A small package for analyzing quantum espresso outputs
+Home-page: https://github.com/euclidmenot2/qe_analyzer
+Author: Elizabeth Pogue
+Author-email: epogue1@jhu.edu
+License: UNKNOWN
+Description: qe_analyzer
+        	convergenceTests.py
+        		[ecut, planewaves, energy, ecut**(3/2)]=extractECUTConvergenceInfo(file1)
+        		"head_ECUTcovergencePlot.png"=ECUTconvergenceTest(head, calcThresh=False, thresh=0.05)
+        		"TotEvsInequivK.png"=KconvergenceTest(fmt='*.out')
+        		kx, ky, kz, shiftx, khifty, shiftz, ecutwfc, energy, inequiv, time=extractKConvergenceInfo(file1)
+        		a, cba, totEnergy=importacLatticeParamEnergyFile(fname)
+        		mat, unA, unCbA, data=importAllLatParamFiles(fmt)
+        		"print(min data point a=, c/a=)"=plotCbAvsA(fmt, lim=0)
+        	copyPaste.py
+        		"updated file"=insertKptsFromXcrysden(kpfFile, updateFile)
+        		"output file and lines in console describing what is being replaced to allow for verification"=vcRelaxTransfer(inFileHead, outputF)
+        	electronBands.py
+        		[Ef, booleanHighestOccupied]=getEfSCF(scfFile)
+        		[k, energies]=importBands(file)
+        		[k, energies, xCoordinates, highSymmetryPoints]=buildBands(file2)
+        		plotBands(file, Ef=0, Kcoord=True, lbls=[], figsize=plt.rcParams.get('figure.figsize'), pad=1.08)
+        	phonons.py
+        		x, energy=importFreqGp(fname)
+        		pts, flfrq=generateXcoordMatdyn(matdynFile)
+        		plotPhononDispersion_cm(matdynF, figsize=plt.rcParams.get('figure.figsize'), pad=1.08 ,labels=[])
+        		plotPhononDispersion_meV(matdynF, figsize=plt.rcParams.get('figure.figsize'), pad=1.08 ,labels=[])
+        		
+        convergenceTests.extractECUTConvergenceInfo(file1):
+        	"""extracts ECUT convergence information from a given file, file1
+        	outputs a list of [ECUT, # planewaves, energy, CPU time, and ECUT**(3/2)]
+        	
+        	Parameters
+            ----------
+            file1 : str
+                DESCRIPTION. File to read in
+        	
+            Returns list containing
+            -------
+            ecutwfc : float
+                DESCRIPTION. ECUT value 
+        	planewaves : float
+                DESCRIPTION. number of planewaves
+        	energy : float
+                DESCRIPTION. Total Energy
+        	time: float
+        		DESCRIPTION. CPU time
+        	ecutwfc**(3/2): float
+        		DESCRIPTION. ECUT value to the 2/3 power. Ecut**(2/3) should be proportional to the number of planewaves
+        	
+        	"""
+        convergenceTests.ECUTconvergenceTest(head, calcThresh=False, thresh=0.05)
+        	""" Prints the filenames imported  for an ECUT convergence test (series of files where ECUT is changing)
+        	assumes '${head}-${ECUT}.out' file naming, 
+        	will ignore all other files in folder.
+        	Prints the filenames that it imports for this also saves the plot
+            
+        
+            Parameters
+            ----------
+            head : str
+                DESCRIPTION. The header to the filename. Assumes that your working directory contains files with 
+        		   '${head}-${ECUT}.out' formatting
+        	calcThresh : boolean, optional
+        		DESCRIPTION. Do you want to pull out the ECUT associated with a convergence threshold?
+        	
+        	thresh : float
+        		DESCRIPTION. The convergence threshold you would like
+            Returns
+            -------
+            None. A plot should show up and will be automatically saved to your working directory.
+            """		
+        convergenceTests.extractKConvergenceInfo(file1)
+            """
+            kx, ky, kz, shiftx, shifty, shiftx, ecutwfc, energy, inequiv,time  =extractKConvergenceInfo('SrTiO3-260-0-16.out')
+        
+            Parameters
+            ----------
+            file1 : str
+                DESCRIPTION. name of *.out file to extract information from
+        
+            Returns
+            -------
+            kx : int
+                DESCRIPTION.# k points in x direction
+            ky : int
+                DESCRIPTION. # k points in y direction
+            kz : int
+                DESCRIPTION. # k points in z direction
+            shiftx : int
+                DESCRIPTION.0 or 1
+            shifty : int
+                DESCRIPTION.0 or 1
+            shiftz : int
+                DESCRIPTION.0 or 1
+            ecutwfc : float
+                DESCRIPTION. cutoff energy
+            energy : float
+                DESCRIPTION. total energy
+            inequiv : int
+                DESCRIPTION. Number inequivalent k points
+            time : float
+                DESCRIPTION. CPU time in minutes
+        
+            """
+        	
+        convergenceTests.KconvergenceTest(fmt='*.out')	
+        	"""
+            plots energy vs # k point mesh in x, y, and z directions. If all equal, only does one plot
+            KconvergenceTest('SrTiO3-260-*-*.out')
+        
+            Parameters
+            ----------
+            fmt : string, optional
+                DESCRIPTION. The default is '*.out'. filename format for searching the working directory. This is like glob
+        
+            Returns
+            -------
+            None.
+        	"""
+        convergenceTests.importacLatticeParamEnergyFile(fname)
+            '''
+            
+        
+            Parameters
+            ----------
+            fname : TYPE
+                DESCRIPTION.
+        
+            Returns
+            -------
+            a : float
+                DESCRIPTION. lattice constant a in Bohr
+            cba : float
+                DESCRIPTION.c/a ratio
+            totEnergy : float
+                DESCRIPTION. total energy in Ry
+        
+            '''	
+        	
+        convergenceTests.importAllLatParamFiles(fmt)
+            """
+            import all lattice parameter files. Use this for debugging any issues with plotCbAvsA. This is used in plotCbAvsA.
+            Prints the filenames of all files imported to allow you to check that things import properly
+            Parameters
+            ----------
+            fmt : str
+                DESCRIPTION. Format used by glob to describe the files involved in the lattice parameter data
+        
+            Returns
+            -------
+            mat : numpy array of floats
+                DESCRIPTION. Array of total energies
+            unA : 1-d sorted numpy array
+                DESCRIPTION. Array of unique values in the a-lattice parameter
+            unCbA : 1-d sorted numpy array
+                DESCRIPTION. Array of unique values in c/a
+            data : numpy array
+                DESCRIPTION. raw data extracted from files, useful for debugging
+        
+            """
+        convergenceTests.plotCbAvsA(fmt, lim=0):
+            """
+            Plots C/A vs A when A is in Bohr
+        	fmt='graphite_*_*.out'      
+        	plotCbAvsA(fmt)             
+            Parameters
+            ----------
+            fmt : str
+                DESCRIPTION. Format used by glob to describe the files involved in the lattice parameter data
+            lim : float, optional
+                DESCRIPTION. The default is -45.599. Describes the energy threshold above which all become one color.
+        
+            Returns
+            -------
+            None.
+        
+            """
+        	
+        copyPaste.insertKptsFromXcrysden(kpfFile, updateFile):
+            """
+            Generates a new *.in file entitled updateFile(minus.in)_update.in 
+            by incorporating the k-points listed in kpfFile 
+            (real form of k-point coordinates)
+        
+            Parameters
+            ----------
+            kpfFile : str
+                DESCRIPTION. Filename, including extension, of the XCRYSDEN *.kpf file 
+                containing the points you want to add
+            updateFile : TYPE
+                DESCRIPTION. Filename, including extension, of the *.in file that you 
+                want to update/replace k-points of. This should leave other blocks alone.
+        
+            Returns
+            -------
+            None.
+        
+            """
+        copyPaste.vcRelaxTransfer(inFileHead, outputF):
+            '''
+            Applies the new lattice parameters and atom sites obtained from a vc-relax calculation to a new *.in file
+            example: vcRelaxTransfer('Si-vcRelax', 'Si-vcRelax2.in')
+            Caution: Not fully tested.
+        
+            Parameters
+            ----------
+            inFileHead : str
+                DESCRIPTION. Head of pw.x input and output files used for vc-relax calculation ([HEAD].in and [HEAD].out). No extension included
+            outputF : str
+                DESCRIPTION. Name of the new pw.x input file that you want to create. MUST INCLUDE *.in EXTENSION!
+        
+            Returns
+            -------
+            None.
+        
+            '''
+        electronBands.getEfSCF(scfFile):
+            """ Extracts Fermi level from SCF file
+            
+        
+            Parameters
+            ----------
+            scfFile : str
+                DESCRIPTION. Filename (or path to file and filename)
+        
+            Returns
+            -------
+            list
+                DESCRIPTION. [Ef, highest occupied], The first element is the Fermi level. 
+                The second element is a boolean describing whether the file said it was 
+                  the highest occupied orbital (True) or truly the Fermi level (False) 
+        
+            """
+        electronBands.importBands(file):
+            """    import bands structure in a mannner ready for plotting
+            Parameters
+            ----------
+            file : str
+                DESCRIPTION. band.x output file $[prefix]_bandx.out file generated by running bands.x
+            Kcoord : boolean, optional
+                
+            Returns
+            -------
+            k : array of float64
+                DESCRIPTION. x-coordinates associated with k-points to use for plot. This is a 1-d array (vector)
+            Energies : array of float64
+                DESCRIPTION. array such that each column represents a band
+            x2 : list
+                DESCRIPTION. x-coordinates associated with special k points
+            hsp : list
+                DESCRIPTION. Each element in the list is a set of coordinates [kx, ky, kz] 
+                describing the high-symmetry points. 
+            """	
+        	
+        electronBands.buildBands(file2):
+            """Extracts energy vs k for plotting into 1D array k and numpy array; 
+            also extracts special points for plotting
+            
+            Parameters
+            ----------
+            file2 : str
+                DESCRIPTION. band.x output file $[prefix]_bandx.out file generated by running bands.x
+            Kcoord : boolean, optional
+                
+            Returns
+            -------
+            k : array of float64
+                DESCRIPTION. x-coordinates associated with k-points to use for plot. This is a 1-d array (vector)
+            Energies : array of float64
+                DESCRIPTION. array such that each column represents a band
+            x2 : list
+                DESCRIPTION. x-coordinates associated with special k points
+            hsp : list
+                DESCRIPTION. Each element in the list is a set of coordinates [kx, ky, kz] 
+                describing the high-symmetry points. 
+            
+            """
+        electronBands.plotBands(file, Ef=0, Kcoord=True, lbls=[], figsize=plt.rcParams.get('figure.figsize'), pad=1.08):
+            """ Return a plot of the data from file. 
+            plotBands(file)
+            plotBands(file, getEfSCF('si_scf.out')[0], False, ['L', r'$\Gamma$', 'X'])
+            plotBands(file, 0, False, ['L', r'$\Gamma$', 'X'])
+        
+            Parameters
+            ----------
+            file : str
+                DESCRIPTION. band.x output file $[prefix]_bandx.out file generated by running bands.x
+            Ef : float, optional
+                DESCRIPTION. Fermi level. Can be extracted using 
+            Kcoord : boolean, optional
+                DESCRIPTION. The default is True. For the k-axis, use the special point coordinates (kx, ky, kz) for labels. 
+                If false, requires lbls to include a list of labels of the appropriate length eg:['L', r'$\Gamma$', X]
+            lbls : list
+                DESCRIPTION. The default is []. List of length number of high-symmetry points, optional only if Kcoord=True. 
+            figsize: (float, float), optional
+                DESCRIPTION. The default is plt.rcParams.get('figure.figsize'). Figure width and height in inches
+            pad: float, optional
+                DESCRIPTION. The default is 1.08. Padding around figure for tight_layout
+            Returns
+            -------
+            None.
+        
+            """
+        phonons.importFreqGp(fname)
+            """
+            imports data from *.freq.gp file
+        
+            Parameters
+            ----------
+            fname : str
+                DESCRIPTION.file name to be imported
+        
+            Returns
+            -------
+            x: 1-d numpy array
+                DESCRIPTION. k point x-value for plotting (2pi/a)
+            energy: 2-d numpy array
+                DESCRIPTION. each column is a different band.
+        
+        	
+        phonons.generateXcoordMatdyn(matdynFile)
+            """
+            generates X-labels (special K-points) from matdyn file
+            assumes q_in_band_form=True
+        
+            Parameters
+            ----------
+            matdynFile : TYPE
+                DESCRIPTION.
+        
+            Returns
+            -------
+            pts : 2-d numpy array
+                DESCRIPTION. special points such that column 0 is kx, column 1 is ky, column 2 is kz, column 3 is the x-coordinate for the E-vs-k plot
+            flfrq : str
+                DESCRIPTION. filename from matdyn file for where to expect the phonon data for processing (*.freq.gp file)
+        
+            """
+        	
+        phonons.plotPhononDispersion_cm(matdynF, figsize=plt.rcParams.get('figure.figsize'), pad=1.08 ,labels=[]):
+            """
+            Plots phonon dispersion assuming q_in_band_form for special points
+            
+            plotPhononDispersion_cm('diamond_matdyn.in')
+            plotPhononDispersion_cm('diamond_matdyn.in', labels=['L', r'$\Gamma$', 'X'])
+        
+            Parameters
+            ----------
+            matdynF : str
+                DESCRIPTION. Filename of the matdyne input file that you used to generate the *.freq.gp file
+            figsize : tuple, optional
+                DESCRIPTION. The default is plt.rcParams.get('figure.figsize'). See matplotlib.pyplot.plot for details
+            pad : float, optional
+                DESCRIPTION. The default is 1.08. padding around the figure in plt.tight_layout()
+            labels : list of strings, optional
+                DESCRIPTION. The default is []. Labels to use for the special points. 
+                If the length of this is not equal to the number of special points listed in matdynF, these labels will not be used.
+                assumes q_in_band_form
+        
+            Returns
+            -------
+            None.
+        
+            """
+        phonons.plotPhononDispersion_meV(matdynF, figsize=plt.rcParams.get('figure.figsize'), pad=1.08 ,labels=[])
+            """
+            Plots phonon dispersion assuming q_in_band_form for special points
+            
+            plotPhononDispersion_meV('diamond_matdyn.in')
+            plotPhononDispersion_meV('diamond_matdyn.in', labels=['L', r'$\Gamma$', 'X'])
+            
+        
+            Parameters
+            ----------
+            matdynF : str
+                DESCRIPTION. Filename of the matdyne input file that you used to generate the *.freq.gp file
+            figsize : tuple, optional
+                DESCRIPTION. The default is plt.rcParams.get('figure.figsize'). See matplotlib.pyplot.plot for details
+            pad : float, optional
+                DESCRIPTION. The default is 1.08. padding around the figure in plt.tight_layout()
+            labels : list of strings, optional
+                DESCRIPTION. The default is []. Labels to use for the special points. 
+                If the length of this is not equal to the number of special points listed in matdynF, these labels will not be used.
+                assumes q_in_band_form
+        
+            Returns
+            -------
+            None.
+        
+            """
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
