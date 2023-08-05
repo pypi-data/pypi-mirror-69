@@ -1,0 +1,68 @@
+Metadata-Version: 2.1
+Name: nadar
+Version: 0.1.0
+Summary: NAtural DAte Ranges - automatic translation of natural language phrases describing date ranges into relevant dates or strings
+Home-page: https://github.com/michalpuchala/nadar
+Author: Michal Puchala
+Author-email: mk.puchala@gmail.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: datetime
+Requires-Dist: dateparser
+
+# NAtural DAte Ranges
+
+The purposed of this package is to translate natural language phrases describing date ranges into relevant dates or strings.
+
+# Installation
+
+`pip install nadar`
+
+# How to use the package
+
+`import nadar as nd`
+
+**parse_reference**<br/>
+Takes in a string representing a delta in date and returns it given the reference date.
+
+```
+>>> nd.parse_reference('today')
+SmartDate(2020-05-18)
+
+>>> parse_reference('hace tres meses')
+SmartDate(2018, 2, 8)
+```
+
+**parse_period**<br/>
+Takes in a string representing a period and returns it given the reference date.
+
+```
+>>> nd.parse_period('last month')
+SmartPeriod(SmartDate(2018, 4, 1), SmartDate(2018, 4, 30))
+
+>>> nd.parse_period('last year', reference='2017-10-28')
+SmartPeriod(SmartDate(2016, 1, 1), SmartDate(2016, 12, 31))
+```
+
+**smart_dates**<br/>
+Wrapper for both parse_period() and parse_reference() returning a tuple of strings.
+
+```
+>>> nd.smart_dates('4 months ago')
+('2020-01-01', '2020-01-31')
+
+>>> nd.smart_dates('yesterday')
+('2020-05-19', '2020-05-19')
+```
+
+# Acknowledgment
+
+The main author of the code for this package is [**Benjamin Wolter, PhD**](https://www.linkedin.com/in/benjamin-wolter/).<br/>
+The author of the original idea for the functionality is [**Sergey Ivanov, PhD**](https://www.linkedin.com/in/sergey-ivanov-a52355bb/)
+
+
