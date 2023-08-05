@@ -1,0 +1,21 @@
+import unittest
+from runner import create_app, db
+from backend.logger import logging
+import json
+
+log = logging.getLogger(__name__)
+
+class {{class_name}}(unittest.TestCase):
+    def setUp(self):
+        self.user = 'my_username'
+        self.app = create_app()
+        self.client = self.app.test_client
+        with self.app.app_context():
+            db.create_all()
+            db.session.commit()
+	
+    def tearDown(self):
+        """teardown all initialized variables."""
+        with self.app.app_context():
+            db.session.remove()
+            db.drop_all()

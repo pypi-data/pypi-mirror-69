@@ -1,0 +1,19 @@
+
+
+    def test_{{name}}(self):
+        # TODO : Replace All Input {{http}}
+        res = self.client().{{http|lower}}('{{rooUrl}}{{http_url}}', headers={'user': self.user},
+        {%- if http.lower() != 'get' %} json={
+        {%- for key, value in docstring.items() %}
+            "{{key}}": "{{value}}"{%-if not loop.last -%}, {%- endif -%}
+        {%- endfor %}
+        }
+        {%- else %} query_string={
+        {%- for key, value in docstring.items() %}
+            '{{key}}': '{{value}}'{%-if not loop.last -%}, {%- endif -%}
+        {%- endfor %}
+        }
+        {%- endif %})
+        data = json.loads(res.data)
+        log.info('test_{{name}}: %s', data)
+        self.assertEqual(res.status_code, 200)
