@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "sql-athame"
+version = "0.2.0"
+description = "Python tool for slicing and dicing SQL"
+authors = ["Brian Downing <bdowning@lavos.net>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/bdowning/sql-athame"
+repository = "https://github.com/bdowning/sql-athame"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+assertpy = "*"
+black = {version = "*", allow-prereleases = true}
+isort = "*"
+pytest = "*"
+mypy = "*"
+flake8 = "*"
+ipython = "*"
+pytest-cov = "*"
+bump2version = "*"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
