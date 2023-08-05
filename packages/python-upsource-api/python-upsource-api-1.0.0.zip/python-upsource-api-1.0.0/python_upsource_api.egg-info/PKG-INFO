@@ -1,0 +1,58 @@
+Metadata-Version: 1.1
+Name: python-upsource-api
+Version: 1.0.0
+Summary: Jetbrains Upsource API handler for Python
+Home-page: https://github.com/shijl0925/python-upsource-api
+Author: Jialiang Shi
+Author-email: kevin09254930sjl@gmail.com
+License: MIT
+Description: ====================
+        Python Upsource API
+        ====================
+        
+        API Handler for Upsource web service, providing basic authentication (which
+        seems to be the only kind that Upsource supports) and a few methods.
+        
+        Installation
+        ============
+        
+        Install::
+        
+            pip install python-upsource-api
+        
+        Compatibility
+        -------------
+        
+        This package is compatible Python versions 2.7, 3.4, 3.5 and 3.6.
+        
+        
+        Usage
+        =====
+        
+        The API handler is easy to use, you just need to initialize it with the
+        connection parameters and use any of the methods to get the required information 
+        
+        Example getting projects with coverage and issues metrics::
+        
+            from upsource.UpsourceClient import UpsourceClient
+            from upsource.HubClient import HubClient
+        
+            upsource = UpsourceClient(base_url, username='admin', password='xxx')
+            hub = HubClient(hub_url, username='admin', password='xxx') or hub = HubClient(hub_url, token='xxxxx')
+        
+        
+        
+Keywords: api upsource hub
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Plugins
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Topic :: Software Development
