@@ -1,0 +1,69 @@
+{
+  "src/lib/components/Wordcloud.react.js": {
+    "description": "Wordcloud is used to render a cloud of words using the react-wordcloud component\nby chrisrzhou:\nhttps://github.com/chrisrzhou/react-wordcloud",
+    "displayName": "Wordcloud",
+    "methods": [],
+    "props": {
+      "words": {
+        "type": {
+          "name": "array"
+        },
+        "required": true,
+        "description": "An array of words.\nA word is an object that must contain the \u2018text\u2019 and \u2018value\u2019 keys."
+      },
+      "id": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "The ID used to identify this component in Dash callbacks."
+      },
+      "setProps": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Dash-assigned callback that should be called to report property changes\nto Dash, to make them available for callbacks."
+      },
+      "maxWords": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "Maximum number of words to display"
+      },
+      "minSize": {
+        "type": {
+          "name": "array"
+        },
+        "required": false,
+        "description": "Set minimum [width, height] values for the SVG container."
+      },
+      "size": {
+        "type": {
+          "name": "array"
+        },
+        "required": false,
+        "description": "Set explicit [width, height] values for the SVG container.\nThis will disable responsive resizing.\nIf undefined, the wordcloud will responsively size to its parent container."
+      },
+      "options": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "Configure the wordcloud with various options.",
+        "defaultValue": {
+          "value": "{}",
+          "computed": false
+        }
+      },
+      "clickedWord": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "Word that has been clicked"
+      }
+    }
+  }
+}
