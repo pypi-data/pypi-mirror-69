@@ -1,0 +1,52 @@
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+[tool.poetry]
+name = "beets-tagmod"
+version = "0.1.0"
+description = "A plugin for beets to modify media tags before they become written."
+authors = ["Thore Weilbier <thore@weilbier.net>"]
+repository = "https://github.com/weilbith/beets-tagmod"
+license = "MIT"
+readme = "README.md"
+packages = [
+    { include = "beetsplug" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+beets = "^1.4"
+confuse = "^1.0"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.7"
+mypy = "^0.730.0"
+isort = "^4.3"
+taskipy = "^1.2"
+black = {version = "^18.3-alpha.0", allows-prereleases = true}
+pre-commit = "^2.2"
+
+[tool.taskipy.tasks]
+format-fix = "task format-fix_black && task format-fix_isort"
+format-check = "task format-check_black && task format-check_isort"
+format-fix_black = "black ."
+format-check_black = "black --check ."
+format-fix_isort = "isort --recursive ."
+format-check_isort = "isort --recursive --check-only ."
+lint = "task lint_flake8 && task lint_mypy"
+lint_flake8 = "flake8 --ignore=E501,W503 ." # Ignore line lengths and leave it up to black.
+lint_mypy = "mypy --namespace-packages **/*.py"
+pre-commit = "pre-commit install"
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+line-length = 79
+known-first-party = ["beetsplug"]
+# compatibility for black
+multi-line-output = 3
+include-trailing-comma = true
+force-grid-wrap = 0
+use-parentheses = true
