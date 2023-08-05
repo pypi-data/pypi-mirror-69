@@ -1,0 +1,92 @@
+Metadata-Version: 2.1
+Name: facile-gitlab-trigger
+Version: 0.0.3
+Summary: testing 
+Home-page: https://www.facile.it
+Author: Fabio Lima
+Author-email: f46io@icloud.com
+License: UNKNOWN
+Description: <img src="https://assinews-assinformdalcine.netdna-ssl.com/wp-content/uploads/2017/02/facileit.png" alt="mypy logo" width="300px"/>
+        
+        # Facile GitLab Helper
+        
+        This library provides help to microservices inside gitLab C.I pipelines, integrating different repositories within different pipelines and projects.
+        
+        ## Getting Started
+        
+        Go to the terminal and install the given library:
+        
+        ```python
+        pip install facile-gitlab-trigger
+        ```
+        
+        Execute the given command below to be sure the library was installed correctly:
+        
+        ```python
+        facile-trigger --help
+        ```
+        Once the terminal displays the list of help bellow:
+        
+        ```shell
+        usage: facile-trigger -a GITLAB_API_TOKEN [-h GIT_LAB_HOST] [--help] [-t TARGET_BRANCH] -p PROJECT_ID -b
+                              REF_NAME -f YAML_FILE
+        
+        Gilab trigger helper
+        
+        optional arguments:
+          -a GITLAB_API_TOKEN, --api-token GITLAB_API_TOKEN
+                                personal access token (not required when running detached)
+          -h GIT_LAB_HOST, --host GIT_LAB_HOST
+          --help                show this help message and exit
+          -t TARGET_BRANCH, --target-ref TARGET_BRANCH
+                                target ref (branch, tag, commit)
+          -p PROJECT_ID, --project-id PROJECT_ID
+                                repository id found on settings
+          -b REF_NAME, --branch-merged REF_NAME
+                                filled by git COMMIT_REF_NAME
+          -f YAML_FILE, --yaml-file YAML_FILE
+                                filled by git COMMIT_REF_NAME
+        ```
+        
+        ## Usage
+        
+        Running pipeline with Facile GitLab Helper requires few steps, some arguments are required in onrder to run pipelines:
+        
+        ##### Branch Title
+        
+        This argument can be dynamic filled using gitlab variables like $CI_COMMIT_TITLE. In this case Facile GitLab Helper will get the string provide by the given variable matching with a file yaml where lists running rules like once an ID is present in the given string, tests will run a specific path. E.g. once $CI_COMMIT_TITLE contains like PROJECT_NAME string, tets will run only the path specific by the given rule.
+        
+        ##### Project ID
+        
+        It's the id shown on gitLab Project Root>>Settings>>Geral
+        
+        ##### API Key
+        
+        This can be generated going on user Profile >> Access Tokens >>> Add a personal access token. Once it gets generated, feed the give arg with the api key generated.
+        
+        ##### Gitlab Host Domain
+        
+        Here is the gitlab domain like "https://gitlab.<domain>/" As facile.it domain would be like "https://gitlab.facile.it/".
+        
+        ##### Target Branch
+        
+        Here comes the dired branch that will run like "master", "develop" and so on.
+        
+        ##### Yaml File
+        
+        Here yaml file items which provides rules for each kind of "id":
+        
+        ```yaml
+        NLT: Tests/noleggio.robot
+        ABC: Tests/abc.robot
+        ```
+        For instance, if the branch title contains "NTL" test automation will run the test path Tests/noleggio.robot, once contains "ABC" then Tests/abc.robot will run. So as -f paramenters should be a path where you create your yaml rule file.
+        
+        Below an example of full command which runs a pipeline
+        
+        ```shell
+        facile-trigger -b <branch_title> -p <project_id> -a <api_key> -h <gitlab_host_domain> -t <target_branch> -f <yaml_file>
+        ```
+        
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
