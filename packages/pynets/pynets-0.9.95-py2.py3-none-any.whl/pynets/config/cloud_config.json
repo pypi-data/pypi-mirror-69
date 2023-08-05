@@ -1,0 +1,36 @@
+{
+"jobName": "<JOBNAME>",
+"jobQueue": "Queue",
+"dependsOn": [],
+"jobDefinition": "FuncDefinition:8",
+"parameters": {},
+"containerOverrides": {
+  "vcpus": "<CORES>",
+  "memory": "<MEM>",
+  "command": [
+    "<INPUT>",
+    "/outputs",
+    "<MODALITY>",
+    "--participant_label",
+    "<SUBJ>",
+    "--session_label",
+    "<SESH>",
+    "--push_location",
+    "<PUSH>"
+  ],
+  "environment": [
+    {
+      "name": "AWS_ACCESS_KEY_ID",
+      "value": "<KEYID>"
+    },
+    {
+      "name": "AWS_SECRET_ACCESS_KEY",
+      "value": "<SECRET>"
+    },
+    {
+      "name": "AWS_DEFAULT_REGION",
+      "value": "us-east-2"
+    }
+  ]
+}
+}
