@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Top Games</title>
+    </head>
+    <body style="background-color: #73f094;">
+        <h1>Top Games For You</h1>
+
+        <p><h2>These are the games our service chose for YOU!</h2></p>
+        <p>All 5 of these games should be an interesting challenge for you,
+            whether they're almost exactly like your quiz choices, or very much different.
+        </p>
+        {%for game in top_games%}
+            <br>
+            <img src="{{game.cover}}" alt="{{game.slug}}">
+            <p>
+            <h3>{{game.name}}</h3>
+            <b>Genres:</b> {{', '.join(game.genres)}}<br>
+            <b>Platforms:</b> {{', '.join(game.platforms)}}<br>
+            <b>Summary:</b> {{game.summary}}<br>
+            <b>Age Rating:</b> {{game.age_floor}}+<br>
+        {%endfor%}
+
+
+        <p>Game Scorer is an independent service and is not associated with any major corporation.</p>
+    </body>
+</html>
