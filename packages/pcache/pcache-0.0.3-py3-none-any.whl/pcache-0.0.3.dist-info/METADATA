@@ -1,0 +1,40 @@
+Metadata-Version: 2.1
+Name: pcache
+Version: 0.0.3
+Summary: A simple implementation of Persistent Caching
+Home-page: https://github.com/pallabpain/pcache.git
+Author: Pallab Pain
+Author-email: pallabkumarpain@gmail.com
+License: MIT
+Keywords: cache,persistent cache
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: Unix
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Description-Content-Type: text/markdown
+
+# Simple Persistent Cache
+[![Build Status](https://travis-ci.com/pallabpain/pcache.svg?branch=master)](https://travis-ci.com/pallabpain/pcache)
+
+pcache is simple Python 3 implementation of persistent cache.
+
+## Installation
+To install `pcache`, simply run
+```
+pip install pcache
+```
+
+## Usage
+```
+>>> from pcache import PersistentCache
+>>> cache = PersistentCache(filename="cachefile")
+>>> cache["objId"] = "7sdjhds8"
+>>> cache["objId"]
+'7sdjhds8'
+```
+
+
