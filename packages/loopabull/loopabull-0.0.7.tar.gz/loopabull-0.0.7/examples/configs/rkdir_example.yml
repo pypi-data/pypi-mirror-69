@@ -1,0 +1,18 @@
+loglevel: info
+
+ansible:
+  playbooks_dir: examples/playbooks
+  cfg_file_path: examples/ansible.cfg
+  playbook_cmd: /usr/bin/ansible-playbook
+
+routing_keys:
+    - org.fedoraproject.dev.logger.hello_world
+
+plugins:
+  looper:
+    name: redis
+    host: 127.0.0.1
+    port: 6379
+    db: 0
+  translator:
+    name: rkdirectory
