@@ -1,0 +1,121 @@
+Metadata-Version: 2.1
+Name: djangoiot
+Version: 0.0.2b0
+Summary: Enable IoT in you django app
+Home-page: https://github.com/tomvictor/djangoiot
+Author: Tom Victor
+Author-email: vjtomvictor@gmail.com
+License: MIT
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Topic :: Internet :: WWW/HTTP
+Requires-Python: >=3.6
+Requires-Dist: django
+Requires-Dist: djangorestframework
+Requires-Dist: djangorestframework-simplejwt
+Requires-Dist: paho-mqtt
+Provides-Extra: dev
+Requires-Dist: bumpversion (<1,>=0.5.3) ; extra == 'dev'
+Requires-Dist: pytest-watch ; extra == 'dev'
+Requires-Dist: wheel ; extra == 'dev'
+Requires-Dist: twine ; extra == 'dev'
+Requires-Dist: ipython ; extra == 'dev'
+Requires-Dist: cryptography ; extra == 'dev'
+Requires-Dist: pytest-cov ; extra == 'dev'
+Requires-Dist: pytest-django ; extra == 'dev'
+Requires-Dist: pytest-xdist ; extra == 'dev'
+Requires-Dist: pytest ; extra == 'dev'
+Requires-Dist: tox ; extra == 'dev'
+Requires-Dist: flake8 ; extra == 'dev'
+Requires-Dist: pep8 ; extra == 'dev'
+Requires-Dist: isort ; extra == 'dev'
+Requires-Dist: Sphinx (<2,>=1.6.5) ; extra == 'dev'
+Requires-Dist: sphinx-rtd-theme (>=0.1.9) ; extra == 'dev'
+Provides-Extra: doc
+Requires-Dist: Sphinx (<2,>=1.6.5) ; extra == 'doc'
+Requires-Dist: sphinx-rtd-theme (>=0.1.9) ; extra == 'doc'
+Provides-Extra: lint
+Requires-Dist: flake8 ; extra == 'lint'
+Requires-Dist: pep8 ; extra == 'lint'
+Requires-Dist: isort ; extra == 'lint'
+Provides-Extra: test
+Requires-Dist: cryptography ; extra == 'test'
+Requires-Dist: pytest-cov ; extra == 'test'
+Requires-Dist: pytest-django ; extra == 'test'
+Requires-Dist: pytest-xdist ; extra == 'test'
+Requires-Dist: pytest ; extra == 'test'
+Requires-Dist: tox ; extra == 'test'
+
+djangoiot (Under development)
+=============================
+
+.. image:: https://readthedocs.org/projects/djangoiot/badge/?version=latest
+    :target: https://djangoiot.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
+.. image:: https://travis-ci.org/Tomvictor/djangoiot.svg?branch=master
+    :target: https://travis-ci.org/Tomvictor/djangoiot
+
+
+Djangoiot helps the Django app to effectively communicate over MQTT. Moreover,
+it enables the IoT devices to communicate directly with the web apps, database
+as well as algorithms.  The IoT era calls for a new connectivity protocol that
+guarantees minimum data consumption and greater reliability. Therefore,
+MQTT is more suitable than HTTP since it ensures complete support for actual physical devices.
+
+Look how easy it is to use::
+
+    from djangoiot.shortcuts import device,subscribe
+    from djangoiot import broker
+
+    new_broker = broker.register(host="localhost", port=8001)
+    new_broker.subscribe("topic/hello")
+    new_broker.send_message("topic/hello", "message")
+
+
+For full documentation, visit `djangoiot.readthedocs.io
+<https://djangoiot.readthedocs.io/en/latest/>`__.
+
+Features
+--------
+
+- Add and configure broker
+- Send message over MQTT
+- Receive from MQTT broker
+- Broadcast message over MQTT topics
+
+Installation
+------------
+
+Install djangoiot by running::
+
+    pip install djangoiot
+
+
+Contribute
+----------
+
+- Issue Tracker: github.com/tomvictor/djangoiot/issues
+- Source Code: github.com/tomvictor/djangoiot
+
+Support
+-------
+
+If you are having issues, please let raise issue on github.
+
+License
+-------
+
+The project is licensed under the MIT license.
+
+
