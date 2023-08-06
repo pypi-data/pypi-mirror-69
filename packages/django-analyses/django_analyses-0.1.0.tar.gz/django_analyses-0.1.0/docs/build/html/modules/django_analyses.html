@@ -1,0 +1,788 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>django_analyses package &mdash; django_analyses 0.0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="django_analyses.filters package" href="django_analyses.filters.html" />
+    <link rel="prev" title="Reference" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> django_analyses
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/user_guide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">django_analyses package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.filters.html">django_analyses.filters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.migrations.html">django_analyses.migrations package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.models.html">django_analyses.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.serializers.html">django_analyses.serializers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.utils.html">django_analyses.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.views.html">django_analyses.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-django_analyses.admin">django_analyses.admin module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-django_analyses.apps">django_analyses.apps module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-django_analyses.pipeline_runner">django_analyses.pipeline_runner module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-django_analyses.urls">django_analyses.urls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-django_analyses">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html">tests package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">django_analyses</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">Reference</a> &raquo;</li>
+        
+      <li>django_analyses package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/django_analyses.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="django-analyses-package">
+<h1>django_analyses package<a class="headerlink" href="#django-analyses-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="django_analyses.filters.html">django_analyses.filters package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.filters.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.filters.input.html">django_analyses.filters.input package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.filters.output.html">django_analyses.filters.output package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.filters.pipeline.html">django_analyses.filters.pipeline package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.filters.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.filters.html#module-django_analyses.filters.analysis">django_analyses.filters.analysis module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.filters.html#module-django_analyses.filters.category">django_analyses.filters.category module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.filters.html#module-django_analyses.filters">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="django_analyses.migrations.html">django_analyses.migrations package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.migrations.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.migrations.html#module-django_analyses.migrations.0001_initial">django_analyses.migrations.0001_initial module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.migrations.html#module-django_analyses.migrations">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="django_analyses.models.html">django_analyses.models package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.models.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.models.input.html">django_analyses.models.input package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.models.managers.html">django_analyses.models.managers package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.models.output.html">django_analyses.models.output package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.models.pipeline.html">django_analyses.models.pipeline package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.models.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.models.html#module-django_analyses.models.analysis">django_analyses.models.analysis module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.models.html#module-django_analyses.models.analysis_version">django_analyses.models.analysis_version module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.models.html#module-django_analyses.models.category">django_analyses.models.category module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.models.html#module-django_analyses.models.run">django_analyses.models.run module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.models.html#module-django_analyses.models">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="django_analyses.serializers.html">django_analyses.serializers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.serializers.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.serializers.input.html">django_analyses.serializers.input package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.serializers.output.html">django_analyses.serializers.output package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.serializers.pipeline.html">django_analyses.serializers.pipeline package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.serializers.utils.html">django_analyses.serializers.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.serializers.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.serializers.html#module-django_analyses.serializers.analysis">django_analyses.serializers.analysis module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.serializers.html#module-django_analyses.serializers.analysis_version">django_analyses.serializers.analysis_version module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.serializers.html#module-django_analyses.serializers.category">django_analyses.serializers.category module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.serializers.html#module-django_analyses.serializers.run">django_analyses.serializers.run module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.serializers.html#module-django_analyses.serializers">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="django_analyses.utils.html">django_analyses.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.utils.html#module-django_analyses.utils.choice_enum">django_analyses.utils.choice_enum module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.utils.html#module-django_analyses.utils.input_manager">django_analyses.utils.input_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.utils.html#module-django_analyses.utils.output_manager">django_analyses.utils.output_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.utils.html#module-django_analyses.utils">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="django_analyses.views.html">django_analyses.views package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views.analysis">django_analyses.views.analysis module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views.analysis_version">django_analyses.views.analysis_version module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views.category">django_analyses.views.category module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views.defaults">django_analyses.views.defaults module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views.input">django_analyses.views.input module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views.input_definition">django_analyses.views.input_definition module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views.input_specification">django_analyses.views.input_specification module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views.node">django_analyses.views.node module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views.output">django_analyses.views.output module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views.output_definition">django_analyses.views.output_definition module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views.output_specification">django_analyses.views.output_specification module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views.pagination">django_analyses.views.pagination module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views.pipe">django_analyses.views.pipe module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views.pipeline">django_analyses.views.pipeline module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views.run">django_analyses.views.run module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.views.html#module-django_analyses.views">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-django_analyses.admin">
+<span id="django-analyses-admin-module"></span><h2>django_analyses.admin module<a class="headerlink" href="#module-django_analyses.admin" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.admin.AnalysisAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.admin.</code><code class="sig-name descname">AnalysisAdmin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">admin_site</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.AnalysisAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.admin.AnalysisAdmin.inlines">
+<code class="sig-name descname">inlines</code><em class="property"> = [&lt;class 'django_analyses.admin.AnalysisVersionInline'&gt;]</em><a class="headerlink" href="#django_analyses.admin.AnalysisAdmin.inlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.AnalysisAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('title', 'description', 'created', 'modified')</em><a class="headerlink" href="#django_analyses.admin.AnalysisAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.AnalysisAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#django_analyses.admin.AnalysisAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="django_analyses.admin.AnalysisVersionAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.admin.</code><code class="sig-name descname">AnalysisVersionAdmin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">admin_site</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.AnalysisVersionAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.admin.AnalysisVersionAdmin.fieldsets">
+<code class="sig-name descname">fieldsets</code><em class="property"> = ((None, {'fields': ('analysis', 'title', 'description')}), ('Advanced Options', {'classes': ('collapse',), 'fields': ('run_method_key', 'nested_results_attribute')}))</em><a class="headerlink" href="#django_analyses.admin.AnalysisVersionAdmin.fieldsets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.AnalysisVersionAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#django_analyses.admin.AnalysisVersionAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.AnalysisVersionAdmin.name">
+<code class="sig-name descname">name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">instance</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="headerlink" href="#django_analyses.admin.AnalysisVersionAdmin.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="django_analyses.admin.AnalysisVersionInline">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.admin.</code><code class="sig-name descname">AnalysisVersionInline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent_model</span></em>, <em class="sig-param"><span class="n">admin_site</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.AnalysisVersionInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.TabularInline</span></code></p>
+<dl class="py method">
+<dt id="django_analyses.admin.AnalysisVersionInline.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#django_analyses.admin.AnalysisVersionInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.AnalysisVersionInline.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#django_analyses.admin.AnalysisVersionInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.html#django_analyses.models.analysis_version.AnalysisVersion" title="django_analyses.models.analysis_version.AnalysisVersion"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.analysis_version.AnalysisVersion</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="django_analyses.admin.InputAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.admin.</code><code class="sig-name descname">InputAdmin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">admin_site</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.InputAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="py method">
+<dt id="django_analyses.admin.InputAdmin.analysis_version">
+<code class="sig-name descname">analysis_version</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">instance</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="headerlink" href="#django_analyses.admin.InputAdmin.analysis_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.InputAdmin.get_queryset">
+<code class="sig-name descname">get_queryset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.InputAdmin.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a QuerySet of all model instances that can be edited by the
+admin site. This is used by changelist_view.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.InputAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('run_id', 'key', 'value', 'analysis_version')</em><a class="headerlink" href="#django_analyses.admin.InputAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.InputAdmin.list_display_links">
+<code class="sig-name descname">list_display_links</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.admin.InputAdmin.list_display_links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.InputAdmin.list_filter">
+<code class="sig-name descname">list_filter</code><em class="property"> = ('run__analysis_version',)</em><a class="headerlink" href="#django_analyses.admin.InputAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.InputAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#django_analyses.admin.InputAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.InputAdmin.run_id">
+<code class="sig-name descname">run_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">instance</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="headerlink" href="#django_analyses.admin.InputAdmin.run_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.InputAdmin.search_fields">
+<code class="sig-name descname">search_fields</code><em class="property"> = ('run__id',)</em><a class="headerlink" href="#django_analyses.admin.InputAdmin.search_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="django_analyses.admin.InputDefinitionAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.admin.</code><code class="sig-name descname">InputDefinitionAdmin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">admin_site</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.InputDefinitionAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="py method">
+<dt id="django_analyses.admin.InputDefinitionAdmin.choices">
+<code class="sig-name descname">choices</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">instance</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a><a class="headerlink" href="#django_analyses.admin.InputDefinitionAdmin.choices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.InputDefinitionAdmin.get_queryset">
+<code class="sig-name descname">get_queryset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.InputDefinitionAdmin.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a QuerySet of all model instances that can be edited by the
+admin site. This is used by changelist_view.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.InputDefinitionAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('key', 'description', 'min_value', 'max_value', 'default', 'choices', 'required', 'is_configuration')</em><a class="headerlink" href="#django_analyses.admin.InputDefinitionAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.InputDefinitionAdmin.list_filter">
+<code class="sig-name descname">list_filter</code><em class="property"> = ('specification_set__analysis__title', 'specification_set__id')</em><a class="headerlink" href="#django_analyses.admin.InputDefinitionAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.InputDefinitionAdmin.max_value">
+<code class="sig-name descname">max_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">instance</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.InputDefinitionAdmin.max_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.InputDefinitionAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#django_analyses.admin.InputDefinitionAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.InputDefinitionAdmin.min_value">
+<code class="sig-name descname">min_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">instance</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.InputDefinitionAdmin.min_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="django_analyses.admin.InputDefinitionsInline">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.admin.</code><code class="sig-name descname">InputDefinitionsInline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent_model</span></em>, <em class="sig-param"><span class="n">admin_site</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.InputDefinitionsInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.TabularInline</span></code></p>
+<dl class="py method">
+<dt id="django_analyses.admin.InputDefinitionsInline.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#django_analyses.admin.InputDefinitionsInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.InputDefinitionsInline.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#django_analyses.admin.InputDefinitionsInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.input_specification.InputSpecification_base_input_definitions</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.InputDefinitionsInline.verbose_name_plural">
+<code class="sig-name descname">verbose_name_plural</code><em class="property"> = 'Input Definitions'</em><a class="headerlink" href="#django_analyses.admin.InputDefinitionsInline.verbose_name_plural" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="django_analyses.admin.InputInline">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.admin.</code><code class="sig-name descname">InputInline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent_model</span></em>, <em class="sig-param"><span class="n">admin_site</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.InputInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.TabularInline</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.admin.InputInline.extra">
+<code class="sig-name descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#django_analyses.admin.InputInline.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.InputInline.get_queryset">
+<code class="sig-name descname">get_queryset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.InputInline.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a QuerySet of all model instances that can be edited by the
+admin site. This is used by changelist_view.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.InputInline.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#django_analyses.admin.InputInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.InputInline.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#django_analyses.admin.InputInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.input.html#django_analyses.models.input.input.Input" title="django_analyses.models.input.input.Input"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.input.Input</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.InputInline.readonly_fields">
+<code class="sig-name descname">readonly_fields</code><em class="property"> = ('key', 'value')</em><a class="headerlink" href="#django_analyses.admin.InputInline.readonly_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="django_analyses.admin.InputSpecificationAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.admin.</code><code class="sig-name descname">InputSpecificationAdmin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">admin_site</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.InputSpecificationAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.admin.InputSpecificationAdmin.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ('analysis',)</em><a class="headerlink" href="#django_analyses.admin.InputSpecificationAdmin.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.InputSpecificationAdmin.inlines">
+<code class="sig-name descname">inlines</code><em class="property"> = [&lt;class 'django_analyses.admin.InputDefinitionsInline'&gt;]</em><a class="headerlink" href="#django_analyses.admin.InputSpecificationAdmin.inlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.InputSpecificationAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('id', 'analysis')</em><a class="headerlink" href="#django_analyses.admin.InputSpecificationAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.InputSpecificationAdmin.list_filter">
+<code class="sig-name descname">list_filter</code><em class="property"> = ('analysis',)</em><a class="headerlink" href="#django_analyses.admin.InputSpecificationAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.InputSpecificationAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#django_analyses.admin.InputSpecificationAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="django_analyses.admin.OutputAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.admin.</code><code class="sig-name descname">OutputAdmin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">admin_site</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.OutputAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="py method">
+<dt id="django_analyses.admin.OutputAdmin.analysis_version">
+<code class="sig-name descname">analysis_version</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">instance</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="headerlink" href="#django_analyses.admin.OutputAdmin.analysis_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.OutputAdmin.get_queryset">
+<code class="sig-name descname">get_queryset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.OutputAdmin.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a QuerySet of all model instances that can be edited by the
+admin site. This is used by changelist_view.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.OutputAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('run_id', 'key', 'value', 'analysis_version')</em><a class="headerlink" href="#django_analyses.admin.OutputAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.OutputAdmin.list_display_links">
+<code class="sig-name descname">list_display_links</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.admin.OutputAdmin.list_display_links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.OutputAdmin.list_filter">
+<code class="sig-name descname">list_filter</code><em class="property"> = ('run__analysis_version', 'run__id')</em><a class="headerlink" href="#django_analyses.admin.OutputAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.OutputAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#django_analyses.admin.OutputAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.OutputAdmin.run_id">
+<code class="sig-name descname">run_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">instance</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="headerlink" href="#django_analyses.admin.OutputAdmin.run_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="django_analyses.admin.OutputDefinition">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.admin.</code><code class="sig-name descname">OutputDefinition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">admin_site</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.OutputDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="py method">
+<dt id="django_analyses.admin.OutputDefinition.analysis">
+<code class="sig-name descname">analysis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">instance</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.OutputDefinition.analysis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.OutputDefinition.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('key', 'description', 'analysis')</em><a class="headerlink" href="#django_analyses.admin.OutputDefinition.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.OutputDefinition.list_filter">
+<code class="sig-name descname">list_filter</code><em class="property"> = ('specification_set__analysis__title', 'specification_set__id')</em><a class="headerlink" href="#django_analyses.admin.OutputDefinition.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.OutputDefinition.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#django_analyses.admin.OutputDefinition.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="django_analyses.admin.OutputInline">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.admin.</code><code class="sig-name descname">OutputInline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent_model</span></em>, <em class="sig-param"><span class="n">admin_site</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.OutputInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.TabularInline</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.admin.OutputInline.extra">
+<code class="sig-name descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#django_analyses.admin.OutputInline.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.OutputInline.get_queryset">
+<code class="sig-name descname">get_queryset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.OutputInline.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a QuerySet of all model instances that can be edited by the
+admin site. This is used by changelist_view.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.OutputInline.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#django_analyses.admin.OutputInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.OutputInline.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#django_analyses.admin.OutputInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.output.html#django_analyses.models.output.output.Output" title="django_analyses.models.output.output.Output"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.output.output.Output</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.OutputInline.readonly_fields">
+<code class="sig-name descname">readonly_fields</code><em class="property"> = ('key', 'value')</em><a class="headerlink" href="#django_analyses.admin.OutputInline.readonly_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="django_analyses.admin.OutputSpecificationAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.admin.</code><code class="sig-name descname">OutputSpecificationAdmin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">admin_site</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.OutputSpecificationAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.admin.OutputSpecificationAdmin.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ('analysis',)</em><a class="headerlink" href="#django_analyses.admin.OutputSpecificationAdmin.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.OutputSpecificationAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('id', 'analysis')</em><a class="headerlink" href="#django_analyses.admin.OutputSpecificationAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.OutputSpecificationAdmin.list_filter">
+<code class="sig-name descname">list_filter</code><em class="property"> = ('analysis',)</em><a class="headerlink" href="#django_analyses.admin.OutputSpecificationAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.OutputSpecificationAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#django_analyses.admin.OutputSpecificationAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="django_analyses.admin.RunAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.admin.</code><code class="sig-name descname">RunAdmin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">admin_site</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.admin.RunAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="py class">
+<dt id="django_analyses.admin.RunAdmin.Media">
+<em class="property">class </em><code class="sig-name descname">Media</code><a class="headerlink" href="#django_analyses.admin.RunAdmin.Media" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt id="django_analyses.admin.RunAdmin.Media.css">
+<code class="sig-name descname">css</code><em class="property"> = {'all': ('django_analyses/css/hide_admin_original.css',)}</em><a class="headerlink" href="#django_analyses.admin.RunAdmin.Media.css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.RunAdmin.inlines">
+<code class="sig-name descname">inlines</code><em class="property"> = (&lt;class 'django_analyses.admin.InputInline'&gt;, &lt;class 'django_analyses.admin.OutputInline'&gt;)</em><a class="headerlink" href="#django_analyses.admin.RunAdmin.inlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.admin.RunAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('id', 'analysis_version', 'created')</em><a class="headerlink" href="#django_analyses.admin.RunAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.admin.RunAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#django_analyses.admin.RunAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.apps">
+<span id="django-analyses-apps-module"></span><h2>django_analyses.apps module<a class="headerlink" href="#module-django_analyses.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.apps.DjangoAnalysesConfig">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.apps.</code><code class="sig-name descname">DjangoAnalysesConfig</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">app_name</span></em>, <em class="sig-param"><span class="n">app_module</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.apps.DjangoAnalysesConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.apps.config.AppConfig</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.apps.DjangoAnalysesConfig.name">
+<code class="sig-name descname">name</code><em class="property"> = 'django_analyses'</em><a class="headerlink" href="#django_analyses.apps.DjangoAnalysesConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.pipeline_runner">
+<span id="django-analyses-pipeline-runner-module"></span><h2>django_analyses.pipeline_runner module<a class="headerlink" href="#module-django_analyses.pipeline_runner" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.pipeline_runner.PipelineRunner">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.pipeline_runner.</code><code class="sig-name descname">PipelineRunner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pipeline</span><span class="p">:</span> <span class="n"><a class="reference internal" href="django_analyses.models.pipeline.html#django_analyses.models.pipeline.pipeline.Pipeline" title="django_analyses.models.pipeline.pipeline.Pipeline">django_analyses.models.pipeline.pipeline.Pipeline</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.pipeline_runner.PipelineRunner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt id="django_analyses.pipeline_runner.PipelineRunner.get_destination_kwarg">
+<code class="sig-name descname">get_destination_kwarg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pipe</span><span class="p">:</span> <span class="n"><a class="reference internal" href="django_analyses.models.pipeline.html#django_analyses.models.pipeline.pipe.Pipe" title="django_analyses.models.pipeline.pipe.Pipe">django_analyses.models.pipeline.pipe.Pipe</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a><a class="headerlink" href="#django_analyses.pipeline_runner.PipelineRunner.get_destination_kwarg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.pipeline_runner.PipelineRunner.get_incoming_pipes">
+<code class="sig-name descname">get_incoming_pipes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span><span class="p">:</span> <span class="n"><a class="reference internal" href="django_analyses.models.pipeline.html#django_analyses.models.pipeline.node.Node" title="django_analyses.models.pipeline.node.Node">django_analyses.models.pipeline.node.Node</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/models/querysets.html#django.db.models.query.QuerySet" title="(in Django v3.2)">django.db.models.query.QuerySet</a><a class="headerlink" href="#django_analyses.pipeline_runner.PipelineRunner.get_incoming_pipes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.pipeline_runner.PipelineRunner.get_node_inputs">
+<code class="sig-name descname">get_node_inputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span><span class="p">:</span> <span class="n"><a class="reference internal" href="django_analyses.models.pipeline.html#django_analyses.models.pipeline.node.Node" title="django_analyses.models.pipeline.node.Node">django_analyses.models.pipeline.node.Node</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a><a class="headerlink" href="#django_analyses.pipeline_runner.PipelineRunner.get_node_inputs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.pipeline_runner.PipelineRunner.has_required_runs">
+<code class="sig-name descname">has_required_runs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span><span class="p">:</span> <span class="n"><a class="reference internal" href="django_analyses.models.pipeline.html#django_analyses.models.pipeline.node.Node" title="django_analyses.models.pipeline.node.Node">django_analyses.models.pipeline.node.Node</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="headerlink" href="#django_analyses.pipeline_runner.PipelineRunner.has_required_runs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.pipeline_runner.PipelineRunner.pending_nodes">
+<em class="property">property </em><code class="sig-name descname">pending_nodes</code><a class="headerlink" href="#django_analyses.pipeline_runner.PipelineRunner.pending_nodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.pipeline_runner.PipelineRunner.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.pipeline_runner.PipelineRunner.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.pipeline_runner.PipelineRunner.run_entry_nodes">
+<code class="sig-name descname">run_entry_nodes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#django_analyses.pipeline_runner.PipelineRunner.run_entry_nodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.pipeline_runner.PipelineRunner.run_node">
+<code class="sig-name descname">run_node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span><span class="p">:</span> <span class="n"><a class="reference internal" href="django_analyses.models.pipeline.html#django_analyses.models.pipeline.node.Node" title="django_analyses.models.pipeline.node.Node">django_analyses.models.pipeline.node.Node</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#django_analyses.pipeline_runner.PipelineRunner.run_node" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.urls">
+<span id="django-analyses-urls-module"></span><h2>django_analyses.urls module<a class="headerlink" href="#module-django_analyses.urls" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-django_analyses">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-django_analyses" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="django_analyses.filters.html" class="btn btn-neutral float-right" title="django_analyses.filters package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="modules.html" class="btn btn-neutral float-left" title="Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Zvi Baratz
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

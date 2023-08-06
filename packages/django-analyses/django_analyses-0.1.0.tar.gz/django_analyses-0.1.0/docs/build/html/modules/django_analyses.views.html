@@ -1,0 +1,1012 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>django_analyses.views package &mdash; django_analyses 0.0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="tests package" href="tests.html" />
+    <link rel="prev" title="django_analyses.utils package" href="django_analyses.utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> django_analyses
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/user_guide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="django_analyses.html">django_analyses package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="django_analyses.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.filters.html">django_analyses.filters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.migrations.html">django_analyses.migrations package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.models.html">django_analyses.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.serializers.html">django_analyses.serializers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.utils.html">django_analyses.utils package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">django_analyses.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.admin">django_analyses.admin module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.apps">django_analyses.apps module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.pipeline_runner">django_analyses.pipeline_runner module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.urls">django_analyses.urls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html">tests package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">django_analyses</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">Reference</a> &raquo;</li>
+        
+          <li><a href="django_analyses.html">django_analyses package</a> &raquo;</li>
+        
+      <li>django_analyses.views package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/django_analyses.views.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="django-analyses-views-package">
+<h1>django_analyses.views package<a class="headerlink" href="#django-analyses-views-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-django_analyses.views.analysis">
+<span id="django-analyses-views-analysis-module"></span><h2>django_analyses.views.analysis module<a class="headerlink" href="#module-django_analyses.views.analysis" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.views.analysis.AnalysisViewSet">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.views.analysis.</code><code class="sig-name descname">AnalysisViewSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.analysis.AnalysisViewSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.views.defaults.DefaultsMixin" title="django_analyses.views.defaults.DefaultsMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.defaults.DefaultsMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis.AnalysisViewSet.basename">
+<code class="sig-name descname">basename</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.analysis.AnalysisViewSet.basename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis.AnalysisViewSet.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.analysis.AnalysisViewSet.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis.AnalysisViewSet.detail">
+<code class="sig-name descname">detail</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.analysis.AnalysisViewSet.detail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis.AnalysisViewSet.filter_class">
+<code class="sig-name descname">filter_class</code><a class="headerlink" href="#django_analyses.views.analysis.AnalysisViewSet.filter_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.filters.html#django_analyses.filters.analysis.AnalysisFilter" title="django_analyses.filters.analysis.AnalysisFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.filters.analysis.AnalysisFilter</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis.AnalysisViewSet.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.analysis.AnalysisViewSet.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis.AnalysisViewSet.pagination_class">
+<code class="sig-name descname">pagination_class</code><a class="headerlink" href="#django_analyses.views.analysis.AnalysisViewSet.pagination_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#django_analyses.views.pagination.StandardResultsSetPagination" title="django_analyses.views.pagination.StandardResultsSetPagination"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.pagination.StandardResultsSetPagination</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis.AnalysisViewSet.queryset">
+<code class="sig-name descname">queryset</code><a class="headerlink" href="#django_analyses.views.analysis.AnalysisViewSet.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis.AnalysisViewSet.serializer_class">
+<code class="sig-name descname">serializer_class</code><a class="headerlink" href="#django_analyses.views.analysis.AnalysisViewSet.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.serializers.html#django_analyses.serializers.analysis.AnalysisSerializer" title="django_analyses.serializers.analysis.AnalysisSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.serializers.analysis.AnalysisSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis.AnalysisViewSet.suffix">
+<code class="sig-name descname">suffix</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.analysis.AnalysisViewSet.suffix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.views.analysis_version">
+<span id="django-analyses-views-analysis-version-module"></span><h2>django_analyses.views.analysis_version module<a class="headerlink" href="#module-django_analyses.views.analysis_version" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.views.analysis_version.AnalysisVersionViewSet">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.views.analysis_version.</code><code class="sig-name descname">AnalysisVersionViewSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.analysis_version.AnalysisVersionViewSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis_version.AnalysisVersionViewSet.basename">
+<code class="sig-name descname">basename</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.analysis_version.AnalysisVersionViewSet.basename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis_version.AnalysisVersionViewSet.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.analysis_version.AnalysisVersionViewSet.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis_version.AnalysisVersionViewSet.detail">
+<code class="sig-name descname">detail</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.analysis_version.AnalysisVersionViewSet.detail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis_version.AnalysisVersionViewSet.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.analysis_version.AnalysisVersionViewSet.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis_version.AnalysisVersionViewSet.queryset">
+<code class="sig-name descname">queryset</code><a class="headerlink" href="#django_analyses.views.analysis_version.AnalysisVersionViewSet.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis_version.AnalysisVersionViewSet.serializer_class">
+<code class="sig-name descname">serializer_class</code><a class="headerlink" href="#django_analyses.views.analysis_version.AnalysisVersionViewSet.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.serializers.html#django_analyses.serializers.analysis_version.AnalysisVersionSerializer" title="django_analyses.serializers.analysis_version.AnalysisVersionSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.serializers.analysis_version.AnalysisVersionSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.analysis_version.AnalysisVersionViewSet.suffix">
+<code class="sig-name descname">suffix</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.analysis_version.AnalysisVersionViewSet.suffix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.views.category">
+<span id="django-analyses-views-category-module"></span><h2>django_analyses.views.category module<a class="headerlink" href="#module-django_analyses.views.category" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.views.category.CategoryViewSet">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.views.category.</code><code class="sig-name descname">CategoryViewSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.category.CategoryViewSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.views.defaults.DefaultsMixin" title="django_analyses.views.defaults.DefaultsMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.defaults.DefaultsMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.views.category.CategoryViewSet.basename">
+<code class="sig-name descname">basename</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.category.CategoryViewSet.basename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.category.CategoryViewSet.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.category.CategoryViewSet.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.category.CategoryViewSet.detail">
+<code class="sig-name descname">detail</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.category.CategoryViewSet.detail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.category.CategoryViewSet.filter_class">
+<code class="sig-name descname">filter_class</code><a class="headerlink" href="#django_analyses.views.category.CategoryViewSet.filter_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.filters.html#django_analyses.filters.category.CategoryFilter" title="django_analyses.filters.category.CategoryFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.filters.category.CategoryFilter</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.category.CategoryViewSet.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.category.CategoryViewSet.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.category.CategoryViewSet.pagination_class">
+<code class="sig-name descname">pagination_class</code><a class="headerlink" href="#django_analyses.views.category.CategoryViewSet.pagination_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#django_analyses.views.pagination.StandardResultsSetPagination" title="django_analyses.views.pagination.StandardResultsSetPagination"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.pagination.StandardResultsSetPagination</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.category.CategoryViewSet.queryset">
+<code class="sig-name descname">queryset</code><a class="headerlink" href="#django_analyses.views.category.CategoryViewSet.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.category.CategoryViewSet.serializer_class">
+<code class="sig-name descname">serializer_class</code><a class="headerlink" href="#django_analyses.views.category.CategoryViewSet.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.serializers.html#django_analyses.serializers.category.CategorySerializer" title="django_analyses.serializers.category.CategorySerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.serializers.category.CategorySerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.category.CategoryViewSet.suffix">
+<code class="sig-name descname">suffix</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.category.CategoryViewSet.suffix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.views.defaults">
+<span id="django-analyses-views-defaults-module"></span><h2>django_analyses.views.defaults module<a class="headerlink" href="#module-django_analyses.views.defaults" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.views.defaults.DefaultsMixin">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.views.defaults.</code><code class="sig-name descname">DefaultsMixin</code><a class="headerlink" href="#django_analyses.views.defaults.DefaultsMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Default settings for view authentication, permissions, filtering and pagination.</p>
+<dl class="py attribute">
+<dt id="django_analyses.views.defaults.DefaultsMixin.authentication_classes">
+<code class="sig-name descname">authentication_classes</code><em class="property"> = (&lt;class 'rest_framework.authentication.BasicAuthentication'&gt;, &lt;class 'rest_framework.authentication.TokenAuthentication'&gt;)</em><a class="headerlink" href="#django_analyses.views.defaults.DefaultsMixin.authentication_classes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.defaults.DefaultsMixin.filter_backends">
+<code class="sig-name descname">filter_backends</code><em class="property"> = (&lt;class 'django_filters.rest_framework.backends.DjangoFilterBackend'&gt;, &lt;class 'rest_framework.filters.SearchFilter'&gt;, &lt;class 'rest_framework.filters.OrderingFilter'&gt;)</em><a class="headerlink" href="#django_analyses.views.defaults.DefaultsMixin.filter_backends" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.defaults.DefaultsMixin.permission_classes">
+<code class="sig-name descname">permission_classes</code><em class="property"> = (&lt;class 'rest_framework.permissions.IsAuthenticated'&gt;,)</em><a class="headerlink" href="#django_analyses.views.defaults.DefaultsMixin.permission_classes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.views.input">
+<span id="django-analyses-views-input-module"></span><h2>django_analyses.views.input module<a class="headerlink" href="#module-django_analyses.views.input" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.views.input.InputViewSet">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.views.input.</code><code class="sig-name descname">InputViewSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.input.InputViewSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.views.defaults.DefaultsMixin" title="django_analyses.views.defaults.DefaultsMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.defaults.DefaultsMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.views.input.InputViewSet.basename">
+<code class="sig-name descname">basename</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.input.InputViewSet.basename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input.InputViewSet.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.input.InputViewSet.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input.InputViewSet.detail">
+<code class="sig-name descname">detail</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.input.InputViewSet.detail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input.InputViewSet.filter_class">
+<code class="sig-name descname">filter_class</code><a class="headerlink" href="#django_analyses.views.input.InputViewSet.filter_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.filters.input.html#django_analyses.filters.input.input.InputFilter" title="django_analyses.filters.input.input.InputFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.filters.input.input.InputFilter</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.views.input.InputViewSet.get_queryset">
+<code class="sig-name descname">get_queryset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.input.InputViewSet.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of items for this view.
+This must be an iterable, and may be a queryset.
+Defaults to using <cite>self.queryset</cite>.</p>
+<p>This method should always be used rather than accessing <cite>self.queryset</cite>
+directly, as <cite>self.queryset</cite> gets evaluated only once, and those results
+are cached for all subsequent requests.</p>
+<p>You may want to override this if you need to provide different
+querysets depending on the incoming request.</p>
+<p>(Eg. return a list of items that is specific to the user)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input.InputViewSet.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.input.InputViewSet.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input.InputViewSet.pagination_class">
+<code class="sig-name descname">pagination_class</code><a class="headerlink" href="#django_analyses.views.input.InputViewSet.pagination_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#django_analyses.views.pagination.StandardResultsSetPagination" title="django_analyses.views.pagination.StandardResultsSetPagination"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.pagination.StandardResultsSetPagination</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input.InputViewSet.serializer_class">
+<code class="sig-name descname">serializer_class</code><a class="headerlink" href="#django_analyses.views.input.InputViewSet.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.serializers.input.html#django_analyses.serializers.input.input.InputSerializer" title="django_analyses.serializers.input.input.InputSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.serializers.input.input.InputSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input.InputViewSet.suffix">
+<code class="sig-name descname">suffix</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.input.InputViewSet.suffix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.views.input_definition">
+<span id="django-analyses-views-input-definition-module"></span><h2>django_analyses.views.input_definition module<a class="headerlink" href="#module-django_analyses.views.input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.views.input_definition.InputDefinitionViewSet">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.views.input_definition.</code><code class="sig-name descname">InputDefinitionViewSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.input_definition.InputDefinitionViewSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.views.defaults.DefaultsMixin" title="django_analyses.views.defaults.DefaultsMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.defaults.DefaultsMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.views.input_definition.InputDefinitionViewSet.basename">
+<code class="sig-name descname">basename</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.input_definition.InputDefinitionViewSet.basename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input_definition.InputDefinitionViewSet.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.input_definition.InputDefinitionViewSet.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input_definition.InputDefinitionViewSet.detail">
+<code class="sig-name descname">detail</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.input_definition.InputDefinitionViewSet.detail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input_definition.InputDefinitionViewSet.filter_class">
+<code class="sig-name descname">filter_class</code><a class="headerlink" href="#django_analyses.views.input_definition.InputDefinitionViewSet.filter_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.filters.input.html#django_analyses.filters.input.input_definition.InputDefinitionFilter" title="django_analyses.filters.input.input_definition.InputDefinitionFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.filters.input.input_definition.InputDefinitionFilter</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.views.input_definition.InputDefinitionViewSet.get_queryset">
+<code class="sig-name descname">get_queryset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.input_definition.InputDefinitionViewSet.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of items for this view.
+This must be an iterable, and may be a queryset.
+Defaults to using <cite>self.queryset</cite>.</p>
+<p>This method should always be used rather than accessing <cite>self.queryset</cite>
+directly, as <cite>self.queryset</cite> gets evaluated only once, and those results
+are cached for all subsequent requests.</p>
+<p>You may want to override this if you need to provide different
+querysets depending on the incoming request.</p>
+<p>(Eg. return a list of items that is specific to the user)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input_definition.InputDefinitionViewSet.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.input_definition.InputDefinitionViewSet.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input_definition.InputDefinitionViewSet.pagination_class">
+<code class="sig-name descname">pagination_class</code><a class="headerlink" href="#django_analyses.views.input_definition.InputDefinitionViewSet.pagination_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#django_analyses.views.pagination.StandardResultsSetPagination" title="django_analyses.views.pagination.StandardResultsSetPagination"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.pagination.StandardResultsSetPagination</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input_definition.InputDefinitionViewSet.serializer_class">
+<code class="sig-name descname">serializer_class</code><a class="headerlink" href="#django_analyses.views.input_definition.InputDefinitionViewSet.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.serializers.input.definitions.html#django_analyses.serializers.input.definitions.input_definition.InputDefinitionSerializer" title="django_analyses.serializers.input.definitions.input_definition.InputDefinitionSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.serializers.input.definitions.input_definition.InputDefinitionSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input_definition.InputDefinitionViewSet.suffix">
+<code class="sig-name descname">suffix</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.input_definition.InputDefinitionViewSet.suffix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.views.input_specification">
+<span id="django-analyses-views-input-specification-module"></span><h2>django_analyses.views.input_specification module<a class="headerlink" href="#module-django_analyses.views.input_specification" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.views.input_specification.InputSpecificationViewSet">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.views.input_specification.</code><code class="sig-name descname">InputSpecificationViewSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.input_specification.InputSpecificationViewSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.views.input_specification.InputSpecificationViewSet.basename">
+<code class="sig-name descname">basename</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.input_specification.InputSpecificationViewSet.basename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input_specification.InputSpecificationViewSet.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.input_specification.InputSpecificationViewSet.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input_specification.InputSpecificationViewSet.detail">
+<code class="sig-name descname">detail</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.input_specification.InputSpecificationViewSet.detail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input_specification.InputSpecificationViewSet.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.input_specification.InputSpecificationViewSet.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input_specification.InputSpecificationViewSet.queryset">
+<code class="sig-name descname">queryset</code><a class="headerlink" href="#django_analyses.views.input_specification.InputSpecificationViewSet.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input_specification.InputSpecificationViewSet.serializer_class">
+<code class="sig-name descname">serializer_class</code><a class="headerlink" href="#django_analyses.views.input_specification.InputSpecificationViewSet.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.serializers.input.html#django_analyses.serializers.input.input_specification.InputSpecificationSerializer" title="django_analyses.serializers.input.input_specification.InputSpecificationSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.serializers.input.input_specification.InputSpecificationSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.input_specification.InputSpecificationViewSet.suffix">
+<code class="sig-name descname">suffix</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.input_specification.InputSpecificationViewSet.suffix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.views.node">
+<span id="django-analyses-views-node-module"></span><h2>django_analyses.views.node module<a class="headerlink" href="#module-django_analyses.views.node" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.views.node.NodeViewSet">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.views.node.</code><code class="sig-name descname">NodeViewSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.node.NodeViewSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.views.defaults.DefaultsMixin" title="django_analyses.views.defaults.DefaultsMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.defaults.DefaultsMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.views.node.NodeViewSet.basename">
+<code class="sig-name descname">basename</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.node.NodeViewSet.basename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.node.NodeViewSet.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.node.NodeViewSet.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.node.NodeViewSet.detail">
+<code class="sig-name descname">detail</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.node.NodeViewSet.detail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.node.NodeViewSet.filter_class">
+<code class="sig-name descname">filter_class</code><a class="headerlink" href="#django_analyses.views.node.NodeViewSet.filter_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.filters.pipeline.html#django_analyses.filters.pipeline.node.NodeFilter" title="django_analyses.filters.pipeline.node.NodeFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.filters.pipeline.node.NodeFilter</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.node.NodeViewSet.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.node.NodeViewSet.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.node.NodeViewSet.pagination_class">
+<code class="sig-name descname">pagination_class</code><a class="headerlink" href="#django_analyses.views.node.NodeViewSet.pagination_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#django_analyses.views.pagination.StandardResultsSetPagination" title="django_analyses.views.pagination.StandardResultsSetPagination"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.pagination.StandardResultsSetPagination</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.node.NodeViewSet.queryset">
+<code class="sig-name descname">queryset</code><a class="headerlink" href="#django_analyses.views.node.NodeViewSet.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.node.NodeViewSet.serializer_class">
+<code class="sig-name descname">serializer_class</code><a class="headerlink" href="#django_analyses.views.node.NodeViewSet.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.serializers.pipeline.html#django_analyses.serializers.pipeline.node.NodeSerializer" title="django_analyses.serializers.pipeline.node.NodeSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.serializers.pipeline.node.NodeSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.node.NodeViewSet.suffix">
+<code class="sig-name descname">suffix</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.node.NodeViewSet.suffix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.views.output">
+<span id="django-analyses-views-output-module"></span><h2>django_analyses.views.output module<a class="headerlink" href="#module-django_analyses.views.output" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.views.output.OutputViewSet">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.views.output.</code><code class="sig-name descname">OutputViewSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.output.OutputViewSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.views.defaults.DefaultsMixin" title="django_analyses.views.defaults.DefaultsMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.defaults.DefaultsMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.views.output.OutputViewSet.basename">
+<code class="sig-name descname">basename</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.output.OutputViewSet.basename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output.OutputViewSet.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.output.OutputViewSet.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output.OutputViewSet.detail">
+<code class="sig-name descname">detail</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.output.OutputViewSet.detail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output.OutputViewSet.filter_class">
+<code class="sig-name descname">filter_class</code><a class="headerlink" href="#django_analyses.views.output.OutputViewSet.filter_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.filters.output.html#django_analyses.filters.output.output.OutputFilter" title="django_analyses.filters.output.output.OutputFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.filters.output.output.OutputFilter</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.views.output.OutputViewSet.get_queryset">
+<code class="sig-name descname">get_queryset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.output.OutputViewSet.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of items for this view.
+This must be an iterable, and may be a queryset.
+Defaults to using <cite>self.queryset</cite>.</p>
+<p>This method should always be used rather than accessing <cite>self.queryset</cite>
+directly, as <cite>self.queryset</cite> gets evaluated only once, and those results
+are cached for all subsequent requests.</p>
+<p>You may want to override this if you need to provide different
+querysets depending on the incoming request.</p>
+<p>(Eg. return a list of items that is specific to the user)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output.OutputViewSet.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.output.OutputViewSet.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output.OutputViewSet.pagination_class">
+<code class="sig-name descname">pagination_class</code><a class="headerlink" href="#django_analyses.views.output.OutputViewSet.pagination_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#django_analyses.views.pagination.StandardResultsSetPagination" title="django_analyses.views.pagination.StandardResultsSetPagination"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.pagination.StandardResultsSetPagination</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output.OutputViewSet.serializer_class">
+<code class="sig-name descname">serializer_class</code><a class="headerlink" href="#django_analyses.views.output.OutputViewSet.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.serializers.output.html#django_analyses.serializers.output.output.OutputSerializer" title="django_analyses.serializers.output.output.OutputSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.serializers.output.output.OutputSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output.OutputViewSet.suffix">
+<code class="sig-name descname">suffix</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.output.OutputViewSet.suffix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.views.output_definition">
+<span id="django-analyses-views-output-definition-module"></span><h2>django_analyses.views.output_definition module<a class="headerlink" href="#module-django_analyses.views.output_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.views.output_definition.OutputDefinitionViewSet">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.views.output_definition.</code><code class="sig-name descname">OutputDefinitionViewSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.output_definition.OutputDefinitionViewSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.views.defaults.DefaultsMixin" title="django_analyses.views.defaults.DefaultsMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.defaults.DefaultsMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.views.output_definition.OutputDefinitionViewSet.basename">
+<code class="sig-name descname">basename</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.output_definition.OutputDefinitionViewSet.basename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output_definition.OutputDefinitionViewSet.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.output_definition.OutputDefinitionViewSet.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output_definition.OutputDefinitionViewSet.detail">
+<code class="sig-name descname">detail</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.output_definition.OutputDefinitionViewSet.detail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output_definition.OutputDefinitionViewSet.filter_class">
+<code class="sig-name descname">filter_class</code><a class="headerlink" href="#django_analyses.views.output_definition.OutputDefinitionViewSet.filter_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.filters.output.html#django_analyses.filters.output.output_definition.OutputDefinitionFilter" title="django_analyses.filters.output.output_definition.OutputDefinitionFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.filters.output.output_definition.OutputDefinitionFilter</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.views.output_definition.OutputDefinitionViewSet.get_queryset">
+<code class="sig-name descname">get_queryset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.output_definition.OutputDefinitionViewSet.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of items for this view.
+This must be an iterable, and may be a queryset.
+Defaults to using <cite>self.queryset</cite>.</p>
+<p>This method should always be used rather than accessing <cite>self.queryset</cite>
+directly, as <cite>self.queryset</cite> gets evaluated only once, and those results
+are cached for all subsequent requests.</p>
+<p>You may want to override this if you need to provide different
+querysets depending on the incoming request.</p>
+<p>(Eg. return a list of items that is specific to the user)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output_definition.OutputDefinitionViewSet.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.output_definition.OutputDefinitionViewSet.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output_definition.OutputDefinitionViewSet.pagination_class">
+<code class="sig-name descname">pagination_class</code><a class="headerlink" href="#django_analyses.views.output_definition.OutputDefinitionViewSet.pagination_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#django_analyses.views.pagination.StandardResultsSetPagination" title="django_analyses.views.pagination.StandardResultsSetPagination"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.pagination.StandardResultsSetPagination</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output_definition.OutputDefinitionViewSet.serializer_class">
+<code class="sig-name descname">serializer_class</code><a class="headerlink" href="#django_analyses.views.output_definition.OutputDefinitionViewSet.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.serializers.output.definitions.html#django_analyses.serializers.output.definitions.output_definition.OutputDefinitionSerializer" title="django_analyses.serializers.output.definitions.output_definition.OutputDefinitionSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.serializers.output.definitions.output_definition.OutputDefinitionSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output_definition.OutputDefinitionViewSet.suffix">
+<code class="sig-name descname">suffix</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.output_definition.OutputDefinitionViewSet.suffix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.views.output_specification">
+<span id="django-analyses-views-output-specification-module"></span><h2>django_analyses.views.output_specification module<a class="headerlink" href="#module-django_analyses.views.output_specification" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.views.output_specification.OutputSpecificationViewSet">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.views.output_specification.</code><code class="sig-name descname">OutputSpecificationViewSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.output_specification.OutputSpecificationViewSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.views.output_specification.OutputSpecificationViewSet.basename">
+<code class="sig-name descname">basename</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.output_specification.OutputSpecificationViewSet.basename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output_specification.OutputSpecificationViewSet.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.output_specification.OutputSpecificationViewSet.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output_specification.OutputSpecificationViewSet.detail">
+<code class="sig-name descname">detail</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.output_specification.OutputSpecificationViewSet.detail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output_specification.OutputSpecificationViewSet.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.output_specification.OutputSpecificationViewSet.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output_specification.OutputSpecificationViewSet.queryset">
+<code class="sig-name descname">queryset</code><a class="headerlink" href="#django_analyses.views.output_specification.OutputSpecificationViewSet.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output_specification.OutputSpecificationViewSet.serializer_class">
+<code class="sig-name descname">serializer_class</code><a class="headerlink" href="#django_analyses.views.output_specification.OutputSpecificationViewSet.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.serializers.output.html#django_analyses.serializers.output.output_specification.OutputSpecificationSerializer" title="django_analyses.serializers.output.output_specification.OutputSpecificationSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.serializers.output.output_specification.OutputSpecificationSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.output_specification.OutputSpecificationViewSet.suffix">
+<code class="sig-name descname">suffix</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.output_specification.OutputSpecificationViewSet.suffix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.views.pagination">
+<span id="django-analyses-views-pagination-module"></span><h2>django_analyses.views.pagination module<a class="headerlink" href="#module-django_analyses.views.pagination" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.views.pagination.StandardResultsSetPagination">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.views.pagination.</code><code class="sig-name descname">StandardResultsSetPagination</code><a class="headerlink" href="#django_analyses.views.pagination.StandardResultsSetPagination" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.pagination.PageNumberPagination</span></code></p>
+<p>Default pagination parameters. This didn’t work as part of the DefaultsMixin and therefore has to be
+defined separately in the ‘pagination_class’ configuration.</p>
+<dl class="py attribute">
+<dt id="django_analyses.views.pagination.StandardResultsSetPagination.page_size">
+<code class="sig-name descname">page_size</code><em class="property"> = 100</em><a class="headerlink" href="#django_analyses.views.pagination.StandardResultsSetPagination.page_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pagination.StandardResultsSetPagination.page_size_query_param">
+<code class="sig-name descname">page_size_query_param</code><em class="property"> = 'page_size'</em><a class="headerlink" href="#django_analyses.views.pagination.StandardResultsSetPagination.page_size_query_param" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.views.pipe">
+<span id="django-analyses-views-pipe-module"></span><h2>django_analyses.views.pipe module<a class="headerlink" href="#module-django_analyses.views.pipe" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.views.pipe.PipeViewSet">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.views.pipe.</code><code class="sig-name descname">PipeViewSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.pipe.PipeViewSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.views.defaults.DefaultsMixin" title="django_analyses.views.defaults.DefaultsMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.defaults.DefaultsMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.views.pipe.PipeViewSet.basename">
+<code class="sig-name descname">basename</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.pipe.PipeViewSet.basename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipe.PipeViewSet.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.pipe.PipeViewSet.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipe.PipeViewSet.detail">
+<code class="sig-name descname">detail</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.pipe.PipeViewSet.detail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipe.PipeViewSet.filter_class">
+<code class="sig-name descname">filter_class</code><a class="headerlink" href="#django_analyses.views.pipe.PipeViewSet.filter_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.filters.pipeline.html#django_analyses.filters.pipeline.pipe.PipeFilter" title="django_analyses.filters.pipeline.pipe.PipeFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.filters.pipeline.pipe.PipeFilter</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipe.PipeViewSet.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.pipe.PipeViewSet.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipe.PipeViewSet.pagination_class">
+<code class="sig-name descname">pagination_class</code><a class="headerlink" href="#django_analyses.views.pipe.PipeViewSet.pagination_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#django_analyses.views.pagination.StandardResultsSetPagination" title="django_analyses.views.pagination.StandardResultsSetPagination"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.pagination.StandardResultsSetPagination</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipe.PipeViewSet.queryset">
+<code class="sig-name descname">queryset</code><a class="headerlink" href="#django_analyses.views.pipe.PipeViewSet.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipe.PipeViewSet.serializer_class">
+<code class="sig-name descname">serializer_class</code><a class="headerlink" href="#django_analyses.views.pipe.PipeViewSet.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.serializers.pipeline.html#django_analyses.serializers.pipeline.pipe.PipeSerializer" title="django_analyses.serializers.pipeline.pipe.PipeSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.serializers.pipeline.pipe.PipeSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipe.PipeViewSet.suffix">
+<code class="sig-name descname">suffix</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.pipe.PipeViewSet.suffix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.views.pipeline">
+<span id="django-analyses-views-pipeline-module"></span><h2>django_analyses.views.pipeline module<a class="headerlink" href="#module-django_analyses.views.pipeline" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.views.pipeline.PipelineViewSet">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.views.pipeline.</code><code class="sig-name descname">PipelineViewSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.pipeline.PipelineViewSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.views.defaults.DefaultsMixin" title="django_analyses.views.defaults.DefaultsMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.defaults.DefaultsMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.views.pipeline.PipelineViewSet.basename">
+<code class="sig-name descname">basename</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.pipeline.PipelineViewSet.basename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipeline.PipelineViewSet.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.pipeline.PipelineViewSet.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipeline.PipelineViewSet.detail">
+<code class="sig-name descname">detail</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.pipeline.PipelineViewSet.detail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipeline.PipelineViewSet.filter_class">
+<code class="sig-name descname">filter_class</code><a class="headerlink" href="#django_analyses.views.pipeline.PipelineViewSet.filter_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.filters.pipeline.html#django_analyses.filters.pipeline.pipeline.PipelineFilter" title="django_analyses.filters.pipeline.pipeline.PipelineFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.filters.pipeline.pipeline.PipelineFilter</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipeline.PipelineViewSet.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.pipeline.PipelineViewSet.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipeline.PipelineViewSet.pagination_class">
+<code class="sig-name descname">pagination_class</code><a class="headerlink" href="#django_analyses.views.pipeline.PipelineViewSet.pagination_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#django_analyses.views.pagination.StandardResultsSetPagination" title="django_analyses.views.pagination.StandardResultsSetPagination"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.views.pagination.StandardResultsSetPagination</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipeline.PipelineViewSet.queryset">
+<code class="sig-name descname">queryset</code><a class="headerlink" href="#django_analyses.views.pipeline.PipelineViewSet.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipeline.PipelineViewSet.serializer_class">
+<code class="sig-name descname">serializer_class</code><a class="headerlink" href="#django_analyses.views.pipeline.PipelineViewSet.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.serializers.pipeline.html#django_analyses.serializers.pipeline.pipeline.PipelineSerializer" title="django_analyses.serializers.pipeline.pipeline.PipelineSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.serializers.pipeline.pipeline.PipelineSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.pipeline.PipelineViewSet.suffix">
+<code class="sig-name descname">suffix</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.pipeline.PipelineViewSet.suffix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.views.run">
+<span id="django-analyses-views-run-module"></span><h2>django_analyses.views.run module<a class="headerlink" href="#module-django_analyses.views.run" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.views.run.RunViewSet">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.views.run.</code><code class="sig-name descname">RunViewSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.views.run.RunViewSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<dl class="py attribute">
+<dt id="django_analyses.views.run.RunViewSet.basename">
+<code class="sig-name descname">basename</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.run.RunViewSet.basename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.run.RunViewSet.description">
+<code class="sig-name descname">description</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.run.RunViewSet.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.run.RunViewSet.detail">
+<code class="sig-name descname">detail</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.run.RunViewSet.detail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.run.RunViewSet.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.run.RunViewSet.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.run.RunViewSet.queryset">
+<code class="sig-name descname">queryset</code><a class="headerlink" href="#django_analyses.views.run.RunViewSet.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.run.RunViewSet.serializer_class">
+<code class="sig-name descname">serializer_class</code><a class="headerlink" href="#django_analyses.views.run.RunViewSet.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.serializers.html#django_analyses.serializers.run.RunSerializer" title="django_analyses.serializers.run.RunSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.serializers.run.RunSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.views.run.RunViewSet.suffix">
+<code class="sig-name descname">suffix</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.views.run.RunViewSet.suffix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.views">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-django_analyses.views" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tests.html" class="btn btn-neutral float-right" title="tests package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="django_analyses.utils.html" class="btn btn-neutral float-left" title="django_analyses.utils package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Zvi Baratz
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

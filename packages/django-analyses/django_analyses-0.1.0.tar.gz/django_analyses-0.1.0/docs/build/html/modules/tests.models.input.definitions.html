@@ -1,0 +1,827 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tests.models.input.definitions package &mdash; django_analyses 0.0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="tests.models.input.types package" href="tests.models.input.types.html" />
+    <link rel="prev" title="tests.models.input package" href="tests.models.input.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> django_analyses
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/user_guide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="django_analyses.html">django_analyses package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tests.html">tests package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="tests.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="tests.factories.html">tests.factories package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="tests.models.html">tests.models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#module-tests.fixtures">tests.fixtures module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#module-tests.interfaces">tests.interfaces module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#module-tests.test_pipeline_runner">tests.test_pipeline_runner module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#module-tests.test_settings">tests.test_settings module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#module-tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">django_analyses</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">Reference</a> &raquo;</li>
+        
+          <li><a href="tests.html">tests package</a> &raquo;</li>
+        
+          <li><a href="tests.models.html">tests.models package</a> &raquo;</li>
+        
+          <li><a href="tests.models.input.html">tests.models.input package</a> &raquo;</li>
+        
+      <li>tests.models.input.definitions package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/tests.models.input.definitions.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tests-models-input-definitions-package">
+<h1>tests.models.input.definitions package<a class="headerlink" href="#tests-models-input-definitions-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-tests.models.input.definitions.test_boolean_input_definition">
+<span id="tests-models-input-definitions-test-boolean-input-definition-module"></span><h2>tests.models.input.definitions.test_boolean_input_definition module<a class="headerlink" href="#module-tests.models.input.definitions.test_boolean_input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tests.models.input.definitions.test_boolean_input_definition.BooleanInputDefinitionTestCase">
+<em class="property">class </em><code class="sig-prename descclassname">tests.models.input.definitions.test_boolean_input_definition.</code><code class="sig-name descname">BooleanInputDefinitionTestCase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">methodName</span><span class="o">=</span><span class="default_value">'runTest'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_boolean_input_definition.BooleanInputDefinitionTestCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.test.testcases.TestCase</span></code></p>
+<p>Tests for the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition" title="django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">BooleanInputDefinition</span></code></a>
+model.</p>
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_boolean_input_definition.BooleanInputDefinitionTestCase.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_boolean_input_definition.BooleanInputDefinitionTestCase.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the created instances to the tests’ contexts.
+For more information see unittest’s <a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUp" title="(in Python v3.8)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setUp()</span></code></a> method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_boolean_input_definition.BooleanInputDefinitionTestCase.test_default_blank_and_null">
+<code class="sig-name descname">test_default_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_boolean_input_definition.BooleanInputDefinitionTestCase.test_default_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>default</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_boolean_input_definition.BooleanInputDefinitionTestCase.test_get_type">
+<code class="sig-name descname">test_get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_boolean_input_definition.BooleanInputDefinitionTestCase.test_get_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.get_type" title="django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.get_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_type()</span></code></a>
+return the expected value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_boolean_input_definition.BooleanInputDefinitionTestCase.test_input_class_attribute">
+<code class="sig-name descname">test_input_class_attribute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_boolean_input_definition.BooleanInputDefinitionTestCase.test_input_class_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the <cite>input_class</cite> attribute is set to
+<a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.boolean_input.BooleanInput" title="django_analyses.models.input.types.boolean_input.BooleanInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">BooleanInput</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-tests.models.input.definitions.test_file_input_definition">
+<span id="tests-models-input-definitions-test-file-input-definition-module"></span><h2>tests.models.input.definitions.test_file_input_definition module<a class="headerlink" href="#module-tests.models.input.definitions.test_file_input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tests.models.input.definitions.test_file_input_definition.FileInputDefinitionTestCase">
+<em class="property">class </em><code class="sig-prename descclassname">tests.models.input.definitions.test_file_input_definition.</code><code class="sig-name descname">FileInputDefinitionTestCase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">methodName</span><span class="o">=</span><span class="default_value">'runTest'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_file_input_definition.FileInputDefinitionTestCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.test.testcases.TestCase</span></code></p>
+<p>Tests for the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.file_input_definition.FileInputDefinition" title="django_analyses.models.input.definitions.file_input_definition.FileInputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileInputDefinition</span></code></a>
+model.</p>
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_file_input_definition.FileInputDefinitionTestCase.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_file_input_definition.FileInputDefinitionTestCase.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the created instances to the tests’ contexts.
+For more information see unittest’s <a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUp" title="(in Python v3.8)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setUp()</span></code></a> method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_file_input_definition.FileInputDefinitionTestCase.test_default_is_none">
+<code class="sig-name descname">test_default_is_none</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_file_input_definition.FileInputDefinitionTestCase.test_default_is_none" title="Permalink to this definition">¶</a></dt>
+<dd><p>The
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.file_input_definition.FileInputDefinition" title="django_analyses.models.input.definitions.file_input_definition.FileInputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileInputDefinition</span></code></a>
+does not currently support a default value definition and therefore is
+expected to be None.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_file_input_definition.FileInputDefinitionTestCase.test_get_type">
+<code class="sig-name descname">test_get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_file_input_definition.FileInputDefinitionTestCase.test_get_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.get_type" title="django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.get_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_type()</span></code></a>
+method returns the expected value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_file_input_definition.FileInputDefinitionTestCase.test_input_class_attribute">
+<code class="sig-name descname">test_input_class_attribute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_file_input_definition.FileInputDefinitionTestCase.test_input_class_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the <cite>input_class</cite> attribute is set to
+<a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.file_input.FileInput" title="django_analyses.models.input.types.file_input.FileInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileInput</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-tests.models.input.definitions.test_float_input_definition">
+<span id="tests-models-input-definitions-test-float-input-definition-module"></span><h2>tests.models.input.definitions.test_float_input_definition module<a class="headerlink" href="#module-tests.models.input.definitions.test_float_input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase">
+<em class="property">class </em><code class="sig-prename descclassname">tests.models.input.definitions.test_float_input_definition.</code><code class="sig-name descname">FloatInputDefinitionTestCase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">methodName</span><span class="o">=</span><span class="default_value">'runTest'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.test.testcases.TestCase</span></code></p>
+<p>Tests for the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition" title="django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">FloatInputDefinition</span></code></a>
+model.</p>
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the created instances to the tests’ contexts.
+For more information see unittest’s <a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUp" title="(in Python v3.8)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setUp()</span></code></a> method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_default_blank_and_null">
+<code class="sig-name descname">test_default_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_default_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>default</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_default_may_be_nulled">
+<code class="sig-name descname">test_default_may_be_nulled</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_default_may_be_nulled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>default</em> field may be set to null without raising
+a ValidationError or any other exception.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_get_type">
+<code class="sig-name descname">test_get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_get_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.get_type" title="django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.get_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_type()</span></code></a>
+method returns the expected value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_input_class_attribute">
+<code class="sig-name descname">test_input_class_attribute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_input_class_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the <cite>input_class</cite> attribute is set to
+<a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.float_input.FloatInput" title="django_analyses.models.input.types.float_input.FloatInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">FloatInput</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_max_value_blank_and_null">
+<code class="sig-name descname">test_max_value_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_max_value_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>max_value</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_max_value_may_be_nulled">
+<code class="sig-name descname">test_max_value_may_be_nulled</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_max_value_may_be_nulled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>max_value</em> field may be set to null without raising
+a ValidationError or any other exception.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_max_value_validation">
+<code class="sig-name descname">test_max_value_validation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_max_value_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that a ValidationError is raised if the default value is
+greater than the <cite>max_value</cite> definition.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_min_value_blank_and_null">
+<code class="sig-name descname">test_min_value_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_min_value_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>min_value</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_min_value_may_be_nulled">
+<code class="sig-name descname">test_min_value_may_be_nulled</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_min_value_may_be_nulled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>min_value</em> field may be set to null without raising
+a ValidationError or any other exception.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_min_value_validation">
+<code class="sig-name descname">test_min_value_validation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_float_input_definition.FloatInputDefinitionTestCase.test_min_value_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that a ValidationError is raised if the default value is
+lesser than the <cite>min_value</cite> definition.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-tests.models.input.definitions.test_input_definition">
+<span id="tests-models-input-definitions-test-input-definition-module"></span><h2>tests.models.input.definitions.test_input_definition module<a class="headerlink" href="#module-tests.models.input.definitions.test_input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase">
+<em class="property">class </em><code class="sig-prename descclassname">tests.models.input.definitions.test_input_definition.</code><code class="sig-name descname">InputDefinitionTestCase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">methodName</span><span class="o">=</span><span class="default_value">'runTest'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.test.testcases.TestCase</span></code></p>
+<p>Tests for the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.input_definition.InputDefinition" title="django_analyses.models.input.definitions.input_definition.InputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputDefinition</span></code></a>
+model.</p>
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the created instances to the tests’ contexts.
+For more information see unittest’s <a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUp" title="(in Python v3.8)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setUp()</span></code></a> method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_create_input_instance_raises_type_error">
+<code class="sig-name descname">test_create_input_instance_raises_type_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_create_input_instance_raises_type_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that calling the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">create_input_instance()</span></code>
+raises a ValidationError. This is the expected behavior as long as the
+input_class attribute is not defined (or ill defined).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_create_input_instance_reraises_uncaught_exception">
+<code class="sig-name descname">test_create_input_instance_reraises_uncaught_exception</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_create_input_instance_reraises_uncaught_exception" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that calling the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">create_input_instance()</span></code>
+method when <em>input_class</em> is properly set but invalid kwargs still
+raises an exception.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_create_input_instance_with_non_input_subclass_value_raises_type_error">
+<code class="sig-name descname">test_create_input_instance_with_non_input_subclass_value_raises_type_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_create_input_instance_with_non_input_subclass_value_raises_type_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that calling the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">create_input_instance()</span></code>
+with a non-<a class="reference internal" href="django_analyses.models.input.html#django_analyses.models.input.input.Input" title="django_analyses.models.input.input.Input"><code class="xref py py-class docutils literal notranslate"><span class="pre">Input</span></code></a>
+model subclass value raises a ValidationError.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_create_input_instance_with_non_model_value_raises_type_error">
+<code class="sig-name descname">test_create_input_instance_with_non_model_value_raises_type_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_create_input_instance_with_non_model_value_raises_type_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that calling the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">create_input_instance()</span></code>
+with a non-model value raises a ValidationError.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_custom_manager_is_assigned">
+<code class="sig-name descname">test_custom_manager_is_assigned</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_custom_manager_is_assigned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the manager is assigned to be the custom
+<a class="reference internal" href="django_analyses.models.managers.html#django_analyses.models.managers.input_definition.InputDefinitionManager" title="django_analyses.models.managers.input_definition.InputDefinitionManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputDefinitionManager</span></code></a>
+class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_default_field_is_none">
+<code class="sig-name descname">test_default_field_is_none</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_default_field_is_none" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>default</em> field is set to None. This field is
+meant to be overriden by a <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/models/fields.html#django.db.models.Field" title="(in Django v3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Field</span></code></a> instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_description_blank_and_null">
+<code class="sig-name descname">test_description_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_description_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>description</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_input_class_is_none">
+<code class="sig-name descname">test_input_class_is_none</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_input_class_is_none" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>input_class</em> class attribute is set to None. This is
+meant to be overriden by a
+<a class="reference internal" href="django_analyses.models.input.html#django_analyses.models.input.input.Input" title="django_analyses.models.input.input.Input"><code class="xref py py-class docutils literal notranslate"><span class="pre">Input</span></code></a> instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_is_configuration_default_value">
+<code class="sig-name descname">test_is_configuration_default_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_is_configuration_default_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the default value of the <em>is_configuration</em> field.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_key_blank_and_null">
+<code class="sig-name descname">test_key_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_key_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>key</em> field may not be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_key_is_not_unique">
+<code class="sig-name descname">test_key_is_not_unique</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_key_is_not_unique" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>key</em> field is not unique.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_key_max_length">
+<code class="sig-name descname">test_key_max_length</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_key_max_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the max_length of the <em>key</em> field.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_ordering">
+<code class="sig-name descname">test_ordering</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_ordering" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/models/options/#ordering">ordering</a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_required_default_value">
+<code class="sig-name descname">test_required_default_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_required_default_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the default value of the <em>required</em> field.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_resetting_input_class_to_valid_input_subclass">
+<code class="sig-name descname">test_resetting_input_class_to_valid_input_subclass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_resetting_input_class_to_valid_input_subclass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.input_definition.InputDefinition.check_input_class_definition" title="django_analyses.models.input.definitions.input_definition.InputDefinition.check_input_class_definition"><code class="xref py py-meth docutils literal notranslate"><span class="pre">check_input_class_definition()</span></code></a>
+method does not raise a ValidationError when setting <em>input_class</em> to
+some valid Input model subclass.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_string">
+<code class="sig-name descname">test_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_input_definition.InputDefinitionTestCase.test_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the string output.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-tests.models.input.definitions.test_integer_input_definition">
+<span id="tests-models-input-definitions-test-integer-input-definition-module"></span><h2>tests.models.input.definitions.test_integer_input_definition module<a class="headerlink" href="#module-tests.models.input.definitions.test_integer_input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase">
+<em class="property">class </em><code class="sig-prename descclassname">tests.models.input.definitions.test_integer_input_definition.</code><code class="sig-name descname">IntegerInputDefinitionTestCase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">methodName</span><span class="o">=</span><span class="default_value">'runTest'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.test.testcases.TestCase</span></code></p>
+<p>Tests for the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition" title="django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntegerInputDefinition</span></code></a>
+model.</p>
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the created instances to the tests’ contexts.
+For more information see unittest’s <a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUp" title="(in Python v3.8)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setUp()</span></code></a> method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_default_blank_and_null">
+<code class="sig-name descname">test_default_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_default_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>default</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_default_may_be_nulled">
+<code class="sig-name descname">test_default_may_be_nulled</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_default_may_be_nulled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>default</em> field may be set to null without raising
+a ValidationError or any other exception.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_get_type">
+<code class="sig-name descname">test_get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_get_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.get_type" title="django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.get_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_type()</span></code></a>
+method returns the expected value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_input_class_attribute">
+<code class="sig-name descname">test_input_class_attribute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_input_class_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the <cite>input_class</cite> attribute is set to
+<a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.integer_input.IntegerInput" title="django_analyses.models.input.types.integer_input.IntegerInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntegerInput</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_max_value_blank_and_null">
+<code class="sig-name descname">test_max_value_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_max_value_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>max_value</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_max_value_may_be_nulled">
+<code class="sig-name descname">test_max_value_may_be_nulled</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_max_value_may_be_nulled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>max_value</em> field may be set to null without raising
+a ValidationError or any other exception.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_max_value_validation">
+<code class="sig-name descname">test_max_value_validation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_max_value_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that a ValidationError is raised if the default value is
+greater than the <cite>max_value</cite> definition.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_min_value_blank_and_null">
+<code class="sig-name descname">test_min_value_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_min_value_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>min_value</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_min_value_may_be_nulled">
+<code class="sig-name descname">test_min_value_may_be_nulled</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_min_value_may_be_nulled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>min_value</em> field may be set to null without raising
+a ValidationError or any other exception.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_min_value_validation">
+<code class="sig-name descname">test_min_value_validation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_integer_input_definition.IntegerInputDefinitionTestCase.test_min_value_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that a ValidationError is raised if the default value is
+lesser than the <cite>min_value</cite> definition.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-tests.models.input.definitions.test_list_input_definition">
+<span id="tests-models-input-definitions-test-list-input-definition-module"></span><h2>tests.models.input.definitions.test_list_input_definition module<a class="headerlink" href="#module-tests.models.input.definitions.test_list_input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase">
+<em class="property">class </em><code class="sig-prename descclassname">tests.models.input.definitions.test_list_input_definition.</code><code class="sig-name descname">ListInputDefinitionTestCase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">methodName</span><span class="o">=</span><span class="default_value">'runTest'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.test.testcases.TestCase</span></code></p>
+<p>Tests for the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition" title="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">ListInputDefinition</span></code></a>
+model.</p>
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the created instances to the tests’ contexts.
+For more information see unittest’s <a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUp" title="(in Python v3.8)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setUp()</span></code></a> method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_default_blank_and_null">
+<code class="sig-name descname">test_default_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_default_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>default</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_get_type">
+<code class="sig-name descname">test_get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_get_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.get_type" title="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.get_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_type()</span></code></a>
+method returns the expected length.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_input_class_attribute">
+<code class="sig-name descname">test_input_class_attribute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_input_class_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the <cite>input_class</cite> attribute is set to
+<a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.list_input.ListInput" title="django_analyses.models.input.types.list_input.ListInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">ListInput</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_max_length_blank_and_null">
+<code class="sig-name descname">test_max_length_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_max_length_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>max_length</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_max_length_validation">
+<code class="sig-name descname">test_max_length_validation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_max_length_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that a ValidationError is raised if the default’s length is
+greater than the <cite>max_length</cite> definition.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_min_length_blank_and_null">
+<code class="sig-name descname">test_min_length_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_min_length_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>min_length</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_min_length_validation">
+<code class="sig-name descname">test_min_length_validation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_min_length_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that a ValidationError is raised if the default’s length is
+lesser than the <cite>min_length</cite> definition.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_resetting_default_to_valid_value">
+<code class="sig-name descname">test_resetting_default_to_valid_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_resetting_default_to_valid_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that setting the default value to a different value that is
+valid does not raise a ValidationError.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_setting_default_to_non_list_raises_validation_error">
+<code class="sig-name descname">test_setting_default_to_non_list_raises_validation_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_setting_default_to_non_list_raises_validation_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that setting the default value to a non-list value raises
+a validation error.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_wrong_element_type_raises_validation_error">
+<code class="sig-name descname">test_wrong_element_type_raises_validation_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_list_input_definition.ListInputDefinitionTestCase.test_wrong_element_type_raises_validation_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that a ValidationError is raised if the default’s element
+type does not match the <em>element_type</em> field value.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-tests.models.input.definitions.test_string_input_definition">
+<span id="tests-models-input-definitions-test-string-input-definition-module"></span><h2>tests.models.input.definitions.test_string_input_definition module<a class="headerlink" href="#module-tests.models.input.definitions.test_string_input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase">
+<em class="property">class </em><code class="sig-prename descclassname">tests.models.input.definitions.test_string_input_definition.</code><code class="sig-name descname">StringInputDefinitionTestCase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">methodName</span><span class="o">=</span><span class="default_value">'runTest'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.test.testcases.TestCase</span></code></p>
+<p>Tests for the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition" title="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">StringInputDefinition</span></code></a>
+model.</p>
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the created instances to the tests’ contexts.
+For more information see unittest’s <a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUp" title="(in Python v3.8)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setUp()</span></code></a> method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_choices_blank_and_null">
+<code class="sig-name descname">test_choices_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_choices_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>choices</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_default_blank_and_null">
+<code class="sig-name descname">test_default_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_default_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>default</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_default_max_length">
+<code class="sig-name descname">test_default_max_length</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_default_max_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the <em>default</em> field’s max_length value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_get_type">
+<code class="sig-name descname">test_get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_get_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.get_type" title="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.get_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_type()</span></code></a>
+method returns the expected value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_input_class_attribute">
+<code class="sig-name descname">test_input_class_attribute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_input_class_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the <cite>input_class</cite> attribute is set to
+<a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.string_input.StringInput" title="django_analyses.models.input.types.string_input.StringInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">StringInput</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_is_output_path_blank_and_null">
+<code class="sig-name descname">test_is_output_path_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_is_output_path_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>is_output_path</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_is_output_path_default_value">
+<code class="sig-name descname">test_is_output_path_default_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_is_output_path_default_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the <em>is_output_path</em> field’s default value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_max_length_blank_and_null">
+<code class="sig-name descname">test_max_length_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_max_length_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>max_length</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_min_length_blank_and_null">
+<code class="sig-name descname">test_min_length_blank_and_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_min_length_blank_and_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the <em>min_length</em> field may be blank or null.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_validation_with_default_and_without_choices">
+<code class="sig-name descname">test_validation_with_default_and_without_choices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_validation_with_default_and_without_choices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.validate" title="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.validate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">validate()</span></code></a>
+methods does not raise a ValidationError if the <cite>choices</cite> field
+is null when <cite>default</cite> is set.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_validation_with_default_from_choices">
+<code class="sig-name descname">test_validation_with_default_from_choices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_validation_with_default_from_choices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.validate" title="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.validate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">validate()</span></code></a>
+methods does not raise a ValidationError if the <cite>choices</cite> field
+is set and contains the <cite>default</cite> value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_validation_with_default_not_from_choices">
+<code class="sig-name descname">test_validation_with_default_not_from_choices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_validation_with_default_not_from_choices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.validate" title="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.validate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">validate()</span></code></a>
+methods raises a ValidationError if the <cite>choices</cite> field is set
+and does not contains the <cite>default</cite> value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_validation_without_default_and_without_choices">
+<code class="sig-name descname">test_validation_without_default_and_without_choices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.models.input.definitions.test_string_input_definition.StringInputDefinitionTestCase.test_validation_without_default_and_without_choices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the
+<a class="reference internal" href="django_analyses.models.input.definitions.html#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.validate" title="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.validate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">validate()</span></code></a>
+methods does not raise a ValidationError if the <cite>choices</cite> and
+<cite>default</cite> fields are null.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-tests.models.input.definitions">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tests.models.input.definitions" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tests.models.input.types.html" class="btn btn-neutral float-right" title="tests.models.input.types package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tests.models.input.html" class="btn btn-neutral float-left" title="tests.models.input package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Zvi Baratz
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

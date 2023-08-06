@@ -1,0 +1,372 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>django_analyses.models.managers package &mdash; django_analyses 0.0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="django_analyses.models.output package" href="django_analyses.models.output.html" />
+    <link rel="prev" title="django_analyses.models.input.types package" href="django_analyses.models.input.types.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> django_analyses
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/user_guide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="django_analyses.html">django_analyses package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="django_analyses.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.filters.html">django_analyses.filters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.migrations.html">django_analyses.migrations package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="django_analyses.models.html">django_analyses.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.serializers.html">django_analyses.serializers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.utils.html">django_analyses.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.views.html">django_analyses.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.admin">django_analyses.admin module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.apps">django_analyses.apps module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.pipeline_runner">django_analyses.pipeline_runner module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.urls">django_analyses.urls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html">tests package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">django_analyses</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">Reference</a> &raquo;</li>
+        
+          <li><a href="django_analyses.html">django_analyses package</a> &raquo;</li>
+        
+          <li><a href="django_analyses.models.html">django_analyses.models package</a> &raquo;</li>
+        
+      <li>django_analyses.models.managers package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/django_analyses.models.managers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="django-analyses-models-managers-package">
+<h1>django_analyses.models.managers package<a class="headerlink" href="#django-analyses-models-managers-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-django_analyses.models.managers.analysis">
+<span id="django-analyses-models-managers-analysis-module"></span><h2>django_analyses.models.managers.analysis module<a class="headerlink" href="#module-django_analyses.models.managers.analysis" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.managers.analysis.AnalysisManager">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.managers.analysis.</code><code class="sig-name descname">AnalysisManager</code><a class="headerlink" href="#django_analyses.models.managers.analysis.AnalysisManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.models.manager.Manager</span></code></p>
+<dl class="py method">
+<dt id="django_analyses.models.managers.analysis.AnalysisManager.from_dict">
+<code class="sig-name descname">from_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">definition</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a><a class="headerlink" href="#django_analyses.models.managers.analysis.AnalysisManager.from_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.managers.analysis.AnalysisManager.from_list">
+<code class="sig-name descname">from_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">definitions</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a><a class="headerlink" href="#django_analyses.models.managers.analysis.AnalysisManager.from_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.managers.analysis_version">
+<span id="django-analyses-models-managers-analysis-version-module"></span><h2>django_analyses.models.managers.analysis_version module<a class="headerlink" href="#module-django_analyses.models.managers.analysis_version" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.managers.analysis_version.AnalysisVersionManager">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.managers.analysis_version.</code><code class="sig-name descname">AnalysisVersionManager</code><a class="headerlink" href="#django_analyses.models.managers.analysis_version.AnalysisVersionManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.models.manager.Manager</span></code></p>
+<dl class="py method">
+<dt id="django_analyses.models.managers.analysis_version.AnalysisVersionManager.from_dict">
+<code class="sig-name descname">from_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis</span></em>, <em class="sig-param"><span class="n">definition</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.managers.analysis_version.AnalysisVersionManager.from_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.managers.analysis_version.AnalysisVersionManager.from_list">
+<code class="sig-name descname">from_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis</span></em>, <em class="sig-param"><span class="n">definitions</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a><a class="headerlink" href="#django_analyses.models.managers.analysis_version.AnalysisVersionManager.from_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.managers.analysis_version.AnalysisVersionManager.get_kwargs_from_definition">
+<code class="sig-name descname">get_kwargs_from_definition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis</span></em>, <em class="sig-param"><span class="n">definition</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a><a class="headerlink" href="#django_analyses.models.managers.analysis_version.AnalysisVersionManager.get_kwargs_from_definition" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.managers.input_definition">
+<span id="django-analyses-models-managers-input-definition-module"></span><h2>django_analyses.models.managers.input_definition module<a class="headerlink" href="#module-django_analyses.models.managers.input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.managers.input_definition.InputDefinitionManager">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.managers.input_definition.</code><code class="sig-name descname">InputDefinitionManager</code><a class="headerlink" href="#django_analyses.models.managers.input_definition.InputDefinitionManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">model_utils.managers.InheritanceManager</span></code></p>
+<dl class="py method">
+<dt id="django_analyses.models.managers.input_definition.InputDefinitionManager.from_specification_dict">
+<code class="sig-name descname">from_specification_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">specification</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a><a class="headerlink" href="#django_analyses.models.managers.input_definition.InputDefinitionManager.from_specification_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.managers.input_specification">
+<span id="django-analyses-models-managers-input-specification-module"></span><h2>django_analyses.models.managers.input_specification module<a class="headerlink" href="#module-django_analyses.models.managers.input_specification" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.managers.input_specification.InputSpecificationManager">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.managers.input_specification.</code><code class="sig-name descname">InputSpecificationManager</code><a class="headerlink" href="#django_analyses.models.managers.input_specification.InputSpecificationManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.models.manager.Manager</span></code></p>
+<dl class="py method">
+<dt id="django_analyses.models.managers.input_specification.InputSpecificationManager.filter_by_definitions">
+<code class="sig-name descname">filter_by_definitions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis</span></em>, <em class="sig-param"><span class="n">definitions</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/models/querysets.html#django.db.models.query.QuerySet" title="(in Django v3.2)">django.db.models.query.QuerySet</a><a class="headerlink" href="#django_analyses.models.managers.input_specification.InputSpecificationManager.filter_by_definitions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.managers.input_specification.InputSpecificationManager.from_dict">
+<code class="sig-name descname">from_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis</span></em>, <em class="sig-param"><span class="n">specification</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a><a class="headerlink" href="#django_analyses.models.managers.input_specification.InputSpecificationManager.from_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.managers.output_definition">
+<span id="django-analyses-models-managers-output-definition-module"></span><h2>django_analyses.models.managers.output_definition module<a class="headerlink" href="#module-django_analyses.models.managers.output_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.managers.output_definition.OutputDefinitionManager">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.managers.output_definition.</code><code class="sig-name descname">OutputDefinitionManager</code><a class="headerlink" href="#django_analyses.models.managers.output_definition.OutputDefinitionManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">model_utils.managers.InheritanceManager</span></code></p>
+<dl class="py method">
+<dt id="django_analyses.models.managers.output_definition.OutputDefinitionManager.from_specification_dict">
+<code class="sig-name descname">from_specification_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">specification</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a><a class="headerlink" href="#django_analyses.models.managers.output_definition.OutputDefinitionManager.from_specification_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.managers.output_specification">
+<span id="django-analyses-models-managers-output-specification-module"></span><h2>django_analyses.models.managers.output_specification module<a class="headerlink" href="#module-django_analyses.models.managers.output_specification" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.managers.output_specification.OutputSpecificationManager">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.managers.output_specification.</code><code class="sig-name descname">OutputSpecificationManager</code><a class="headerlink" href="#django_analyses.models.managers.output_specification.OutputSpecificationManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.models.manager.Manager</span></code></p>
+<dl class="py method">
+<dt id="django_analyses.models.managers.output_specification.OutputSpecificationManager.filter_by_definitions">
+<code class="sig-name descname">filter_by_definitions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis</span></em>, <em class="sig-param"><span class="n">definitions</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/models/querysets.html#django.db.models.query.QuerySet" title="(in Django v3.2)">django.db.models.query.QuerySet</a><a class="headerlink" href="#django_analyses.models.managers.output_specification.OutputSpecificationManager.filter_by_definitions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.managers.output_specification.OutputSpecificationManager.from_dict">
+<code class="sig-name descname">from_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis</span></em>, <em class="sig-param"><span class="n">specification</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a><a class="headerlink" href="#django_analyses.models.managers.output_specification.OutputSpecificationManager.from_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.managers.run">
+<span id="django-analyses-models-managers-run-module"></span><h2>django_analyses.models.managers.run module<a class="headerlink" href="#module-django_analyses.models.managers.run" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.managers.run.RunManager">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.managers.run.</code><code class="sig-name descname">RunManager</code><a class="headerlink" href="#django_analyses.models.managers.run.RunManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.models.manager.Manager</span></code></p>
+<dl class="py method">
+<dt id="django_analyses.models.managers.run.RunManager.create_and_execute">
+<code class="sig-name descname">create_and_execute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_version</span><span class="p">:</span> <span class="n"><a class="reference internal" href="django_analyses.models.html#django_analyses.models.analysis_version.AnalysisVersion" title="django_analyses.models.analysis_version.AnalysisVersion">django_analyses.models.analysis_version.AnalysisVersion</a></span></em>, <em class="sig-param"><span class="n">user</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://django.readthedocs.io/en/latest/ref/contrib/auth.html#django.contrib.auth.models.User" title="(in Django v3.2)">django.contrib.auth.models.User</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.managers.run.RunManager.create_and_execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.managers.run.RunManager.get_existing">
+<code class="sig-name descname">get_existing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_version</span><span class="p">:</span> <span class="n"><a class="reference internal" href="django_analyses.models.html#django_analyses.models.analysis_version.AnalysisVersion" title="django_analyses.models.analysis_version.AnalysisVersion">django_analyses.models.analysis_version.AnalysisVersion</a></span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.managers.run.RunManager.get_existing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.managers.run.RunManager.get_or_execute">
+<code class="sig-name descname">get_or_execute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis_version</span><span class="p">:</span> <span class="n"><a class="reference internal" href="django_analyses.models.html#django_analyses.models.analysis_version.AnalysisVersion" title="django_analyses.models.analysis_version.AnalysisVersion">django_analyses.models.analysis_version.AnalysisVersion</a></span></em>, <em class="sig-param"><span class="n">user</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://django.readthedocs.io/en/latest/ref/contrib/auth.html#django.contrib.auth.models.User" title="(in Django v3.2)">django.contrib.auth.models.User</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.managers.run.RunManager.get_or_execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.managers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-django_analyses.models.managers" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="django_analyses.models.output.html" class="btn btn-neutral float-right" title="django_analyses.models.output package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="django_analyses.models.input.types.html" class="btn btn-neutral float-left" title="django_analyses.models.input.types package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Zvi Baratz
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

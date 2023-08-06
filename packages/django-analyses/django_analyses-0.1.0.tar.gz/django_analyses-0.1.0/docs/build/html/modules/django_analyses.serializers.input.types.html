@@ -1,0 +1,423 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>django_analyses.serializers.input.types package &mdash; django_analyses 0.0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="django_analyses.serializers.output package" href="django_analyses.serializers.output.html" />
+    <link rel="prev" title="django_analyses.serializers.input.definitions package" href="django_analyses.serializers.input.definitions.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> django_analyses
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/user_guide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="django_analyses.html">django_analyses package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="django_analyses.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.filters.html">django_analyses.filters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.migrations.html">django_analyses.migrations package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.models.html">django_analyses.models package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="django_analyses.serializers.html">django_analyses.serializers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.utils.html">django_analyses.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.views.html">django_analyses.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.admin">django_analyses.admin module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.apps">django_analyses.apps module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.pipeline_runner">django_analyses.pipeline_runner module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.urls">django_analyses.urls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html">tests package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">django_analyses</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">Reference</a> &raquo;</li>
+        
+          <li><a href="django_analyses.html">django_analyses package</a> &raquo;</li>
+        
+          <li><a href="django_analyses.serializers.html">django_analyses.serializers package</a> &raquo;</li>
+        
+          <li><a href="django_analyses.serializers.input.html">django_analyses.serializers.input package</a> &raquo;</li>
+        
+      <li>django_analyses.serializers.input.types package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/django_analyses.serializers.input.types.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="django-analyses-serializers-input-types-package">
+<h1>django_analyses.serializers.input.types package<a class="headerlink" href="#django-analyses-serializers-input-types-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-django_analyses.serializers.input.types.boolean_input">
+<span id="django-analyses-serializers-input-types-boolean-input-module"></span><h2>django_analyses.serializers.input.types.boolean_input module<a class="headerlink" href="#module-django_analyses.serializers.input.types.boolean_input" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.serializers.input.types.boolean_input.BooleanInputSerializer">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.serializers.input.types.boolean_input.</code><code class="sig-name descname">BooleanInputSerializer</code><span class="sig-paren">(</span><em class="sig-param">instance=None</em>, <em class="sig-param">data=&lt;class 'rest_framework.fields.empty'&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.serializers.input.types.boolean_input.BooleanInputSerializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.serializers.ModelSerializer</span></code></p>
+<dl class="py class">
+<dt id="django_analyses.serializers.input.types.boolean_input.BooleanInputSerializer.Meta">
+<em class="property">class </em><code class="sig-name descname">Meta</code><a class="headerlink" href="#django_analyses.serializers.input.types.boolean_input.BooleanInputSerializer.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt id="django_analyses.serializers.input.types.boolean_input.BooleanInputSerializer.Meta.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ('id', 'key', 'value', 'run', 'definition')</em><a class="headerlink" href="#django_analyses.serializers.input.types.boolean_input.BooleanInputSerializer.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.serializers.input.types.boolean_input.BooleanInputSerializer.Meta.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#django_analyses.serializers.input.types.boolean_input.BooleanInputSerializer.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.boolean_input.BooleanInput" title="django_analyses.models.input.types.boolean_input.BooleanInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.types.boolean_input.BooleanInput</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.serializers.input.types.directory_input">
+<span id="django-analyses-serializers-input-types-directory-input-module"></span><h2>django_analyses.serializers.input.types.directory_input module<a class="headerlink" href="#module-django_analyses.serializers.input.types.directory_input" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.serializers.input.types.directory_input.DirectoryInputSerializer">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.serializers.input.types.directory_input.</code><code class="sig-name descname">DirectoryInputSerializer</code><span class="sig-paren">(</span><em class="sig-param">instance=None</em>, <em class="sig-param">data=&lt;class 'rest_framework.fields.empty'&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.serializers.input.types.directory_input.DirectoryInputSerializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.serializers.ModelSerializer</span></code></p>
+<dl class="py class">
+<dt id="django_analyses.serializers.input.types.directory_input.DirectoryInputSerializer.Meta">
+<em class="property">class </em><code class="sig-name descname">Meta</code><a class="headerlink" href="#django_analyses.serializers.input.types.directory_input.DirectoryInputSerializer.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt id="django_analyses.serializers.input.types.directory_input.DirectoryInputSerializer.Meta.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ('id', 'key', 'value', 'run', 'definition')</em><a class="headerlink" href="#django_analyses.serializers.input.types.directory_input.DirectoryInputSerializer.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.serializers.input.types.directory_input.DirectoryInputSerializer.Meta.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#django_analyses.serializers.input.types.directory_input.DirectoryInputSerializer.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.directory_input.DirectoryInput" title="django_analyses.models.input.types.directory_input.DirectoryInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.types.directory_input.DirectoryInput</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.serializers.input.types.file_input">
+<span id="django-analyses-serializers-input-types-file-input-module"></span><h2>django_analyses.serializers.input.types.file_input module<a class="headerlink" href="#module-django_analyses.serializers.input.types.file_input" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.serializers.input.types.file_input.FileInputSerializer">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.serializers.input.types.file_input.</code><code class="sig-name descname">FileInputSerializer</code><span class="sig-paren">(</span><em class="sig-param">instance=None</em>, <em class="sig-param">data=&lt;class 'rest_framework.fields.empty'&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.serializers.input.types.file_input.FileInputSerializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.serializers.ModelSerializer</span></code></p>
+<dl class="py class">
+<dt id="django_analyses.serializers.input.types.file_input.FileInputSerializer.Meta">
+<em class="property">class </em><code class="sig-name descname">Meta</code><a class="headerlink" href="#django_analyses.serializers.input.types.file_input.FileInputSerializer.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt id="django_analyses.serializers.input.types.file_input.FileInputSerializer.Meta.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ('id', 'key', 'value', 'run', 'definition')</em><a class="headerlink" href="#django_analyses.serializers.input.types.file_input.FileInputSerializer.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.serializers.input.types.file_input.FileInputSerializer.Meta.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#django_analyses.serializers.input.types.file_input.FileInputSerializer.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.file_input.FileInput" title="django_analyses.models.input.types.file_input.FileInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.types.file_input.FileInput</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.serializers.input.types.float_input">
+<span id="django-analyses-serializers-input-types-float-input-module"></span><h2>django_analyses.serializers.input.types.float_input module<a class="headerlink" href="#module-django_analyses.serializers.input.types.float_input" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.serializers.input.types.float_input.FloatInputSerializer">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.serializers.input.types.float_input.</code><code class="sig-name descname">FloatInputSerializer</code><span class="sig-paren">(</span><em class="sig-param">instance=None</em>, <em class="sig-param">data=&lt;class 'rest_framework.fields.empty'&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.serializers.input.types.float_input.FloatInputSerializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.serializers.ModelSerializer</span></code></p>
+<dl class="py class">
+<dt id="django_analyses.serializers.input.types.float_input.FloatInputSerializer.Meta">
+<em class="property">class </em><code class="sig-name descname">Meta</code><a class="headerlink" href="#django_analyses.serializers.input.types.float_input.FloatInputSerializer.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt id="django_analyses.serializers.input.types.float_input.FloatInputSerializer.Meta.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ('id', 'key', 'value', 'run', 'definition')</em><a class="headerlink" href="#django_analyses.serializers.input.types.float_input.FloatInputSerializer.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.serializers.input.types.float_input.FloatInputSerializer.Meta.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#django_analyses.serializers.input.types.float_input.FloatInputSerializer.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.float_input.FloatInput" title="django_analyses.models.input.types.float_input.FloatInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.types.float_input.FloatInput</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.serializers.input.types.integer_input">
+<span id="django-analyses-serializers-input-types-integer-input-module"></span><h2>django_analyses.serializers.input.types.integer_input module<a class="headerlink" href="#module-django_analyses.serializers.input.types.integer_input" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.serializers.input.types.integer_input.IntegerInputSerializer">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.serializers.input.types.integer_input.</code><code class="sig-name descname">IntegerInputSerializer</code><span class="sig-paren">(</span><em class="sig-param">instance=None</em>, <em class="sig-param">data=&lt;class 'rest_framework.fields.empty'&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.serializers.input.types.integer_input.IntegerInputSerializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.serializers.ModelSerializer</span></code></p>
+<dl class="py class">
+<dt id="django_analyses.serializers.input.types.integer_input.IntegerInputSerializer.Meta">
+<em class="property">class </em><code class="sig-name descname">Meta</code><a class="headerlink" href="#django_analyses.serializers.input.types.integer_input.IntegerInputSerializer.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt id="django_analyses.serializers.input.types.integer_input.IntegerInputSerializer.Meta.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ('id', 'key', 'value', 'run', 'definition')</em><a class="headerlink" href="#django_analyses.serializers.input.types.integer_input.IntegerInputSerializer.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.serializers.input.types.integer_input.IntegerInputSerializer.Meta.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#django_analyses.serializers.input.types.integer_input.IntegerInputSerializer.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.integer_input.IntegerInput" title="django_analyses.models.input.types.integer_input.IntegerInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.types.integer_input.IntegerInput</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.serializers.input.types.list_input">
+<span id="django-analyses-serializers-input-types-list-input-module"></span><h2>django_analyses.serializers.input.types.list_input module<a class="headerlink" href="#module-django_analyses.serializers.input.types.list_input" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.serializers.input.types.list_input.ListInputSerializer">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.serializers.input.types.list_input.</code><code class="sig-name descname">ListInputSerializer</code><span class="sig-paren">(</span><em class="sig-param">instance=None</em>, <em class="sig-param">data=&lt;class 'rest_framework.fields.empty'&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.serializers.input.types.list_input.ListInputSerializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.serializers.ModelSerializer</span></code></p>
+<dl class="py class">
+<dt id="django_analyses.serializers.input.types.list_input.ListInputSerializer.Meta">
+<em class="property">class </em><code class="sig-name descname">Meta</code><a class="headerlink" href="#django_analyses.serializers.input.types.list_input.ListInputSerializer.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt id="django_analyses.serializers.input.types.list_input.ListInputSerializer.Meta.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ('id', 'key', 'value', 'run', 'definition')</em><a class="headerlink" href="#django_analyses.serializers.input.types.list_input.ListInputSerializer.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.serializers.input.types.list_input.ListInputSerializer.Meta.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#django_analyses.serializers.input.types.list_input.ListInputSerializer.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.list_input.ListInput" title="django_analyses.models.input.types.list_input.ListInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.types.list_input.ListInput</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.serializers.input.types.string_input">
+<span id="django-analyses-serializers-input-types-string-input-module"></span><h2>django_analyses.serializers.input.types.string_input module<a class="headerlink" href="#module-django_analyses.serializers.input.types.string_input" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.serializers.input.types.string_input.StringInputSerializer">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.serializers.input.types.string_input.</code><code class="sig-name descname">StringInputSerializer</code><span class="sig-paren">(</span><em class="sig-param">instance=None</em>, <em class="sig-param">data=&lt;class 'rest_framework.fields.empty'&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.serializers.input.types.string_input.StringInputSerializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.serializers.ModelSerializer</span></code></p>
+<dl class="py class">
+<dt id="django_analyses.serializers.input.types.string_input.StringInputSerializer.Meta">
+<em class="property">class </em><code class="sig-name descname">Meta</code><a class="headerlink" href="#django_analyses.serializers.input.types.string_input.StringInputSerializer.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt id="django_analyses.serializers.input.types.string_input.StringInputSerializer.Meta.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ('id', 'key', 'value', 'run', 'definition')</em><a class="headerlink" href="#django_analyses.serializers.input.types.string_input.StringInputSerializer.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.serializers.input.types.string_input.StringInputSerializer.Meta.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#django_analyses.serializers.input.types.string_input.StringInputSerializer.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.string_input.StringInput" title="django_analyses.models.input.types.string_input.StringInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.types.string_input.StringInput</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.serializers.input.types">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-django_analyses.serializers.input.types" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="django_analyses.serializers.output.html" class="btn btn-neutral float-right" title="django_analyses.serializers.output package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="django_analyses.serializers.input.definitions.html" class="btn btn-neutral float-left" title="django_analyses.serializers.input.definitions package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Zvi Baratz
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

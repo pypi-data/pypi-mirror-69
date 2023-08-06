@@ -1,0 +1,1247 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>django_analyses.models.input.definitions package &mdash; django_analyses 0.0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="django_analyses.models.input.types package" href="django_analyses.models.input.types.html" />
+    <link rel="prev" title="django_analyses.models.input package" href="django_analyses.models.input.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> django_analyses
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/user_guide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="django_analyses.html">django_analyses package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="django_analyses.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.filters.html">django_analyses.filters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.migrations.html">django_analyses.migrations package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="django_analyses.models.html">django_analyses.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.serializers.html">django_analyses.serializers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.utils.html">django_analyses.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.views.html">django_analyses.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.admin">django_analyses.admin module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.apps">django_analyses.apps module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.pipeline_runner">django_analyses.pipeline_runner module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.urls">django_analyses.urls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html">tests package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">django_analyses</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">Reference</a> &raquo;</li>
+        
+          <li><a href="django_analyses.html">django_analyses package</a> &raquo;</li>
+        
+          <li><a href="django_analyses.models.html">django_analyses.models package</a> &raquo;</li>
+        
+          <li><a href="django_analyses.models.input.html">django_analyses.models.input package</a> &raquo;</li>
+        
+      <li>django_analyses.models.input.definitions package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/django_analyses.models.input.definitions.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="django-analyses-models-input-definitions-package">
+<h1>django_analyses.models.input.definitions package<a class="headerlink" href="#django-analyses-models-input-definitions-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-django_analyses.models.input.definitions.boolean_input_definition">
+<span id="django-analyses-models-input-definitions-boolean-input-definition-module"></span><h2>django_analyses.models.input.definitions.boolean_input_definition module<a class="headerlink" href="#module-django_analyses.models.input.definitions.boolean_input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.input.definitions.boolean_input_definition.</code><code class="sig-name descname">BooleanInputDefinition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">required</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">is_configuration</span></em>, <em class="sig-param"><span class="n">value_attribute</span></em>, <em class="sig-param"><span class="n">run_method_input</span></em>, <em class="sig-param"><span class="n">inputdefinition_ptr</span></em>, <em class="sig-param"><span class="n">default</span></em>, <em class="sig-param"><span class="n">is_output_switch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition" title="django_analyses.models.input.definitions.input_definition.InputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition</span></code></a></p>
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist" title="django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned" title="django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.default">
+<code class="sig-name descname">default</code><a class="headerlink" href="#django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.default" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.get_type">
+<code class="sig-name descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#django_analyses.models.input.definitions.input_definitions.InputDefinitions" title="django_analyses.models.input.definitions.input_definitions.InputDefinitions">django_analyses.models.input.definitions.input_definitions.InputDefinitions</a><a class="headerlink" href="#django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.input_class">
+<code class="sig-name descname">input_class</code><a class="headerlink" href="#django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.input_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.boolean_input.BooleanInput" title="django_analyses.models.input.types.boolean_input.BooleanInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.types.boolean_input.BooleanInput</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.input_set">
+<code class="sig-name descname">input_set</code><a class="headerlink" href="#django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.input_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.inputdefinition_ptr">
+<code class="sig-name descname">inputdefinition_ptr</code><a class="headerlink" href="#django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.inputdefinition_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.inputdefinition_ptr_id">
+<code class="sig-name descname">inputdefinition_ptr_id</code><a class="headerlink" href="#django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.inputdefinition_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.is_output_switch">
+<code class="sig-name descname">is_output_switch</code><a class="headerlink" href="#django_analyses.models.input.definitions.boolean_input_definition.BooleanInputDefinition.is_output_switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.input.definitions.directory_input_definition">
+<span id="django-analyses-models-input-definitions-directory-input-definition-module"></span><h2>django_analyses.models.input.definitions.directory_input_definition module<a class="headerlink" href="#module-django_analyses.models.input.definitions.directory_input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.input.definitions.directory_input_definition.</code><code class="sig-name descname">DirectoryInputDefinition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">required</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">is_configuration</span></em>, <em class="sig-param"><span class="n">value_attribute</span></em>, <em class="sig-param"><span class="n">run_method_input</span></em>, <em class="sig-param"><span class="n">inputdefinition_ptr</span></em>, <em class="sig-param"><span class="n">is_output_directory</span></em>, <em class="sig-param"><span class="n">default</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition" title="django_analyses.models.input.definitions.input_definition.InputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition</span></code></a></p>
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist" title="django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned" title="django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.default">
+<code class="sig-name descname">default</code><a class="headerlink" href="#django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.default" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.get_type">
+<code class="sig-name descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#django_analyses.models.input.definitions.input_definitions.InputDefinitions" title="django_analyses.models.input.definitions.input_definitions.InputDefinitions">django_analyses.models.input.definitions.input_definitions.InputDefinitions</a><a class="headerlink" href="#django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.input_class">
+<code class="sig-name descname">input_class</code><a class="headerlink" href="#django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.input_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.directory_input.DirectoryInput" title="django_analyses.models.input.types.directory_input.DirectoryInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.types.directory_input.DirectoryInput</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.input_set">
+<code class="sig-name descname">input_set</code><a class="headerlink" href="#django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.input_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.inputdefinition_ptr">
+<code class="sig-name descname">inputdefinition_ptr</code><a class="headerlink" href="#django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.inputdefinition_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.inputdefinition_ptr_id">
+<code class="sig-name descname">inputdefinition_ptr_id</code><a class="headerlink" href="#django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.inputdefinition_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.is_output_directory">
+<code class="sig-name descname">is_output_directory</code><a class="headerlink" href="#django_analyses.models.input.definitions.directory_input_definition.DirectoryInputDefinition.is_output_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.input.definitions.file_input_definition">
+<span id="django-analyses-models-input-definitions-file-input-definition-module"></span><h2>django_analyses.models.input.definitions.file_input_definition module<a class="headerlink" href="#module-django_analyses.models.input.definitions.file_input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.input.definitions.file_input_definition.FileInputDefinition">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.input.definitions.file_input_definition.</code><code class="sig-name descname">FileInputDefinition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">required</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">is_configuration</span></em>, <em class="sig-param"><span class="n">value_attribute</span></em>, <em class="sig-param"><span class="n">run_method_input</span></em>, <em class="sig-param"><span class="n">inputdefinition_ptr</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.input.definitions.file_input_definition.FileInputDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition" title="django_analyses.models.input.definitions.input_definition.InputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition</span></code></a></p>
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist" title="django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned" title="django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.get_type">
+<code class="sig-name descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#django_analyses.models.input.definitions.input_definitions.InputDefinitions" title="django_analyses.models.input.definitions.input_definitions.InputDefinitions">django_analyses.models.input.definitions.input_definitions.InputDefinitions</a><a class="headerlink" href="#django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.input_class">
+<code class="sig-name descname">input_class</code><a class="headerlink" href="#django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.input_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.file_input.FileInput" title="django_analyses.models.input.types.file_input.FileInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.types.file_input.FileInput</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.input_set">
+<code class="sig-name descname">input_set</code><a class="headerlink" href="#django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.input_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.inputdefinition_ptr">
+<code class="sig-name descname">inputdefinition_ptr</code><a class="headerlink" href="#django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.inputdefinition_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.inputdefinition_ptr_id">
+<code class="sig-name descname">inputdefinition_ptr_id</code><a class="headerlink" href="#django_analyses.models.input.definitions.file_input_definition.FileInputDefinition.inputdefinition_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.input.definitions.float_input_definition">
+<span id="django-analyses-models-input-definitions-float-input-definition-module"></span><h2>django_analyses.models.input.definitions.float_input_definition module<a class="headerlink" href="#module-django_analyses.models.input.definitions.float_input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.input.definitions.float_input_definition.</code><code class="sig-name descname">FloatInputDefinition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">required</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">is_configuration</span></em>, <em class="sig-param"><span class="n">value_attribute</span></em>, <em class="sig-param"><span class="n">run_method_input</span></em>, <em class="sig-param"><span class="n">inputdefinition_ptr</span></em>, <em class="sig-param"><span class="n">numberinputdefinition_ptr</span></em>, <em class="sig-param"><span class="n">min_value</span></em>, <em class="sig-param"><span class="n">max_value</span></em>, <em class="sig-param"><span class="n">default</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition" title="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition</span></code></a></p>
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.DoesNotExist" title="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.DoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.MultipleObjectsReturned" title="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.default">
+<code class="sig-name descname">default</code><a class="headerlink" href="#django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.default" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.get_type">
+<code class="sig-name descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#django_analyses.models.input.definitions.input_definitions.InputDefinitions" title="django_analyses.models.input.definitions.input_definitions.InputDefinitions">django_analyses.models.input.definitions.input_definitions.InputDefinitions</a><a class="headerlink" href="#django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.input_class">
+<code class="sig-name descname">input_class</code><a class="headerlink" href="#django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.input_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.float_input.FloatInput" title="django_analyses.models.input.types.float_input.FloatInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.types.float_input.FloatInput</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.input_set">
+<code class="sig-name descname">input_set</code><a class="headerlink" href="#django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.input_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.max_value">
+<code class="sig-name descname">max_value</code><a class="headerlink" href="#django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.max_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.min_value">
+<code class="sig-name descname">min_value</code><a class="headerlink" href="#django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.min_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.numberinputdefinition_ptr">
+<code class="sig-name descname">numberinputdefinition_ptr</code><a class="headerlink" href="#django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.numberinputdefinition_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.numberinputdefinition_ptr_id">
+<code class="sig-name descname">numberinputdefinition_ptr_id</code><a class="headerlink" href="#django_analyses.models.input.definitions.float_input_definition.FloatInputDefinition.numberinputdefinition_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.input.definitions.input_definition">
+<span id="django-analyses-models-input-definitions-input-definition-module"></span><h2>django_analyses.models.input.definitions.input_definition module<a class="headerlink" href="#module-django_analyses.models.input.definitions.input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.input.definitions.input_definition.</code><code class="sig-name descname">InputDefinition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">required</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">is_configuration</span></em>, <em class="sig-param"><span class="n">value_attribute</span></em>, <em class="sig-param"><span class="n">run_method_input</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/exceptions.html#django.core.exceptions.ObjectDoesNotExist" title="(in Django v3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/exceptions.html#django.core.exceptions.MultipleObjectsReturned" title="(in Django v3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.booleaninputdefinition">
+<code class="sig-name descname">booleaninputdefinition</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.booleaninputdefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.check_input_class_definition">
+<code class="sig-name descname">check_input_class_definition</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.check_input_class_definition" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.default">
+<code class="sig-name descname">default</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.description">
+<code class="sig-name descname">description</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.directoryinputdefinition">
+<code class="sig-name descname">directoryinputdefinition</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.directoryinputdefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.fileinputdefinition">
+<code class="sig-name descname">fileinputdefinition</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.fileinputdefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.get_or_create_input_instance">
+<code class="sig-name descname">get_or_create_input_instance</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="django_analyses.models.input.html#django_analyses.models.input.input.Input" title="django_analyses.models.input.input.Input">django_analyses.models.input.input.Input</a><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.get_or_create_input_instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.id">
+<code class="sig-name descname">id</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.input_class">
+<code class="sig-name descname">input_class</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.input_class" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.is_configuration">
+<code class="sig-name descname">is_configuration</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.is_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.key">
+<code class="sig-name descname">key</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.key" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.listinputdefinition">
+<code class="sig-name descname">listinputdefinition</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.listinputdefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.numberinputdefinition">
+<code class="sig-name descname">numberinputdefinition</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.numberinputdefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django_analyses.models.managers.input_definition.InputDefinitionManager object&gt;</em><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.pipe_set">
+<code class="sig-name descname">pipe_set</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.pipe_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.required">
+<code class="sig-name descname">required</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.required" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.run_method_input">
+<code class="sig-name descname">run_method_input</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.run_method_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the current instance. Override this in a subclass if you want to
+control the saving process.</p>
+<p>The ‘force_insert’ and ‘force_update’ parameters can be used to insist
+that the “save” must be an SQL insert or update (or equivalent for
+non-SQL backends), respectively. Normally, they should not be set.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.specification_set">
+<code class="sig-name descname">specification_set</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.specification_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the forward and reverse sides of
+a many-to-many relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Pizza</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">toppings</span> <span class="o">=</span> <span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Topping</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;pizzas&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Pizza.toppings</span></code> and <code class="docutils literal notranslate"><span class="pre">Topping.pizzas</span></code> are <code class="docutils literal notranslate"><span class="pre">ManyToManyDescriptor</span></code>
+instances.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.stringinputdefinition">
+<code class="sig-name descname">stringinputdefinition</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.stringinputdefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.validate">
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.validate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definition.InputDefinition.value_attribute">
+<code class="sig-name descname">value_attribute</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.value_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.input.definitions.input_definitions">
+<span id="django-analyses-models-input-definitions-input-definitions-module"></span><h2>django_analyses.models.input.definitions.input_definitions module<a class="headerlink" href="#module-django_analyses.models.input.definitions.input_definitions" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.input.definitions.input_definitions.InputDefinitions">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.input.definitions.input_definitions.</code><code class="sig-name descname">InputDefinitions</code><a class="headerlink" href="#django_analyses.models.input.definitions.input_definitions.InputDefinitions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definitions.InputDefinitions.BLN">
+<code class="sig-name descname">BLN</code><em class="property"> = 'Boolean'</em><a class="headerlink" href="#django_analyses.models.input.definitions.input_definitions.InputDefinitions.BLN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definitions.InputDefinitions.DIR">
+<code class="sig-name descname">DIR</code><em class="property"> = 'Directory'</em><a class="headerlink" href="#django_analyses.models.input.definitions.input_definitions.InputDefinitions.DIR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definitions.InputDefinitions.FIL">
+<code class="sig-name descname">FIL</code><em class="property"> = 'File'</em><a class="headerlink" href="#django_analyses.models.input.definitions.input_definitions.InputDefinitions.FIL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definitions.InputDefinitions.FLT">
+<code class="sig-name descname">FLT</code><em class="property"> = 'Float'</em><a class="headerlink" href="#django_analyses.models.input.definitions.input_definitions.InputDefinitions.FLT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definitions.InputDefinitions.INT">
+<code class="sig-name descname">INT</code><em class="property"> = 'Integer'</em><a class="headerlink" href="#django_analyses.models.input.definitions.input_definitions.InputDefinitions.INT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definitions.InputDefinitions.LST">
+<code class="sig-name descname">LST</code><em class="property"> = 'List'</em><a class="headerlink" href="#django_analyses.models.input.definitions.input_definitions.InputDefinitions.LST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.input_definitions.InputDefinitions.STR">
+<code class="sig-name descname">STR</code><em class="property"> = 'String'</em><a class="headerlink" href="#django_analyses.models.input.definitions.input_definitions.InputDefinitions.STR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.input.definitions.integer_input_definition">
+<span id="django-analyses-models-input-definitions-integer-input-definition-module"></span><h2>django_analyses.models.input.definitions.integer_input_definition module<a class="headerlink" href="#module-django_analyses.models.input.definitions.integer_input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.input.definitions.integer_input_definition.</code><code class="sig-name descname">IntegerInputDefinition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">required</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">is_configuration</span></em>, <em class="sig-param"><span class="n">value_attribute</span></em>, <em class="sig-param"><span class="n">run_method_input</span></em>, <em class="sig-param"><span class="n">inputdefinition_ptr</span></em>, <em class="sig-param"><span class="n">numberinputdefinition_ptr</span></em>, <em class="sig-param"><span class="n">min_value</span></em>, <em class="sig-param"><span class="n">max_value</span></em>, <em class="sig-param"><span class="n">default</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition" title="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition</span></code></a></p>
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.DoesNotExist" title="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.DoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.MultipleObjectsReturned" title="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.default">
+<code class="sig-name descname">default</code><a class="headerlink" href="#django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.default" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.get_type">
+<code class="sig-name descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#django_analyses.models.input.definitions.input_definitions.InputDefinitions" title="django_analyses.models.input.definitions.input_definitions.InputDefinitions">django_analyses.models.input.definitions.input_definitions.InputDefinitions</a><a class="headerlink" href="#django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.input_class">
+<code class="sig-name descname">input_class</code><a class="headerlink" href="#django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.input_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.integer_input.IntegerInput" title="django_analyses.models.input.types.integer_input.IntegerInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.types.integer_input.IntegerInput</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.input_set">
+<code class="sig-name descname">input_set</code><a class="headerlink" href="#django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.input_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.max_value">
+<code class="sig-name descname">max_value</code><a class="headerlink" href="#django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.max_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.min_value">
+<code class="sig-name descname">min_value</code><a class="headerlink" href="#django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.min_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.numberinputdefinition_ptr">
+<code class="sig-name descname">numberinputdefinition_ptr</code><a class="headerlink" href="#django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.numberinputdefinition_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.numberinputdefinition_ptr_id">
+<code class="sig-name descname">numberinputdefinition_ptr_id</code><a class="headerlink" href="#django_analyses.models.input.definitions.integer_input_definition.IntegerInputDefinition.numberinputdefinition_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.input.definitions.list_input_definition">
+<span id="django-analyses-models-input-definitions-list-input-definition-module"></span><h2>django_analyses.models.input.definitions.list_input_definition module<a class="headerlink" href="#module-django_analyses.models.input.definitions.list_input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.input.definitions.list_input_definition.</code><code class="sig-name descname">ListInputDefinition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">required</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">is_configuration</span></em>, <em class="sig-param"><span class="n">value_attribute</span></em>, <em class="sig-param"><span class="n">run_method_input</span></em>, <em class="sig-param"><span class="n">inputdefinition_ptr</span></em>, <em class="sig-param"><span class="n">element_type</span></em>, <em class="sig-param"><span class="n">min_length</span></em>, <em class="sig-param"><span class="n">max_length</span></em>, <em class="sig-param"><span class="n">default</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition" title="django_analyses.models.input.definitions.input_definition.InputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition</span></code></a></p>
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist" title="django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned" title="django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.default">
+<code class="sig-name descname">default</code><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.default" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.element_type">
+<code class="sig-name descname">element_type</code><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.element_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.get_element_type_display">
+<code class="sig-name descname">get_element_type_display</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django.db.models.fields.CharField: element_type&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.get_element_type_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.get_type">
+<code class="sig-name descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#django_analyses.models.input.definitions.input_definitions.InputDefinitions" title="django_analyses.models.input.definitions.input_definitions.InputDefinitions">django_analyses.models.input.definitions.input_definitions.InputDefinitions</a><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.input_class">
+<code class="sig-name descname">input_class</code><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.input_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.list_input.ListInput" title="django_analyses.models.input.types.list_input.ListInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.types.list_input.ListInput</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.input_set">
+<code class="sig-name descname">input_set</code><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.input_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.inputdefinition_ptr">
+<code class="sig-name descname">inputdefinition_ptr</code><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.inputdefinition_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.inputdefinition_ptr_id">
+<code class="sig-name descname">inputdefinition_ptr_id</code><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.inputdefinition_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.max_length">
+<code class="sig-name descname">max_length</code><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.max_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.min_length">
+<code class="sig-name descname">min_length</code><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.min_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.raise_max_length_error">
+<code class="sig-name descname">raise_max_length_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.raise_max_length_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.raise_min_length_error">
+<code class="sig-name descname">raise_min_length_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.raise_min_length_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.raise_not_list_error">
+<code class="sig-name descname">raise_not_list_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.raise_not_list_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.raise_wrong_type_error">
+<code class="sig-name descname">raise_wrong_type_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.raise_wrong_type_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.validate">
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.validate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.validate_default_value">
+<code class="sig-name descname">validate_default_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.validate_default_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.validate_default_value_max_length">
+<code class="sig-name descname">validate_default_value_max_length</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.validate_default_value_max_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.validate_default_value_min_length">
+<code class="sig-name descname">validate_default_value_min_length</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.validate_default_value_min_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.validate_elements_type_for_default">
+<code class="sig-name descname">validate_elements_type_for_default</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="headerlink" href="#django_analyses.models.input.definitions.list_input_definition.ListInputDefinition.validate_elements_type_for_default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.input.definitions.messages">
+<span id="django-analyses-models-input-definitions-messages-module"></span><h2>django_analyses.models.input.definitions.messages module<a class="headerlink" href="#module-django_analyses.models.input.definitions.messages" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-django_analyses.models.input.definitions.number_input_definition">
+<span id="django-analyses-models-input-definitions-number-input-definition-module"></span><h2>django_analyses.models.input.definitions.number_input_definition module<a class="headerlink" href="#module-django_analyses.models.input.definitions.number_input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.input.definitions.number_input_definition.</code><code class="sig-name descname">NumberInputDefinition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">required</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">is_configuration</span></em>, <em class="sig-param"><span class="n">value_attribute</span></em>, <em class="sig-param"><span class="n">run_method_input</span></em>, <em class="sig-param"><span class="n">inputdefinition_ptr</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition" title="django_analyses.models.input.definitions.input_definition.InputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition</span></code></a></p>
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist" title="django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned" title="django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.floatinputdefinition">
+<code class="sig-name descname">floatinputdefinition</code><a class="headerlink" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.floatinputdefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.inputdefinition_ptr">
+<code class="sig-name descname">inputdefinition_ptr</code><a class="headerlink" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.inputdefinition_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.inputdefinition_ptr_id">
+<code class="sig-name descname">inputdefinition_ptr_id</code><a class="headerlink" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.inputdefinition_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.integerinputdefinition">
+<code class="sig-name descname">integerinputdefinition</code><a class="headerlink" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.integerinputdefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.raise_default_over_max_error">
+<code class="sig-name descname">raise_default_over_max_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.raise_default_over_max_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.raise_default_under_min_error">
+<code class="sig-name descname">raise_default_under_min_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.raise_default_under_min_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.validate">
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.validate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.validate_default">
+<code class="sig-name descname">validate_default</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.input.definitions.number_input_definition.NumberInputDefinition.validate_default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.input.definitions.string_input_definition">
+<span id="django-analyses-models-input-definitions-string-input-definition-module"></span><h2>django_analyses.models.input.definitions.string_input_definition module<a class="headerlink" href="#module-django_analyses.models.input.definitions.string_input_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.input.definitions.string_input_definition.</code><code class="sig-name descname">StringInputDefinition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">required</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">is_configuration</span></em>, <em class="sig-param"><span class="n">value_attribute</span></em>, <em class="sig-param"><span class="n">run_method_input</span></em>, <em class="sig-param"><span class="n">inputdefinition_ptr</span></em>, <em class="sig-param"><span class="n">min_length</span></em>, <em class="sig-param"><span class="n">max_length</span></em>, <em class="sig-param"><span class="n">default</span></em>, <em class="sig-param"><span class="n">dynamic_default</span></em>, <em class="sig-param"><span class="n">choices</span></em>, <em class="sig-param"><span class="n">is_output_path</span></em>, <em class="sig-param"><span class="n">is_output_switch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition" title="django_analyses.models.input.definitions.input_definition.InputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition</span></code></a></p>
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist" title="django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition.DoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned" title="django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.definitions.input_definition.InputDefinition.MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.choices">
+<code class="sig-name descname">choices</code><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.choices" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.default">
+<code class="sig-name descname">default</code><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.default" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.dynamic_default">
+<code class="sig-name descname">dynamic_default</code><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.dynamic_default" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.get_type">
+<code class="sig-name descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#django_analyses.models.input.definitions.input_definitions.InputDefinitions" title="django_analyses.models.input.definitions.input_definitions.InputDefinitions">django_analyses.models.input.definitions.input_definitions.InputDefinitions</a><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.input_class">
+<code class="sig-name descname">input_class</code><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.input_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.input.types.html#django_analyses.models.input.types.string_input.StringInput" title="django_analyses.models.input.types.string_input.StringInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.input.types.string_input.StringInput</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.input_set">
+<code class="sig-name descname">input_set</code><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.input_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.inputdefinition_ptr">
+<code class="sig-name descname">inputdefinition_ptr</code><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.inputdefinition_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.inputdefinition_ptr_id">
+<code class="sig-name descname">inputdefinition_ptr_id</code><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.inputdefinition_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.is_output_path">
+<code class="sig-name descname">is_output_path</code><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.is_output_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.is_output_switch">
+<code class="sig-name descname">is_output_switch</code><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.is_output_switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.max_length">
+<code class="sig-name descname">max_length</code><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.max_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.min_length">
+<code class="sig-name descname">min_length</code><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.min_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.raise_default_not_in_choices_error">
+<code class="sig-name descname">raise_default_not_in_choices_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.raise_default_not_in_choices_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.validate">
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#django_analyses.models.input.definitions.string_input_definition.StringInputDefinition.validate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.input.definitions">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-django_analyses.models.input.definitions" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="django_analyses.models.input.types.html" class="btn btn-neutral float-right" title="django_analyses.models.input.types package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="django_analyses.models.input.html" class="btn btn-neutral float-left" title="django_analyses.models.input package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Zvi Baratz
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

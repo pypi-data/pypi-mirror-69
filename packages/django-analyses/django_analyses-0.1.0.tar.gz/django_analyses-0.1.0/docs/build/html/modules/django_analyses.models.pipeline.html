@@ -1,0 +1,633 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>django_analyses.models.pipeline package &mdash; django_analyses 0.0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="django_analyses.serializers package" href="django_analyses.serializers.html" />
+    <link rel="prev" title="django_analyses.models.output.types package" href="django_analyses.models.output.types.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> django_analyses
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/user_guide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="django_analyses.html">django_analyses package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="django_analyses.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.filters.html">django_analyses.filters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.migrations.html">django_analyses.migrations package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="django_analyses.models.html">django_analyses.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.serializers.html">django_analyses.serializers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.utils.html">django_analyses.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.views.html">django_analyses.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.admin">django_analyses.admin module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.apps">django_analyses.apps module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.pipeline_runner">django_analyses.pipeline_runner module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.urls">django_analyses.urls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html">tests package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">django_analyses</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">Reference</a> &raquo;</li>
+        
+          <li><a href="django_analyses.html">django_analyses package</a> &raquo;</li>
+        
+          <li><a href="django_analyses.models.html">django_analyses.models package</a> &raquo;</li>
+        
+      <li>django_analyses.models.pipeline package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/django_analyses.models.pipeline.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="django-analyses-models-pipeline-package">
+<h1>django_analyses.models.pipeline package<a class="headerlink" href="#django-analyses-models-pipeline-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-django_analyses.models.pipeline.node">
+<span id="django-analyses-models-pipeline-node-module"></span><h2>django_analyses.models.pipeline.node module<a class="headerlink" href="#module-django_analyses.models.pipeline.node" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.pipeline.node.Node">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.pipeline.node.</code><code class="sig-name descname">Node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">created</span></em>, <em class="sig-param"><span class="n">modified</span></em>, <em class="sig-param"><span class="n">analysis_version</span></em>, <em class="sig-param"><span class="n">configuration</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.pipeline.node.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django_extensions.db.models.TimeStampedModel</span></code></p>
+<dl class="py exception">
+<dt id="django_analyses.models.pipeline.node.Node.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/exceptions.html#django.core.exceptions.ObjectDoesNotExist" title="(in Django v3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="django_analyses.models.pipeline.node.Node.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/exceptions.html#django.core.exceptions.MultipleObjectsReturned" title="(in Django v3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.node.Node.analysis_version">
+<code class="sig-name descname">analysis_version</code><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.analysis_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.node.Node.analysis_version_id">
+<code class="sig-name descname">analysis_version_id</code><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.analysis_version_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.check_configuration_sameness">
+<code class="sig-name descname">check_configuration_sameness</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.check_configuration_sameness" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.check_run_configuration_sameness">
+<code class="sig-name descname">check_run_configuration_sameness</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">run</span><span class="p">:</span> <span class="n"><a class="reference internal" href="django_analyses.models.html#django_analyses.models.run.Run" title="django_analyses.models.run.Run">django_analyses.models.run.Run</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.check_run_configuration_sameness" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.node.Node.configuration">
+<code class="sig-name descname">configuration</code><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.get_full_configuration">
+<code class="sig-name descname">get_full_configuration</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.get_full_configuration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.get_next_by_created">
+<code class="sig-name descname">get_next_by_created</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django_extensions.db.fields.CreationDateTimeField: created&gt;</em>, <em class="sig-param">is_next=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.get_next_by_created" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.get_next_by_modified">
+<code class="sig-name descname">get_next_by_modified</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django_extensions.db.fields.ModificationDateTimeField: modified&gt;</em>, <em class="sig-param">is_next=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.get_next_by_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.get_previous_by_created">
+<code class="sig-name descname">get_previous_by_created</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django_extensions.db.fields.CreationDateTimeField: created&gt;</em>, <em class="sig-param">is_next=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.get_previous_by_created" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.get_previous_by_modified">
+<code class="sig-name descname">get_previous_by_modified</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django_extensions.db.fields.ModificationDateTimeField: modified&gt;</em>, <em class="sig-param">is_next=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.get_previous_by_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.get_required_nodes">
+<code class="sig-name descname">get_required_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/models/querysets.html#django.db.models.query.QuerySet" title="(in Django v3.2)">django.db.models.query.QuerySet</a><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.get_required_nodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.get_requiring_nodes">
+<code class="sig-name descname">get_requiring_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/models/querysets.html#django.db.models.query.QuerySet" title="(in Django v3.2)">django.db.models.query.QuerySet</a><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.get_requiring_nodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.get_run_set">
+<code class="sig-name descname">get_run_set</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/models/querysets.html#django.db.models.query.QuerySet" title="(in Django v3.2)">django.db.models.query.QuerySet</a><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.get_run_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.node.Node.id">
+<code class="sig-name descname">id</code><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.node.Node.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.node.Node.pipe_destination_set">
+<code class="sig-name descname">pipe_destination_set</code><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.pipe_destination_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.node.Node.pipe_source_set">
+<code class="sig-name descname">pipe_source_set</code><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.pipe_source_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.required_nodes">
+<em class="property">property </em><code class="sig-name descname">required_nodes</code><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.required_nodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.requiring_nodes">
+<em class="property">property </em><code class="sig-name descname">requiring_nodes</code><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.requiring_nodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></span></em>, <em class="sig-param"><span class="n">user</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://django.readthedocs.io/en/latest/ref/contrib/auth.html#django.contrib.auth.models.User" title="(in Django v3.2)">django.contrib.auth.models.User</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="django_analyses.models.html#django_analyses.models.run.Run" title="django_analyses.models.run.Run">django_analyses.models.run.Run</a><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.run_set">
+<em class="property">property </em><code class="sig-name descname">run_set</code><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.run_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the current instance. Override this in a subclass if you want to
+control the saving process.</p>
+<p>The ‘force_insert’ and ‘force_update’ parameters can be used to insist
+that the “save” must be an SQL insert or update (or equivalent for
+non-SQL backends), respectively. Normally, they should not be set.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.node.Node.validate">
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#django_analyses.models.pipeline.node.Node.validate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.pipeline.pipe">
+<span id="django-analyses-models-pipeline-pipe-module"></span><h2>django_analyses.models.pipeline.pipe module<a class="headerlink" href="#module-django_analyses.models.pipeline.pipe" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.pipeline.pipe.Pipe">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.pipeline.pipe.</code><code class="sig-name descname">Pipe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">pipeline</span></em>, <em class="sig-param"><span class="n">source</span></em>, <em class="sig-param"><span class="n">base_source_port</span></em>, <em class="sig-param"><span class="n">destination</span></em>, <em class="sig-param"><span class="n">base_destination_port</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="py exception">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/exceptions.html#django.core.exceptions.ObjectDoesNotExist" title="(in Django v3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/exceptions.html#django.core.exceptions.MultipleObjectsReturned" title="(in Django v3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.base_destination_port">
+<code class="sig-name descname">base_destination_port</code><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.base_destination_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.base_destination_port_id">
+<code class="sig-name descname">base_destination_port_id</code><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.base_destination_port_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.base_source_port">
+<code class="sig-name descname">base_source_port</code><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.base_source_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.base_source_port_id">
+<code class="sig-name descname">base_source_port_id</code><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.base_source_port_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.destination">
+<code class="sig-name descname">destination</code><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.destination" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.destination_id">
+<code class="sig-name descname">destination_id</code><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.destination_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.destination_port">
+<em class="property">property </em><code class="sig-name descname">destination_port</code><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.destination_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.id">
+<code class="sig-name descname">id</code><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.pipeline">
+<code class="sig-name descname">pipeline</code><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.pipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.pipeline_id">
+<code class="sig-name descname">pipeline_id</code><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.pipeline_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.source">
+<code class="sig-name descname">source</code><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.source_id">
+<code class="sig-name descname">source_id</code><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.pipe.Pipe.source_port">
+<em class="property">property </em><code class="sig-name descname">source_port</code><a class="headerlink" href="#django_analyses.models.pipeline.pipe.Pipe.source_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.pipeline.pipeline">
+<span id="django-analyses-models-pipeline-pipeline-module"></span><h2>django_analyses.models.pipeline.pipeline module<a class="headerlink" href="#module-django_analyses.models.pipeline.pipeline" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.pipeline.pipeline.Pipeline">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.pipeline.pipeline.</code><code class="sig-name descname">Pipeline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">created</span></em>, <em class="sig-param"><span class="n">modified</span></em>, <em class="sig-param"><span class="n">title</span></em>, <em class="sig-param"><span class="n">description</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.pipeline.pipeline.Pipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django_extensions.db.models.TitleDescriptionModel</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">django_extensions.db.models.TimeStampedModel</span></code></p>
+<dl class="py exception">
+<dt id="django_analyses.models.pipeline.pipeline.Pipeline.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_analyses.models.pipeline.pipeline.Pipeline.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/exceptions.html#django.core.exceptions.ObjectDoesNotExist" title="(in Django v3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="django_analyses.models.pipeline.pipeline.Pipeline.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_analyses.models.pipeline.pipeline.Pipeline.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/exceptions.html#django.core.exceptions.MultipleObjectsReturned" title="(in Django v3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.pipeline.Pipeline.entry_nodes">
+<em class="property">property </em><code class="sig-name descname">entry_nodes</code><a class="headerlink" href="#django_analyses.models.pipeline.pipeline.Pipeline.entry_nodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.pipeline.Pipeline.get_entry_nodes">
+<code class="sig-name descname">get_entry_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#django_analyses.models.pipeline.node.Node" title="django_analyses.models.pipeline.node.Node">django_analyses.models.pipeline.node.Node</a><a class="headerlink" href="#django_analyses.models.pipeline.pipeline.Pipeline.get_entry_nodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.pipeline.Pipeline.get_next_by_created">
+<code class="sig-name descname">get_next_by_created</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django_extensions.db.fields.CreationDateTimeField: created&gt;</em>, <em class="sig-param">is_next=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.pipeline.pipeline.Pipeline.get_next_by_created" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.pipeline.Pipeline.get_next_by_modified">
+<code class="sig-name descname">get_next_by_modified</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django_extensions.db.fields.ModificationDateTimeField: modified&gt;</em>, <em class="sig-param">is_next=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.pipeline.pipeline.Pipeline.get_next_by_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.pipeline.Pipeline.get_node_set">
+<code class="sig-name descname">get_node_set</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/models/querysets.html#django.db.models.query.QuerySet" title="(in Django v3.2)">django.db.models.query.QuerySet</a><a class="headerlink" href="#django_analyses.models.pipeline.pipeline.Pipeline.get_node_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.pipeline.Pipeline.get_previous_by_created">
+<code class="sig-name descname">get_previous_by_created</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django_extensions.db.fields.CreationDateTimeField: created&gt;</em>, <em class="sig-param">is_next=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.pipeline.pipeline.Pipeline.get_previous_by_created" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.pipeline.Pipeline.get_previous_by_modified">
+<code class="sig-name descname">get_previous_by_modified</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django_extensions.db.fields.ModificationDateTimeField: modified&gt;</em>, <em class="sig-param">is_next=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.pipeline.pipeline.Pipeline.get_previous_by_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.pipeline.Pipeline.id">
+<code class="sig-name descname">id</code><a class="headerlink" href="#django_analyses.models.pipeline.pipeline.Pipeline.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.pipeline.pipeline.Pipeline.node_set">
+<em class="property">property </em><code class="sig-name descname">node_set</code><a class="headerlink" href="#django_analyses.models.pipeline.pipeline.Pipeline.node_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.pipeline.Pipeline.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#django_analyses.models.pipeline.pipeline.Pipeline.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.pipeline.pipeline.Pipeline.pipe_set">
+<code class="sig-name descname">pipe_set</code><a class="headerlink" href="#django_analyses.models.pipeline.pipeline.Pipeline.pipe_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.pipeline">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-django_analyses.models.pipeline" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="django_analyses.serializers.html" class="btn btn-neutral float-right" title="django_analyses.serializers package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="django_analyses.models.output.types.html" class="btn btn-neutral float-left" title="django_analyses.models.output.types package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Zvi Baratz
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

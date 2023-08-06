@@ -1,0 +1,520 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>django_analyses.models.output.definitions package &mdash; django_analyses 0.0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="django_analyses.models.output.types package" href="django_analyses.models.output.types.html" />
+    <link rel="prev" title="django_analyses.models.output package" href="django_analyses.models.output.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> django_analyses
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/user_guide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="django_analyses.html">django_analyses package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="django_analyses.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.filters.html">django_analyses.filters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.migrations.html">django_analyses.migrations package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="django_analyses.models.html">django_analyses.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.serializers.html">django_analyses.serializers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.utils.html">django_analyses.utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="django_analyses.views.html">django_analyses.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.admin">django_analyses.admin module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.apps">django_analyses.apps module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.pipeline_runner">django_analyses.pipeline_runner module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses.urls">django_analyses.urls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="django_analyses.html#module-django_analyses">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html">tests package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">django_analyses</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">Reference</a> &raquo;</li>
+        
+          <li><a href="django_analyses.html">django_analyses package</a> &raquo;</li>
+        
+          <li><a href="django_analyses.models.html">django_analyses.models package</a> &raquo;</li>
+        
+          <li><a href="django_analyses.models.output.html">django_analyses.models.output package</a> &raquo;</li>
+        
+      <li>django_analyses.models.output.definitions package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/django_analyses.models.output.definitions.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="django-analyses-models-output-definitions-package">
+<h1>django_analyses.models.output.definitions package<a class="headerlink" href="#django-analyses-models-output-definitions-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-django_analyses.models.output.definitions.file_output_definition">
+<span id="django-analyses-models-output-definitions-file-output-definition-module"></span><h2>django_analyses.models.output.definitions.file_output_definition module<a class="headerlink" href="#module-django_analyses.models.output.definitions.file_output_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.output.definitions.file_output_definition.</code><code class="sig-name descname">FileOutputDefinition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">outputdefinition_ptr</span></em>, <em class="sig-param"><span class="n">validate_existence</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition" title="django_analyses.models.output.definitions.output_definition.OutputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.output.definitions.output_definition.OutputDefinition</span></code></a></p>
+<dl class="py exception">
+<dt id="django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.DoesNotExist" title="django_analyses.models.output.definitions.output_definition.OutputDefinition.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.output.definitions.output_definition.OutputDefinition.DoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.MultipleObjectsReturned" title="django_analyses.models.output.definitions.output_definition.OutputDefinition.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.output.definitions.output_definition.OutputDefinition.MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.get_type">
+<code class="sig-name descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="headerlink" href="#django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.output_class">
+<code class="sig-name descname">output_class</code><a class="headerlink" href="#django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.output_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.output.types.html#django_analyses.models.output.types.file_output.FileOutput" title="django_analyses.models.output.types.file_output.FileOutput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.output.types.file_output.FileOutput</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.output_set">
+<code class="sig-name descname">output_set</code><a class="headerlink" href="#django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.output_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.outputdefinition_ptr">
+<code class="sig-name descname">outputdefinition_ptr</code><a class="headerlink" href="#django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.outputdefinition_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.outputdefinition_ptr_id">
+<code class="sig-name descname">outputdefinition_ptr_id</code><a class="headerlink" href="#django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.outputdefinition_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.validate_existence">
+<code class="sig-name descname">validate_existence</code><a class="headerlink" href="#django_analyses.models.output.definitions.file_output_definition.FileOutputDefinition.validate_existence" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.output.definitions.float_output_definition">
+<span id="django-analyses-models-output-definitions-float-output-definition-module"></span><h2>django_analyses.models.output.definitions.float_output_definition module<a class="headerlink" href="#module-django_analyses.models.output.definitions.float_output_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.output.definitions.float_output_definition.</code><code class="sig-name descname">FloatOutputDefinition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">outputdefinition_ptr</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition" title="django_analyses.models.output.definitions.output_definition.OutputDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.output.definitions.output_definition.OutputDefinition</span></code></a></p>
+<dl class="py exception">
+<dt id="django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.DoesNotExist" title="django_analyses.models.output.definitions.output_definition.OutputDefinition.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.output.definitions.output_definition.OutputDefinition.DoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.MultipleObjectsReturned" title="django_analyses.models.output.definitions.output_definition.OutputDefinition.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.output.definitions.output_definition.OutputDefinition.MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition.get_type">
+<code class="sig-name descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="headerlink" href="#django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition.get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition.output_class">
+<code class="sig-name descname">output_class</code><a class="headerlink" href="#django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition.output_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="django_analyses.models.output.types.html#django_analyses.models.output.types.float_output.FloatOutput" title="django_analyses.models.output.types.float_output.FloatOutput"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_analyses.models.output.types.float_output.FloatOutput</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition.output_set">
+<code class="sig-name descname">output_set</code><a class="headerlink" href="#django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition.output_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition.outputdefinition_ptr">
+<code class="sig-name descname">outputdefinition_ptr</code><a class="headerlink" href="#django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition.outputdefinition_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition.outputdefinition_ptr_id">
+<code class="sig-name descname">outputdefinition_ptr_id</code><a class="headerlink" href="#django_analyses.models.output.definitions.float_output_definition.FloatOutputDefinition.outputdefinition_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.output.definitions.output_definition">
+<span id="django-analyses-models-output-definitions-output-definition-module"></span><h2>django_analyses.models.output.definitions.output_definition module<a class="headerlink" href="#module-django_analyses.models.output.definitions.output_definition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.output.definitions.output_definition.OutputDefinition">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.output.definitions.output_definition.</code><code class="sig-name descname">OutputDefinition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">description</span></em><span class="sig-paren">)</span><a class="headerlink" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="py exception">
+<dt id="django_analyses.models.output.definitions.output_definition.OutputDefinition.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/exceptions.html#django.core.exceptions.ObjectDoesNotExist" title="(in Django v3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="django_analyses.models.output.definitions.output_definition.OutputDefinition.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://django.readthedocs.io/en/latest/ref/exceptions.html#django.core.exceptions.MultipleObjectsReturned" title="(in Django v3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.output.definitions.output_definition.OutputDefinition.check_output_class_definition">
+<code class="sig-name descname">check_output_class_definition</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.check_output_class_definition" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.output.definitions.output_definition.OutputDefinition.create_output_instance">
+<code class="sig-name descname">create_output_instance</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="django_analyses.models.output.html#django_analyses.models.output.output.Output" title="django_analyses.models.output.output.Output">django_analyses.models.output.output.Output</a><a class="headerlink" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.create_output_instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.output_definition.OutputDefinition.description">
+<code class="sig-name descname">description</code><a class="headerlink" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.output_definition.OutputDefinition.fileoutputdefinition">
+<code class="sig-name descname">fileoutputdefinition</code><a class="headerlink" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.fileoutputdefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.output_definition.OutputDefinition.floatoutputdefinition">
+<code class="sig-name descname">floatoutputdefinition</code><a class="headerlink" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.floatoutputdefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.output_definition.OutputDefinition.id">
+<code class="sig-name descname">id</code><a class="headerlink" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.output_definition.OutputDefinition.key">
+<code class="sig-name descname">key</code><a class="headerlink" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.key" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.output_definition.OutputDefinition.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django_analyses.models.managers.output_definition.OutputDefinitionManager object&gt;</em><a class="headerlink" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.output_definition.OutputDefinition.output_class">
+<code class="sig-name descname">output_class</code><em class="property"> = None</em><a class="headerlink" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.output_class" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.output_definition.OutputDefinition.pipe_set">
+<code class="sig-name descname">pipe_set</code><a class="headerlink" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.pipe_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="django_analyses.models.output.definitions.output_definition.OutputDefinition.pre_output_instance_create">
+<code class="sig-name descname">pre_output_instance_create</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kwargs</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="headerlink" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.pre_output_instance_create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.output_definition.OutputDefinition.specification_set">
+<code class="sig-name descname">specification_set</code><a class="headerlink" href="#django_analyses.models.output.definitions.output_definition.OutputDefinition.specification_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the forward and reverse sides of
+a many-to-many relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Pizza</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">toppings</span> <span class="o">=</span> <span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Topping</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;pizzas&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Pizza.toppings</span></code> and <code class="docutils literal notranslate"><span class="pre">Topping.pizzas</span></code> are <code class="docutils literal notranslate"><span class="pre">ManyToManyDescriptor</span></code>
+instances.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.output.definitions.output_definitions">
+<span id="django-analyses-models-output-definitions-output-definitions-module"></span><h2>django_analyses.models.output.definitions.output_definitions module<a class="headerlink" href="#module-django_analyses.models.output.definitions.output_definitions" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="django_analyses.models.output.definitions.output_definitions.OutputDefinitions">
+<em class="property">class </em><code class="sig-prename descclassname">django_analyses.models.output.definitions.output_definitions.</code><code class="sig-name descname">OutputDefinitions</code><a class="headerlink" href="#django_analyses.models.output.definitions.output_definitions.OutputDefinitions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.output_definitions.OutputDefinitions.FIL">
+<code class="sig-name descname">FIL</code><em class="property"> = 'File'</em><a class="headerlink" href="#django_analyses.models.output.definitions.output_definitions.OutputDefinitions.FIL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="django_analyses.models.output.definitions.output_definitions.OutputDefinitions.FLT">
+<code class="sig-name descname">FLT</code><em class="property"> = 'Float'</em><a class="headerlink" href="#django_analyses.models.output.definitions.output_definitions.OutputDefinitions.FLT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-django_analyses.models.output.definitions">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-django_analyses.models.output.definitions" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="django_analyses.models.output.types.html" class="btn btn-neutral float-right" title="django_analyses.models.output.types package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="django_analyses.models.output.html" class="btn btn-neutral float-left" title="django_analyses.models.output package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Zvi Baratz
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
