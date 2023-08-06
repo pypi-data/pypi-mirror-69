@@ -1,0 +1,255 @@
+Metadata-Version: 2.1
+Name: xlfunctions
+Version: 0.2.2
+Summary: Implemententation of Python equivalents of MS Excel functions.
+Home-page: https://github.com/bradbase/xlfunctions
+Author: Bradley van Ree
+Author-email: brads@bradbase.net
+License: GPL 3.0
+Description: ===========
+        XLFunctions
+        ===========
+        
+        .. image:: https://travis-ci.org/bradbase/xlfunctions.png?branch=master
+           :target: https://travis-ci.org/bradbase/xlfunctions
+        
+        .. image:: https://coveralls.io/repos/github/bradbase/xlfunctions/badge.svg?branch=master
+           :target: https://coveralls.io/github/bradbase/xlfunctions?branch=master
+        
+        .. image:: https://img.shields.io/pypi/v/xlfunctions.svg
+            :target: https://pypi.python.org/pypi/xlfunctions
+        
+        .. image:: https://img.shields.io/pypi/pyversions/xlfunctions.svg
+            :target: https://pypi.python.org/pypi/xlfunctions/
+        
+        .. image:: https://img.shields.io/pypi/status/xlfunctions.svg
+            :target: https://pypi.org/project/xlfunctions/
+            :alt: Package stability
+        
+        A collection of classes which implement functions as used in Microsoft
+        Excel. The intent is to be a definitive library to support evaluating Excel
+        calculations.
+        
+        There are a number of solutions being developed in the Python universe which
+        are writing their own implementations of the same functions. Often those
+        implementations are simply wrapping pandas, numpy or scipy. Although
+        potentially fit for purpose in those solutions, the calculated result may not
+        necessarily agree with Excel.
+        
+        There are also a handful of libraries to be found which have attempted a
+        universal Python implementation of Excel functions however as they aren't
+        being actively used by a library they appear to be abandoned reasonably
+        rapidly. xlfunctions is being used by
+        `xlcalcualtor <https://github.com/bradbase/xlcalculator>`_ (an attempted
+        re-write of `Koala2 <https://github.com/vallettea/koala>`_ and, in turn,
+        `FlyingKoala <https://github.com/bradbase/flyingkoala>`_).
+        
+        Excel occasionally does unusual things while calculating which may not always
+        align with what is accepted outside the realms of Excel. With this in mind it
+        is common that numpy, scipy or pandas libraries may not calculate a result
+        which agrees with Excel. This is especially true of Excel's date
+        handling. This library attempts to take care to return results as close as
+        possible to what Excel would expect. **If you want to align perfectly with
+        Excel, please read the discussion on Excel number precision (below)**
+        
+        
+        Supported Functions
+        -------------------
+        
+        * ABS
+        * AVERAGE
+        * CHOOSE
+        * CONCAT
+        * COUNT
+        * COUNTA
+        * DATE
+        * IRR
+        * LN
+            - Python Math.log() differs from Excel LN. Currently returning Math.log()
+        * MAX
+        * MID
+        * MIN
+        * MOD
+        * NPV
+        * PMT
+        * POWER
+        * RIGHT
+        * ROUND
+        * ROUNDDOWN
+        * ROUNDUP
+        * SLN
+        * SQRT
+        * SUM
+        * SUMPRODUCT
+        * TODAY
+        * VLOOKUP
+            - Exact match only
+        * XNPV
+        * YEARFRAC
+            - Basis 1, Actual/actual, is only within 3 decimal places
+        
+        
+        Run Tests
+        ---------
+        
+        Setup your environment::
+        
+          virtualenv -p 3.7 ve
+          ve/bin/pip install -e .[test]
+        
+        From the root xlfunctions directory::
+        
+          ve/bin/python -m unittest discover -p "test_*.py"
+        
+        Or simply run tox::
+        
+          tox
+        
+        Adding/Registering Excel Functions
+        ----------------------------------
+        
+        Excel functions can be added by any code using the the
+        ``xlfunctions.xl.register()`` decorator. Here is a simple example:
+        
+        .. code-block:: Python
+        
+          from xlfunctions import xl
+        
+          @xl.register()
+          @xl.validate_args
+          def ADDONE(num: xl.Number):
+              return num + 1
+        
+        The `v@xl.alidate_args` decorator will ensure that the annotated arguments are
+        converted and validated. For example, even if you pass in a string, it is
+        converted to a number (in typical Excel fashion):
+        
+        .. code-block:: Python
+        
+          >>> ADDONE(1):
+          2
+          >>> ADDONE('1'):
+          2
+        
+        If you would like to contribute functions, please create a pull request. All
+        new functions should be accompanied by sufficient tests to cover the
+        functionality.
+        
+        
+        Excel number precision
+        ----------------------
+        
+        Excel number precision is a complex discussion.
+        
+        It has been discussed in a `Wikipedia
+        page <https://en.wikipedia.org/wiki/Numeric_precision_in_Microsoft_Excel>`_.
+        
+        The fundamentals come down to floating point numbers and a contention between
+        how they are represented in memory Vs how they are stored on disk Vs how they
+        are presented on screen. A `Microsoft
+        article <https://www.microsoft.com/en-us/microsoft-365/blog/2008/04/10/understanding-floating-point-precision-aka-why-does-excel-give-me-seemingly-wrong-answers/>`_
+        explains the contention.
+        
+        This project is attempting to take care while reading numbers from the Excel
+        file to try and remove a variety of representation errors.
+        
+        Further work will be required to keep numbers in-line with Excel throughout
+        different transformations.
+        
+        From what I can determine this requires a low-level implementation of a
+        numeric datatype (C or C++, Cython??) to replicate its behaviour. Python
+        built-in numeric types don't replicate appropriate behaviours.
+        
+        
+        =======
+        CHANGES
+        =======
+        
+        
+        0.2.2 (2020-05-28)
+        ------------------
+        
+        - Implement a few more operators for the Excel Number type.
+        
+        
+        0.2.1 (2020-05-28)
+        ------------------
+        
+        - Fix an error message to refer to the righ type.
+        
+        - Added a test to ensure SUM() works with arrays containing Excel data types.
+        
+        
+        0.2.0 (2020-05-28)
+        ------------------
+        
+        - Support for delayed argument execution by introducing expressions that can
+          be evaluated when needed. This is required to support efficient logical
+          operator implementations. For example, when an "if"-condition is true, the
+          false value does not need to be computed.
+        
+        - Implemented all Excel types.
+        
+          + Better control of logic differences between Python and Excel. (Compare
+            with None and blank handling, for example.)
+        
+          + Tight control of type casting with very situation-specific edge case
+            handling. (For example, when a string representing a boolean will evaluate
+            as a boolean and when not. For example, `int(bool('False')) == 0` in Excel
+            but `AND('False', True) == True`.
+        
+          + Make date/time its own type.
+        
+        - Moved errors back into their own module.
+        
+        - Moved criteria parsing into its own module.
+        
+        - Made function signature validation and conversion much more consistent
+          allowing a lot less error handling and data conversion in the function
+          body.
+        
+        
+        
+        0.1.0 (2020-05-25)
+        ------------------
+        
+        - Complete rewrite of library.
+        
+          * Introduced a function registry that can be used to extend the function
+            library in third party software.
+        
+          * Removed excessive use of static methods and converted all Excel functions
+            to simple Python functions (with some decorators).
+        
+          * Organized functions into categories based on Microsoft documentation.
+        
+          * Proper argument validation and conversion where supported.
+        
+          * Many functions are now much more flexible with their types and more
+            correctly mimic Excel behavior.
+        
+          * Use of `dateutil` and `yearfrac` libraries to do complicated date
+            calculations instead of implementing it from scratch.
+        
+          * Achieved 100% test coverage.
+        
+        
+        0.0.3b (2020-05-11)
+        -------------------
+        
+        - Initial release.
+        
+Keywords: Excel functions
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Requires-Python: >=3.7
+Provides-Extra: test
+Provides-Extra: build
