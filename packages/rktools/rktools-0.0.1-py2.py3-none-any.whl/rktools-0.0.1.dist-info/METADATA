@@ -1,0 +1,116 @@
+Metadata-Version: 2.1
+Name: rktools
+Version: 0.0.1
+Summary: The Régis Kla Python tools library
+Home-page: https://github.com/rejux/rktools-lib
+Author: Régis Kla
+Author-email: klaregis@gmail.com
+License: MIT
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Description-Content-Type: text/markdown
+Requires-Dist: tqdm
+
+# rktools
+
+A general purpose Python library.
+
+[![Build Status][travis-image]][travis-url]
+[![Downloads Stats][npm-downloads]][npm-url]
+
+*rktools* is a general purpose Python Library. It is originally designed after the needs of several small tools during Python projects development.
+
+## Introduction
+
+The library is organized around dedicated modules for monitoring processes, for loggings events, and so forth:
+
+- *loggers:*  A simple Python *logging* wrapper that provide additional features such as http server logging handler management...
+- *monitors:* A set of monitoring tools to provide visibility to the end user. For instance, it provide *ProgressBar* which is a *tqdm* wrapper, and so forth 
+
+## Install
+
+*rktools* is currently supported only for Linux systems. However, since it is written with pure Python, it should run without any problem on all platforms. 
+
+### Using pip
+
+The easiest way to install *rktools* is using *pip* to fetch it from [Pypi](https://pypi.org/project/rktools/) as follows:
+
+~~~bash
+$ pip install rktools 
+~~~
+
+## Using rktools
+
+The modules usage is as follows.
+
+### Loggers
+
+Import the *init_logger* function from the *rktools.loggers* module:
+
+~~~python
+from rktools.loggers import init_logger
+~~~
+
+Declare and initialize a *logger* global (or local variable) : 
+
+~~~python
+...
+logger = init_logger(name="test_monitors", config = config)
+...
+~~~
+
+The returned *logger* object is an instance of Python *logging.Logger*  class.
+Also notice that the Python *logging* package can be required if you want to override the logging level: 
+
+~~~python
+import logging
+...
+logger = init_logger(name="test_monitors", config = config, level = logging.getLevelName("DEBUG"))
+...
+~~~
+
+Use the *logger* object the same way you use the Python  *logging.Logger*  object:
+
+~~~python
+...
+logger.debug("A debug message!")
+logger.info("A info message!")
+logger.warning("A warn message!")
+logger.error("A error message!")
+logger.critical("A critical message!")
+...
+~~~
+
+Find more details in the reference documentation [here](#).
+
+### Monitoring
+
+Import the *ProgressBar* class from the *monitors* module:
+
+~~~python
+from rktools.monitors import ProgressBar
+~~~
+
+
+## Changes
+
+* 0.0.1
+    * Lib creation. Work in progress
+
+
+
+
+## Feedback
+
+Open a ticket / fork the project on [GitHub](#), or send me an email at klaregis@gmail.com.
+
+
+
+
+
+
+
+
+
