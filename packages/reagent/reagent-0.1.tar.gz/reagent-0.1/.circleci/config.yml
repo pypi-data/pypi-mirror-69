@@ -1,0 +1,285 @@
+version: 2.1
+
+# How to test the Linux jobs:
+#   - Install CircleCI local CLI: https://circleci.com/docs/2.0/local-cli/
+#   - circleci config process .circleci/config.yml > gen.yml && circleci local execute -c gen.yml --job end_to_end_test
+#     - Replace end_to_end_test with the name of the job you want to test.
+
+commands:
+  checkout_merge:
+    description: "checkout merge branch"
+    steps:
+      - checkout
+      - run:
+          name: Checkout merge branch
+          command: |
+            set -ex
+            BRANCH=$(git rev-parse --abbrev-ref HEAD)
+            if [[ "$BRANCH" != "master" ]]; then
+              git merge origin/master
+            fi
+
+  rasp_build_deps:
+    description: Install RASP build deps
+    parameters:
+      miniconda2:
+        type: string
+    steps:
+      - run:
+          name: Install build deps
+          command: |
+            curl <<parameters.miniconda2>> -o ~/miniconda.sh
+            bash ~/miniconda.sh -b -p $HOME/miniconda
+            source $HOME/miniconda/bin/activate
+            conda init
+            conda install -y --file rasp_requirements.txt
+
+  install_libtorch:
+    description: Download & unzip libtorch
+    parameters:
+      source:
+        type: string
+    steps:
+      - run:
+          name: Download libtorch
+          command: |
+            pushd ..
+            curl <<parameters.source>> -o libtorch.zip
+            unzip libtorch.zip
+            popd
+
+  rasp_build_test:
+    description: Build & test RASP
+    steps:
+      - run:
+          name: Clone submodules
+          command: |
+            git submodule update --force --recursive --init --remote
+      - run:
+          name: Build RASP
+          command: |
+            source $HOME/miniconda/bin/activate
+            echo $HOME
+            mkdir -p serving/build
+            pushd serving/build
+            cmake -DCMAKE_PREFIX_PATH=$HOME/libtorch -DCMAKE_CXX_STANDARD=17 ..
+            make -j2
+            popd
+      - run:
+          name: Run RASP tests
+          command: |
+            serving/build/RaspTest
+      - store_artifacts:
+          path: serving/build/RaspTest
+          destination: RaspTest
+      - store_artifacts:
+          path: serving/build/RaspCli
+          destination: RaspCli
+
+  end_to_end_test:
+    description: Set-up for end-to-end tests
+    steps:
+      - run:
+          name: Installing SDKs
+          command: |
+            mv ~/.bashrc ~/.bashrc.bk
+            curl -s "https://get.sdkman.io" | bash
+            source "$HOME/.sdkman/bin/sdkman-init.sh"
+            sdk version
+            sdk install java 8.0.252.hs-adpt
+            sdk install scala
+            sdk install maven
+            sdk install spark 2.4.4
+            sudo apt-get update
+            sudo apt-get install bc
+      - run:
+          name: Build preprocessing package
+          command: |
+            mvn -f preprocessing/pom.xml clean package
+      - run:
+          name: Run script
+          command: |
+            # gather data and store as pickle
+            coverage run ./reagent/workflow/cli.py run reagent.workflow.gym_batch_rl.offline_gym "$CONFIG"
+            # run through timeline operator
+            coverage run --append ./reagent/workflow/cli.py run reagent.workflow.gym_batch_rl.timeline_operator "$CONFIG"
+            # train and evaluate
+            coverage run --append ./reagent/workflow/cli.py run reagent.workflow.gym_batch_rl.train_and_evaluate_gym "$CONFIG"
+      - run:
+          name: Save coverage results
+          command: |
+            coverage report
+            coverage xml
+            bash <(curl -s https://codecov.io/bash)
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
+      - store_test_results:
+          path: ~/test-results
+      - store_artifacts:
+          path: preprocessing/target/rl-preprocessing-1.1.jar
+          destination: rl-preprocessing-1.1.jar
+
+  pip_install:
+    description: Pip install requirements
+    parameters:
+      install_gym:
+        type: boolean
+        default: true
+      is_ubuntu_gpu:
+        type: boolean
+        default: false
+    steps:
+      - when:
+          condition: << parameters.is_ubuntu_gpu >>
+          steps:
+            - run:
+                command: |
+                  pyenv global 3.7.0
+      - run:
+          command: |
+            pip install --upgrade pip
+            pip install --upgrade tox wheel setuptools
+      - when:
+          condition: << parameters.install_gym >>
+          steps:
+            - when:
+                condition: << parameters.is_ubuntu_gpu >>
+                steps:
+                  - run:
+                      command: |
+                        pip install -e .[gym,test]
+                        pip install torch==1.5.0+cu101 -f https://download.pytorch.org/whl/torch_stable.html
+            - unless:
+                condition: << parameters.is_ubuntu_gpu >>
+                steps:
+                  - run:
+                      command: |
+                        sudo pip install -e .[gym,test]
+
+  run_unittest:
+    description: Run unittests, coverage and save results
+    parameters:
+      tox_env:
+        type: string
+    steps:
+      - run:
+          command: |
+            tox -e << parameters.tox_env >>
+            bash <(curl -s https://codecov.io/bash)
+      - run: python setup.py bdist_wheel
+      - store_artifacts:
+          path: dist/reagent-0.1-py3-none-any.whl
+          destination: reagent-0.1-py3-none-any.whl
+      - store_test_results:
+          path: .tox/py37/log/
+
+
+
+
+jobs:
+  gpu_unittest:
+    machine:
+      image: ubuntu-1604-cuda-10.1:201909-23
+    resource_class: gpu.medium
+    environment:
+      - CUDA_LAUNCH_BLOCKING: 1
+    steps:
+      - checkout_merge
+      - pip_install:
+          install_gym: false
+          is_ubuntu_gpu: true
+      - run_unittest:
+          tox_env: circleci_unittest
+
+  gym_unittest:
+    machine:
+      image: ubuntu-1604-cuda-10.1:201909-23
+    resource_class: gpu.medium
+    environment:
+      - CUDA_LAUNCH_BLOCKING: 1
+    steps:
+      - checkout_merge
+      - pip_install:
+          install_gym: false
+          is_ubuntu_gpu: true
+      - run_unittest:
+          tox_env: circleci_gym_unittest
+
+  dqn_cartpole_e2e:
+    docker:
+      - image: circleci/python:3.7
+    resource_class: large
+    environment:
+      - BASH_ENV: ~/.bashrc
+      - CONFIG: reagent/workflow/sample_configs/discrete_dqn_cartpole_offline.yaml
+    steps:
+      - checkout_merge
+      - pip_install:
+          install_gym: true
+          is_ubuntu_gpu: false
+      - end_to_end_test
+
+  sac_pendulum_e2e:
+    docker:
+      - image: circleci/python:3.7
+    resource_class: large
+    environment:
+      - BASH_ENV: ~/.bashrc
+      - CONFIG: reagent/workflow/sample_configs/sac_pendulum_offline.yaml
+    steps:
+      - checkout_merge
+      - pip_install:
+          install_gym: true
+          is_ubuntu_gpu: false
+      - end_to_end_test
+
+  sac_pendulum_e2e_gpu:
+    machine:
+      image: ubuntu-1604-cuda-10.1:201909-23
+    resource_class: gpu.medium
+    environment:
+      - CONFIG: reagent/workflow/sample_configs/sac_pendulum_offline.yaml
+    steps:
+      - checkout_merge
+      - pip_install:
+          install_gym: true
+          is_ubuntu_gpu: true
+      - end_to_end_test
+
+  rasp_test_linux:
+    docker:
+      - image: cimg/base:2020.01
+    resource_class: large
+    steps:
+      - checkout_merge
+      - rasp_build_deps:
+          miniconda2: https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh
+      - install_libtorch:
+          source: https://download.pytorch.org/libtorch/nightly/cpu/libtorch-cxx11-abi-shared-with-deps-latest.zip
+      - rasp_build_test
+
+  rasp_test_mac:
+    macos:
+      xcode: 11.3.0
+    steps:
+      - checkout_merge
+      - rasp_build_deps:
+          miniconda2: https://repo.anaconda.com/miniconda/Miniconda2-latest-MacOSX-x86_64.sh
+      - install_libtorch:
+          source: https://download.pytorch.org/libtorch/nightly/cpu/libtorch-macos-latest.zip
+      - rasp_build_test
+
+workflows:
+  build:
+    jobs:
+      - dqn_cartpole_e2e
+      - sac_pendulum_e2e
+      - sac_pendulum_e2e_gpu
+      - gpu_unittest
+      - gym_unittest
+      - rasp_test_linux
+      - rasp_test_mac
