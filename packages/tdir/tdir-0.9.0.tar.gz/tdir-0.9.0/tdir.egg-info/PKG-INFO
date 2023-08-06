@@ -1,0 +1,47 @@
+Metadata-Version: 1.1
+Name: tdir
+Version: 0.9.0
+Summary: Create and recursively fill a temporary directory
+Home-page: https://github.com/rec/tdir
+Author: Tom Ritchford
+Author-email: tom@swirly.com
+License: MIT
+Description: 🗃 tdir - create and fill a temporary directory 🗃
+        ======================================================
+        
+        A context manager that creates a temporary directory using
+        tempfile.TemporaryDirectory and then populates it.
+        
+        Extremely useful for unit tests where you want a whole directory
+        full of files really fast.
+        
+        EXAMPLE
+        
+        .. code-block:: python
+        
+            import tdir
+        
+            with tdir.tdir(
+                'one', 'two', 'three',
+                four='two\nlines',
+                sub1={
+                    'six': 'A short file',
+                    'seven': 'blank lines\n\n\n\n',
+                    'eight': ['a', 'b', 'c']
+            }) as td:
+                # Now the directory `td` has files `one`, `two` and `three`, each with
+                # one line, file `four` with two lines, and then a subdirectory `sub/`
+                # with more files.
+        
+Keywords: testing,modules
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Utilities
