@@ -1,0 +1,74 @@
+Metadata-Version: 2.1
+Name: bKashWebhook
+Version: 0.0.2
+Summary: This package will help to receive bKash Webhook payment payload
+Home-page: https://github.com/vubon/bkash-webhook
+Author: Vubon Roy
+Author-email: vubon.roy@gmail.com
+License: MIT
+Project-URL: Documentation, https://github.com/vubon/bkash-webhook/blob/master/docs/GUIDE.md
+Platform: Python
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Environment :: Web Environment
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Description-Content-Type: text/markdown
+Requires-Dist: requests
+Requires-Dist: pyOpenSSL
+Requires-Dist: responses
+
+# bKash Webhook
+[![PyPI version](https://badge.fury.io/py/bKashWebhook.svg)](https://badge.fury.io/py/bKashWebhook)
+![Coverage](https://raw.githubusercontent.com/vubon/bkash-webhook/master/docs/coverage.svg)
+[![GitHub version](https://badge.fury.io/gh/vubon%2Fbkash-webhook.svg)](https://badge.fury.io/gh/vubon%2Fbkash-webhook)
+
+## Introduction
+This package will help to receive Webhook notification from bKash end and the user can use this package of any kind of Python Web Frameworks 
+
+**If bKash complains about this package.Such as Logo and others. The author will remove from the package from PyPi and Github.**
+
+![Coverage](https://raw.githubusercontent.com/vubon/bkash-webhook/master/docs/BKash.svg)
+## Quickstart
+### Installation
+Install from pypi: 
+```shell script
+pip install bKashWebhook
+```
+
+## Security
+bKashWebhook package does not provide any kind of security. But payload content security handle by **bKash** <br/>
+N.B. You need to secure your API endpoint yourself. 
+## Example 
+```python
+import json
+from bkash_webhook import BKash
+bkash = BKash(json.loads("bKash Webhook Payload"))
+res = bkash.bkash_response_process()
+print(res)
+# You will get bKash Payload if everything is okay. 
+```
+To learn more [Documentation](./docs/GUIDE.md).
+
+## Changelog
+See [Changelog](CHANGELOG.md)
+
+## Trade off
+- Currently, Coverage result is 98%. Two test cases don't cover and those test cases are not possible to cover.
+These test cases do not impact to core response. So don't worry. ValidationError Exception would manage that type error. 
+
+## License
+MIT
+
+## Changelog
+All notable changes to this project will be documented in this file. <br/>
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## v0.0.2 - 2020-05-30
+- Added PyPI badge 
+- Added documentation link into setup.py 
+
