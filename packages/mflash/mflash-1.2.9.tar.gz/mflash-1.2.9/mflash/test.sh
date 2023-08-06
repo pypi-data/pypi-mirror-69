@@ -1,0 +1,1 @@
+openocd/osx/openocd_mxos -f interface/jlink_swd.cfg -f targets/rtl8762c.cfg -f flashloader/scripts/flash.tcl -f flashloader/scripts/cmd.tcl -c init -c flash_alg_pre_init -c "flash_alg_init flashloader/ramcode/rtl8762c.elf" -c mac -c shutdown
