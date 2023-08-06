@@ -1,0 +1,141 @@
+Metadata-Version: 2.1
+Name: webparsa
+Version: 0.0.1
+Summary: This project uses XML templates to extract data from websites for you, with almost no code
+Home-page: https://github.com/myfatemi04/webparsa
+Author: Michael Fatemi
+Author-email: myfatemi04@gmail.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+
+# webparsa
+This project uses XML templates to extract data from websites for you, with almost no code.
+
+XML templates are used to mimic the structure of the HTML itself, allowing you to make intuitive selectors.
+You could literally copy and paste website code, and specify which attributes are the variables you want, and it would
+work.
+
+### Storing single values
+*Note: for images, use the `<p_img>` tag, because img tags can't have children in HTML.*
+To extract a certain value from a part of the element, use the `<value>` tag.
+Value tags need two things:
+- name: the name of the variable to store under
+- (inner text): the attribute to store.
+
+### Storing lists of values
+To import a list of similar divs as a python list, wrap the single div that encloses the tags with `<list>` tags.
+List tags need only one attribute:
+- name: the name of the variable to store under
+Doesn't have to be the direct parent of a value!
+
+### Storing dicts of values
+To group some values together as a dict, wrap the values in a `<dict>` tag.
+Requires a name attribute, like `<list>` and `<value>`.
+Doesn't have to be the direct parent of a value!
+
+### Possible attributes:
+- self.attrs.(any attribute): attributes from the HTML tag
+- self.text: inner text
+- self.element: BeautifulSoup element
+
+### Filtering
+To select an element with HTML, just write the HTML element.
+
+For example, writing `<div class='foo'>` will select any `div`s with class `foo`. 
+
+To filter any attribute, use "filter.*" as an attribute in the element.
+- filter.index=N: this element must be at select(element)\[N\]
+- filter.regex.*=REGEX: this attribute must match a certain regex. Examples: filter.regex.text=.+, filter.regex.attrs.data=\\d+.
+- filter.function=*: you define a function for us, passed as a keyword argument during the constructor. Then, we pass a dict containing attributes ('text', 'element', 'index', and another dictionary called 'attrs'), and your function returns False if the node should be rejected.
+
+### Post processing
+In any tag, you can add the attribute "after" to run on any `<list>, <dict>, or <value>`'s value.
+
+For example,
+~~~
+<div id=number>
+    <value name=number after=int>self.text</value>
+</div>
+~~~
+
+Will call the user-defined function `int` on the value returned from self.text.
+This applies to any node in the XML tree, including HTML elements.
+You can also call this `after` in `<list>` and `<value>` tags.
+
+**NOTE: in lists, this function will be called on the entire list, NOT on individual elements!**
+
+To define the 'int' function, pass it in the constructor as Parsa((structure), int=function)
+
+Something that might be useful would be to have a function called `df`, that makes a pandas dataframe from a list element.
+
+Default postprocessing functions:
+ - (User-defined functions)
+ - .<...>: runs type(value).<...>(value). Essentially value.<...>(). Example: ".strip" -> x.strip()
+ - Built-in functions like int, float, str, list, dict, etc. Any attribute of the module builtins.
+
+Other postprocessing functions:
+ - remove_commas: x.replace(",", "")
+ - split_commas: x.split(",")
+ - split: x.split(" ")
+
+You can use function composition by adding a "+" between function names.
+For example:
+remove_commas+int: "1,000,000" -> "1000000" -> 1000000.
+
+If you want to use more than one argument, I suggest writing a wrapper function or making a `partial` with `functools.partial`.
+
+### Required content
+By default, all selectors must exist for a datapoint to be stored.
+However, if you want a datapoint to be optional, wrap the selector in `<unrequired>`.
+
+## Example
+### washington-post.xml
+Hopefully this explains enough about how it works!
+THIS GETS WASHINGTON POST HEADLINES
+
+~~~
+<list name=headlines> // stores children as dicts in a list called 'headlines'
+    <div filter.level="any"> // filter.level="any" means they don't have to be direct children
+        <div class="headline" filter.level="any"> // finds divs with class headline
+            <a> // finds a link
+                <value name=link>self.attrs.href</value> // stores the link's href attribute to 'link'
+                <value name=headline>self.text</value> // stores the link's text to 'text'. other possibility is 'element', which stores the BS4 node.
+            </a>
+        </div>
+        <span class="author" filter.level="any"> // finds spans with class author
+            <a filter.level="any"> // finds any link
+                <value name=author>self.text</value> // stores the text to 'author'
+            </a>
+        </span>
+        <div class="art" filter.level="any"> // finds divs with class art
+            <p_img filter.level="any"> // img doesn't let you put stuff inside, so it's called p_img
+                <value name=image_url>self.attrs.data-hi-res-src</value> // stores an attribute to 'image_url'
+            </p_img>
+        </div>
+    </div>
+</list>
+~~~
+
+### washington-post.py
+
+~~~
+import webparsa
+import requests
+
+parser = webparsa.Parsa(washington-post-xml-text)
+
+website_content = requests.get("http://washingtonpost.com")
+
+for headline in parser.parse(website_content)['headlines']:
+    print(headline['headline'], headline['author'], headline['image_url'])
+~~~
+
+## License
+
+Standard MIT license.
+
