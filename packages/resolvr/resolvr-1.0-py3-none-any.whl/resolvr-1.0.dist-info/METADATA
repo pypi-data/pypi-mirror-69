@@ -1,0 +1,124 @@
+Metadata-Version: 2.1
+Name: resolvr
+Version: 1.0
+Summary: A penetration testing tool to resolve domains and optionally filter on in-scope results.
+Home-page: https://gitlab.com/TheTwitchy/resolvr
+Author: TheTwitchy
+Author-email: thetwitchy@thetwitchy.com
+License: MIT
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Security
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: netaddr
+Requires-Dist: requests
+Requires-Dist: termcolor
+
+# resolvr
+
+Resolves domains and optionally filters on in-scope results.
+
+## Examples
+
+### Docs
+~~~
+root@kali:~/.../personal/resolvr$ ./resolvr.py -h
+usage: resolvr [-h] [-v] [-q] [-i [INPUT]] [-o [OUTPUT]] [-s [SCOPE]]
+               [-O [OUT_OF_SCOPE]] [-n [NO_RESOLVE]]
+
+Resolves domains and optionally filters on in-scope results
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  -q, --quiet           surpress extra output
+  -i [INPUT], --input [INPUT]
+                        input list of domains to test (default stdin)
+  -o [OUTPUT], --output [OUTPUT]
+                        output filename
+  -s [SCOPE], --scope [SCOPE]
+                        input list of in-scope address ranges (default *)
+  -O [OUT_OF_SCOPE], --out-of-scope [OUT_OF_SCOPE]
+                        out of scope hosts output filename
+  -n [NO_RESOLVE], --no-resolve [NO_RESOLVE]
+                        non-resolved hosts output filename
+
+~~~
+
+### Basic Usage
+First, you need a list of domains and subdomains that are possibly a target, usually discovered through any number of subdomain enumeration techniques:
+
+~~~
+root@kali:~$ subbrute.py company.com -o discovered_subdomains_company.com.txt
+company.com
+dev.company.com
+wiki.company.com
+host2.company.com
+...omitted for brevity...
+~~~
+
+Generally you want to take this list and feed it into resolvr, like so:
+
+~~~
+root@kali:~$ resolvr.py -i discovered_subdomains_company.com.txt -o resolvr_results_company.com.txt
+                           ___                      
+                          /\_ \                     
+ _ __    __    ____    ___\//\ \    __  __   _ __   
+/\`'__\/'__`\ /',__\  / __`\\ \ \  /\ \/\ \ /\`'__\ 
+\ \ \//\  __//\__, `\/\ \L\ \\_\ \_\ \ \_/ |\ \ \/  
+ \ \_\\ \____\/\____/\ \____//\____\\ \___/  \ \_\  
+  \/_/ \/____/\/___/  \/___/ \/____/ \/__/    \/_/  
+
+                                             v1.0
+info: Host company.com resolves to 255.255.255.254
+error: Failed to resolve the host dev.company.com
+error: Failed to resolve the host wiki.company.com
+info: Host host2.company.com resolves to 255.255.255.255
+...omitted for brevity...
+~~~
+
+### Target Filtering
+Additionally, if you know the exact CIDR ranges of which hosts are in scope, you can feed this in as well, which will be taken into account:
+
+~~~
+root@kali:~$ cat target_ranges.txt 
+255.255.255.255/32
+
+root@kali:~$ resolvr.py -i discovered_subdomains_company.com.txt -o resolvr_results_company.com.txt -s target_ranges.txt 
+                           ___                      
+                          /\_ \                     
+ _ __    __    ____    ___\//\ \    __  __   _ __   
+/\`'__\/'__`\ /',__\  / __`\\ \ \  /\ \/\ \ /\`'__\ 
+\ \ \//\  __//\__, `\/\ \L\ \\_\ \_\ \ \_/ |\ \ \/  
+ \ \_\\ \____\/\____/\ \____//\____\\ \___/  \ \_\  
+  \/_/ \/____/\/___/  \/___/ \/____/ \/__/    \/_/  
+
+                                             v1.0
+info: Host company.com resolves to 255.255.255.254 but is *not* in scope
+error: Failed to resolve the host dev.company.com
+error: Failed to resolve the host wiki.company.com
+info: Host host2.company.com resolves to 255.255.255.255 and is in scope
+...omitted for brevity...
+~~~
+
+## Installation
+### Standard
+`pip3 install resolvr`
+
+### Bleeding Edge
+Use this only if the central package is out of date, and you need to install the latest package with the latest features.
+
+`python3 setup.py install`
+
+### Development
+* It is recommended that you use a virtual environment for development:
+    * `virtualenv --python python3 venv`
+    * `source ./venv/bin/activate`
+* `python setup.py develop`
+* Run with `resolvr` like normal
+* Upload to PyPI using the process outlined in https://packaging.python.org/tutorials/packaging-projects/
+
+
