@@ -1,0 +1,55 @@
+[tool.poetry]
+name = "munin2smartphone"
+version = "0.0.3"
+description = "HTTP API producing static pages from your munin data"
+authors = ["Feth AREZKI <feth@majerti.fr>"]
+license = "GPL-2 or CECILL-2.1"
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Operating System :: POSIX :: Linux",
+    "Natural Language :: English",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    ]
+
+readme = 'README.rst'
+repository = "https://framagit.org/feth/munin2smartphone.git"
+homepage = "https://framagit.org/feth/munin2smartphone"
+documentation = "https://munin2smartphone.readthedocs.io/"
+
+[tool.poetry.dependencies]
+python = ">= 3.6"
+PyYAML = "5.3.1"
+quicklogging = "^0.3"
+pyxdg = "^0.26"
+aiohttp = "3.6.2"
+toml = "^0.10.1"
+jinja2 = "^2.11.2"
+pytz = "^2020.1"
+coloredlogs = "^14.0"
+
+[tool.poetry.extras]
+docs = [
+  "graphviz",
+  "sphinx",
+  "sphinx-autodoc-typehints",
+  "sphinx-rtd-theme",
+]
+
+
+[tool.poetry.scripts]
+munin2smartphone = 'munin2smartphone.entrypoints:run_from_cli'
+
+[tool.poetry.dev-dependencies]
+pudb = "^2019.2"
+flake8 = "^3.7.9"
+black = "^19.10b0"
+sphinx = "^3.0.3"
+sphinx_rtd_theme = "^0.4.3"
+graphviz = "^0.14"
+readme-renderer = "^26.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
