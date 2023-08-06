@@ -1,0 +1,28 @@
+<img src="https://www.tal-com.com/images/2019/05/31/Robot-Snake_large.jpg" alt="mypy logo" width="300px"/>
+
+# New Business lib
+
+This Robot Selenium library which owns a couple of keywords called by Facile New Business Projects centralizing most used keywords within those projects. 
+
+## Getting Started
+
+Go to the terminal and install the given library:
+
+```python
+pip install facile-new-business-lib
+```
+
+After that go to the robot project and import the given library
+
+```python
+Library                 facilenewbusinesslib
+```
+
+### Prerequisites
+
+You need Python 3.5 or later to run mypy. You can have multiple Python versions (2.x and 3.x) installed on the same system without problems.
+
+### Demo 
+
+This is a alpha version which contains different driver instances in order to understand different browsers flows convering future troubleshootings 
+
