@@ -1,0 +1,2 @@
+# Genetic Machine Learning for Python
+GMLP or *Genetic Machine Learning for Python*, is a user friendly python machine learning package. GMLP is intuitive and can be used for lots of Machine Learning Projects.
