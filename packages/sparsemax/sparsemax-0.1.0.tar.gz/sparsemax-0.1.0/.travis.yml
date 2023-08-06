@@ -1,0 +1,18 @@
+language: python
+python:
+- 3.8
+- 3.7
+- 3.6
+- 3.5
+install: pip install -U tox-travis
+script: tox
+deploy:
+  provider: pypi
+  distributions: sdist bdist_wheel
+  user: aced125
+  password:
+    secure: B8xZK7CmK44gfZurl8qySRESraEYE07A7edzQbGMEp81z1F60f83cg7S0VoX68fBIVoq97D60D3kBMUeZmVGsJJP2t0YCAT+VOd3Cxb3H0wdFpZhC/U2ar8IwB0fT5ndv4x8c2YAbt7PKjvvIxPyn9g9BKwCt44R8vQas+btQjPE9Kdt0RFSsucM2snhxXA9HuCiiJP1gLHDcBG1xseUZSw4fMHsuQN7qYED0wVY5VVW0VFwr+3+fRqnnVDFAzEDq0EwiEPhAfB7GXZaQJY5iQ9XmHuyv5ckRlxyMAS8ODUHsf0XR/bGglqsVvYO4YKkpzqsuwtgVqQwe0s150z1f2ukK/vfKEnKAAVb1NES7WdrSVmV5bfT/9jEZMo2O5qlczT1oy1WzI6FO4iIkmmjQwVvZNJJiQsexSUq7eJlNWube016s+GYtyuFJE6DS7oJ0Hk9k2dFO2CoRQHPGqu0ic0CZN7DIPFAxcIwPjgjHeM2TjjVB54pT9QQc7sNWu3xuNb/R1gn91gxBU2dHr9twwCu6lrMllxNBxzUQxNYaXDgYxEpr5Ly0bFHlH6NGK15vOfKQ7/17n6Z2g2Y415UCw/dLrdvFqtSG4GbQcEUvQSc7PnTbebz8HILE1rzCOS0a1pdwDYBQUzFcslkTxxo7hTiMTC6pzkr6svu2pAx+6Y=
+  on:
+    tags: true
+    repo: aced125/sparsemax
+    python: 3.8
