@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "digikam-photo-finder"
+version = "0.2.0"
+description = ""
+authors = ["Andrew Halberstadt <ahal@pm.me>"]
+packages = [
+    {include = "dkpf"},
+]
+
+[tool.poetry.scripts]
+dkpf = "dkpf.cli:main"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+appdirs = "^1.4.3"
+tomlkit = "^0.5.11"
+loguru = "^0.4.1"
+flake8 = "^3.7.9"
+cleo = "^0.8.0"
+
+[tool.poetry.dev-dependencies]
+black = "^19.10b0"
+
+[build-system]
+requires = ["poetry>=1.0.0"]
+build-backend = "poetry.masonry.api"
