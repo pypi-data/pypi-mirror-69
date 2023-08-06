@@ -1,0 +1,1 @@
+This package will help to calculate Gaussian and Binomial Distribution.
