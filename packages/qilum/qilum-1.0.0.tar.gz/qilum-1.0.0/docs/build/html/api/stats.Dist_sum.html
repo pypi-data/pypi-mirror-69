@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Dist_sum &#8212; Qilum</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="shortcut icon" href="../_static/qilum.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Dist_walker" href="stats.Dist_walker.html" />
+    <link rel="prev" title="Dist_scale" href="stats.Dist_scale.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="dist-sum">
+<h1>Dist_sum<a class="headerlink" href="#dist-sum" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="stats.Dist_sum">
+<em class="property">class </em><code class="sig-prename descclassname">stats.</code><code class="sig-name descname">Dist_sum</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dists</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="stats.Dist_qilum.html#stats.Dist_qilum" title="stats.Dist_qilum"><code class="xref py py-class docutils literal notranslate"><span class="pre">stats.Dist_qilum</span></code></a></p>
+<p>Distribution for a sum of distributions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dists</strong> (<em>array like</em>) – array of scipy stats distributions or Dist_qilum</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.stats</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># exponential distributions left and right types</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_left</span>  <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp+&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_right</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_sum</span><span class="p">([</span><span class="n">exp_left</span><span class="p">,</span> <span class="n">exp_right</span><span class="p">]);</span>
+</pre></div>
+</div>
+<img alt="../_images/Dist_sum.jpg" src="../_images/Dist_sum.jpg" />
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#stats.Dist_sum.F_tot" title="stats.Dist_sum.F_tot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">F_tot</span></code></a>()</p></td>
+<td><p>Cumulative of the function f() on the whole valid range x</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#stats.Dist_sum.cdf" title="stats.Dist_sum.cdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cdf</span></code></a>(x)</p></td>
+<td><p>Cumulative distribution function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#stats.Dist_sum.f" title="stats.Dist_sum.f"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f</span></code></a>(x)</p></td>
+<td><p>function f(x)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#stats.Dist_sum.name" title="stats.Dist_sum.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a>()</p></td>
+<td><p>Name of the class</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#stats.Dist_sum.pdf" title="stats.Dist_sum.pdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pdf</span></code></a>(x)</p></td>
+<td><p>Probability density function</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#stats.Dist_sum.ppf" title="stats.Dist_sum.ppf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppf</span></code></a>(q)</p></td>
+<td><p>Percent point function (inverse of cdf) at q</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#stats.Dist_sum.rvs" title="stats.Dist_sum.rvs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rvs</span></code></a>(size)</p></td>
+<td><p>random numbers in ndarray of lenght size</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#stats.Dist_sum.rvs_xy" title="stats.Dist_sum.rvs_xy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rvs_xy</span></code></a>(size)</p></td>
+<td><p>random numbers rans in ndarray of lenght size and function(rans)</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="py method">
+<dt id="stats.Dist_sum.F_tot">
+<code class="sig-name descname">F_tot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_sum.F_tot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cumulative of the function f() on the whole valid range x</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dist.F_tot()*scale_y*|scale_x|; if dist.F_tot() not define set to 1</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.stats</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># exponential distributions left and right types</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_left</span>  <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp+&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_right</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_sum</span><span class="p">([</span><span class="n">exp_left</span><span class="p">,</span> <span class="n">exp_right</span><span class="p">]);</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">F_tot</span><span class="p">())</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_sum.cdf">
+<code class="sig-name descname">cdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_sum.cdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cumulative distribution function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array_like of type</em><em>(</em><em>values</em><em>)</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Cumulative distribution function evaluated at x</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.stats</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># exponential distributions left and right types</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_left</span>  <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp+&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_right</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_sum</span><span class="p">([</span><span class="n">exp_left</span><span class="p">,</span> <span class="n">exp_right</span><span class="p">]);</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;cdf(x)=&#39;</span><span class="p">,</span><span class="n">dist</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="go">cdf(x)= [0.05413411 0.4        0.4        0.77927234]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_sum.f">
+<code class="sig-name descname">f</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_sum.f" title="Permalink to this definition">¶</a></dt>
+<dd><p>function f(x)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array_like of type</em><em>(</em><em>values</em><em>)</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>f(x)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.stats</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># exponential distributions left and right types</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_left</span>  <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp+&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_right</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_sum</span><span class="p">([</span><span class="n">exp_left</span><span class="p">,</span> <span class="n">exp_right</span><span class="p">]);</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;f(x)=&#39;</span><span class="p">,</span><span class="n">dist</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="go">f(x)= [0.27067057 0.         3.         1.10363832]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_sum.name">
+<code class="sig-name descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_sum.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>‘Dist_sum’</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.stats</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># exponential distributions left and right types</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_left</span>  <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp+&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_right</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_sum</span><span class="p">([</span><span class="n">exp_left</span><span class="p">,</span> <span class="n">exp_right</span><span class="p">]);</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
+<span class="go">&#39;Dist_sum&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_sum.pdf">
+<code class="sig-name descname">pdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_sum.pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probability density function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array_like of type</em><em>(</em><em>values</em><em>)</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>f(x)/F_tot()</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.stats</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># exponential distributions left and right types</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_left</span>  <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp+&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_right</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_sum</span><span class="p">([</span><span class="n">exp_left</span><span class="p">,</span> <span class="n">exp_right</span><span class="p">]);</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;pdf(x)=&#39;</span><span class="p">,</span><span class="n">dist</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="go">pdf(x)= [0.05413411 0.         0.6        0.22072766]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_sum.ppf">
+<code class="sig-name descname">ppf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_sum.ppf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Percent point function (inverse of cdf) at q</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>q</strong> (<em>array_like of double</em>) – lower tail probability</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>quantile corresponding to the lower tail probability q</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.stats</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># exponential distributions left and right types</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_left</span>  <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp+&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_right</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_sum</span><span class="p">([</span><span class="n">exp_left</span><span class="p">,</span> <span class="n">exp_right</span><span class="p">]);</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.7</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ppf(q)=&#39;</span><span class="p">,</span><span class="n">dist</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+<span class="go">NotImplementedError: Sum::ppf: not implemented</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_sum.rvs">
+<code class="sig-name descname">rvs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_sum.rvs" title="Permalink to this definition">¶</a></dt>
+<dd><p>random numbers in ndarray of lenght size</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> (<em>int</em>) – number of random number</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>random numbers</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.stats</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># exponential distributions left and right types</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_left</span>  <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp+&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_right</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_sum</span><span class="p">([</span><span class="n">exp_left</span><span class="p">,</span> <span class="n">exp_right</span><span class="p">]);</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rans=&#39;</span><span class="p">,</span><span class="n">dist</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="go">rans= [-1.69435547 -1.25739917 -1.01561614  4.38379953]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_sum.rvs_xy">
+<code class="sig-name descname">rvs_xy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_sum.rvs_xy" title="Permalink to this definition">¶</a></dt>
+<dd><p>random numbers rans in ndarray of lenght size and function(rans)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> (<em>int</em>) – number of random number</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>ndarray</em> – random numbers</p></li>
+<li><p><em>ndarray</em> – f(random numbers)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.stats</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># exponential distributions left and right types</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_left</span>  <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp+&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_right</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_sum</span><span class="p">([</span><span class="n">exp_left</span><span class="p">,</span> <span class="n">exp_right</span><span class="p">]);</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rans=&#39;</span><span class="p">,</span><span class="n">dist</span><span class="o">.</span><span class="n">rvs_xy</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="go">rans= (array([-1.90014397, -3.38554518]), array([0.81302226, 0.18407758]))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Qilum</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License MIT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#contact-help">Contact/Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#current-version-release">Current version 1.0.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#homepage">Homepage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#source-code">Source code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#distribution-install">Distribution/install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#complete-example">Complete example</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="stats.f_cumulative.html">f_cumulative</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.f_max.html">f_max</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.f_walker.html">f_walker</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_cubicSpline.html">Dist_cubicSpline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_qilum.html">Dist_qilum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_reject.html">Dist_reject</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_scale.html">Dist_scale</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Dist_sum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_walker.html">Dist_walker</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="stats.Dist_scale.html" title="previous chapter">Dist_scale</a></li>
+      <li>Next: <a href="stats.Dist_walker.html" title="next chapter">Dist_walker</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Damien Loison.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/stats.Dist_sum.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

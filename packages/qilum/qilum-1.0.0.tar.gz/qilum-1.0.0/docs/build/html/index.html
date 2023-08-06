@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Qilum</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="shortcut icon" href="_static/qilum.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="License MIT" href="license.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <a class="reference internal image-reference" href="_images/qilum.png"><img alt="_images/qilum.png" src="_images/qilum.png" style="width: 400px;" /></a>
+<p>Qilum is a statistical and utility library supplementing existing statistical libraries,
+including <a class="reference external" href="https://numpy.org">numpy</a> and <a class="reference external" href="https://www.scipy.org/">scipy</a>.
+We use <a class="reference external" href="http://numba.pydata.org">numba</a> library to speed up some calculations.</p>
+<p>In this first version, we provide several random number generators. They are based on the
+<a class="reference external" href="http://www.damienloison.com/finance/LOPOR/index.html">C++ LOPOR library</a>
+and the article <a class="reference external" href="http://www.damienloison.com/articles/reference26.pdf">Canonical local algorithms for spin systems: heat bath
+and Hasting’s methods</a>.
+We respect the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/stats.html">scipy.stats random number generator</a>
+interface and any of the scipy.stats classes can be used to initialize qilum classes.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License MIT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html#contact-help">Contact/Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html#current-version-release">Current version 1.0.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html#homepage">Homepage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html#source-code">Source code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html#distribution-install">Distribution/install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html#complete-example-tests">Complete example/tests</a></li>
+</ul>
+</div>
+<ul class="simple">
+<li><p>Example: Discrete Walker distribution <a class="reference internal" href="api/stats.Dist_walker.html#stats.Dist_walker" title="stats.Dist_walker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dist_walker</span></code></a></p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a discrete distribution with Walker algorithm</span>
+<span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="n">walker</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_walker</span><span class="p">(</span><span class="n">probabilities</span><span class="o">=</span><span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="c1"># and call the random number generator</span>
+<span class="n">rans</span> <span class="o">=</span> <span class="n">walker</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Example: Sum of distributions <a class="reference internal" href="api/stats.Dist_sum.html#stats.Dist_sum" title="stats.Dist_sum"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dist_sum</span></code></a></p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># exponential distributions left and right types</span>
+<span class="n">exp_left</span>  <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=-</span><span class="mf">1.000001</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp+&#39;</span><span class="p">)</span>
+<span class="n">exp_right</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp-&#39;</span><span class="p">)</span>
+<span class="c1"># sum of the distributions</span>
+<span class="n">dist_sum</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_sum</span><span class="p">([</span><span class="n">exp_left</span><span class="p">,</span> <span class="n">exp_right</span><span class="p">]);</span>
+<span class="c1"># random numbers</span>
+<span class="n">rans</span> <span class="o">=</span> <span class="n">dist_sum</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/Dist_sum_2.jpg" src="_images/Dist_sum_2.jpg" />
+<ul class="simple">
+<li><p>Example: Rejection method distribution <a class="reference internal" href="api/stats.Dist_reject.html#stats.Dist_reject" title="stats.Dist_reject"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dist_reject</span></code></a></p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># generate a random generator for f_f(x)</span>
+<span class="k">def</span> <span class="nf">f_f</span><span class="p">(</span><span class="n">xs</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">xs</span><span class="o">&lt;-</span><span class="mi">5</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">xs</span><span class="o">&gt;</span><span class="mi">5</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">3.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span><span class="o">/</span><span class="mf">10.</span><span class="p">))</span>
+<span class="c1"># find a step function above f_f(x)</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1001</span><span class="p">)</span>
+<span class="n">ys</span> <span class="o">=</span> <span class="n">f_f</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+<span class="n">xs_step</span><span class="p">,</span> <span class="n">ys_step</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">f_max</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">ys_step</span> <span class="o">*=</span> <span class="mf">1.2</span> <span class="c1"># just to be sure that our step function &gt;= f_f()</span>
+<span class="c1"># create a distribution for this step function:</span>
+<span class="n">hist_dist</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">rv_histogram</span><span class="p">((</span><span class="n">ys_step</span><span class="p">,</span> <span class="n">xs_step</span><span class="p">))</span>
+<span class="c1"># scale this diribution</span>
+<span class="n">cumulative</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">f_cumulative</span><span class="p">(</span><span class="n">xs_step</span><span class="p">,</span> <span class="n">ys_step</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">dist_step</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">hist_dist</span><span class="p">,</span> <span class="n">scale_y</span> <span class="o">=</span> <span class="n">cumulative</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;dist_step&#39;</span><span class="p">)</span>
+<span class="c1"># create dist_reject</span>
+<span class="n">dist_reject</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_reject</span><span class="p">(</span><span class="n">dist_step</span><span class="p">,</span> <span class="n">f_f</span><span class="p">)</span>
+<span class="c1"># random numbers</span>
+<span class="n">rans</span> <span class="o">=</span> <span class="n">dist_reject</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/Dist_reject2.jpg" src="_images/Dist_reject2.jpg" />
+<p>The main classes are:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="api/stats.Dist_reject.html#stats.Dist_reject" title="stats.Dist_reject"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dist_reject</span></code></a>. Construct an exact generator for any probability functions. This is the <a class="reference external" href="http://www.damienloison.com/articles/reference26.pdf">fastest method</a> when you do not know how to calculate or inverse the cumulative.</p></li>
+<li><p><a class="reference internal" href="api/stats.Dist_sum.html#stats.Dist_sum" title="stats.Dist_sum"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dist_sum</span></code></a>. Construct a sum of known distributions</p></li>
+<li><p><a class="reference internal" href="api/stats.Dist_scale.html#stats.Dist_scale" title="stats.Dist_scale"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dist_scale</span></code></a>. Apply scaling for x and y, for any distributions, even negative scaling for x</p></li>
+<li><p><a class="reference internal" href="api/stats.Dist_cubicSpline.html#stats.Dist_cubicSpline" title="stats.Dist_cubicSpline"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dist_cubicSpline</span></code></a>. Create an approximate random number generator for any functions using cubic spline. If you need an exact random number generator, use <a class="reference internal" href="api/stats.Dist_reject.html#stats.Dist_reject" title="stats.Dist_reject"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dist_reject</span></code></a>. The <a class="reference internal" href="api/stats.Dist_cubicSpline.html#stats.Dist_cubicSpline" title="stats.Dist_cubicSpline"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dist_cubicSpline</span></code></a> can be used instead of <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.rv_histogram.html#scipy.stats.rv_histogram">scipy.stats.rv_histogram</a> if you need a smooth function</p></li>
+<li><p><a class="reference internal" href="api/stats.Dist_walker.html#stats.Dist_walker" title="stats.Dist_walker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dist_walker</span></code></a>. Create a very fast random number generator for discrete distributions.</p></li>
+<li><p>In addition, we expose the function <a class="reference internal" href="api/stats.f_walker.html#stats.f_walker" title="stats.f_walker"><code class="xref py py-func docutils literal notranslate"><span class="pre">f_walker()</span></code></a> which calculates the parameters of the Walker algorithm</p></li>
+</ul>
+<div class="section" id="module-stats">
+<span id="stats-module"></span><h1>stats Module<a class="headerlink" href="#module-stats" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/stats.f_cumulative.html#stats.f_cumulative" title="stats.f_cumulative"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f_cumulative</span></code></a>(xs, ys[, normalized])</p></td>
+<td><p>cumulative calculation</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/stats.f_max.html#stats.f_max" title="stats.f_max"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f_max</span></code></a>(xs, ys, N)</p></td>
+<td><p>maximun value ys in N intervals</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/stats.f_walker.html#stats.f_walker" title="stats.f_walker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f_walker</span></code></a>(probabilities)</p></td>
+<td><p>given N probabilities , return a series of N boxes of value mean(probabilities) with 2 indices in each.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/stats.Dist_cubicSpline.html#stats.Dist_cubicSpline" title="stats.Dist_cubicSpline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dist_cubicSpline</span></code></a>(x, y[, N_cs])</p></td>
+<td><p>Distribution for (x,y): cubic splaine approximation for both cumulative ans values</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/stats.Dist_qilum.html#stats.Dist_qilum" title="stats.Dist_qilum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dist_qilum</span></code></a></p></td>
+<td><p>Base class for any qilum distribution</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/stats.Dist_reject.html#stats.Dist_reject" title="stats.Dist_reject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dist_reject</span></code></a>(dist_ran, f_fx[, f_tot])</p></td>
+<td><p>Distribution with rejection method.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/stats.Dist_scale.html#stats.Dist_scale" title="stats.Dist_scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dist_scale</span></code></a>(dist[, loc_x, scale_x, scale_y, name])</p></td>
+<td><p>Distribution scale for x and y: f_new = scale_y*f((x-loc_x)*scale_x)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/stats.Dist_sum.html#stats.Dist_sum" title="stats.Dist_sum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dist_sum</span></code></a>(dists)</p></td>
+<td><p>Distribution for a sum of distributions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/stats.Dist_walker.html#stats.Dist_walker" title="stats.Dist_walker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dist_walker</span></code></a>(probabilities[, values])</p></td>
+<td><p>Fast generator for discrete values using the Walker algorithm</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">Qilum</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License MIT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html#contact-help">Contact/Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html#current-version-release">Current version 1.0.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html#homepage">Homepage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html#source-code">Source code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html#distribution-install">Distribution/install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html#complete-example-tests">Complete example/tests</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/stats.f_cumulative.html">f_cumulative</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/stats.f_max.html">f_max</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/stats.f_walker.html">f_walker</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/stats.Dist_cubicSpline.html">Dist_cubicSpline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/stats.Dist_qilum.html">Dist_qilum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/stats.Dist_reject.html">Dist_reject</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/stats.Dist_scale.html">Dist_scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/stats.Dist_sum.html">Dist_sum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/stats.Dist_walker.html">Dist_walker</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="license.html" title="next chapter">License MIT</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Damien Loison.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

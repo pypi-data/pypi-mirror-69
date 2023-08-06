@@ -1,0 +1,429 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Dist_reject &#8212; Qilum</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="shortcut icon" href="../_static/qilum.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Dist_scale" href="stats.Dist_scale.html" />
+    <link rel="prev" title="Dist_qilum" href="stats.Dist_qilum.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="dist-reject">
+<h1>Dist_reject<a class="headerlink" href="#dist-reject" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="stats.Dist_reject">
+<em class="property">class </em><code class="sig-prename descclassname">stats.</code><code class="sig-name descname">Dist_reject</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dist_ran</span></em>, <em class="sig-param"><span class="n">f_fx</span></em>, <em class="sig-param"><span class="n">f_tot</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_reject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="stats.Dist_qilum.html#stats.Dist_qilum" title="stats.Dist_qilum"><code class="xref py py-class docutils literal notranslate"><span class="pre">stats.Dist_qilum</span></code></a></p>
+<p>Distribution with rejection method. Give a distribution with a known method for both random number generation and function value, and apply rejection method to keep values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dist_ran</strong> (<em>distribution scipy</em><em> or </em><em>qilum.Dist</em>) – we can call a random number generator <a class="reference internal" href="#stats.Dist_reject.rvs" title="stats.Dist_reject.rvs"><code class="xref py py-func docutils literal notranslate"><span class="pre">rvs()</span></code></a></p></li>
+<li><p><strong>f_fx</strong> (<em>function</em>) – objective</p></li>
+<li><p><strong>f_tot</strong> (<em>double</em>) – Cumulative of the function f_fx() on the whole valid range x,
+Only used if we want to use this distribution as part of Dist_sum</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.stats</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># gaussian function</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f_f</span><span class="p">(</span><span class="n">xs</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="mf">3.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># 1.create a function f_sum(x) above the function f_f(x).</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#   f_sum(x) = y0*exp(+a*x)  if x_min &lt; x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#   f_sum(x) = step function if x_min &lt; x &lt;= x_max</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#   f_sum(x) = y0*exp(-a*x)  if x_max &lt; x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1001</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ys</span> <span class="o">=</span> <span class="n">f_f</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xs_inter</span><span class="p">,</span> <span class="n">ys_inter</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">f_max</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ys_inter</span> <span class="o">*=</span> <span class="mf">1.2</span> <span class="c1"># just to be sure that our step function &gt;= f_f()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># histogram distribution with the step function</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hist_dist</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">rv_histogram</span><span class="p">((</span><span class="n">ys_inter</span><span class="p">,</span> <span class="n">xs_inter</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># scale this diribution</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cumulative</span> <span class="o">=</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">xs_inter</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="n">xs_inter</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">ys_inter</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">step</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">hist_dist</span><span class="p">,</span> <span class="n">scale_y</span> <span class="o">=</span> <span class="n">cumulative</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># exponential distribution at the left and right of the step distribution</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_left</span>  <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=</span><span class="n">xs_inter</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">scale_x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale_y</span><span class="o">=</span><span class="n">ys_inter</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp+&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_right</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_scale</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(),</span><span class="n">loc_x</span><span class="o">=</span><span class="n">xs_inter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">scale_x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">scale_y</span><span class="o">=</span><span class="n">ys_inter</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp-&#39;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># 2. create a sum of the known distributions for each part of f2 function</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist_sum</span>    <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_sum</span><span class="p">([</span><span class="n">exp_left</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">exp_right</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># 3. create the Dist_rejection distribution using this sum and the original f_f(x) function</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_reject</span><span class="p">(</span><span class="n">dist_sum</span><span class="p">,</span> <span class="n">f_f</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># test result with the normal distribution hypothesis</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k2</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">normaltest</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">100000</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Normal distribution test = &quot;</span><span class="p">,</span><span class="n">p</span> <span class="o">&gt;</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="s2">&quot; with &quot;</span><span class="p">,</span> <span class="s2">&quot;p = </span><span class="si">{:g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+<span class="go">Normal distribution test =  True  with  p = 0.0617403</span>
+</pre></div>
+</div>
+<img alt="../_images/Dist_reject.jpg" src="../_images/Dist_reject.jpg" />
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#stats.Dist_reject.F_tot" title="stats.Dist_reject.F_tot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">F_tot</span></code></a>()</p></td>
+<td><p>Cumulative of the function f() on the whole valid range x</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#stats.Dist_reject.cdf" title="stats.Dist_reject.cdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cdf</span></code></a>(x)</p></td>
+<td><p>Cumulative distribution function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#stats.Dist_reject.f" title="stats.Dist_reject.f"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f</span></code></a>(x)</p></td>
+<td><p>function f(x) set initialy f_fx(x)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#stats.Dist_reject.f_underlying" title="stats.Dist_reject.f_underlying"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f_underlying</span></code></a>(x)</p></td>
+<td><p>function dist_ran.f(x): function of the underlying distribution dist_ran set up initialy</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#stats.Dist_reject.name" title="stats.Dist_reject.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a>()</p></td>
+<td><p>Name of the class</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#stats.Dist_reject.pdf" title="stats.Dist_reject.pdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pdf</span></code></a>(x)</p></td>
+<td><p>Probability density function</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#stats.Dist_reject.ppf" title="stats.Dist_reject.ppf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppf</span></code></a>(q)</p></td>
+<td><p>Percent point function (inverse of cdf) at q</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#stats.Dist_reject.rvs" title="stats.Dist_reject.rvs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rvs</span></code></a>(size)</p></td>
+<td><p>random numbers in ndarray of lenght size</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#stats.Dist_reject.rvs_xy" title="stats.Dist_reject.rvs_xy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rvs_xy</span></code></a>(size)</p></td>
+<td><p>random numbers rans in ndarray of lenght size and function(rans)</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="py method">
+<dt id="stats.Dist_reject.F_tot">
+<code class="sig-name descname">F_tot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_reject.F_tot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cumulative of the function f() on the whole valid range x</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># see example at the top of the class</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">F_tot</span><span class="p">())</span>
+<span class="go">NotImplementedError: Dist_reject.F_tot: not implemented</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_reject.cdf">
+<code class="sig-name descname">cdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_reject.cdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cumulative distribution function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array_like of type</em><em>(</em><em>values</em><em>)</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Cumulative distribution function evaluated at x</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># see example at the top of the class</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;cdf(x)=&#39;</span><span class="p">,</span><span class="n">dist</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="go">NotImplementedError: Dist_reject.cdf: not implemented</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_reject.f">
+<code class="sig-name descname">f</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_reject.f" title="Permalink to this definition">¶</a></dt>
+<dd><p>function f(x) set initialy f_fx(x)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array_like of type</em><em>(</em><em>values</em><em>)</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>f(x)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># see example at the top of the class</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;f(x)=&#39;</span><span class="p">,</span><span class="n">dist</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="go">f(x)= [1.21970898 2.71451225 2.01096014 1.21970898]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_reject.f_underlying">
+<code class="sig-name descname">f_underlying</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_reject.f_underlying" title="Permalink to this definition">¶</a></dt>
+<dd><p>function dist_ran.f(x): function of the underlying distribution dist_ran set up initialy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array_like of type</em><em>(</em><em>values</em><em>)</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dist.f(x)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># see example at the top of the class</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;f_underlying(x)=&#39;</span><span class="p">,</span><span class="n">dist</span><span class="o">.</span><span class="n">f_underlying</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="go">f_underlying(x)= [2.7056004  3.6        2.75102576 2.75102576]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># or similarly</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;f_underlying(x)=&#39;</span><span class="p">,</span><span class="n">dist</span><span class="o">.</span><span class="n">dist_ran</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="go">f_underlying(x)= [2.7056004  3.6        2.75102576 2.75102576]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_reject.name">
+<code class="sig-name descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_reject.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>‘Dist_reject’</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># see example at the top of the class</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
+<span class="go">&#39;Dist_reject&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_reject.pdf">
+<code class="sig-name descname">pdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_reject.pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probability density function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array_like of type</em><em>(</em><em>values</em><em>)</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>f(x)/F_tot()</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># see example at the top of the class</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;pdf(x)=&#39;</span><span class="p">,</span><span class="n">dist</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="go">NotImplementedError: Dist_reject.F_tot: not implemented</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_reject.ppf">
+<code class="sig-name descname">ppf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_reject.ppf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Percent point function (inverse of cdf) at q</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>q</strong> (<em>array_like of double</em>) – lower tail probability</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>quantile corresponding to the lower tail probability q</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># see example at the top of the class</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.7</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ppf(q)=&#39;</span><span class="p">,</span><span class="n">dist</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+<span class="go">NotImplementedError: Dist_reject.ppf: not implemented</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_reject.rvs">
+<code class="sig-name descname">rvs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_reject.rvs" title="Permalink to this definition">¶</a></dt>
+<dd><p>random numbers in ndarray of lenght size</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> (<em>int</em>) – number of random number</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>random numbers</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># see example at the top of the class</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rans=&#39;</span><span class="p">,</span><span class="n">dist</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="go">rans= [-1.17789338 -0.69306554  1.1672123  -1.80663854]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_reject.rvs_xy">
+<code class="sig-name descname">rvs_xy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_reject.rvs_xy" title="Permalink to this definition">¶</a></dt>
+<dd><p>random numbers rans in ndarray of lenght size and function(rans)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> (<em>int</em>) – number of random number</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>ndarray</em> – random numbers</p></li>
+<li><p><em>ndarray</em> – f(random numbers)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># see example at the top of the class</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rans=&#39;</span><span class="p">,</span><span class="n">dist</span><span class="o">.</span><span class="n">rvs_xy</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="go">rans= (array([-2.46439985, -0.96670812]), array([1.63441612, 2.73234395]))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Qilum</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License MIT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#contact-help">Contact/Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#current-version-release">Current version 1.0.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#homepage">Homepage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#source-code">Source code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#distribution-install">Distribution/install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#complete-example">Complete example</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="stats.f_cumulative.html">f_cumulative</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.f_max.html">f_max</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.f_walker.html">f_walker</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_cubicSpline.html">Dist_cubicSpline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_qilum.html">Dist_qilum</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Dist_reject</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_scale.html">Dist_scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_sum.html">Dist_sum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_walker.html">Dist_walker</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="stats.Dist_qilum.html" title="previous chapter">Dist_qilum</a></li>
+      <li>Next: <a href="stats.Dist_scale.html" title="next chapter">Dist_scale</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Damien Loison.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/stats.Dist_reject.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

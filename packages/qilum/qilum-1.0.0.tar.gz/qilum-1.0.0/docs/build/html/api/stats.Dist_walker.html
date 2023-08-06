@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Dist_walker &#8212; Qilum</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="shortcut icon" href="../_static/qilum.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Dist_sum" href="stats.Dist_sum.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="dist-walker">
+<h1>Dist_walker<a class="headerlink" href="#dist-walker" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="stats.Dist_walker">
+<em class="property">class </em><code class="sig-prename descclassname">stats.</code><code class="sig-name descname">Dist_walker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">probabilities</span></em>, <em class="sig-param"><span class="n">values</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_walker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="stats.Dist_qilum.html#stats.Dist_qilum" title="stats.Dist_qilum"><code class="xref py py-class docutils literal notranslate"><span class="pre">stats.Dist_qilum</span></code></a></p>
+<p>Fast generator for discrete values using the Walker algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>probabilities</strong> (<em>array_like</em>) – an array of probability</p></li>
+<li><p><strong>values</strong> (<em>array_like</em><em> or </em><em>None</em>) – values corresponding to the probabilities. if ‘None’ values=arange(probabilities.size)</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">probabilities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">walker</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_walker</span><span class="p">(</span><span class="n">probabilities</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/Dist_walker.jpg" src="../_images/Dist_walker.jpg" />
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#stats.Dist_walker.F_tot" title="stats.Dist_walker.F_tot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">F_tot</span></code></a>()</p></td>
+<td><p>Cumulative of the function f() on the whole valid range x</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#stats.Dist_walker.cdf" title="stats.Dist_walker.cdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cdf</span></code></a>(x)</p></td>
+<td><p>Cumulative distribution function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#stats.Dist_walker.f" title="stats.Dist_walker.f"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f</span></code></a>(x)</p></td>
+<td><p>function f(x)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#stats.Dist_walker.name" title="stats.Dist_walker.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a>()</p></td>
+<td><p>Name of the class: ‘Dist_walker’</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#stats.Dist_walker.pdf" title="stats.Dist_walker.pdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pdf</span></code></a>(x)</p></td>
+<td><p>Same as pmf()</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#stats.Dist_walker.pmf" title="stats.Dist_walker.pmf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pmf</span></code></a>(x)</p></td>
+<td><p>Probability mass function</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#stats.Dist_walker.ppf" title="stats.Dist_walker.ppf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppf</span></code></a>(q)</p></td>
+<td><p>Percent point function (inverse of cdf) at q</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#stats.Dist_walker.rvs" title="stats.Dist_walker.rvs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rvs</span></code></a>([size])</p></td>
+<td><p>random numbers in ndarray of lenght size</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="py method">
+<dt id="stats.Dist_walker.F_tot">
+<code class="sig-name descname">F_tot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_walker.F_tot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cumulative of the function f() on the whole valid range x</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>probabilities.sum()</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">walker</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_walker</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">walker</span><span class="o">.</span><span class="n">F_tot</span><span class="p">())</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_walker.cdf">
+<code class="sig-name descname">cdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_walker.cdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cumulative distribution function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array_like of type</em><em>(</em><em>values</em><em>)</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Cumulative distribution function evaluated at x</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">walker</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_walker</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;cdf(x)=&#39;</span><span class="p">,</span><span class="n">walker</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="go">cdf(x)= [0.2 0.2 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 1. ]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_walker.f">
+<code class="sig-name descname">f</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_walker.f" title="Permalink to this definition">¶</a></dt>
+<dd><p>function f(x)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array_like of type</em><em>(</em><em>values</em><em>)</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>f(x)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">walker</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_walker</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;f(x)=&#39;</span><span class="p">,</span><span class="n">walker</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="go">f(x)= [0.2 0.  0.3 0.  0.  0.  0.  0.  0.  0.  0.5]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_walker.name">
+<code class="sig-name descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_walker.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the class: ‘Dist_walker’</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_walker.pdf">
+<code class="sig-name descname">pdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_walker.pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as pmf()</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_walker.pmf">
+<code class="sig-name descname">pmf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_walker.pmf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probability mass function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array_like of type</em><em>(</em><em>values</em><em>)</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>f(x)/probabilities.sum()</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">walker</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_walker</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;pmf(x)=&#39;</span><span class="p">,</span><span class="n">walker</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="go">pmf(x)= [0.2 0.  0.3 0.  0.  0.  0.  0.  0.  0.  0.5]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_walker.ppf">
+<code class="sig-name descname">ppf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">q</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_walker.ppf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Percent point function (inverse of cdf) at q</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>q</strong> (<em>array_like of double</em>) – lower tail probability</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>quantile corresponding to the lower tail probability q</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">walker</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_walker</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.7</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ppf(q)=&#39;</span><span class="p">,</span><span class="n">walker</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+<span class="go">ppf(q)= [ 0.  2.  2. 10. 10.]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="stats.Dist_walker.rvs">
+<code class="sig-name descname">rvs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">size</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.Dist_walker.rvs" title="Permalink to this definition">¶</a></dt>
+<dd><p>random numbers in ndarray of lenght size</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> (<em>int</em>) – number of random number</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>random numbers</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">walker</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">Dist_walker</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rans=&#39;</span><span class="p">,</span><span class="n">walker</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="go">rans= [ 0  0  0 10  0 10  2  2 10  0]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Qilum</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License MIT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#contact-help">Contact/Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#current-version-release">Current version 1.0.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#homepage">Homepage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#source-code">Source code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#distribution-install">Distribution/install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#complete-example">Complete example</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="stats.f_cumulative.html">f_cumulative</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.f_max.html">f_max</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.f_walker.html">f_walker</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_cubicSpline.html">Dist_cubicSpline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_qilum.html">Dist_qilum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_reject.html">Dist_reject</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_scale.html">Dist_scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_sum.html">Dist_sum</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Dist_walker</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="stats.Dist_sum.html" title="previous chapter">Dist_sum</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Damien Loison.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/stats.Dist_walker.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

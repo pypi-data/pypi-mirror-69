@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>f_cumulative &#8212; Qilum</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="shortcut icon" href="../_static/qilum.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="f_max" href="stats.f_max.html" />
+    <link rel="prev" title="License MIT" href="../license.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="f-cumulative">
+<h1>f_cumulative<a class="headerlink" href="#f-cumulative" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="stats.f_cumulative">
+<code class="sig-prename descclassname">stats.</code><code class="sig-name descname">f_cumulative</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xs</span></em>, <em class="sig-param"><span class="n">ys</span></em>, <em class="sig-param"><span class="n">normalized</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#stats.f_cumulative" title="Permalink to this definition">¶</a></dt>
+<dd><p>cumulative calculation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xs</strong> (<em>np.array</em>) – x values</p></li>
+<li><p><strong>ys</strong> (<em>np.array</em>) – y values. ys.size = xs.size-1 or ys.size = xs.size</p></li>
+<li><p><strong>normalized</strong> (<em>bool</em>) – if normalized=True, the cumulative is normalized to 1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>cumulative_values</strong> – array of size xs.size-1, not normalized</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qilum.stats</span> <span class="k">as</span> <span class="nn">qs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1001</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ys</span> <span class="o">=</span> <span class="mf">3.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># calcul</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># same size for xs and ys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cumulative1</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">f_cumulative</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">normalized</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># xs are intervals where ys are constant: xs.size = ys.size+1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ys</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">ys</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cumulative2</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">f_cumulative</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">normalized</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># plot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">cumulative1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;cumulative1&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">cumulative2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;cumulative2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/f_cumulative.jpg" src="../_images/f_cumulative.jpg" />
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Qilum</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License MIT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#contact-help">Contact/Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#current-version-release">Current version 1.0.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#homepage">Homepage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#source-code">Source code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#distribution-install">Distribution/install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html#complete-example">Complete example</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">f_cumulative</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.f_max.html">f_max</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.f_walker.html">f_walker</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_cubicSpline.html">Dist_cubicSpline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_qilum.html">Dist_qilum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_reject.html">Dist_reject</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_scale.html">Dist_scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_sum.html">Dist_sum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.Dist_walker.html">Dist_walker</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../license.html" title="previous chapter">License MIT</a></li>
+      <li>Next: <a href="stats.f_max.html" title="next chapter">f_max</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Damien Loison.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/stats.f_cumulative.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
