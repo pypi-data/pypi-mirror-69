@@ -1,0 +1,53 @@
+Metadata-Version: 2.1
+Name: django-passwordless-auth
+Version: 2020.5.26
+Summary: Django passwordless auth
+Home-page: https://github.com/andrewp-as-is/django-passwordless-auth.py
+License: Unlicense
+Description: <!--
+        https://pypi.org/project/readme-generator/
+        https://pypi.org/project/python-readme-generator/
+        -->
+        
+        [![](https://img.shields.io/pypi/pyversions/django-passwordless-auth.svg?longCache=True)](https://pypi.org/project/django-passwordless-auth/)
+        [![](https://img.shields.io/badge/License-Unlicense-blue.svg?longCache=True)](https://unlicense.org/)
+        
+        #### Installation
+        ```bash
+        $ [sudo] pip install django-passwordless-auth
+        ```
+        
+        #### Pros
+        +   3rd party/social authentication without password
+        
+        #### Examples
+        `settings.py`
+        ```python
+        AUTHENTICATION_BACKENDS = (
+            'django_passwordless_auth.backend.PasswordlessAuthBackend',
+        )
+        ```
+        
+        `views.py`
+        ```python
+        from django.contrib.auth import login
+        
+        def view(request):
+            ...
+            login(request, user, backend='django_passwordless_auth.backend.PasswordlessAuthBackend')
+        ```
+        
+        <p align="center">
+            <a href="https://pypi.org/project/python-readme-generator/">python-readme-generator</a>
+        </p>
+Keywords: Django,passwordless,auth
+Platform: UNKNOWN
+Classifier: Framework :: Django
+Classifier: License :: Public Domain
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Description-Content-Type: text/markdown
