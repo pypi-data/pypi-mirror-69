@@ -1,0 +1,12 @@
+        [console_scripts]
+        ctdump = configtree.script:ctdump
+
+        [configtree.formatter]
+        json = configtree.formatter:to_json
+        shell = configtree.formatter:to_shell
+
+        [configtree.source]
+        .json = configtree.source:from_json
+        .yaml = configtree.source:from_yaml
+        .yml = configtree.source:from_yaml
+    
