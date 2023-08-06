@@ -1,0 +1,47 @@
+Metadata-Version: 2.1
+Name: unimon-ctl
+Version: 0.0.1
+Summary: Control ClickOS Domains (and get unimon data)
+Home-page: https://github.com/willfantom/unimon-ctl
+Author: Will Fantom
+Author-email: w.fantom@lancaster.ac.uk
+License: UNKNOWN
+Description: # Unimon Control 🎛
+        
+        Unimon Control is port of [ClickOS Control](https://github.com/sysml/clickos-ctl) into Python. This has been done to allow for quick expansion on its code base.
+        
+        This currently supports all the same features as the original ClickOS Control so can be used as a stand in replacement. THis program does not depend on `libxenstore`, but does depend on `pyxs`.
+        
+        See the README for ClickOS Control [here](https://github.com/sysml/clickos-ctl/blob/master/README.md).
+        
+        ## Features
+        
+        - Check status of clickos router ✅
+        - Install click config to clickos instance ✅
+        - Start and stop clickos routers ✅
+        - Remove clickos routers ✅
+        - Dockerized ✅
+        - Runs via a CLI ✅
+        - Control via REST API ⚠️
+        - Control the underlying Xen domains ⚠️
+        - Get data from Unimon Click elements ⚠️
+        - Get XenStats info for domain ⚠️
+        - Control Unimon Click elements ⚠️
+        
+        ## Example
+        
+        To run with docker (using xenstore):
+        
+        ```bash
+        docker run --rm -it -v /var/run/xenstored/socket:/var/run/xenstored/socket willfantom/unimon-ctl
+        ```
+        
+        ## Notice
+        
+        This has been made as part of my PhD work, so will not be maintained beyond the feature set I require.
+Keywords: unikernel clickos unimon
+Platform: UNKNOWN
+Classifier: Programming Language :: Python
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Operating System :: Unix
+Description-Content-Type: text/markdown
