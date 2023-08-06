@@ -1,0 +1,66 @@
+Metadata-Version: 2.1
+Name: systran-align
+Version: 3.1.0
+Summary: Alignment tool based on fast_align
+Home-page: UNKNOWN
+Author: SYSTRAN
+Author-email: guillaume.klein@systrangroup.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Programming Language :: Python
+Classifier: Topic :: Text Processing :: Linguistic
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Description-Content-Type: text/markdown
+
+# systran-align
+
+**systran-align** is a small alignment tool that is based on https://github.com/clab/fast_align.
+
+## Installation
+
+```bash
+pip install systran-align
+```
+
+## Usage
+
+```python
+import systran_align
+```
+
+### Generating alignment probabilities
+
+```python
+systran_align.generate_alignment_probabilities(
+    input_path: str,
+    forward_probs_path: str,
+    backward_probs_path: str,
+    verbose=False,
+    iterations=5,
+    favor_diagonal=False,
+    beam_threshold=-4,
+    diagonal_tension=4,
+    optimize_tension=False,
+    variational_bayes=False,
+    alpha=0.01,
+    no_null_word=False,
+    prob_align_null=0.08,
+    thread_buffer_size=10000)
+```
+
+### Computing alignments
+
+```python
+aligner = systran_align.Aligner(
+    forward_probs_path: str,
+    backward_probs_path: str)
+
+alignments, forward_log_prob, backward_log_prob = aligner.align(
+    source: list,
+    target: list)
+```
+
+
