@@ -1,0 +1,156 @@
+ADLINK DAQ USB 7250
+###################
+
+8x relays (digital output)
+--------------------------
+
+* Relay 0-3 C form
+* Relay 4-7 A form
+
+8x digital input
+----------------
+
+Each digital input is connected via opto-isolators to CPLD.
+It has to be at least 5V between DIxL and DIxH.
+
+The digital inputs can be filtered (or debounced). Adlink
+calls this "digital filter" with minimum pulse width.
+
+The pulse width can be only set for all inputs at the same time.
+However if the digital input runs through the filter can be specific for each input indivitual.
+
+2x counter
+----------
+
+The counter input is similiar to the digital input. It has also a digital filter.
+But the digital filter pulse width is configurable for each counter indepentend.
+
+The counters count every edge as well figuring out the clock period.
+The clock period is counting in 1/48Mhz steps.
+
+Architecture
+------------
+
+The 7250 is based on a Cypress-8051 USB and an Altera-CPLD.
+
+.. code::
+
+               counter & digital inputs
+                          |
+   digital output/relay   |
+             |            |
+             |            |
+  -- USB2 --- Cypress --- CPLD
+
+All digital output are connected to the Cypress while counter and digital inputs and counters are connected to the CPLD.
+
+supported features
+------------------
+
+* 8-CH relay output
+* 8-CH digital inputs
+* 2-CH counter
+
++------------------------------------+-----------+--------+
+| features                           | supported | tested |
++====================================+===========+========+
+| get device id                      | X         | X      |
++------------------------------------+-----------+--------+
+| get/set relay state                | X         | X      |
++------------------------------------+-----------+--------+
+| get/set relay initial state        | X         | X      |
++------------------------------------+-----------+--------+
+| get digital input state            | X         | X      |
++------------------------------------+-----------+--------+
+| set digital input min pulse width  | X         |        |
++------------------------------------+-----------+--------+
+| enable digital input filter        | X         |        |
++------------------------------------+-----------+--------+
+| digital input COS/IRQ              | X         |        |
++------------------------------------+-----------+--------+
+| read COS changes                   |           |        |
++------------------------------------+-----------+--------+
+| get counter frequency              | X         | X      |
++------------------------------------+-----------+--------+
+| get counter edge                   | X         | X      |
++------------------------------------+-----------+--------+
+| set counter min pulse width        | X         |        |
++------------------------------------+-----------+--------+
+| enable counter filter              | X         |        |
++------------------------------------+-----------+--------+
+| set counter polarity               | X         |        |
++------------------------------------+-----------+--------+
+| reset counter frequency            | X         |        |
++------------------------------------+-----------+--------+
+| reset counter counter              | X         |        |
++------------------------------------+-----------+--------+
+
+get device id
+^^^^^^^^^^^^^
+
+Get rotary switch position.
+
+get/set relay initial state
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Get/Set the relay initial state. The initial state
+is the state when the device plugged in. This have to be written
+into a flash.
+
+set digital input min pulse width
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The digital input minimum pulse width is part of digital filtering.
+It defines how long the input must remain on a signal level to be sampled.
+It's debouncing.
+
+enable digital input filter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Enable the digital input filter on a specific input. Just setting the digital input min pulse does not enable
+it. Each input can be set to be filtered or not.
+
+digital input COS/IRQ
+^^^^^^^^^^^^^^^^^^^^^
+
+Supports triggering a IRQ when the input level changes.
+
+read COS
+^^^^^^^^
+
+The CPLD seems to count how often an COS happend. The windows software have a button on "Check COS w/ Timer".
+It's unknown how this works.
+
+get counter frequency
+^^^^^^^^^^^^^^^^^^^^^
+
+Retrieve the frequency from the counter. Calculated in 1/48Mhz steps.
+
+get counter edge
+^^^^^^^^^^^^^^^^
+
+Retrieve the edge counter from the counter. The polarity of the counter (counting high or low edges)
+can be set individual.
+
+set counter min pulse width
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Same as digital input minimum pulse width, except
+each counter can have different pulse width settings.
+
+set counter polarity
+^^^^^^^^^^^^^^^^^^^^
+
+Set the counter polarity. If it counts high or low polarity edges.
+
+reset counter frequency
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Reset the frequency counter to starts counting again.
+
+reset counter counter
+^^^^^^^^^^^^^^^^^^^^^
+
+Reset the edge counter. So it starts again at 0.
+
+Reset the frequency counter to starts counting again.
