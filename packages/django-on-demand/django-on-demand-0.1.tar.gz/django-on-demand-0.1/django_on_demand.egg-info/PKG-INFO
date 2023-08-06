@@ -1,0 +1,49 @@
+Metadata-Version: 1.1
+Name: django-on-demand
+Version: 0.1
+Summary: A Django app to manage suppliers and consumers in an on-demand marketplace.
+Home-page: https://www.example.com/
+Author: Pirai Dev
+Author-email: piraidev@gmail.com
+License: BSD-3-Clause
+Description: ===============
+        Social Rest API
+        ===============
+        
+        Social Rest API is a Django app to conduct construction of APIs ment to be used for on-demannd and social apps.
+        
+        Detailed documentation is in the "docs" directory.
+        
+        Quick start
+        -----------
+        
+        1. This app is using `django-rest-framework` to provide API endpoints, which means this app will need to be added to the list of installed apps.
+        The app will automatically install `django-rest-framework` if it's not installed.
+        `on_demand` also needs to be added to the list of installed apps::
+        
+            INSTALLED_APPS = [
+                ...
+                'on_demand',
+                'rest_framework'
+            ]
+        
+        2. Include the Django On Demand URLconf in your project urls.py like this::
+        
+            path('ondemand/', include('on_demand.urls')),
+        
+        3. Run ``python manage.py migrate`` to create the Social Rest API models.
+        
+        4. Start the development server and visit http://127.0.0.1:8000/admin/
+           to create an Social API (you'll need the Admin app enabled).
+        
+        5. Visit http://127.0.0.1:8000/ondemand/ to test the new API.
+Platform: UNKNOWN
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 2.1
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
