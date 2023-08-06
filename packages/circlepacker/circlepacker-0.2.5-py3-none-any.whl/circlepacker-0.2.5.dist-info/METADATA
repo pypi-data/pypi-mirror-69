@@ -1,0 +1,48 @@
+Metadata-Version: 2.1
+Name: circlepacker
+Version: 0.2.5
+Summary: A service for computing circle packing
+Home-page: https://github.com/osullivryan/circle-packer
+Keywords: circlepacking,optimization
+Author: Ryan O'Sullivan
+Author-email: osullivryan@gmail.com
+Requires-Python: >=3.7,<4.0
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Dist: fastapi (>=0.54.2,<0.55.0)
+Requires-Dist: pydantic (>=1.5.1,<2.0.0)
+Requires-Dist: scipy (>=1.4.1,<2.0.0)
+Requires-Dist: uvicorn (>=0.11.5,<0.12.0)
+Project-URL: Repository, https://github.com/osullivryan/circle-packer
+Description-Content-Type: text/markdown
+
+# Circle Packer
+<img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/osullivryan/circle-packer/Release Master Branch?style=flat-square"> <img alt="PyPi Version" src="https://img.shields.io/pypi/v/circlepacker?style=flat-square">
+
+
+## Why pack circles?
+
+Sticking circles as close together as possible!
+
+## How to use
+
+Currently it is only through the API. You can install it using pip:
+
+```pip install circlepacker```
+
+And then run the service using:
+
+```python -m circlepacker```
+
+Following the link provided and routing to `/docs` will get you to the Swagger documentation where you can try it out.
+
+![API](resources/docs.png)
+
+## TODO
+
+* Finalize backend routing to include better pydantic typing for contracts.
+* Create simple frontend 
+* Deploy to AWS services
