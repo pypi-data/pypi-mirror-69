@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "unnamed-rpc"
+version = "0.0.1"
+description = "Unnnamed PRC Protocol"
+authors = ["Jamie Bliss <jamie@ivyleav.es>"]
+license = "LGPL-3.0-or-later"
+repository = "https://github.com/minecraft-podman/urp"
+packages = [
+    { include = "urp" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+msgpack = "^1.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+pytest-asyncio = "*"
+pytest-timeout = "^1.3.4"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
