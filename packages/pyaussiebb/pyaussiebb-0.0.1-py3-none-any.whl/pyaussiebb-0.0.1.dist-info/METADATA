@@ -1,0 +1,41 @@
+Metadata-Version: 2.1
+Name: pyaussiebb
+Version: 0.0.1
+Summary: Aussie Broadband API module
+Home-page: https://github.com/yaleman/aussiebb
+Author: James Hodgkinson
+Author-email: yaleman@ricetek.net
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: requests
+Requires-Dist: loguru
+
+# pyAussieBB
+
+[![Build Status](https://droneio.yaleman.org/api/badges/yaleman/aussiebb/status.svg)](https://droneio.yaleman.org/yaleman/aussiebb)
+
+This is a very simple module for interacting with the Aussie Broadband APIs.
+
+I wrote this so I can pull a line test periodically and show the NBN how garbage they are.
+
+## Usage
+
+```
+pip install --user pyaussiebb
+python
+>>> from aussiebb import AussieBB
+>>> account = AussieBB(username, password)
+>>> account.get_services()
+[{allyourservicedetails}]
+```
+
+For more, check out the module.
+
+
