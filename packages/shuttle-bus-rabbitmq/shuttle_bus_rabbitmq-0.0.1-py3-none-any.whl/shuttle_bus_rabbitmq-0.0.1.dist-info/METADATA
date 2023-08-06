@@ -1,0 +1,82 @@
+Metadata-Version: 2.1
+Name: shuttle-bus-rabbitmq
+Version: 0.0.1
+Summary: 
+Home-page: https://github.com/jbw/shuttle-bus
+Keywords: shuttle-bus,rabbitmq,messaging
+Author: Jason Watson
+Author-email: jbw@jbw.cc
+Requires-Python: >=3.6,<4.0
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Requires-Dist: aio_pika (>=6.6.0,<7.0.0)
+Requires-Dist: typing_extensions (>=3.7.4,<4.0.0)
+Project-URL: Repository, https://github.com/jbw/shuttle-bus
+Description-Content-Type: text/markdown
+
+# Shuttle Bus
+
+A modern distributed application framework for Python.
+
+## Build Status
+
+| Branch | Status |
+| :--- | :---: |
+| master | [![master](https://github.com/jbw/shuttle-bus/workflows/Python%20package/badge.svg)](./) |
+| develop | [![develop](https://github.com/jbw/shuttle-bus/workflows/Python%20package/badge.svg?branch=develop)](./) |
+
+## Getting started
+
+### Install
+
+```bash
+pip install shuttle-bus-rabbitmq
+```
+
+### Simple example
+
+```python
+uri = "amqp://admin:admin@localhost/"
+host_settings = HostSettings.create(uri)
+
+receive_settings = ReceiveSettings()
+receive_settings.name = "queue_name"
+
+consumer = PrintConsumer()
+receive_endpoint_configuration = ReceiveEndpointConfiguration(receive_settings, consumer)
+
+bus_configuration = BusConfiguration(host_settings)
+
+bus = await Bus.create(bus_configuration, receive_endpoint_configuration)
+
+await bus.start()
+await bus.publish(bytes("Hello", "UTF-8"))
+await bus.stop()
+```
+
+## Versioning
+
+Shuttle Bus follows Semantic Versioning.
+
+## Contributing
+
+See CONTRIBUTING.md
+
+## Builds
+
+See [https://pypi.org/project/shuttle-bus/](https://pypi.org/project/shuttle-bus/)
+
+## Requirements
+
+* Python &gt;= 3.6
+
+## Credits
+
+* [aio-pika](https://github.com/mosquito/aio-pika)
+
+
