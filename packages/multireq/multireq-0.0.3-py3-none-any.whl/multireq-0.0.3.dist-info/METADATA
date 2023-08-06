@@ -1,0 +1,46 @@
+Metadata-Version: 2.1
+Name: multireq
+Version: 0.0.3
+Summary: Package for sending multi requests with different proxies.
+Home-page: https://github.com/rafet/multi-requester
+Author: rafet
+License: MIT
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
+Requires-Dist: requests
+
+# Multi Requester with Different Proxies
+
+
+## Example
+
+```python
+import multireq
+
+mr = multireq.multiRequester(use_proxy=True)
+
+urls = [
+    "https://jsonplaceholder.typicode.com/todos/1",
+    "https://jsonplaceholder.typicode.com/todos/2",
+    "https://jsonplaceholder.typicode.com/todos/3"
+]
+
+results = mr.get_many(urls)
+
+for i in results:
+    print(i.json()['title'])
+
+##################
+
+#Output
+
+# delectus aut autem
+# quis ut nam facilis et officia qui
+# fugiat veniam minus
+```
+
+
