@@ -1,0 +1,1 @@
+This package uses api requests to get current dollar conversions
