@@ -1,0 +1,16 @@
+This is a bugfix release for bioinf-helperlibs.
+
+Biopython release 1.77 removed Python 2 support, along
+with some 2/3 compatibility logic that we relied on for
+our 2/3 compatibility logic.
+While release 0.1.12 works around the issue by pinning the
+dependencies to an older Biopython version, this version
+properly fixes the issue by also dropping Python 2 support
+and the compatibility logic going along with that.
+
+Detailed changes:
+
+Kai Blin (2):
+      seqio: Remove Python 2 compatibility glue
+      Bump version to 0.2.0
+
