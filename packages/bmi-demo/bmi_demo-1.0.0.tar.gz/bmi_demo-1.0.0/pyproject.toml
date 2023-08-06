@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "bmi_demo"
+version = "1.0.0"
+description = "A simple demo application to demonstrate how to use Poetry and Typer to create executable Python CLIs."
+authors = ["JoaoGFarias <joao@thatsabug.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+typer = "^0.2.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+pytest-watch = "^4.2.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+[tool.poetry.scripts]
+bmi_demo = "bmi_demo.cli:main"
+
+[tool.poetry.urls]
+issues = "https://github.com/JoaoGFarias/bmi_demo/issues"
