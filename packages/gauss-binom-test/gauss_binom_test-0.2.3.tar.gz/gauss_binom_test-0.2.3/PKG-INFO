@@ -1,0 +1,75 @@
+Metadata-Version: 2.1
+Name: gauss_binom_test
+Version: 0.2.3
+Summary: Gaussian and Binomial distributions
+Home-page: UNKNOWN
+Author: ludovico
+License: MIT
+Description: # Gaussian and Binomial Distributions
+        
+        A basic package for calculating and visualizing Gaussian and Binomial Distributions.
+        This is only a test.
+        
+        
+        # How to install
+        
+        ```console 
+        $ python install gauss-binom-test
+        ```
+        
+        # Features
+        
+        - Calculate the Gaussian and Binomial pdf of a data set
+        - Calculate the mean and standard deviation
+        - Calculate the sum of two pdfs
+        - Plot the histogram of data points and normalizdd histogram of the pdf
+        
+        
+        
+        # Example
+        
+        Open the Python interpreter:
+        
+        **Create a standard normalmdistribution (zero mean and standard deviation equal to one)**
+        
+        ```console
+        $ python
+        >>> gaussian_normal = Gaussian()
+        ```
+        
+        **Create a Gaussian distribution with mean=5 and stdv=2
+        
+        ```console
+        >>> gaussian_one = Gaussian(5,2)
+        ```
+        
+        **Addition of two Gaussian distributions**
+        
+        ```console
+        >>> gaussian_sum = gaussian_normal + gaussian_one
+        ```
+        
+        **Calculate the probability of a data point for a Gaussian distribution with a given mean and stdv**
+        
+        ```console
+        >>> gaussian_one = Gaussian(5,2)
+        >>> gaussian_one.pdf(6)
+        ```
+        
+        **Calculate the mean and standard deviation
+        
+        ```console
+        >>> gaussian_one.mean()
+        >>> # sample stdv
+        >>> gaussian_one.stdev() 
+        >>> # population stdev
+        >>> gaussian_one.stdev(sample=False)
+        ```
+        
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
