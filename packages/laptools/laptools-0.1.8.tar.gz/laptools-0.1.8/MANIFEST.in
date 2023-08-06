@@ -1,0 +1,13 @@
+include LICENSE
+include *.md
+include *.yaml
+include .editorconfig
+include .isort.cfg
+include *.png
+
+# Tests
+include tox.ini
+recursive-include tests *.py
+recursive-exclude * *.py[co]
+
+graft src/laptools/data
