@@ -1,0 +1,35 @@
+version: 2.1
+
+workflows:
+  version: 2
+  build_deploy:
+    jobs:
+      - build
+
+jobs:
+  build:
+
+    docker:
+      - image: circleci/python:3.7.5
+
+    steps:
+      - checkout
+      - run:
+          name: Requirements install
+          command: |
+              sudo pip install --upgrade pip
+              sudo pip install -U -r requirements.txt
+              echo "=================================="
+              echo "covid-surge requirements installed"
+              echo "=================================="
+              sudo pip install -U pytest pytest-cov codecov
+              echo "==========================="
+              echo "test requirements installed"
+              echo "==========================="
+      - run:
+          name: Pytest w/ code coverage
+          command: |    
+              export PYTHONPATH=$PYTHONPATH:$(pwd)
+              cd covid_surge/tests
+              pytest --cov=./ 
+              codecov
