@@ -1,0 +1,4 @@
+"Downloads SPX and VIX option data from www.cboe.com/"
+"You will need Chrome installed and chromedriver.exe in your C:\Windows\System32\ directory"
+"If you parse 0 seconds to download_cboe_data() it will only run once."
+"Closing the Chrome browser will terminate the program."
