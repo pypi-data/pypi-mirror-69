@@ -1,0 +1,61 @@
+Metadata-Version: 2.1
+Name: multireq
+Version: 0.0.6
+Summary: Package for sending multi requests with different proxies.
+Home-page: https://github.com/rafet/multi-requester
+Author: rafet
+License: MIT
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
+Requires-Dist: requests
+
+# multireq
+`multireq` is a python package that helps you to send multiple requests simultaneously and secretly.
+
+## Installation
+``` python
+pip install multireq
+```
+
+## Simple Usage
+
+```python
+import multireq
+
+mr = multireq.multiRequester(use_proxy=True)
+
+urls = [
+    "https://jsonplaceholder.typicode.com/todos/1",
+    "https://jsonplaceholder.typicode.com/todos/2",
+    "https://jsonplaceholder.typicode.com/todos/3"
+]
+
+responses = mr.get_many(urls)
+
+for response in responses:
+    print(response.json()['title'])
+
+```
+### Output
+```
+delectus aut autem
+quis ut nam facilis et officia qui
+fugiat veniam minus
+```
+<hr>
+
+If you don't want to use proxies, you can simply set the `use_proxy`  to False. When you use a proxy, requests can be so slow. However, sometimes you have to hide your identity when you send requests. If you don't have privacy issues, don't use the proxy and send requests faster.
+```python
+mr = multireq.multiRequester(use_proxy=False)
+```
+<hr>
+
+Also, you can send just one request.
+```python
+response = mr.get(url)
+```
+
