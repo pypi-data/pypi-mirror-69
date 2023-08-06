@@ -1,0 +1,29 @@
+{#
+  Copyright (C) 2020 CERN.
+
+  Invenio is free software; you can redistribute it and/or modify it
+  under the terms of the MIT License; see LICENSE file for more details.
+#}
+{% extends "invenio_communities/base.html" %}
+
+{%- block javascript %}
+    {{ super() }}
+    {{ webpack['invenio-communities-search.js'] }}
+{%- endblock %}
+
+{%- block page_body %}
+  <div class="container top-padding">
+    <div class="ui grid">
+    <div class="three wide column right floated">
+      <a href="/communities/new">
+      <button class="ui positive button">
+        <i class="fa fa-plus"></i>
+        New community
+      </button>
+    </a>
+
+    </div>
+    <div id="communities-search"></div>
+  </div>
+</div>
+{%- endblock page_body %}
