@@ -1,0 +1,38 @@
+Metadata-Version: 2.1
+Name: tempfileatexit
+Version: 0.0.1
+Summary: Remove tempory files at program exit, combination of tempfile and atexit should be as simple as possible.
+Home-page: https://github.com/jachym/tempfileatexit
+Author: Jachym Cepicky
+Author-email: jachym@cepicky.ch
+License: UNKNOWN
+Description: # tempfileatexit
+        
+        Python library for removing temporary files and directories when program finishes.
+        
+        ## Usage
+        
+        
+        ```
+        import tempfileatexit
+        import tempfile
+        
+        (fs, my_tempfile) = tempfile.mkstemp()
+        my_tempdir = tempfile.mkdtemp()
+        
+        tempfileatexit.register(my_tempfile)
+        tempfileatexit.register(my_tempdir)
+        
+        
+        print(tempfileatexit.list(verbose=True))
+        ```
+        
+        After you run the code and the program exxists, the `my_tempfile` and
+        `my_tempdir` will be gone.
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.0
+Description-Content-Type: text/markdown
