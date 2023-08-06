@@ -1,0 +1,54 @@
+Metadata-Version: 2.1
+Name: gmlp
+Version: 0.1a1
+Summary: Genetic Algorithm for Python
+Home-page: https://github.com/CoderWeird/gmlp
+Author: Drew Montooth
+Author-email: drewmontooth@gmail.com
+License: UNKNOWN
+Description: # Genetic Machine Learning for Python
+        GMLP or *Genetic Machine Learning for Python*, is a user friendly python machine learning package. GMLP is intuitive and can be used for lots of Machine Learning Projects.
+        An Example ->
+        ```python
+        from gmlp.evolution import Enviroment
+        from gmlp.mutations import value_encoding_mutation
+        from gmlp.fitness import Fitness_Function
+        import matplotlib.pyplot as plt
+        generations = 1000
+        
+        hello = [0,1,1,0,1,0,0,0,0,1,1,0,0,1,0,1,0,1,1,0,1,1,0,0,0,1,1,0,1,1,0,0,0,1,1,0,1,1,1,1,0,0,1,0,0,0,0,0,0,1,1,1,0,1,1,1,0,1,1,0,1,1,1,1,0,1,1,1,0,0,1,0,0,1,1,0,1,1,0,0,0,1,1,0,0,1,0,0]
+        e = Enviroment(hello, .9)
+        population = e.generate_population(len(e.problem), binary=True)
+        
+        scores = Fitness_Function().calculate_fitness(population, e.problem)
+        Outputs = []
+        
+        best = min(scores)
+        best_ind = scores[scores.index(best)]
+        
+        score_prog = []
+        score_prog.append(best_ind)
+        for generation in range(generations):
+            scores = Fitness_Function().calculate_fitness(population, e.problem)
+            best = min(scores)
+            best_ind = scores[scores.index(best)]
+            Output = population[scores.index(best)]
+            
+            score_prog.append(best_ind)
+            Outputs.append(Output)
+            print('Generation:%1d, Best Score:%1s, Output:%2s'%(generation, str(best_ind), str(Output)))
+            population = value_encoding_mutation(e.crossover(e.tournament_selection(population, scores, 3), e.problem), .15)
+            if min(scores) == 0:
+                break
+        plt.plot(score_prog)
+        plt.xlabel("Generations")
+        plt.show()
+        ```
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 2.5
+Requires-Python: >=2.5
+Description-Content-Type: text/markdown
