@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "DevGossip"
+version = '1.0.0'
+description = "A simple discussion platform for social communication within the office"
+authors = ["Abumere Ogona"]
+license = "MIT"
+Packages = [
+    {include='./DevGossip.py'} ,
+    {include='./DevGossip.py'}
+]
+
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+[tool.poetry.scripts]
+DevGossip='DevGossip:register_user'
+
+
