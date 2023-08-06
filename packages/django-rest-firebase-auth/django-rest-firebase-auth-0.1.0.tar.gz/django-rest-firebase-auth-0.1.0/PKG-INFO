@@ -1,0 +1,67 @@
+Metadata-Version: 2.1
+Name: django-rest-firebase-auth
+Version: 0.1.0
+Summary: Firebase authentication for Django REST framework
+Home-page: https://github.com/walison17/django-rest-firebase-auth
+Author: Walison Filipe
+Author-email: walisonfilipe@hotmail.com
+License: MIT
+Description: # Django Rest Firebase Auth
+        Use firebase authentication with your django rest framework project
+        
+        [![codecov](https://codecov.io/gh/walison17/django-rest-firebase-auth/branch/master/graph/badge.svg)](https://codecov.io/gh/walison17/django-rest-firebase-auth)
+        
+        ## Requirements
+        - Python (3.5, 3.6, 3.7 or 3.8)
+        - Django >= 2.2
+        - Django Rest Framework
+        
+        
+        ## Installation
+        
+        ```
+        pip install django-rest-firebase-auth
+        ```
+        
+        On your project's `settings.py` add this to the `REST_FRAMEWORK` configuration
+        
+        ```
+        REST_FRAMEWORK = {
+          ...
+          'DEFAULT_AUTHENTICATION_CLASSES': [
+            'firebase_auth.authentication.FirebaseAuthentication'
+          ]
+          ...
+        }
+        ```
+        
+        Get admin credentials `.json` from the Firebase SDK and add them to your project
+        
+        Also in your project's `settings.py`:
+        
+        ```
+        FIREBASE_APP_CREDENTIALS = 'path_to_your_credentials.json'
+        ```
+        
+        if you want to allow only users with verified emails
+        
+        ```
+        FIREBASE_EMAIL_VERIFICATION = True
+        ```
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 2.2
+Classifier: Framework :: Django :: 3.0
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Topic :: Internet :: WWW/HTTP
+Description-Content-Type: text/markdown
