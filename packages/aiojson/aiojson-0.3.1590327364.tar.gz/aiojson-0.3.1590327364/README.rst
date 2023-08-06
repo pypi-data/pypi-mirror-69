@@ -1,0 +1,25 @@
+aiojson
+=======
+
+.. |coverage report| image:: https://git.yurzs.dev/yurzs/aiojson/badges/master/coverage.svg
+   :target: https://git.yurzs.dev/yurzs/aiojson/-/commits/master
+
+Simple json template verifier for ``aiohttp`` 1
+
+Usage
+-----
+
+Simple example:
+
+.. code-block:: python
+
+    from aiohttp import JsonTemplate
+
+
+    @JsonTemplate({
+        "messages": [{
+            "id": int,
+            "text": str
+    }])
+    async def received_message(request, validated_data):
+        pass
