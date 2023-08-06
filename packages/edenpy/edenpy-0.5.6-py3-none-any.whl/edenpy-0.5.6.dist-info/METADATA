@@ -1,0 +1,84 @@
+Metadata-Version: 2.1
+Name: edenpy
+Version: 0.5.6
+Summary: Personal utils package for Python projects
+Home-page: https://github.com/dlems/py-utils
+Author: dlems
+Author-email: 
+License: UNKNOWN
+Keywords: utils
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.7
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+
+Personal utils package for Python projects.
+
+<br>
+
+## Improve Library
+If you get an error or need something to improve, write [Issues](https://github.com/dlems/py-utils/issues).
+
+<br>
+
+## Installation
+
+```sh
+pip install edenpy
+```
+
+<br>
+
+## Usage
+
+### Import
+```py
+from edenpy import save_json, Logger
+```
+
+### (1) File Load and Save
+```py
+from edenpy import save_json
+
+data = [1, 2, [3, 4], {5: 'a', 6: 'b'}]
+path = "./data.json"
+
+save_json(data, path)
+```
+
+data.json
+```json
+[
+	1,
+	2,
+	[
+		3,
+		4
+	],
+	{
+		"5": "a",
+		"6": "b"
+	}
+]
+```
+
+
+### (2) Logger
+When you run a file using logger like `test.py`, log is written to `log.log`. The log records the `time`, `log level`, `file name`, `code line`, `log message`.
+
+
+test.py
+```py
+from edenpy import Logger
+
+logger = Logger().logger
+logger.info("logger info test")
+logger.error("logger error test")
+```
+
+log.log
+```log
+[2020-05-26 09:54:23,182][    INFO][        test.py][   4]	>>	logger info test
+[2020-05-26 09:54:23,182][   ERROR][        test.py][   5]	>>	logger error test
+```
+
