@@ -1,0 +1,149 @@
+.. note::
+    :class: sphx-glr-download-link-note
+
+    Click :ref:`here <sphx_glr_download_auto_examples_frank_wolfe_plot_vertex_overlap.py>` to download the full example code
+.. rst-class:: sphx-glr-example-title
+
+.. _sphx_glr_auto_examples_frank_wolfe_plot_vertex_overlap.py:
+
+
+Update Direction Overlap in Frank-Wolfe
+========================================
+
+This example quantifies how many times the Frank-Wolfe algorithm selects
+the same extremal vertex (which will determine the update direction) twice
+in a row. Selecting the same vertex twice in a row is symptomatic of a poor
+step-size, as it implies that the last two updates could have been replaced
+by a single update with larger step-size.
+
+
+
+.. code-block:: pytb
+
+    Traceback (most recent call last):
+      File "/home/pedregosa/dev/sphinx-gallery/sphinx_gallery/gen_rst.py", line 435, in _memory_usage
+        multiprocess=True)
+      File "/home/pedregosa/dev/memory_profiler/memory_profiler.py", line 343, in memory_usage
+        returned = f(*args, **kw)
+      File "/home/pedregosa/dev/sphinx-gallery/sphinx_gallery/gen_rst.py", line 426, in __call__
+        exec(self.code, self.globals)
+      File "/home/pedregosa/dev/copt/examples/frank_wolfe/plot_vertex_overlap.py", line 30, in <module>
+        X, y = load_data()
+      File "/home/pedregosa/dev/copt/copt/datasets.py", line 155, in load_madelon
+        return _load_dataset("madelon", subset, data_dir)
+      File "/home/pedregosa/dev/copt/copt/datasets.py", line 54, in _load_dataset
+        makedirs(dataset_dir)
+      File "/home/pedregosa/anaconda3/lib/python3.7/os.py", line 221, in makedirs
+        mkdir(name, mode)
+    FileExistsError: [Errno 17] File exists: '/home/pedregosa/copt_data/madelon'
+
+
+
+
+
+.. code-block:: default
+
+    import copt as cp
+    import matplotlib.pyplot as plt
+    from matplotlib.ticker import MaxNLocator
+    import numpy as np
+
+    # datasets and their respective loading functions
+    datasets = [
+        ("Gisette", cp.datasets.load_gisette),
+        ("RCV1", cp.datasets.load_rcv1),
+        ("Madelon", cp.datasets.load_madelon),
+        ("Covtype", cp.datasets.load_covtype),
+    ]
+
+
+    fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 5))
+    for ax, (dataset_title, load_data) in zip(axes.ravel(), datasets):
+        print("Running on the %s dataset" % dataset_title)
+
+        X, y = load_data()
+        n_samples, n_features = X.shape
+
+        l1_ball = cp.utils.L1Ball(n_features / 2.0)
+        f = cp.utils.LogLoss(X, y)
+        x0 = np.zeros(n_features)
+
+        for i, (step, label, marker) in enumerate(
+            [["backtracking", "backtracking", "^"], ["DR", "DR step-size", "d"]]
+        ):
+            print("Running %s variant" % label)
+            st_prev = []
+            overlap = []
+
+            def trace(kw):
+                """Store vertex overlap during execution of the algorithm."""
+                s_t = kw["update_direction"] + kw["x"]
+                if st_prev:
+                    # check if the vertex of this and the previous iterate
+                    # coincide. Since these might be sparse vectors, we use
+                    # sparse.linalg.norm to make the comparison
+                    prev_overlap = overlap[-1]
+                    if np.linalg.norm(st_prev[0] - s_t) == 0:
+                        overlap.append(prev_overlap + 1)
+                    else:
+                        overlap.append(prev_overlap)
+                    st_prev[0] = s_t
+                else:
+                    overlap.append(0)
+                    st_prev.append(s_t)
+
+            cp.minimize_frank_wolfe(
+                f.f_grad,
+                x0,
+                l1_ball.lmo,
+                callback=trace,
+                max_iter=50,
+                step=step,
+                verbose=True,
+                lipschitz=f.lipschitz,
+            )
+            ax.plot(overlap, label=label, marker=marker, markevery=7 + i)
+            ax.yaxis.set_major_locator(MaxNLocator(integer=True))
+            ax.legend()
+        ax.set_xlabel("number of iterations")
+        ax.set_ylabel("LMO overlap")
+        ax.set_title(dataset_title)
+        fig.tight_layout()  # otherwise the right y-label is slightly clipped
+        ax.grid()
+    # plt.legend()
+    plt.show()
+
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 1 minutes  16.132 seconds)
+
+**Estimated memory usage:**  8 MB
+
+
+.. _sphx_glr_download_auto_examples_frank_wolfe_plot_vertex_overlap.py:
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Python source code: plot_vertex_overlap.py <plot_vertex_overlap.py>`
+
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Jupyter notebook: plot_vertex_overlap.ipynb <plot_vertex_overlap.ipynb>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

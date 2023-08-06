@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>copt.minimize_frank_wolfe &#8212; copt  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"Macros": {"argmin": "\\DeclareMathOperator*{\\argmin}{\\mathbf{arg\\,min}}", "argmax": "\\DeclareMathOperator*{\\argmin}{\\mathbf{arg\\,max}}", "bs": "\\newcommand{\\bs}[1]{\\boldsymbol{#1}}"}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]]}})</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="copt.minimize_saga" href="copt.minimize_saga.html" />
+    <link rel="prev" title="copt.minimize_three_split" href="copt.minimize_three_split.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="copt-minimize-frank-wolfe">
+<h1>copt.minimize_frank_wolfe<a class="headerlink" href="#copt-minimize-frank-wolfe" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="copt.minimize_frank_wolfe">
+<code class="sig-prename descclassname">copt.</code><code class="sig-name descname">minimize_frank_wolfe</code><span class="sig-paren">(</span><em class="sig-param">fun</em>, <em class="sig-param">x0</em>, <em class="sig-param">lmo</em>, <em class="sig-param">jac='2-point'</em>, <em class="sig-param">step='backtracking'</em>, <em class="sig-param">lipschitz=None</em>, <em class="sig-param">args=()</em>, <em class="sig-param">max_iter=400</em>, <em class="sig-param">tol=1e-12</em>, <em class="sig-param">callback=None</em>, <em class="sig-param">verbose=0</em>, <em class="sig-param">eps=1e-08</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/openopt/copt/blob/9d14ade/copt/frank_wolfe.py#L96"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#copt.minimize_frank_wolfe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Frank-Wolfe algorithm.</p>
+<p>Implements the Frank-Wolfe algorithm, see , see <a class="reference internal" href="../solvers.html#frank-wolfe"><span class="std std-ref">Frank-Wolfe</span></a> for
+a more detailed description.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fun</strong> – <p>callable
+The objective function to be minimized.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">fun(x,</span> <span class="pre">*args)</span> <span class="pre">-&gt;</span> <span class="pre">float</span></code></p>
+</div></blockquote>
+<p>where x is an 1-D array with shape (n,) and <cite>args</cite>
+is a tuple of the fixed parameters needed to completely
+specify the function.</p>
+</p></li>
+<li><p><strong>x0</strong> – array-like
+Initial guess for solution.</p></li>
+<li><p><strong>lmo</strong> – callable
+Takes as input a vector u of same size as x0 and returns both the update
+direction and the maximum admissible step-size.</p></li>
+<li><p><strong>jac</strong> – <p>{callable,  ‘2-point’, bool}, optional
+Method for computing the gradient vector. If it is a callable,
+it should be a function that returns the gradient vector:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">jac(x,</span> <span class="pre">*args)</span> <span class="pre">-&gt;</span> <span class="pre">array_like,</span> <span class="pre">shape</span> <span class="pre">(n,)</span></code></p>
+</div></blockquote>
+<p>where x is an array with shape (n,) and <cite>args</cite> is a tuple with
+the fixed parameters. Alternatively, the ‘2-point’ select a finite
+difference scheme for numerical estimation of the gradient.
+If <cite>jac</cite> is a Boolean and is True, <cite>fun</cite> is assumed to return the
+gradient along with the objective function. If False, the gradient
+will be estimated using ‘2-point’ finite difference estimation.</p>
+</p></li>
+<li><p><strong>step</strong> – <p>str or callable, optional
+Step-size strategy to use. Should be one of</p>
+<blockquote>
+<div><ul>
+<li><p>”backtracking”, will use the backtracking line-search from <a class="reference internal" href="#panj2020" id="id1"><span>[PANJ2020]</span></a></p></li>
+<li><p>”DR”, will use the Demyanov-Rubinov step-size. This step-size minimizes a quadratic upper bound ob the objective using the gradient’s lipschitz constant, passed in keyword argument <cite>lipschitz</cite>. <a class="reference internal" href="../solvers.html#p2018" id="id2"><span>[P2018]</span></a></p></li>
+<li><p>”sublinear”, will use a decreasing step-size of the form 2/(k+2). <a class="reference internal" href="#j2013" id="id3"><span>[J2013]</span></a></p></li>
+<li><p>callable, if step is a callable function, it will use the step-size returned by step(locals).</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>lipschitz</strong> – None or float, optional
+Estimate for the Lipschitz constant of the gradient. Required when step=”DR”.</p></li>
+<li><p><strong>max_iter</strong> – integer, optional
+Maximum number of iterations.</p></li>
+<li><p><strong>tol</strong> – float, optional
+Tolerance of the stopping criterion. The algorithm will stop whenever
+the Frank-Wolfe gap is below tol or the maximum number of iterations
+is exceeded.</p></li>
+<li><p><strong>callback</strong> – callable, optional
+Callback to execute at each iteration. If the callable returns False
+then the algorithm with immediately return.</p></li>
+<li><p><strong>eps</strong> – float or ndarray
+If jac is approximated, use this value for the step size.</p></li>
+<li><p><strong>verbose</strong> – int, optional
+Verbosity level.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>scipy.optimize.OptimizeResult</dt><dd><p>The optimization result represented as a
+<code class="docutils literal notranslate"><span class="pre">scipy.optimize.OptimizeResult</span></code> object. Important attributes are:
+<code class="docutils literal notranslate"><span class="pre">x</span></code> the solution array, <code class="docutils literal notranslate"><span class="pre">success</span></code> a Boolean flag indicating if
+the optimizer exited successfully and <code class="docutils literal notranslate"><span class="pre">message</span></code> which describes
+the cause of the termination. See <cite>scipy.optimize.OptimizeResult</cite>
+for a description of other attributes.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="j2013"><span class="brackets"><a class="fn-backref" href="#id3">J2013</a></span></dt>
+<dd><p>Jaggi, Martin. <a class="reference external" href="http://proceedings.mlr.press/v28/jaggi13-supp.pdf">“Revisiting Frank-Wolfe: Projection-Free Sparse Convex Optimization.”</a> ICML 2013.</p>
+</dd>
+<dt class="label" id="p2018"><span class="brackets"><a class="fn-backref" href="#id2">P2018</a></span></dt>
+<dd><p>Pedregosa, Fabian <a class="reference external" href="http://fa.bianp.net/blog/2018/notes-on-the-frank-wolfe-algorithm-part-i/">“Notes on the Frank-Wolfe Algorithm”</a>, 2018</p>
+</dd>
+<dt class="label" id="panj2020"><span class="brackets"><a class="fn-backref" href="#id1">PANJ2020</a></span></dt>
+<dd><p>Pedregosa, Fabian, Armin Askari, Geoffrey Negiar, and Martin Jaggi. <a class="reference external" href="https://arxiv.org/pdf/1806.05123.pdf">“Step-Size Adaptivity in Projection-Free Optimization.”</a> arXiv:1806.05123 (2020).</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../auto_examples/frank_wolfe/plot_sparse_benchmark.html#sphx-glr-auto-examples-frank-wolfe-plot-sparse-benchmark-py"><span class="std std-ref">Benchmark of Frank-Wolfe variants for sparse logistic regression</span></a></p></li>
+<li><p><a class="reference internal" href="../auto_examples/frank_wolfe/plot_vertex_overlap.html#sphx-glr-auto-examples-frank-wolfe-plot-vertex-overlap-py"><span class="std std-ref">Update Direction Overlap in Frank-Wolfe</span></a></p></li>
+</ul>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../index.html">copt</a></h1>
+
+
+
+<p class="blurb">Optimization in Python</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../solvers.html">Solvers</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../solvers.html#id1">Proximal-Gradient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../solvers.html#primal-dual-hybrid-gradient">Primal-dual hybrid gradient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../solvers.html#three-operator-splitting">Three-operator splitting</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../solvers.html#frank-wolfe">Frank-Wolfe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../solvers.html#stochastic-methods">Stochastic methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../loss_functions.html">Loss and regularization functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Example Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils.html">Utility functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      
+      
+      
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      
+      |
+      <a href="../_sources/generated/copt.minimize_frank_wolfe.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/openopt/copt" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

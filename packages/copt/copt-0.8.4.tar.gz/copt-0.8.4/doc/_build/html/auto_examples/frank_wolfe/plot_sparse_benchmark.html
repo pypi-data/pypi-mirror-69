@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Benchmark of Frank-Wolfe variants for sparse logistic regression &#8212; copt  documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <script type="text/javascript" src="../../_static/copybutton.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"Macros": {"argmin": "\\DeclareMathOperator*{\\argmin}{\\mathbf{arg\\,min}}", "argmax": "\\DeclareMathOperator*{\\argmin}{\\mathbf{arg\\,max}}", "bs": "\\newcommand{\\bs}[1]{\\boldsymbol{#1}}"}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]]}})</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Benchmark of Pairwise Frank-Wolfe variants for sparse logistic regression" href="plot_sparse_benchmark_pairwise.html" />
+    <link rel="prev" title="Comparison of variants of Stochastic FW" href="../plot_sfw.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-frank-wolfe-plot-sparse-benchmark-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="benchmark-of-frank-wolfe-variants-for-sparse-logistic-regression">
+<span id="sphx-glr-auto-examples-frank-wolfe-plot-sparse-benchmark-py"></span><h1>Benchmark of Frank-Wolfe variants for sparse logistic regression<a class="headerlink" href="#benchmark-of-frank-wolfe-variants-for-sparse-logistic-regression" title="Permalink to this headline">¶</a></h1>
+<p>Comparison of different Frank-Wolfe variants on various
+problems with a logistic regression loss (<a class="reference internal" href="../../generated/copt.utils.LogLoss.html#copt.utils.LogLoss" title="copt.utils.LogLoss"><code class="xref py py-meth docutils literal notranslate"><span class="pre">copt.utils.LogLoss()</span></code></a>)
+and a L1 ball constraint (<a class="reference internal" href="../../generated/copt.utils.L1Ball.html#copt.utils.L1Ball" title="copt.utils.L1Ball"><code class="xref py py-meth docutils literal notranslate"><span class="pre">copt.utils.L1Ball()</span></code></a>).</p>
+<div class="highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;/home/pedregosa/dev/sphinx-gallery/sphinx_gallery/gen_rst.py&quot;</span>, line <span class="m">435</span>, in <span class="n">_memory_usage</span>
+    <span class="n">multiprocess</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/pedregosa/dev/memory_profiler/memory_profiler.py&quot;</span>, line <span class="m">343</span>, in <span class="n">memory_usage</span>
+    <span class="n">returned</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/pedregosa/dev/sphinx-gallery/sphinx_gallery/gen_rst.py&quot;</span>, line <span class="m">426</span>, in <span class="n">__call__</span>
+    <span class="k">exec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">globals</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/pedregosa/dev/copt/examples/frank_wolfe/plot_sparse_benchmark.py&quot;</span>, line <span class="m">32</span>, in <span class="n">&lt;module&gt;</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">()</span>
+  File <span class="nb">&quot;/home/pedregosa/dev/copt/copt/datasets.py&quot;</span>, line <span class="m">155</span>, in <span class="n">load_madelon</span>
+    <span class="k">return</span> <span class="n">_load_dataset</span><span class="p">(</span><span class="s2">&quot;madelon&quot;</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/pedregosa/dev/copt/copt/datasets.py&quot;</span>, line <span class="m">54</span>, in <span class="n">_load_dataset</span>
+    <span class="n">makedirs</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/pedregosa/anaconda3/lib/python3.7/os.py&quot;</span>, line <span class="m">221</span>, in <span class="n">makedirs</span>
+    <span class="n">mkdir</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+<span class="gr">FileExistsError</span>: <span class="n">[Errno 17] File exists: &#39;/home/pedregosa/copt_data/madelon&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">copt</span> <span class="k">as</span> <span class="nn">cp</span>
+
+<span class="c1"># .. datasets and their loading functions ..</span>
+<span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;Gisette&quot;</span><span class="p">,</span> <span class="n">cp</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_gisette</span><span class="p">,</span> <span class="mf">6e3</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;RCV1&quot;</span><span class="p">,</span> <span class="n">cp</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_rcv1</span><span class="p">,</span> <span class="mf">2e4</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;Madelon&quot;</span><span class="p">,</span> <span class="n">cp</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_madelon</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;Covtype&quot;</span><span class="p">,</span> <span class="n">cp</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_covtype</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">),</span>
+<span class="p">]</span>
+
+
+<span class="n">variants_fw</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">&quot;backtracking&quot;</span><span class="p">,</span> <span class="s2">&quot;adaptive step-size&quot;</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;DR&quot;</span><span class="p">,</span> <span class="s2">&quot;Lipschitz step-size&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">],</span>
+<span class="p">]</span>
+
+<span class="k">for</span> <span class="n">dataset_title</span><span class="p">,</span> <span class="n">load_data</span><span class="p">,</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running on the </span><span class="si">%s</span><span class="s2"> dataset&quot;</span> <span class="o">%</span> <span class="n">dataset_title</span><span class="p">)</span>
+
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">()</span>
+    <span class="n">n_samples</span><span class="p">,</span> <span class="n">n_features</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">l1_ball</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">L1Ball</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">LogLoss</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_features</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">step</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">marker</span> <span class="ow">in</span> <span class="n">variants_fw</span><span class="p">:</span>
+
+        <span class="n">cb</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">Trace</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">sol</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">minimize_frank_wolfe</span><span class="p">(</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">f_grad</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l1_ball</span><span class="o">.</span><span class="n">lmo</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">,</span> <span class="n">lipschitz</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">lipschitz</span>
+        <span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cb</span><span class="o">.</span><span class="n">trace_time</span><span class="p">,</span> <span class="n">cb</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sparsity of solution: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-8</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (in seconds)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Objective function&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">dataset_title</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>  <span class="c1"># otherwise the right y-label is slightly clipped</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">cb</span><span class="o">.</span><span class="n">trace_time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>  <span class="c1"># for aesthetics</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 11 minutes  46.105 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  8 MB</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-frank-wolfe-plot-sparse-benchmark-py">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/63936df4ef845428e6714174ce6d52c5/plot_sparse_benchmark.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_sparse_benchmark.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/6a961adde977f7451f64bda5b4f12df3/plot_sparse_benchmark.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_sparse_benchmark.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../../index.html">copt</a></h1>
+
+
+
+<p class="blurb">Optimization in Python</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../solvers.html">Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../loss_functions.html">Loss and regularization functions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Example Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#miscellaneous-examples">Miscellaneous examples</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#frank-wolfe">Frank-Wolfe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#proximal-splitting">Proximal Splitting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils.html">Utility functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../citing.html">Citing</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      
+      
+      
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      
+      |
+      <a href="../../_sources/auto_examples/frank_wolfe/plot_sparse_benchmark.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/openopt/copt" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

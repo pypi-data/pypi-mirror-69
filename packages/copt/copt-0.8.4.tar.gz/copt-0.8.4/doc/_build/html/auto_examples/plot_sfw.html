@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Comparison of variants of Stochastic FW &#8212; copt  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"Macros": {"argmin": "\\DeclareMathOperator*{\\argmin}{\\mathbf{arg\\,min}}", "argmax": "\\DeclareMathOperator*{\\argmin}{\\mathbf{arg\\,max}}", "bs": "\\newcommand{\\bs}[1]{\\boldsymbol{#1}}"}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]]}})</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Benchmark of Frank-Wolfe variants for sparse logistic regression" href="frank_wolfe/plot_sparse_benchmark.html" />
+    <link rel="prev" title="Group Lasso regularization" href="plot_group_lasso.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-plot-sfw-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="comparison-of-variants-of-stochastic-fw">
+<span id="sphx-glr-auto-examples-plot-sfw-py"></span><h1>Comparison of variants of Stochastic FW<a class="headerlink" href="#comparison-of-variants-of-stochastic-fw" title="Permalink to this headline">¶</a></h1>
+<p>The problem solved in this case is a L1 constrained logistic regression
+(sometimes referred to as sparse logistic regression).</p>
+<div class="highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;/home/pedregosa/dev/sphinx-gallery/sphinx_gallery/gen_rst.py&quot;</span>, line <span class="m">435</span>, in <span class="n">_memory_usage</span>
+    <span class="n">multiprocess</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/pedregosa/dev/memory_profiler/memory_profiler.py&quot;</span>, line <span class="m">343</span>, in <span class="n">memory_usage</span>
+    <span class="n">returned</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/pedregosa/dev/sphinx-gallery/sphinx_gallery/gen_rst.py&quot;</span>, line <span class="m">426</span>, in <span class="n">__call__</span>
+    <span class="k">exec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">globals</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/pedregosa/dev/copt/examples/plot_sfw.py&quot;</span>, line <span class="m">58</span>, in <span class="n">&lt;module&gt;</span>
+    <span class="n">variant</span><span class="o">=</span><span class="s1">&#39;SAG&#39;</span>
+  File <span class="nb">&quot;/home/pedregosa/dev/copt/copt/randomized.py&quot;</span>, line <span class="m">836</span>, in <span class="n">minimize_sfw</span>
+    <span class="n">dual_var</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">n_samples</span><span class="p">)</span> <span class="o">*</span> <span class="n">f_deriv</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+  File <span class="nb">&quot;/home/pedregosa/anaconda3/lib/python3.7/site-packages/numba/dispatcher.py&quot;</span>, line <span class="m">376</span>, in <span class="n">_compile_for_args</span>
+    <span class="n">error_rewrite</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;typing&#39;</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/pedregosa/anaconda3/lib/python3.7/site-packages/numba/dispatcher.py&quot;</span>, line <span class="m">343</span>, in <span class="n">error_rewrite</span>
+    <span class="n">reraise</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">e</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/pedregosa/anaconda3/lib/python3.7/site-packages/numba/six.py&quot;</span>, line <span class="m">658</span>, in <span class="n">reraise</span>
+    <span class="k">raise</span> <span class="n">value</span><span class="o">.</span><span class="n">with_traceback</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
+<span class="gr">numba.errors.TypingError</span>: <span class="n">Failed in nopython mode pipeline (step: nopython frontend)</span>
+<span class="x">[1m[1m[1mInvalid use of Function(&lt;built-in function array&gt;) with argument(s) of type(s): (array(float64, 1d, C))</span>
+<span class="x"> * parameterized</span>
+<span class="x">[1mIn definition 0:[0m</span>
+<span class="x">[1m    TypingError: [1marray(float64, 1d, C) not allowed in a homogeneous sequence[0m[0m</span>
+<span class="x">    raised from /home/pedregosa/anaconda3/lib/python3.7/site-packages/numba/typing/npydecl.py:460</span>
+<span class="x">[1mIn definition 1:[0m</span>
+<span class="x">[1m    TypingError: [1marray(float64, 1d, C) not allowed in a homogeneous sequence[0m[0m</span>
+<span class="x">    raised from /home/pedregosa/anaconda3/lib/python3.7/site-packages/numba/typing/npydecl.py:460</span>
+<span class="x">[1mThis error is usually caused by passing an argument of a type that is unsupported by the named function.[0m[0m</span>
+<span class="x">[0m[1m[1] During: resolving callee type: Function(&lt;built-in function array&gt;)[0m</span>
+<span class="x">[0m[1m[2] During: typing of call at /home/pedregosa/dev/copt/copt/utils.py (332)</span>
+<span class="x">[0m</span>
+<span class="x">[1m</span>
+<span class="x">File &quot;../copt/utils.py&quot;, line 332:[0m</span>
+<span class="x">[1m        def log_deriv(p, y):</span>
+<span class="x">            &lt;source elided&gt;</span>
+<span class="x">            # same as in lightning (with minus sign)</span>
+<span class="x">[1m            p = np.array(p)</span>
+<span class="x">[0m            [1m^[0m[0m</span>
+
+<span class="x">This is not usually a problem with Numba itself but instead often caused by</span>
+<span class="x">the use of unsupported features or an issue in resolving types.</span>
+
+<span class="x">To see Python/NumPy features supported by the latest release of Numba visit:</span>
+<span class="x">http://numba.pydata.org/numba-doc/latest/reference/pysupported.html</span>
+<span class="x">and</span>
+<span class="x">http://numba.pydata.org/numba-doc/latest/reference/numpysupported.html</span>
+
+<span class="x">For more information about typing errors and how to debug them visit:</span>
+<span class="x">http://numba.pydata.org/numba-doc/latest/user/troubleshoot.html#my-code-doesn-t-compile</span>
+
+<span class="x">If you think your code should work with Numba, please report the error message</span>
+<span class="x">and traceback, along with a minimal reproducer at:</span>
+<span class="x">https://github.com/numba/numba/issues/new</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">copt</span> <span class="k">as</span> <span class="nn">cp</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># .. construct (random) dataset ..</span>
+<span class="n">n_samples</span><span class="p">,</span> <span class="n">n_features</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">200</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_features</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span>
+<span class="n">max_iter</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">)</span>
+<span class="n">freq</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_iter</span> <span class="o">//</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+
+<span class="c1"># .. objective function and regularizer ..</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">LogLoss</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">constraint</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">L1Ball</span><span class="p">(</span><span class="mf">1.</span><span class="p">)</span>
+
+
+<span class="c1"># .. callbacks to track progress ..</span>
+<span class="k">def</span> <span class="nf">fw_gap</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">grad</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">f_grad</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">constraint</span><span class="o">.</span><span class="n">lmo</span><span class="p">(</span><span class="o">-</span><span class="n">grad</span><span class="p">,</span> <span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="o">-</span><span class="n">grad</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">TraceGaps</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">Trace</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TraceGaps</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">freq</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace_gaps</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dl</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_counter</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">freq</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trace_gaps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fw_gap</span><span class="p">(</span><span class="n">dl</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]))</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TraceGaps</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">dl</span><span class="p">)</span>
+
+
+<span class="n">cb_sfw_SAG</span> <span class="o">=</span> <span class="n">TraceGaps</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="n">freq</span><span class="p">)</span>
+<span class="n">cb_sfw_SAGA</span> <span class="o">=</span> <span class="n">TraceGaps</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="n">freq</span><span class="p">)</span>
+<span class="n">cb_sfw_mokhtari</span> <span class="o">=</span> <span class="n">TraceGaps</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="n">freq</span><span class="p">)</span>
+<span class="n">cb_sfw_lu_freund</span> <span class="o">=</span> <span class="n">TraceGaps</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="n">freq</span><span class="p">)</span>
+
+<span class="c1"># .. run the SFW algorithm ..</span>
+<span class="n">result_sfw_SAG</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">randomized</span><span class="o">.</span><span class="n">minimize_sfw</span><span class="p">(</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">partial_deriv</span><span class="p">,</span>
+    <span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_features</span><span class="p">),</span>
+    <span class="n">constraint</span><span class="o">.</span><span class="n">lmo</span><span class="p">,</span>
+    <span class="n">callback</span><span class="o">=</span><span class="n">cb_sfw_SAG</span><span class="p">,</span>
+    <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
+    <span class="n">variant</span><span class="o">=</span><span class="s1">&#39;SAG&#39;</span>
+<span class="p">)</span>
+
+<span class="n">result_sfw_SAGA</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">randomized</span><span class="o">.</span><span class="n">minimize_sfw</span><span class="p">(</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">partial_deriv</span><span class="p">,</span>
+    <span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_features</span><span class="p">),</span>
+    <span class="n">constraint</span><span class="o">.</span><span class="n">lmo</span><span class="p">,</span>
+    <span class="n">callback</span><span class="o">=</span><span class="n">cb_sfw_SAGA</span><span class="p">,</span>
+    <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
+    <span class="n">variant</span><span class="o">=</span><span class="s1">&#39;SAGA&#39;</span>
+<span class="p">)</span>
+
+<span class="n">result_sfw_mokhtari</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">randomized</span><span class="o">.</span><span class="n">minimize_sfw</span><span class="p">(</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">partial_deriv</span><span class="p">,</span>
+    <span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_features</span><span class="p">),</span>
+    <span class="n">constraint</span><span class="o">.</span><span class="n">lmo</span><span class="p">,</span>
+    <span class="n">callback</span><span class="o">=</span><span class="n">cb_sfw_mokhtari</span><span class="p">,</span>
+    <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
+    <span class="n">variant</span><span class="o">=</span><span class="s1">&#39;MK&#39;</span>
+<span class="p">)</span>
+
+<span class="n">result_sfw_lu_freund</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">randomized</span><span class="o">.</span><span class="n">minimize_sfw</span><span class="p">(</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">partial_deriv</span><span class="p">,</span>
+    <span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_features</span><span class="p">),</span>
+    <span class="n">constraint</span><span class="o">.</span><span class="n">lmo</span><span class="p">,</span>
+    <span class="n">callback</span><span class="o">=</span><span class="n">cb_sfw_lu_freund</span><span class="p">,</span>
+    <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
+    <span class="n">variant</span><span class="o">=</span><span class="s1">&#39;LF&#39;</span>
+<span class="p">)</span>
+<span class="c1"># .. plot the result ..</span>
+<span class="n">max_gap</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">cb_sfw_SAG</span><span class="o">.</span><span class="n">trace_gaps</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+              <span class="n">cb_sfw_mokhtari</span><span class="o">.</span><span class="n">trace_gaps</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+              <span class="n">cb_sfw_lu_freund</span><span class="o">.</span><span class="n">trace_gaps</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+              <span class="n">cb_sfw_SAGA</span><span class="o">.</span><span class="n">trace_gaps</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">max_val</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">cb_sfw_SAG</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+              <span class="n">cb_sfw_mokhtari</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+              <span class="n">cb_sfw_lu_freund</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+              <span class="n">cb_sfw_SAGA</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">min_val</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">cb_sfw_SAG</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">),</span>
+              <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">cb_sfw_mokhtari</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">),</span>
+              <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">cb_sfw_lu_freund</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">),</span>
+              <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">cb_sfw_SAGA</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">),</span>
+              <span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Stochastic Frank-Wolfe&#39;</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cb_sfw_SAG</span><span class="o">.</span><span class="n">trace_gaps</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cb_sfw_SAG</span><span class="o">.</span><span class="n">trace_gaps</span><span class="p">)</span> <span class="o">/</span> <span class="n">max_gap</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;SFW -- SAG&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cb_sfw_SAGA</span><span class="o">.</span><span class="n">trace_gaps</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cb_sfw_SAGA</span><span class="o">.</span><span class="n">trace_gaps</span><span class="p">)</span> <span class="o">/</span> <span class="n">max_gap</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;SFW -- SAGA&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cb_sfw_mokhtari</span><span class="o">.</span><span class="n">trace_gaps</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cb_sfw_mokhtari</span><span class="o">.</span><span class="n">trace_gaps</span><span class="p">)</span> <span class="o">/</span> <span class="n">max_gap</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;SFW -- Mokhtari et al. (2020)&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cb_sfw_lu_freund</span><span class="o">.</span><span class="n">trace_gaps</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cb_sfw_lu_freund</span><span class="o">.</span><span class="n">trace_gaps</span><span class="p">)</span> <span class="o">/</span> <span class="n">max_gap</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;SFW -- Lu and Freund (2020)&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Relative FW gap&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cb_sfw_SAG</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">)),</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cb_sfw_SAG</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">)</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_val</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;SFW -- SAG&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cb_sfw_SAGA</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">)),</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cb_sfw_SAGA</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">)</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_val</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;SFW -- SAGA&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cb_sfw_mokhtari</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">)),</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cb_sfw_mokhtari</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">)</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_val</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;SFW -- Mokhtari et al. (2020)&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cb_sfw_lu_freund</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">)),</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cb_sfw_lu_freund</span><span class="o">.</span><span class="n">trace_fx</span><span class="p">)</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_val</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;SFW -- Lu and Freund (2020)&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Relative suboptimality&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Number of gradient evaluations&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.349 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  8 MB</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-sfw-py">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/f34642611371a636a7bdd425b4ebc3f3/plot_sfw.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_sfw.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/885efddc139fe699f4a5cd73d0f1372d/plot_sfw.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_sfw.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../index.html">copt</a></h1>
+
+
+
+<p class="blurb">Optimization in Python</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../solvers.html">Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../loss_functions.html">Loss and regularization functions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Example Gallery</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#miscellaneous-examples">Miscellaneous examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#frank-wolfe">Frank-Wolfe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#proximal-splitting">Proximal Splitting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../utils.html">Utility functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      
+      
+      
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      
+      |
+      <a href="../_sources/auto_examples/plot_sfw.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/openopt/copt" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>
