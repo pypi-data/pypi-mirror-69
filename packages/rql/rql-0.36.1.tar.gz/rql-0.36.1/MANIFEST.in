@@ -1,0 +1,23 @@
+include docs/conf.py
+include docs/*.rst
+include docs/Makefile
+include docs/*.bat
+
+include makefile
+include rql/parser.g
+
+include __pkginfo__.py
+
+include README
+include TODO
+include ChangeLog
+include COPYING
+include COPYING.LESSER
+include data/gecode_version.cc
+
+recursive-include tools *.py *.rql
+
+include tox.ini
+include build_wheel.sh
+recursive-include test *.py
+prune debian
