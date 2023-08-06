@@ -1,0 +1,68 @@
+Metadata-Version: 2.1
+Name: pytzsub
+Version: 2020a5
+Summary: World timezone definitions by country Subdivision (e.g., provinces or states)
+Home-page: https://github.com/maxim-s-barabash/pytzsub
+Author: Barabash Maxim
+Author-email: maxim.s.barabash@gmail.com
+Maintainer: Barabash Maxim
+Maintainer-email: maxim.s.barabash@gmail.com
+License: MIT License
+Keywords: timezone,tzinfo,datetime,olson,time
+Platform: Independant
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Description-Content-Type: text/markdown
+
+# pytzsub
+
+[![Build Status](https://travis-ci.com/maxim-s-barabash/pytzsub.svg?branch=master)](https://travis-ci.com/maxim-s-barabash/pytzsub)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
+World timezone definitions by country subdivision (e.g., provinces or states)
+
+## Accuracy of the database
+
+The database is not authoritative, and it surely has errors. 
+Corrections are welcome and encouraged. 
+
+
+## Installation
+
+As per usual:
+
+```shell
+pip install pytzsub
+```
+
+## Examples
+
+```python
+>>> from pytzsub import sub_timezone
+>>> sub_timezone('US-CA')
+'America/Los_Angeles'
+```
+
+```python
+>>> from pytzsub import all_code
+>>> 'US-CA' in all_code()
+True
+```
+
+## Module test
+```shell
+python -m pytzsub -v
+```
+
+
+## Time Zone Database
+
+https://www.iana.org/time-zones
+
+
