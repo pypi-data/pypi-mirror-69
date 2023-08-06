@@ -1,0 +1,16 @@
+extraction:
+  python:
+    python_setup:
+      version: 3
+      requirements: "cython>=0.29"
+  cpp:
+    after_prepare:
+    - "pip3 install --upgrade --user cython"
+    - "pip3 install --upgrade --user wheel"
+    - "export PATH=\"$HOME/.local/bin:$PATH\""
+    index:
+      build_command: "python3 setup.py build"
+path_classifiers:
+  generated:
+    # Classify featgram.c as generated code so that it won't get alerts:
+    - root/c/makeotf/makeotf_lib/source/hotconv/featgram.c
