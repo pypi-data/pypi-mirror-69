@@ -1,0 +1,23 @@
+# Include READMEs...
+include *.rst
+include *.txt
+include *.md
+
+# Include the license file
+include LICENSE
+
+# Include recursives
+recursive-include docs *
+
+# rktools.tests subpackage
+recursive-include rktools/tests *
+
+# Exclude recusives
+# Note: this ones didn't work with global-exclude
+recursive-exclude **/.ipynb_checkpoints *
+recursive-exclude **/__pycache__ *
+
+# Exclude
+global-exclude *.py[cod] *.so
+global-exclude docs/01-create-package.txt 
+

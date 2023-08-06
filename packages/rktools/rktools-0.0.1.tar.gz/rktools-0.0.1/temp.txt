@@ -1,0 +1,19 @@
+def read_version():
+    try:
+        with open('version.txt') as f:
+            s = f.read().strip()
+            if s.find("=") != -1:
+                v = s.split("=")[1]
+            else:
+                v = s
+            
+        print("[INFO] Found version = {}".format(v))
+        return v
+    except:
+        return "0.0.1"
+
+
+  # to update the version: updating two files 
+
+  $ bumpversion --current-version 0.0.1 patch version.txt rktools/__init__.py 
+
