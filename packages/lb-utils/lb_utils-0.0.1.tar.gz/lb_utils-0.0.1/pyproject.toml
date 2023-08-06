@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "lb_utils"
+version = "0.0.1"
+description = "static utility functions for LHCb"
+authors = [
+	"CERN - LHCb Core Software <lhcb-core-soft@cern.ch>",
+]
+license = "GPL-3.0-or-later"
+readme = "README.rst"
+
+[tool.poetry.dependencies]
+python = "^3.5"
+pyoptional = "^1.1.2"
+whichcraft = "^0.6.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.4.1"
+
+[build_system]
+requires = [
+	"setuptools >= 35.0.2",
+	"setuptools_scm >= 2.0.0, <3",
+]
+build-backend = "setuptools.build_meta"
