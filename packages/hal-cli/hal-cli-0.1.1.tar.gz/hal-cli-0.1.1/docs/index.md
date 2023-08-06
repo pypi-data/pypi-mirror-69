@@ -1,0 +1,66 @@
+# HAL 🤖
+
+🚧 HAL IS STILL UNDER CONSTRUCTION - PLEASE DON'T MAKE ANY SUDDEN MOVES 🚧
+
+**HAL manages your machine learning research environment in AWS**
+
+Using HAL, you can dynamically provision your perfect machine in AWS - small instances for tinkering with code all the way up to massive GPU instances for training deep learning models. Instance creation and termination is fast, so mode switching is relatively painless, and the costs are kept low by automatically calculating spot instance bids.
+
+When they're created, instances attach themselves to your own persistent, floating EBS volume (defined in terraform), where you can store data, notebooks, git repos, etc.
+
+Users can access instances via ssh, or through a tunnelled jupyterlab session.
+
+## Installation
+
+```console
+pip install hal-cli
+```
+## Using HAL
+
+See the [CLI reference](/cli_reference) for more detailed documentation.
+
+### Create a new instance
+
+```console
+hal start p2.xlarge
+```
+
+replacing `p2.xlarge` with the instance you want.
+
+See the full list of instance types in your region [here](https://aws.amazon.com/ec2/spot/pricing/).
+
+### Describe your running instances
+
+```console
+hal describe
+```
+
+### Connect to your instance via ssh
+
+Open a new shell on your instance by running
+
+```console
+hal connect
+```
+
+Alternatively, you can open `localhost:8888` in a browser and interact with your instance through jupyterlab.
+
+### Move files between your local machine and the remote instance
+
+```console
+hal put \
+  --local-path /path/to/file/to/send \
+  --remote-path /path/on/instance
+```
+
+```console
+hal get \
+  --local-path /path/to/save/file/at \
+  --remote-path /path/on/instance
+```
+
+### Shut down your instance
+
+```console
+hal stop
+```
