@@ -1,0 +1,35 @@
+Metadata-Version: 2.1
+Name: panda3d-logos
+Version: 0.12
+Summary: The Panda3D logo in various formats, a 3d animated splash screen and code to show it off.
+Home-page: https://github.com/thecheapestpixels/panda3d-logos
+Author: thecheapestpixels
+License: UNKNOWN
+Keywords: panda3d
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
+Requires-Dist: panda3d
+
+panda3d-logos
+=============
+
+The Panda3D logo in various formats, a 3d animated splash screen and code to show it off.
+
+To test-drive the splash-screen right now, do this: 
+```$ panda3dsplash --help
+```
+
+To use in your panda3d project:
+```python
+from panda3d_logos.splashes import RainbowSplash
+
+
+splash = RainbowSplash()
+interval = splash.setup()  # This'll change the scene graph, in
+                           # particular reparent the cam!
+interval.start() 	   # Start the interval
+# splash.teardown()        # Clean up when it's done.
+```
+
+
+
