@@ -1,0 +1,53 @@
+Metadata-Version: 2.1
+Name: cloudstate
+Version: 0.1.0
+Summary: Cloudstate Python Support Library
+Home-page: https://github.com/cloudstateio/python-support
+Author: Cloudstate
+License: Apache 2.0
+Project-URL: Documentation, https://cloudstate.io/docs/user/lang/index.html
+Project-URL: Source, https://github.com/cloudstateio/python-support
+Platform: UNKNOWN
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.6
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: protobuf (==3.11.3)
+Requires-Dist: google-api (==0.1.12)
+Requires-Dist: grpcio (==1.28.1)
+Requires-Dist: grpcio-tools (==1.28.1)
+Requires-Dist: attrs (==19.3.0)
+Requires-Dist: googleapis-common-protos (>=1.51.0)
+
+# Python User Language Support
+Python User Language Support for [Cloudstate](https://github.com/cloudstateio/cloudstate).
+
+## Installation via source
+
+```
+> git clone https://github.com/cloudstateio/python-support.git
+Cloning into 'python-support'...
+
+> cd python-support
+> python3 -m venv ./venv 
+> source ./venv/bin/activate
+> python --version     
+Python 3.7.3
+> pip --version 
+> pip install wheel
+> pip install .
+```
+
+### generate installer
+```
+python setup.py bdist_wheel
+```
+
+### local install
+```
+python -m pip install dist/cloudstate-0.1.0-py3-none-any.whl
+```
+
