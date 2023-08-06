@@ -1,0 +1,87 @@
+Metadata-Version: 2.1
+Name: tflite2onnx
+Version: 0.1.0
+Summary: Converting TensorFlow Lite models to ONNX models
+Home-page: https://jackwish.net/tflite2onnx
+Author: 王振华(Zhenhua WANG)
+Author-email: i@jackwish.net
+License: UNKNOWN
+Project-URL: Source, https://github.com/jackwish/tflite2onnx
+Project-URL: Bug Reports, https://github.com/jackwish/tflite2onnx/issues
+Keywords: tflite,onnx
+Platform: UNKNOWN
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Requires-Python: >=3.5.*, <4
+Description-Content-Type: text/markdown
+Requires-Dist: numpy
+Requires-Dist: onnx
+Requires-Dist: tflite
+
+Convert TensorFlow Lite models to ONNX
+======================================
+
+![Build and Test](https://github.com/jackwish/tflite2onnx/workflows/Build%20and%20Test/badge.svg)
+![Sanity](https://github.com/jackwish/tflite2onnx/workflows/Sanity/badge.svg)
+
+This [`tflite2onnx` package][pypi] converts
+TensorFlow Lite (TFLite) models (`*.tflite`) to ONNX models (`*.onnx`).
+
+***This project is under early stage of development, contributions are welcome at [GitHub][github].***
+
+
+## Installation
+
+Simply install via [pip][pypi].
+This package requires `tflite`, `onnx` and `numpy` which should be installed automatically.
+
+```sh
+pip install tflite2onnx
+```
+
+
+## Usage
+
+It's simple as below. Command line tool will be provided soon.
+
+```py
+import tflite2onnx
+
+tflite_path = '/path/to/original/tflite/model'
+onnx_path = '/path/to/save/converted/onnx/model'
+
+tflite2onnx.convert(tflite_path, onnx_path)
+
+```
+
+If you'd like to convert a TensorFlow model (`*.pb`) to ONNX, you may try
+[`tf2onnx`](https://github.com/onnx/tensorflow-onnx). Or, you can firstly
+[convert][tf2tflite] TensorFlow model (`*.pb`)
+to TensorFlow Lite models (`*.tflite`), and then convert to ONNX using this tool.
+
+
+## Resources
+
+* [PyPI page][pypi].
+* [GitHub page][github].
+* [TensorFlow Lite converter][tf2tflite].
+
+
+## License
+
+Apache License Version 2.0.
+
+[pypi]: https://pypi.org/project/tflite2onnx/
+[github]: https://github.com/jackwish/tflite2onnx
+[tf2tflite]: https://www.tensorflow.org/lite/convert
+
+
