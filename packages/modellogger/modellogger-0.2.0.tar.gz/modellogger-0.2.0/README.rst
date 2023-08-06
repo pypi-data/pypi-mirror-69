@@ -1,0 +1,46 @@
+model-logger
+============
+
+``model-logger`` is a Python library for storing model s profile and
+rapid inter model comparision. Powered by ``dash`` and ``SQLITE3``, It is
+compact ,light weight ,interactive yet powerful tool to gain usefull
+insights.
+
+Installation
+------------
+
+Using pip
+~~~~~~~~~
+
+Use the package manager `pip`_ to install model-loger.
+
+|PyPi Downloads| |PyPi Monthly Downloads| |PyPi Version|
+
+.. code:: bash
+
+   pip install modellogger
+
+Initialization
+--------------
+
+.. code:: python
+
+   from modellogger.modellogger import ModelLogger
+
+   #initialise a modelloger instance
+   path = "c/path/to/db/databasename.db"
+   mlog = ModelLogger(path) #setup complete
+    
+
+If you are already using a db created by modelloger you can directly
+load it by stating it s path If you are creating a new project just give
+location where you want to store the db followed by a name.db .
+
+.. _pip: https://pip.pypa.io/en/stable/
+
+.. |PyPi Downloads| image:: https://pepy.tech/badge/modellogger
+   :target: https://pepy.tech/badge/modellogger
+.. |PyPi Monthly Downloads| image:: https://pepy.tech/badge/modellogger/month
+   :target: https://pepy.tech/badge/modellogger/month
+.. |PyPi Version| image:: https://badge.fury.io/py/modellogger.svg
+   :target: https://pypi.org/project/modellogger/
