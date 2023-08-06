@@ -1,0 +1,6 @@
+---
+- import_playbook: ../infrastructure/buster-playbook.yml
+- import_playbook: ../infrastructure/network-playbook.yml
+- import_playbook: authorized-keys-playbook.yml
+  vars:
+    authorized_keys_globs: [ 'ssh_keys/*.pub', 'test_keys/*.pub' ]
