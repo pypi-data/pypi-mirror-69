@@ -1,0 +1,93 @@
+Metadata-Version: 2.1
+Name: collective.sortedcontrolpanels
+Version: 1.0a1
+Summary: sorts control panels alphabetically by title (broken since 2015, but will be in Plone 5.2.2)
+Home-page: https://github.com/collective/collective.sortedcontrolpanels
+Author: T. Kim Nguyen
+Author-email: kim@sixfeetup.com
+License: GPL version 2
+Project-URL: PyPI, https://pypi.python.org/pypi/collective.sortedcontrolpanels
+Project-URL: Source, https://github.com/collective/collective.sortedcontrolpanels
+Project-URL: Tracker, https://github.com/collective/collective.sortedcontrolpanels/issues
+Description: .. This README is meant for consumption by humans and pypi. Pypi can render rst files so please do not use Sphinx features.
+           If you want to learn more about writing documentation, please check out: http://docs.plone.org/about/documentation_styleguide.html
+           This text does not appear on pypi or github. It is a comment.
+        
+        ==============================
+        collective.sortedcontrolpanels
+        ==============================
+        
+        This sorts control panels alphabetically by title.
+        
+        Plone used to do that, but in 2015 a change was quietly made that sorted instead by control panel IDs which are hidden, obscure, and arbitrarily-given.
+        
+        On May 6, 2020, this pull request `PR 3093 <https://github.com/plone/Products.CMFPlone/pull/3093>`_ reverts Plone back to sorting control panels by title.
+        
+        Until a new Plone release (> 5.2.1) includes that merged PR, use this add-on to accomplish the same.
+        
+        
+        Features
+        --------
+        
+        - sorts control panels sensibly in alphabetical order, by title
+        
+        
+        Installation
+        ------------
+        
+        Install collective.sortedcontrolpanels by adding it to your buildout::
+        
+            [buildout]
+        
+            ...
+        
+            eggs =
+                collective.sortedcontrolpanels
+        
+        
+        and then running ``bin/buildout``
+        
+        
+        Contribute
+        ----------
+        
+        - Issue Tracker: https://github.com/collective/collective.sortedcontrolpanels/issues
+        - Source Code: https://github.com/collective/collective.sortedcontrolpanels
+        
+        
+        License
+        -------
+        
+        The project is licensed under the GPLv2.
+        
+        
+        Contributors
+        ============
+        
+        - T. Kim Nguyen, kim@sixfeetup.com
+        
+        
+        Changelog
+        =========
+        
+        
+        1.0a1 (2020-05-23)
+        ------------------
+        
+        - Initial release.
+          [tkimnguyen]
+        
+Keywords: Python Plone
+Platform: UNKNOWN
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Plone
+Classifier: Framework :: Plone :: Addon
+Classifier: Framework :: Plone :: 5.2
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: GNU General Public License v2 (GPLv2)
+Requires-Python: ==2.7, >=3.6
+Provides-Extra: test
