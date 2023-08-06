@@ -1,0 +1,46 @@
+Metadata-Version: 2.1
+Name: zepl-logging
+Version: 1.1.0
+Summary: Alternate Logging package for zepl
+Home-page: https://github.com/usama2762/zepl_logging_client
+Author: Usama Jamil
+Author-email: usamajamil77@gmail.com
+License: MIT
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Description-Content-Type: text/markdown
+Requires-Dist: requests
+Requires-Dist: datetime
+
+# Zepl Logging
+
+This package let's you do logging just like a basic logging modeule but it is desiged specifically to work with zepl notebooks as those are containerized so all the logs are lost when the container is shut down.
+
+
+## Installation
+
+You can install zepl_logging package from [PyPI](https://pypi.org/project/zepl_logging/):
+
+    pip install zepl_logging
+
+The project is Suported with Python 3+
+
+## How to use
+
+    from zepl_logging import logging
+
+    logger = logging.Logging()
+
+    logger.base_config('your_zepl_token', notebook='notebook_name', organization='org_name')
+
+    #now you can use this logger to log anything like 
+
+    logger.info('Connected to Db!')
+    logger.debug('This is a debug message!')
+
+
+
+
+
