@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "devgossip-praiseey"
+version = "0.1.1"
+description = "Gossip platform for any topic for developers."
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+packages = [
+    {include = './main.py'},
+    {include = './utils.py'},
+    {include = './README.md'},
+
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.scripts]
+dev-gossip = 'main:runapp'
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
