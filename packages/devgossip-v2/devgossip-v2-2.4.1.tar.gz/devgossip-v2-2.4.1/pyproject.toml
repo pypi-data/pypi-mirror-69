@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "devgossip-v2"
+version = "2.4.1"
+description = "About: devGossip is a commandline forum app for interaction between developers from around the world. It is a safe space for developers to talk about anything and everything. Users can signup, join any room of their choice to interact with other developers and they also have the option to delete their account. Conversations are not saved to give you the freedom to say all you want."
+
+authors = ["Mark Okhakumhe"]
+packages = [{include = './cli.py'},
+{include = './utils.py'}, 
+{include = './README.md'},
+{include = './requirements.txt'},
+{include = './.env'} 
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pusher = "^3.0.0"
+pysher = "^1.0.6"
+termcolor = "^1.1.0"
+colorama = "^0.4.3"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+[tool.poetry.scripts]
+devgossip-v2 = 'cli:welcome'
