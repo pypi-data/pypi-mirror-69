@@ -1,0 +1,49 @@
+Metadata-Version: 2.1
+Name: py-solaredge
+Version: 0.0.4.6
+Summary: Python API wrapper for SolarEdge monitoring services
+Home-page: https://github.com/Yenthe666/pysolaredge
+Author: Yenthe Van Ginneken
+Author-email: yenthevg@gmail.com
+Maintainer: Yenthe Van Ginneken
+Maintainer-email: yenthevg@gmail.com
+License: BSD
+Keywords: SolarEdge,SolarEdge API,SolarEdge Monitoring,SolarEdge Monitoring API
+Platform: UNKNOWN
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Topic :: Scientific/Engineering
+Description-Content-Type: text/markdown
+Requires-Dist: requests
+
+# pysolaredge
+Python API wrapper for SolarEdge monitoring.<br/>
+This library allows you to easily communicate with the SolarEdge API to get data about solar installations.<br/>
+For more information about the documentation see https://www.solaredge.com/sites/default/files/se_monitoring_api.pdf
+
+# Installation
+```
+pip3 install py-solaredge
+```
+
+# Getting started
+Importing the SolarEdge client:
+```
+from solaredge.api.client import Client
+```
+
+Initializing the SolarEdge API client, and setting your API key:
+```
+se_client = Client()
+se_client.set_api_key('XXX')
+```
+
+Getting all sites:
+```
+sites = se_client.sites.get_sites()
+```
+
+
