@@ -1,0 +1,34 @@
+Metadata-Version: 2.1
+Name: fastapi-healthcheck-flagman
+Version: 0.0.8
+Summary: A small healthcheck package for adding /healthcheck routes to FastAPI projects
+Home-page: https://github.com/flagman/fastapi-healthcheck
+Author: Pavel Malay
+Author-email: flagmansupport@gmail.com
+License: UNKNOWN
+Description: # FastAPI Healthcheck package
+        ```python 
+        import fastapi_healthcheck
+        app = FastAPI(...)
+        
+        class WorkerChecker(healthcheck.base.Base):    
+            def check(self):
+                status = False 
+                # code that checks health
+                time_passed_for_check = 1.0
+                return {"name": self.name, "status": status, "optional": self.optional, "time": time_passed_for_check}
+        
+        fastapi_healthcheck.add_health_route(app, name="Super-Resolution", checkers=[
+            healthcheck.redis.Checker(),  #built-in checker
+            WorkerChecker(name="Worker Checker") #custom checker
+        ])
+        
+        
+        ```
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
