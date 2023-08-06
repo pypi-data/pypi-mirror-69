@@ -1,0 +1,43 @@
+Metadata-Version: 2.1
+Name: fn-deps
+Version: 0.1.0
+Summary: 
+Home-page: https://github.com/BusinessOptics/fn_deps
+License: MIT
+Author: James Saunders
+Author-email: james@businessoptics.biz
+Requires-Python: >=3.6,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Requires-Dist: click (>=7.1.2,<8.0.0)
+Requires-Dist: dephell (>=0.8.3,<0.9.0)
+Requires-Dist: gitpython (>=3.1.2,<4.0.0)
+Requires-Dist: sh (>=1.13.1,<2.0.0)
+Project-URL: Repository, https://github.com/BusinessOptics/fn_deps
+Description-Content-Type: text/markdown
+
+# Fn Deps
+
+Simple helpers for managing and publishing dependencies.
+
+This is used by teh fn_graph project and currently only supports poetry based repos. The primary point is to make publishing a package easy and dependable. The main call is:
+
+`fn_deps publish <major|minor|patch>`
+
+This will:
+
+* Check there are no uncommitted changed
+* Check you are up to date with the origin/master branch
+* Update the package version
+* Use dephell to create a setup.py (very nice for local development)
+* Commit the changes ot the version and setup.py
+* Build the package
+* Tag the commit with the version
+* Push the branch and the tags to origin
+* Publish the package on Pypi
+
+If anything goes wrong it will revert to the original commit without any changes.
+
