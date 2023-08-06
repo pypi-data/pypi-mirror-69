@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<style type="text/css">
+div.warning {
+	background-color: rgb(255, 195, 90);
+}
+div.critical {
+	background-color: rgb(255, 99, 146);
+}
+div.ras {
+	background-color: rgb(153, 255, 125);
+}
+		</style>
+		<title>Supervision</title>
+	</head>
+	<body>
+		<div>Dernière mise à jour {{ date }}</div>
+		{% for check in supervision_data%}
+                    <div class="{{ check.level }}">
+                        <img src="{{ check.icon }}" width="32" height="32"/>
+				{{ check.host }}:
+				{{ check.title }}
+				<ul>
+				{% for crit in check.subchecks %}
+					<li>{{ crit.label }}: {{ crit.value }} </li>
+				{% endfor %}
+				</ul>
+			</div>
+		{% else %}
+			<div class="ras">&#9899; RAS</div>
+		{% endfor %}
+
+		
+	</body>
+</html>
