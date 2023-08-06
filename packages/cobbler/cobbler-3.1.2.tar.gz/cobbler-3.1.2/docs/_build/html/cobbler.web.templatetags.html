@@ -1,0 +1,503 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.web.templatetags package &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>cobbler.web.templatetags package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cobbler.web.templatetags.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cobbler-web-templatetags-package">
+<h1>cobbler.web.templatetags package<a class="headerlink" href="#cobbler-web-templatetags-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cobbler.web.templatetags.site">
+<span id="cobbler-web-templatetags-site-module"></span><h2>cobbler.web.templatetags.site module<a class="headerlink" href="#module-cobbler.web.templatetags.site" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.web.templatetags.site.And">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">And</code><span class="sig-paren">(</span><em class="sig-param">var1</em>, <em class="sig-param">var2=None</em>, <em class="sig-param">negate=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#And"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.And" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="code-autodoc/cobbler.web.templatetags.html#cobbler.web.templatetags.site.BaseCalc" title="cobbler.web.templatetags.site.BaseCalc"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.web.templatetags.site.BaseCalc</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.And.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><em class="sig-param">var1</em>, <em class="sig-param">var2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#And.calculate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.And.calculate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cobbler.web.templatetags.site.BaseCalc">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">BaseCalc</code><span class="sig-paren">(</span><em class="sig-param">var1</em>, <em class="sig-param">var2=None</em>, <em class="sig-param">negate=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#BaseCalc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.BaseCalc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.BaseCalc.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><em class="sig-param">var1</em>, <em class="sig-param">var2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#BaseCalc.calculate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.BaseCalc.calculate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.BaseCalc.resolve">
+<code class="sig-name descname">resolve</code><span class="sig-paren">(</span><em class="sig-param">context</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#BaseCalc.resolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.BaseCalc.resolve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.BaseCalc.resolve_vars">
+<code class="sig-name descname">resolve_vars</code><span class="sig-paren">(</span><em class="sig-param">context</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#BaseCalc.resolve_vars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.BaseCalc.resolve_vars" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cobbler.web.templatetags.site.Equals">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">Equals</code><span class="sig-paren">(</span><em class="sig-param">var1</em>, <em class="sig-param">var2=None</em>, <em class="sig-param">negate=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#Equals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.Equals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="code-autodoc/cobbler.web.templatetags.html#cobbler.web.templatetags.site.BaseCalc" title="cobbler.web.templatetags.site.BaseCalc"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.web.templatetags.site.BaseCalc</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.Equals.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><em class="sig-param">var1</em>, <em class="sig-param">var2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#Equals.calculate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.Equals.calculate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cobbler.web.templatetags.site.Greater">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">Greater</code><span class="sig-paren">(</span><em class="sig-param">var1</em>, <em class="sig-param">var2=None</em>, <em class="sig-param">negate=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#Greater"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.Greater" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="code-autodoc/cobbler.web.templatetags.html#cobbler.web.templatetags.site.BaseCalc" title="cobbler.web.templatetags.site.BaseCalc"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.web.templatetags.site.BaseCalc</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.Greater.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><em class="sig-param">var1</em>, <em class="sig-param">var2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#Greater.calculate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.Greater.calculate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cobbler.web.templatetags.site.GreaterOrEqual">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">GreaterOrEqual</code><span class="sig-paren">(</span><em class="sig-param">var1</em>, <em class="sig-param">var2=None</em>, <em class="sig-param">negate=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#GreaterOrEqual"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.GreaterOrEqual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="code-autodoc/cobbler.web.templatetags.html#cobbler.web.templatetags.site.BaseCalc" title="cobbler.web.templatetags.site.BaseCalc"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.web.templatetags.site.BaseCalc</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.GreaterOrEqual.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><em class="sig-param">var1</em>, <em class="sig-param">var2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#GreaterOrEqual.calculate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.GreaterOrEqual.calculate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cobbler.web.templatetags.site.IfParser">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">IfParser</code><span class="sig-paren">(</span><em class="sig-param">tokens</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#IfParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.IfParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.IfParser.at_end">
+<code class="sig-name descname">at_end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#IfParser.at_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.IfParser.at_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.IfParser.create_var">
+<code class="sig-name descname">create_var</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#IfParser.create_var"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.IfParser.create_var" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cobbler.web.templatetags.site.IfParser.error_class">
+<code class="sig-name descname">error_class</code><a class="headerlink" href="#cobbler.web.templatetags.site.IfParser.error_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">builtins.ValueError</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.IfParser.get_token">
+<code class="sig-name descname">get_token</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#IfParser.get_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.IfParser.get_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.IfParser.get_var">
+<code class="sig-name descname">get_var</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#IfParser.get_var"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.IfParser.get_var" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.IfParser.parse">
+<code class="sig-name descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#IfParser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.IfParser.parse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.IfParser.tokens">
+<em class="property">property </em><code class="sig-name descname">tokens</code><a class="headerlink" href="#cobbler.web.templatetags.site.IfParser.tokens" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cobbler.web.templatetags.site.In">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">In</code><span class="sig-paren">(</span><em class="sig-param">var1</em>, <em class="sig-param">var2=None</em>, <em class="sig-param">negate=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#In"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.In" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="code-autodoc/cobbler.web.templatetags.html#cobbler.web.templatetags.site.BaseCalc" title="cobbler.web.templatetags.site.BaseCalc"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.web.templatetags.site.BaseCalc</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.In.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><em class="sig-param">var1</em>, <em class="sig-param">var2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#In.calculate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.In.calculate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cobbler.web.templatetags.site.Or">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">Or</code><span class="sig-paren">(</span><em class="sig-param">var1</em>, <em class="sig-param">var2=None</em>, <em class="sig-param">negate=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#Or"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.Or" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="code-autodoc/cobbler.web.templatetags.html#cobbler.web.templatetags.site.BaseCalc" title="cobbler.web.templatetags.site.BaseCalc"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.web.templatetags.site.BaseCalc</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.Or.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><em class="sig-param">var1</em>, <em class="sig-param">var2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#Or.calculate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.Or.calculate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cobbler.web.templatetags.site.SmartIfNode">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">SmartIfNode</code><span class="sig-paren">(</span><em class="sig-param">var</em>, <em class="sig-param">nodelist_true</em>, <em class="sig-param">nodelist_false=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#SmartIfNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.SmartIfNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.template.base.Node</span></code></p>
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.SmartIfNode.get_nodes_by_type">
+<code class="sig-name descname">get_nodes_by_type</code><span class="sig-paren">(</span><em class="sig-param">nodetype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#SmartIfNode.get_nodes_by_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.SmartIfNode.get_nodes_by_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all nodes (within this node and its nodelist)
+of the given type</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.SmartIfNode.render">
+<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param">context</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#SmartIfNode.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.SmartIfNode.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the node rendered as a string.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cobbler.web.templatetags.site.SmartIfTests">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">SmartIfTests</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#SmartIfTests"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.SmartIfTests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.SmartIfTests.assertCalc">
+<code class="sig-name descname">assertCalc</code><span class="sig-paren">(</span><em class="sig-param">calc</em>, <em class="sig-param">context=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#SmartIfTests.assertCalc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.SmartIfTests.assertCalc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test a calculation is True, also checking the inverse “negate” case.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.SmartIfTests.assertCalcFalse">
+<code class="sig-name descname">assertCalcFalse</code><span class="sig-paren">(</span><em class="sig-param">calc</em>, <em class="sig-param">context=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#SmartIfTests.assertCalcFalse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.SmartIfTests.assertCalcFalse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test a calculation is False, also checking the inverse “negate” case.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.SmartIfTests.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#SmartIfTests.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.SmartIfTests.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.SmartIfTests.test_and">
+<code class="sig-name descname">test_and</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#SmartIfTests.test_and"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.SmartIfTests.test_and" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.SmartIfTests.test_boolean">
+<code class="sig-name descname">test_boolean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#SmartIfTests.test_boolean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.SmartIfTests.test_boolean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.SmartIfTests.test_equals">
+<code class="sig-name descname">test_equals</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#SmartIfTests.test_equals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.SmartIfTests.test_equals" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.SmartIfTests.test_greater">
+<code class="sig-name descname">test_greater</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#SmartIfTests.test_greater"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.SmartIfTests.test_greater" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.SmartIfTests.test_greater_or_equal">
+<code class="sig-name descname">test_greater_or_equal</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#SmartIfTests.test_greater_or_equal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.SmartIfTests.test_greater_or_equal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.SmartIfTests.test_in">
+<code class="sig-name descname">test_in</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#SmartIfTests.test_in"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.SmartIfTests.test_in" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.SmartIfTests.test_or">
+<code class="sig-name descname">test_or</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#SmartIfTests.test_or"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.SmartIfTests.test_or" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.SmartIfTests.test_parse_bits">
+<code class="sig-name descname">test_parse_bits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#SmartIfTests.test_parse_bits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.SmartIfTests.test_parse_bits" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cobbler.web.templatetags.site.TemplateIfParser">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">TemplateIfParser</code><span class="sig-paren">(</span><em class="sig-param">parser</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#TemplateIfParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.TemplateIfParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="code-autodoc/cobbler.web.templatetags.html#cobbler.web.templatetags.site.IfParser" title="cobbler.web.templatetags.site.IfParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.web.templatetags.site.IfParser</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.TemplateIfParser.create_var">
+<code class="sig-name descname">create_var</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#TemplateIfParser.create_var"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.TemplateIfParser.create_var" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cobbler.web.templatetags.site.TemplateIfParser.error_class">
+<code class="sig-name descname">error_class</code><a class="headerlink" href="#cobbler.web.templatetags.site.TemplateIfParser.error_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">django.template.exceptions.TemplateSyntaxError</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cobbler.web.templatetags.site.TestVar">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">TestVar</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#TestVar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.TestVar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A basic self-resolvable object similar to a Django template variable. Used
+to assist with tests.</p>
+<dl class="method">
+<dt id="cobbler.web.templatetags.site.TestVar.resolve">
+<code class="sig-name descname">resolve</code><span class="sig-paren">(</span><em class="sig-param">context</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#TestVar.resolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.TestVar.resolve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cobbler.web.templatetags.site.ifinlist">
+<code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">ifinlist</code><span class="sig-paren">(</span><em class="sig-param">parser</em>, <em class="sig-param">token</em><span class="sig-paren">)</span><a class="headerlink" href="#cobbler.web.templatetags.site.ifinlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>A smarter {% if %} tag for django templates.</p>
+<p>While retaining current Django functionality, it also handles equality,
+greater than and less than operators. Some common case examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">articles</span><span class="o">|</span><span class="n">length</span> <span class="o">&gt;=</span> <span class="mi">5</span> <span class="o">%</span><span class="p">}</span><span class="o">...</span><span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+<span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="s2">&quot;ifnotequal tag&quot;</span> <span class="o">!=</span> <span class="s2">&quot;beautiful&quot;</span> <span class="o">%</span><span class="p">}</span><span class="o">...</span><span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Arguments and operators _must_ have a space between them, so
+<code class="docutils literal notranslate"><span class="pre">{%</span> <span class="pre">if</span> <span class="pre">1&gt;2</span> <span class="pre">%}</span></code> is not a valid smart if tag.</p>
+<p>All supported operators are: <code class="docutils literal notranslate"><span class="pre">or</span></code>, <code class="docutils literal notranslate"><span class="pre">and</span></code>, <code class="docutils literal notranslate"><span class="pre">in</span></code>, <code class="docutils literal notranslate"><span class="pre">=</span></code> (or <code class="docutils literal notranslate"><span class="pre">==</span></code>),
+<code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cobbler.web.templatetags.site.listsort">
+<code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">listsort</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#listsort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.listsort" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="cobbler.web.templatetags.site.register">
+<code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">register</code><em class="property"> = &lt;django.template.library.Library object&gt;</em><a class="headerlink" href="#cobbler.web.templatetags.site.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>A smarter {% if %} tag for django templates.</p>
+<p>While retaining current Django functionality, it also handles equality,
+greater than and less than operators. Some common case examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">articles</span><span class="o">|</span><span class="n">length</span> <span class="o">&gt;=</span> <span class="mi">5</span> <span class="o">%</span><span class="p">}</span><span class="o">...</span><span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+<span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="s2">&quot;ifnotequal tag&quot;</span> <span class="o">!=</span> <span class="s2">&quot;beautiful&quot;</span> <span class="o">%</span><span class="p">}</span><span class="o">...</span><span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="cobbler.web.templatetags.site.smart_if">
+<code class="sig-prename descclassname">cobbler.web.templatetags.site.</code><code class="sig-name descname">smart_if</code><span class="sig-paren">(</span><em class="sig-param">parser</em>, <em class="sig-param">token</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/web/templatetags/site.html#smart_if"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.web.templatetags.site.smart_if" title="Permalink to this definition">¶</a></dt>
+<dd><p>A smarter {% if %} tag for django templates.</p>
+<p>While retaining current Django functionality, it also handles equality,
+greater than and less than operators. Some common case examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">articles</span><span class="o">|</span><span class="n">length</span> <span class="o">&gt;=</span> <span class="mi">5</span> <span class="o">%</span><span class="p">}</span><span class="o">...</span><span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+<span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="s2">&quot;ifnotequal tag&quot;</span> <span class="o">!=</span> <span class="s2">&quot;beautiful&quot;</span> <span class="o">%</span><span class="p">}</span><span class="o">...</span><span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Arguments and operators _must_ have a space between them, so
+<code class="docutils literal notranslate"><span class="pre">{%</span> <span class="pre">if</span> <span class="pre">1&gt;2</span> <span class="pre">%}</span></code> is not a valid smart if tag.</p>
+<p>All supported operators are: <code class="docutils literal notranslate"><span class="pre">or</span></code>, <code class="docutils literal notranslate"><span class="pre">and</span></code>, <code class="docutils literal notranslate"><span class="pre">in</span></code>, <code class="docutils literal notranslate"><span class="pre">=</span></code> (or <code class="docutils literal notranslate"><span class="pre">==</span></code>),
+<code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.web.templatetags">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cobbler.web.templatetags" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

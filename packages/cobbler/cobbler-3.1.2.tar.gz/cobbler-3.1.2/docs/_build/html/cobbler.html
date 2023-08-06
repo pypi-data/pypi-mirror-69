@@ -1,0 +1,1144 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>3. Cobbler CLI &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4. Cobblerd" href="cobblerd.html" />
+    <link rel="prev" title="2. Install Guide" href="installation-guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Cobbler CLI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-principles">3.1. General Principles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#distros-profiles-and-systems">3.1.1. Distros, Profiles and Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#images">3.1.2. Images</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#repositorys">3.1.3. Repositorys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#management-classes">3.1.4. Management Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deleting-configuration-entries">3.1.5. Deleting configuration entries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#editing">3.1.6. Editing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#copying">3.1.7. Copying</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#renaming">3.1.8. Renaming</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cli-commands">3.2. CLI-Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-distro">3.2.1. cobbler distro</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-profile">3.2.2. cobbler profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-system">3.2.3. cobbler system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-repo">3.2.4. cobbler repo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-image">3.2.5. cobbler image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-mgmtclass">3.2.6. cobbler mgmtclass</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-package">3.2.7. cobbler package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-file">3.2.8. cobbler file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-aclsetup">3.2.9. cobbler aclsetup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-buildiso">3.2.10. cobbler buildiso</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-import">3.2.11. cobbler import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-list">3.2.12. cobbler list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-replicate">3.2.13. cobbler replicate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-report">3.2.14. cobbler report</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-reposync">3.2.15. cobbler reposync</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-sync">3.2.16. cobbler sync</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-validate-autoinstalls">3.2.17. cobbler validate-autoinstalls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-version">3.2.18. cobbler version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-signature">3.2.19. cobbler signature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-get-loaders">3.2.20. cobbler get-loaders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler-hardlink">3.2.21. cobbler hardlink</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#exit-status">3.3. EXIT_STATUS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#additional-help">3.4. Additional Help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>3. Cobbler CLI</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cobbler.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cobbler-cli">
+<h1>3. Cobbler CLI<a class="headerlink" href="#cobbler-cli" title="Permalink to this headline">¶</a></h1>
+<p>This page contains a description for commands which can be used from the CLI.</p>
+<div class="section" id="general-principles">
+<h2>3.1. General Principles<a class="headerlink" href="#general-principles" title="Permalink to this headline">¶</a></h2>
+<p>This should just be a brief overview. For the detailed expanations please reefer to
+<a class="reference external" href="https://cobbler.readthedocs.io/">Readthedocs</a>.</p>
+<div class="section" id="distros-profiles-and-systems">
+<h3>3.1.1. Distros, Profiles and Systems<a class="headerlink" href="#distros-profiles-and-systems" title="Permalink to this headline">¶</a></h3>
+<p>Cobbler has a system of inheritance when it comes to managing the information you want to apply to a certain system.</p>
+</div>
+<div class="section" id="images">
+<h3>3.1.2. Images<a class="headerlink" href="#images" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="repositorys">
+<h3>3.1.3. Repositorys<a class="headerlink" href="#repositorys" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="management-classes">
+<h3>3.1.4. Management Classes<a class="headerlink" href="#management-classes" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="deleting-configuration-entries">
+<h3>3.1.5. Deleting configuration entries<a class="headerlink" href="#deleting-configuration-entries" title="Permalink to this headline">¶</a></h3>
+<p>If you want to remove a specific object, use the remove command with the name that was used to add it.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler distro|profile|system|repo|image|mgmtclass|package|file remove --name=string
+</pre></div>
+</div>
+</div>
+<div class="section" id="editing">
+<h3>3.1.6. Editing<a class="headerlink" href="#editing" title="Permalink to this headline">¶</a></h3>
+<p>If you want to change a particular setting without doing an <code class="docutils literal notranslate"><span class="pre">add</span></code> again, use the <code class="docutils literal notranslate"><span class="pre">edit</span></code> command, using the same name
+you gave when you added the item. Anything supplied in the parameter list will overwrite the settings in the existing
+object, preserving settings not mentioned.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler distro|profile|system|repo|image|mgmtclass|package|file edit --name=string [parameterlist]
+</pre></div>
+</div>
+</div>
+<div class="section" id="copying">
+<h3>3.1.7. Copying<a class="headerlink" href="#copying" title="Permalink to this headline">¶</a></h3>
+<p>Objects can also be copied:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler distro|profile|system|repo|image|mgmtclass|package|file copy --name=oldname --newname=newname
+</pre></div>
+</div>
+</div>
+<div class="section" id="renaming">
+<h3>3.1.8. Renaming<a class="headerlink" href="#renaming" title="Permalink to this headline">¶</a></h3>
+<p>Objects can also be renamed, as long as other objects don’t reference them.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler distro|profile|system|repo|image|mgmtclass|package|file rename --name=oldname --newname=newname
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="cli-commands">
+<h2>3.2. CLI-Commands<a class="headerlink" href="#cli-commands" title="Permalink to this headline">¶</a></h2>
+<p>Short Usage: <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">command</span> <span class="pre">[subcommand]</span> <span class="pre">[--arg1=value1]</span> <span class="pre">[--arg2=value2]</span></code></p>
+<p>Long Usage:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>cobbler &lt;distro<span class="p">|</span>profile<span class="p">|</span>system<span class="p">|</span>repo<span class="p">|</span>image<span class="p">|</span>mgmtclass<span class="p">|</span>package<span class="p">|</span>file&gt; ... <span class="o">[</span>add<span class="p">|</span>edit<span class="p">|</span>copy<span class="p">|</span>get-autoinstall*<span class="p">|</span>list<span class="p">|</span>remove<span class="p">|</span>rename<span class="p">|</span>report<span class="o">]</span> <span class="o">[</span>options<span class="p">|</span>--help<span class="o">]</span>
+cobbler &lt;aclsetup<span class="p">|</span>buildiso<span class="p">|</span>import<span class="p">|</span>list<span class="p">|</span>replicate<span class="p">|</span>report<span class="p">|</span>reposync<span class="p">|</span>sync<span class="p">|</span>validate-autoinstalls<span class="p">|</span>version<span class="p">|</span>signature<span class="p">|</span>get-loaders<span class="p">|</span>hardlink&gt; <span class="o">[</span>options<span class="p">|</span>--help<span class="o">]</span>
+</pre></div>
+</div>
+<div class="section" id="cobbler-distro">
+<h3>3.2.1. cobbler distro<a class="headerlink" href="#cobbler-distro" title="Permalink to this headline">¶</a></h3>
+<p>This first step towards configuring what you want to install is to add a distribution record to cobbler’s configuration.</p>
+<p>If there is an rsync mirror, DVD, NFS, or filesystem tree available that you would rather <code class="docutils literal notranslate"><span class="pre">import</span></code> instead, skip down
+to the documentation about the <code class="docutils literal notranslate"><span class="pre">import</span></code> command. It’s really a lot easier to follow the import workflow – it only
+requires waiting for the mirror content to be copied and/or scanned. Imported mirrors also save time during install
+since they don’t have to hit external install sources.</p>
+<p>If you want to be explicit with distribution definition, however, here’s how it works:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler distro add --name<span class="o">=</span>string --kernel<span class="o">=</span>path --initrd<span class="o">=</span>path <span class="o">[</span>--kopts<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--kopts-post<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--ksmeta<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--arch<span class="o">=</span>i386<span class="p">|</span>x86_64<span class="p">|</span>ppc<span class="p">|</span>ppc64<span class="o">]</span> <span class="o">[</span>--breed<span class="o">=</span>redhat<span class="p">|</span>debian<span class="p">|</span>suse<span class="o">]</span> <span class="o">[</span>--template-files<span class="o">=</span>string<span class="o">]</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>name</p></td>
+<td><p>a string identifying the distribution, this should be something like <code class="docutils literal notranslate"><span class="pre">rhel6</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>kernel</p></td>
+<td><p>An absolute filesystem path to a kernel image.</p></td>
+</tr>
+<tr class="row-even"><td><p>initrd</p></td>
+<td><p>An absolute filesystem path to a initrd image.</p></td>
+</tr>
+<tr class="row-odd"><td><p>kopts</p></td>
+<td><p>Sets kernel command-line arguments that the distro, and profiles/systems depending on it, will use.
+To remove a kernel argument that may be added by a higher cobbler object (or in the global
+settings), you can prefix it with a <code class="docutils literal notranslate"><span class="pre">!</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>Example: <code class="docutils literal notranslate"><span class="pre">--kopts=&quot;foo=bar</span> <span class="pre">baz=3</span> <span class="pre">asdf</span> <span class="pre">!gulp&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>This example passes the arguments <code class="docutils literal notranslate"><span class="pre">foo=bar</span> <span class="pre">baz=3</span> <span class="pre">asdf</span></code> but will make sure <code class="docutils literal notranslate"><span class="pre">gulp</span></code> is not passed
+even if it was requested at a level higher up in the cobbler configuration.</p></td>
+</tr>
+<tr class="row-even"><td><p>kopts-post</p></td>
+<td><p>This is just like <code class="docutils literal notranslate"><span class="pre">--kopts</span></code>, though it governs kernel options on the installed OS, as opposed to
+kernel options fed to the installer. The syntax is exactly the same. This requires some special
+snippets to be found in your automatic installation template in order for this to work. Automatic
+installation templating is described later on in this document.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Example: <code class="docutils literal notranslate"><span class="pre">noapic</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>arch</p></td>
+<td><p>Sets the architecture for the PXE bootloader and also controls how koan’s <code class="docutils literal notranslate"><span class="pre">--replace-self</span></code> option
+will operate.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>The default setting (<code class="docutils literal notranslate"><span class="pre">standard</span></code>) will use <code class="docutils literal notranslate"><span class="pre">pxelinux</span></code>. Set to <code class="docutils literal notranslate"><span class="pre">ppc</span></code> and <code class="docutils literal notranslate"><span class="pre">ppc64</span></code> to use
+<code class="docutils literal notranslate"><span class="pre">yaboot</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">x86</span></code> and <code class="docutils literal notranslate"><span class="pre">x86_64</span></code> effectively do the same thing as standard.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>If you perform a <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">import</span></code>, the arch field will be auto-assigned.</p></td>
+</tr>
+<tr class="row-even"><td><p>ksmeta</p></td>
+<td><p>This is an advanced feature that sets automatic installation template variables to substitute, thus
+enabling those files to be treated as templates. Templates are powered using Cheetah and are
+described further along in this manpage as well as on the Cobbler Wiki.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Example: <code class="docutils literal notranslate"><span class="pre">--ksmeta=&quot;foo=bar</span> <span class="pre">baz=3</span> <span class="pre">asdf&quot;</span></code></p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>See the section on “Kickstart Templating” for further information.</p></td>
+</tr>
+<tr class="row-odd"><td><p>breed</p></td>
+<td><p>Controls how various physical and virtual parameters, including kernel arguments for automatic
+installation, are to be treated. Defaults to <code class="docutils literal notranslate"><span class="pre">redhat</span></code>, which is a suitable value for Fedora and
+CentOS as well. It means anything redhat based.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>There is limited experimental support for specifying “debian”, “ubuntu”, or “suse”, which treats the
+automatic installation template file as a preseed/autoyast file format and changes the kernel
+arguments appropriately. Support for other types of distributions is possible in the future. See the
+Wiki for the latest information about support for these distributions.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>The file used for the answer file, regardless of the breed setting, is the value used for
+<code class="docutils literal notranslate"><span class="pre">--autoinst</span></code> when creating the profile.</p></td>
+</tr>
+<tr class="row-even"><td><p>os-version</p></td>
+<td><p>Generally this field can be ignored. It is intended to alter some hardware setup for virtualized
+instances when provisioning guests with koan. The valid options for <code class="docutils literal notranslate"><span class="pre">--os-version</span></code> vary depending
+on what is specified for <code class="docutils literal notranslate"><span class="pre">--breed</span></code>. If you specify an invalid option, the error message will
+contain a list of valid os versions that can be used. If you don’t know the os version or it does
+not appear in the list, omitting this argument or using <code class="docutils literal notranslate"><span class="pre">other</span></code> should be perfectly fine. If you
+don’t encounter any problems with virtualized instances, this option can be safely ignored.</p></td>
+</tr>
+<tr class="row-odd"><td><p>owners</p></td>
+<td><p>Users with small sites and a limited number of admins can probably ignore this option.  All cobbler
+objects (distros, profiles, systems, and repos) can take a –owners parameter to specify what
+cobbler users can edit particular objects.This only applies to the Cobbler WebUI and XMLRPC
+interface, not the “cobbler” command line tool run from the shell. Furthermore, this is only
+respected by the <code class="docutils literal notranslate"><span class="pre">authz_ownership</span></code> module which must be enabled in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/modules.conf</span></code>.
+The value for <code class="docutils literal notranslate"><span class="pre">--owners</span></code> is a space separated list of users and groups as specified in
+<code class="docutils literal notranslate"><span class="pre">/etc/cobbler/users.conf</span></code>. For more information see the users.conf file as well as the Cobbler
+Wiki. In the default Cobbler configuration, this value is completely ignored, as is <code class="docutils literal notranslate"><span class="pre">users.conf</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>template-files</p></td>
+<td><p>This feature allows cobbler to be used as a configuration management system. The argument is a space
+delimited string of <code class="docutils literal notranslate"><span class="pre">key=value</span></code> pairs. Each key is the path to a template file, each value is the
+path to install the file on the system. This is described in further detail on the Cobbler Wiki and
+is implemented using special code in the post install. Koan alsocan retrieve these files from a
+cobbler server on demand, effectively allowing cobbler to function as a lightweight templated
+configuration management system.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="cobbler-profile">
+<h3>3.2.2. cobbler profile<a class="headerlink" href="#cobbler-profile" title="Permalink to this headline">¶</a></h3>
+<p>A profile associates a distribution to additional specialized options, such as a installation automation file. Profiles
+are the core unit of provisioning and at least one profile must exist for every distribution to be provisioned. A
+profile might represent, for instance, a web server or desktop configuration. In this way, profiles define a role to be
+performed.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler profile add --name<span class="o">=</span>string --distro<span class="o">=</span>string <span class="o">[</span>--autoinst<span class="o">=</span>path<span class="o">]</span> <span class="o">[</span>--kopts<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--ksmeta<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--name-servers<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--name-servers-search<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--virt-file-size<span class="o">=</span>gigabytes<span class="o">]</span> <span class="o">[</span>--virt-ram<span class="o">=</span>megabytes<span class="o">]</span> <span class="o">[</span>--virt-type<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--virt-cpus<span class="o">=</span>integer<span class="o">]</span> <span class="o">[</span>--virt-path<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--virt-bridge<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--server<span class="o">]</span> <span class="o">[</span>--parent<span class="o">=</span>profile<span class="o">]</span>
+</pre></div>
+</div>
+<p>Arguments are the same as listed for distributions, save for the removal of “arch” and “breed”, and with the additions
+listed below:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 82%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>name</p></td>
+<td><p>A descriptive name. This could be something like <code class="docutils literal notranslate"><span class="pre">rhel5webservers</span></code> or <code class="docutils literal notranslate"><span class="pre">f9desktops</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>distro</p></td>
+<td><p>The name of a previously defined cobbler distribution. This value is required.</p></td>
+</tr>
+<tr class="row-even"><td><p>autoinst</p></td>
+<td><p>Local filesystem path to a automatic installation file, the file must reside under
+<code class="docutils literal notranslate"><span class="pre">/var/lib/cobbler/autoinstall_templates</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>name-servers</p></td>
+<td><p>If your nameservers are not provided by DHCP, you can specify a space separated list of
+addresses here to configure each of the installed nodes to use them (provided the automatic
+installation files used are installed on a per-system basis). Users with DHCP setups should not
+need to use this option. This is available to set in profiles to avoid having to set it
+repeatedly for each system record.</p></td>
+</tr>
+<tr class="row-even"><td><p>name-servers-search</p></td>
+<td><p>You can specify a space separated list of domain names to configure each of the installed nodes
+to use them as domain search path.  This is available to set in profiles to avoid having to set
+it repeatedly for each system record.</p></td>
+</tr>
+<tr class="row-odd"><td><p>virt-file-size</p></td>
+<td><p>(Virt-only) How large the disk image should be in Gigabytes. The default is 5. This can be a
+comma separated list (ex: <code class="docutils literal notranslate"><span class="pre">5,6,7</span></code>) to allow for multiple disks of different sizes depending
+on what is given to <code class="docutils literal notranslate"><span class="pre">--virt-path</span></code>. This should be input as a integer or decimal value without
+units.</p></td>
+</tr>
+<tr class="row-even"><td><p>virt-ram</p></td>
+<td><p>(Virt-only) How many megabytes of RAM to consume. The default is 512 MB. This should be input
+as an integer without units.</p></td>
+</tr>
+<tr class="row-odd"><td><p>virt-type</p></td>
+<td><p>(Virt-only) Koan can install images using either Xen paravirt (<code class="docutils literal notranslate"><span class="pre">xenpv</span></code>) or QEMU/KVM
+(<code class="docutils literal notranslate"><span class="pre">qemu</span></code>). Choose one or the other strings to specify, or values will default to attempting to
+find a compatible installation type on the client system(“auto”). See the “koan” manpage for
+more documentation. The default <code class="docutils literal notranslate"><span class="pre">--virt-type</span></code> can be configured in the cobbler settings file
+such that this parameter does not have to be provided. Other virtualization types are
+supported, for information on those options (such as VMware), see the Cobbler Wiki.</p></td>
+</tr>
+<tr class="row-even"><td><p>virt-cpus</p></td>
+<td><p>(Virt-only) How many virtual CPUs should koan give the virtual machine? The default is 1. This
+is an integer.</p></td>
+</tr>
+<tr class="row-odd"><td><p>virt-path</p></td>
+<td><p>(Virt-only) Where to store the virtual image on the host system. Except for advanced cases,
+this parameter can usually be omitted. For disk images, the value is usually an absolute path
+to an existing directory with an optional filename component. There is support for specifying
+partitions <code class="docutils literal notranslate"><span class="pre">/dev/sda4</span></code> or volume groups <code class="docutils literal notranslate"><span class="pre">VolGroup00</span></code>, etc.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>For multiple disks, separate the values with commas such as <code class="docutils literal notranslate"><span class="pre">VolGroup00,VolGroup00</span></code> or
+<code class="docutils literal notranslate"><span class="pre">/dev/sda4,/dev/sda5</span></code>. Both those examples would create two disks for the VM.</p></td>
+</tr>
+<tr class="row-odd"><td><p>virt-bridge</p></td>
+<td><p>(Virt-only) This specifies the default bridge to use for all systems defined under this
+profile. If not specified, itwill assume the default value in the cobbler settings file, which
+as shipped in the RPM is <code class="docutils literal notranslate"><span class="pre">xenbr0</span></code>. If using KVM, this is most likely not correct. You may
+want to override this setting in the system object. Bridge settings are important as they
+define how outside networking will reach the guest. For more information on bridge setup, see
+the Cobbler Wiki, where there is a section describing koan usage.</p></td>
+</tr>
+<tr class="row-even"><td><p>repos</p></td>
+<td><p>This is a space delimited list of all the repos (created with <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">repo</span> <span class="pre">add</span></code> and updated
+with <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">reposync</span></code>)that this profile can make use of during automated installation. For
+example, an example might be <code class="docutils literal notranslate"><span class="pre">--repos=&quot;fc6i386updates</span> <span class="pre">fc6i386extras&quot;</span></code> if the profile wants to
+access these two mirrors that are already mirrored on the cobbler server. Repo management is
+described in greater depth later in the manpage.</p></td>
+</tr>
+<tr class="row-odd"><td><p>parent</p></td>
+<td><p>This is an advanced feature.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>Profiles may inherit from other profiles in lieu of specifying <code class="docutils literal notranslate"><span class="pre">--distro</span></code>. Inherited profiles
+will override any settings specified in their parent, with the exception of <code class="docutils literal notranslate"><span class="pre">--ksmeta</span></code>
+(templating) and <code class="docutils literal notranslate"><span class="pre">--kopts</span></code> (kernel options), which will be blended together.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Example: If profile A has <code class="docutils literal notranslate"><span class="pre">--kopts=&quot;x=7</span> <span class="pre">y=2&quot;</span></code>, B inherits from A, and B has
+<code class="docutils literal notranslate"><span class="pre">--kopts=&quot;x=9</span> <span class="pre">z=2&quot;</span></code>, the actual kernel options that will be used for B are <code class="docutils literal notranslate"><span class="pre">x=9</span> <span class="pre">y=2</span> <span class="pre">z=2</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>Example: If profile B has <code class="docutils literal notranslate"><span class="pre">--virt-ram=256</span></code> and A has <code class="docutils literal notranslate"><span class="pre">--virt-ram=512</span></code>, profile B will use
+the value 256.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Example: If profile A has a <code class="docutils literal notranslate"><span class="pre">--virt-file-size=5</span></code> and B does not specify a size, B will use
+the value from A.</p></td>
+</tr>
+<tr class="row-even"><td><p>server</p></td>
+<td><p>This parameter should be useful only in select circumstances. If machines are on a subnet that
+cannot access the cobbler server using the name/IP as configured in the cobbler settings file,
+use this parameter to override that servername. See also <code class="docutils literal notranslate"><span class="pre">--dhcp-tag</span></code> for configuring the
+next server and DHCP information of the system if you are also usingCobbler to help manage your
+DHCP configuration.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="cobbler-system">
+<h3>3.2.3. cobbler system<a class="headerlink" href="#cobbler-system" title="Permalink to this headline">¶</a></h3>
+<p>System records map a piece of hardware (or a virtual machine) with the cobbler profile to be assigned to run on it. This
+may be thought of as choosing a role for a specific system.</p>
+<p>Note that if provisioning via koan and PXE menus alone, it is not required to create system records in cobbler, though
+they are useful when system specific customizations are required. One such customization would be defining the MAC
+address. If there is a specific role intended for a given machine, system records should be created for it.</p>
+<p>System commands have a wider variety of control offered over network details. In order to use these to the fullest
+possible extent, the automatic installation template used by cobbler must contain certain automatic installation
+snippets (sections of code specifically written for Cobbler to make these values become reality). Compare your automatic
+installation templates with the stock ones in /var/lib/cobbler/autoinstall_templates if you have upgraded, to make sure
+you can take advantage of all options to their fullest potential. If you are a new cobbler user, base your automatic
+installation templates off of these templates.</p>
+<p>Read more about networking setup at: <a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Advanced-networking">https://github.com/cobbler/cobbler/wiki/Advanced-networking</a></p>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cobbler system add --name<span class="o">=</span>string --profile<span class="o">=</span>string <span class="o">[</span>--mac<span class="o">=</span>macaddress<span class="o">]</span> <span class="o">[</span>--ip-address<span class="o">=</span>ipaddress<span class="o">]</span> <span class="o">[</span>--hostname<span class="o">=</span>hostname<span class="o">]</span> <span class="o">[</span>--kopts<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--ksmeta<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--autoinst<span class="o">=</span>path<span class="o">]</span> <span class="o">[</span>--netboot-enabled<span class="o">=</span>Y/N<span class="o">]</span> <span class="o">[</span>--server<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--gateway<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--dns-name<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--static-routes<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--power-address<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--power-type<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--power-user<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--power-pass<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--power-id<span class="o">=</span>string<span class="o">]</span>
+</pre></div>
+</div>
+<p>Adds a cobbler System to the configuration. Arguments are specified as per “profile add” with the following changes:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 7%" />
+<col style="width: 93%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>name</p></td>
+<td><p>The system name works like the name option for other commands.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>If the name looks like a MAC address or an IP, the name will implicitly be used for either –mac or –ip of the firstinterface, respectively. However, it’s usually better to give a descriptive name – don’t rely on this behavior.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>A system created with name “default” has special semantics. If a default system object exists, it sets all undefinedsystems to PXE to a specific profile.  Without a “default” system name created, PXE will fall through to local boot forunconfigured systems.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>When using “default” name, don’t specify any other arguments than –profile … they won’t be used.</p></td>
+</tr>
+<tr class="row-even"><td><p>mac</p></td>
+<td><p>Specifying a mac address via –mac allows the system object to boot directly to a specific profile via PXE, bypassingcobbler’s PXE menu.  If the name of the cobbler system already looks like a mac address, this is inferred from thesystem name and does not need to be specified.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>MAC addresses have the format AA:BB:CC:DD:EE:FF. It’s highly recommended to register your MAC-addresses in Cobbler ifyou’re using static addressing with multiple interfaces, or if you are using any of the advanced networking featureslike bonding, bridges or VLANs.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>Cobbler does contain a feature (enabled in /etc/cobbler/settings) that can automatically add new system records when itfinds profiles being provisioned on hardware it has seen before.  This may help if you do not have a report of all theMAC addresses in your datacenter/lab configuration.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ip-address</p></td>
+<td><p>If cobbler is configured to generate a DHCP configuration (see advanced section), use this setting to define a specificIP for this system in DHCP.  Leaving off this parameter will result in no DHCP management for this particular system.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>Example: –ip-address=192.168.1.50</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>If DHCP management is disabled and the interface is labelled –static=1, this setting will be used for static IPconfiguration.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>Special feature: To control the default PXE behavior for an entire subnet, this field can also be passed in using CIDRnotation.  If –ip is CIDR, do not specify any other arguments other than –name and –profile.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>When using the CIDR notation trick, don’t specify any arguments other than –name and –profile… they won’t be used.</p></td>
+</tr>
+<tr class="row-even"><td><p>dns-name</p></td>
+<td><p>If using the DNS management feature (see advanced section – cobbler supports auto-setup of BIND and dnsmasq), use thisto define a hostname for the system to receive from DNS.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Example: –dns-name=mycomputer.example.com</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>This is a per-interface parameter.  If you have multiple interfaces, it may be different for each interface, forexample, assume a DMZ / dual-homed setup.</p></td>
+</tr>
+<tr class="row-odd"><td><p>gateway and netmask</p></td>
+<td><p>If you are using static IP configurations and the interface is flagged –static=1, these will be applied.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>Netmask is a per-interface parameter. Because of the way gateway is stored on the installed OS, gateway is a globalparameter. You may use –static-routes for per-interface customizations if required.</p></td>
+</tr>
+<tr class="row-odd"><td><p>if-gateway</p></td>
+<td><p>If you are using static IP configurations and have multiple interfaces, use this to define different gateway for eachinterface.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>This is a per-interface setting.</p></td>
+</tr>
+<tr class="row-odd"><td><p>hostname</p></td>
+<td><p>This field corresponds to the hostname set in a systems /etc/sysconfig/network file.  This has no bearing on DNS, evenwhen manage_dns is enabled.  Use –dns-name instead for that feature.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>This parameter is assigned once per system, it is not a per-interface setting.</p></td>
+</tr>
+<tr class="row-odd"><td><p>power-address, power-type, power-user, power-pass, power-id</p></td>
+<td><p>Cobbler contains features that enable integration with power management for easier installation, reinstallation, andmanagement of machines in a datacenter environment.  These parameters are described online athttps://github.com/cobbler/cobbler/wiki/Power-management. If you have a power-managed datacenter/lab setup, usage ofthese features may be something you are interested in.</p></td>
+</tr>
+<tr class="row-even"><td><p>static</p></td>
+<td><p>Indicates that this interface is statically configured.  Many fields (such as gateway/netmask) will not be used unlessthis field is enabled.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>This is a per-interface setting.</p></td>
+</tr>
+<tr class="row-even"><td><p>static-routes</p></td>
+<td><p>This is a space delimited list of ip/mask:gateway routing information in that format. Most systems will not need thisinformation.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>This is a per-interface setting.</p></td>
+</tr>
+<tr class="row-even"><td><p>virt-bridge</p></td>
+<td><p>(Virt-only) While –virt-bridge is present in the profile object (see above), here it works on an interface by interfacebasis. For instance it would be possible to have –virt-bridge0=xenbr0 and –virt-bridge1=xenbr1. If not specified incobbler for each interface, koan will use the value as specified in the profile for each interface, which may not alwaysbe what is intended, but will be sufficient in most cases.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>This is a per-interface setting.</p></td>
+</tr>
+<tr class="row-even"><td><p>autoinst</p></td>
+<td><p>While it is recommended that the –autoinst parameter is only used within for the “profile add” command, there arelimited scenarios when an install base switching to cobbler may have legacy automatic installation files created on aper-system basis (one automatic installation file for each system, nothing shared) and may not want to immediately makeuse of the cobbler templating system. This allows specifying a automatic installation file for use on a per-systembasis. Creation of a parent profile is still required.  If the automatic installation file is a filesystem location, itwill still be treated as a cobbler template.</p></td>
+</tr>
+<tr class="row-odd"><td><p>netboot-enabled</p></td>
+<td><p>If set false, the system will be provisionable through koan but not through standard PXE. This will allow the system tofall back to default PXE boot behavior without deleting the cobbler system object. The default value allows PXE. Cobblercontains a PXE boot loop prevention feature (pxe_just_once, can be enabled in /etc/cobbler/settings) that canautomatically trip off this value after a system gets done installing. This can prevent installs from appearing in anendless loop when the system is set to PXE first in the BIOS order.</p></td>
+</tr>
+<tr class="row-even"><td><p>repos-enabled</p></td>
+<td><p>If set true, koan can reconfigure repositories after installation. This is described further on the Cobbler Wiki,https://github.com/cobbler/cobbler/wiki/Manage-yum-repos.</p></td>
+</tr>
+<tr class="row-odd"><td><p>dhcp-tag</p></td>
+<td><p>If you are setting up a PXE environment with multiple subnets/gateways, and are using cobbler to manage a DHCPconfiguration, you will probably want to use this option. If not, it can be ignored.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>By default, the dhcp tag for all systems is “default” and means that in the DHCP template files the systems will expandout where $insert_cobbler_systems_definitions is found in the DHCP template. However, you may want certain systems toexpand out in other places in the DHCP config file.  Setting –dhcp-tag=subnet2 for instance, will cause that system toexpand out where $insert_cobbler_system_definitions_subnet2 is found, allowing you to insert directives to specifydifferent subnets (or other parameters) before the DHCP configuration entries for those particular systems.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>This is described further on the Cobbler Wiki.</p></td>
+</tr>
+<tr class="row-even"><td><p>interface</p></td>
+<td><p>By default flags like –ip, –mac, –dhcp-tag, –dns-name, –netmask, –virt-bridge, and –static-routes operate on thefirst network interface defined for a system (eth0). However, cobbler supports an arbitrary number of interfaces. Using–interface=eth1 for instance, will allow creating and editing of a second interface.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Interface naming notes:</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>Additional interfaces can be specified (for example: eth1, or any name you like, as long as it does not conflict withany reserved names such as kernel module names) for use with the edit command. Defining VLANs this way is alsosupported, of you want to add VLAN 5 on interface eth0, simply name your interface eth0.5.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Example:</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>cobbler system edit –name=foo –ip-address=192.168.1.50 –mac=AA:BB:CC:DD:EE:A0</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>cobbler system edit –name=foo –interface=eth0 –ip-address=192.168.1.51 –mac=AA:BB:CC:DD:EE:A1</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>cobbler system report foo</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Interfaces can be deleted using the –delete-interface option.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>Example:</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>cobbler system edit –name=foo –interface=eth2 –delete-interface</p></td>
+</tr>
+<tr class="row-even"><td><p>interface-type, interface-master and bonding-opts/bridge-opts</p></td>
+<td><p>One of the other advanced networking features supported by Cobbler is NIC bonding, bridging, and BMC. You can use thisto bond multiple physical network interfaces to one single logical interface to reduce single points of failure in yournetwork, to create bridged interfaces for things like tunnels and virtual machine networks, or to manage BMC interfaceby DHCP. Supported values for the –interface-type parameter are “bond”, “bond_slave”, “bridge”, “bridge_slave”,”bonded_bridge_slave” and “bmc”.  If one of the “_slave” options is specified, you also need to define themaster-interface for this bond using –interface-master=INTERFACE. Bonding and bridge options for the master-interfacemay be specified using –bonding-opts=”foo=1 bar=2” or –bridge-opts=”foo=1 bar=2”, respectively.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Example:</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>cobbler system edit –name=foo –interface=eth0 –mac=AA:BB:CC:DD:EE:00 –interface-type=bond_slave –interface-master=bond0</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>cobbler system edit –name=foo –interface=eth1 –mac=AA:BB:CC:DD:EE:01 –interface-type=bond_slave –interface-master=bond0</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>cobbler system edit –name=foo –interface=bond0 –interface-type=bond –bonding-opts=”mode=active-backup miimon=100” –ip-address=192.168.0.63 –netmask=255.255.255.0 –gateway=192.168.0.1 –static=1</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>More information about networking setup is available at <a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Advanced-networking">https://github.com/cobbler/cobbler/wiki/Advanced-networking</a></p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>To review what networking configuration you have for any object, run “cobbler system report” at any time:</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Example:</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>cobbler system report –name=foo</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="cobbler-repo">
+<h3>3.2.4. cobbler repo<a class="headerlink" href="#cobbler-repo" title="Permalink to this headline">¶</a></h3>
+<p>Repository mirroring allows cobbler to mirror not only install trees (“cobbler import” does this for you) but also
+optional packages, 3rd party content, and even updates. Mirroring all of this content locally on your network will
+result in faster, more up-to-date installations and faster updates. If you are only provisioning a home setup, this will
+probably be overkill, though it can be very useful for larger setups (labs, datacenters, etc).</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler repo add --mirror<span class="o">=</span>url --name<span class="o">=</span>string <span class="o">[</span>--rpmlist<span class="o">=</span>list<span class="o">]</span> <span class="o">[</span>--creatrepo-flags<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--keep-updated<span class="o">=</span>Y/N<span class="o">]</span> <span class="o">[</span>--priority<span class="o">=</span>number<span class="o">]</span> <span class="o">[</span>--arch<span class="o">=</span>string<span class="o">]</span> <span class="o">[</span>--mirror-locally<span class="o">=</span>Y/N<span class="o">]</span> <span class="o">[</span>--breed<span class="o">=</span>yum<span class="p">|</span>rsync<span class="p">|</span>rhn<span class="o">]</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 85%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>mirror</p></td>
+<td><p>The address of the yum mirror. This can be an <code class="docutils literal notranslate"><span class="pre">rsync://</span></code>-URL, an ssh location, or a <code class="docutils literal notranslate"><span class="pre">http://</span></code>
+or <code class="docutils literal notranslate"><span class="pre">ftp://</span></code> mirror location. Filesystem paths also work.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>The mirror address should specify an exact repository to mirror – just one architecture and just
+one distribution. If you have a separate repo to mirror for a different arch, add that repo
+separately.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>Here’s an example of what looks like a good URL:</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rsync://yourmirror.example.com/fedora-linux-core/updates/6/i386</span></code> (for rsync protocol)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">http://mirrors.kernel.org/fedora/extras/6/i386/</span></code> (for http)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">user&#64;yourmirror.example.com/fedora-linux-core/updates/6/i386</span></code>  (for SSH)</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>Experimental support is also provided for mirroring RHN content when you need a fast local mirror.
+The mirror syntax for this is <code class="docutils literal notranslate"><span class="pre">--mirror=rhn://channel-name</span></code> and you must have entitlements for
+this to work. This requires the cobbler server to be installed on RHEL5 or later. You will also
+need a version of <code class="docutils literal notranslate"><span class="pre">yum-utils</span></code> equal or greater to 1.0.4.</p></td>
+</tr>
+<tr class="row-odd"><td><p>name</p></td>
+<td><p>This name is used as the save location for the mirror. If the mirror represented, say, Fedora
+Core 6 i386 updates, a good name would be <code class="docutils literal notranslate"><span class="pre">fc6i386updates</span></code>. Again, be specific.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>This name corresponds with values given to the <code class="docutils literal notranslate"><span class="pre">--repos</span></code> parameter of <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">profile</span> <span class="pre">add</span></code>.
+If a profile has a <code class="docutils literal notranslate"><span class="pre">--repos</span></code>-value that matches the name given here, that repo can be
+automatically set up during provisioning (when supported) and installed systems will also use the
+boot server as a mirror (unless <code class="docutils literal notranslate"><span class="pre">yum_post_install_mirror</span></code> is disabled in the settings file). By
+default the provisioning server will act as a mirror to systems it installs, which may not be
+desirable for laptop configurations, etc.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Distros that can make use of yum repositories during automatic installation include FC6 and later,
+RHEL 5 and later, and derivative distributions.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>See the documentation on <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">profile</span> <span class="pre">add</span></code> for more information.</p></td>
+</tr>
+<tr class="row-odd"><td><p>rpm-list</p></td>
+<td><p>By specifying a space-delimited list of package names for <code class="docutils literal notranslate"><span class="pre">--rpm-list</span></code>, one can decide to mirror
+only a part of a repo (the list of packages given, plus dependencies). This may be helpful in
+conserving time/space/bandwidth. For instance, when mirroring FC6 Extras, it may be desired to
+mirror just cobbler and koan, and skip all of the game packages. To do this, use
+<code class="docutils literal notranslate"><span class="pre">--rpm-list=&quot;cobbler</span> <span class="pre">koan&quot;</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>This option only works for <code class="docutils literal notranslate"><span class="pre">http://</span></code> and <code class="docutils literal notranslate"><span class="pre">ftp://</span></code> repositories (as it is powered by
+yumdownloader). It will be ignored for other mirror types, such as local paths and <code class="docutils literal notranslate"><span class="pre">rsync://</span></code>
+mirrors.</p></td>
+</tr>
+<tr class="row-odd"><td><p>createrepo-flags</p></td>
+<td><p>Specifies optional flags to feed into the createrepo tool, which is called when
+<code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">reposync</span></code> is run for the given repository. The defaults are <code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">cache</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>keep-updated</p></td>
+<td><p>Specifies that the named repository should not be updated during a normal “cobbler reposync”. The
+repo may still beupdated by name. The repo should be synced at least once before disabling this
+feature. See “cobbler reposync” below.</p></td>
+</tr>
+<tr class="row-odd"><td><p>mirror-locally</p></td>
+<td><p>When set to <code class="docutils literal notranslate"><span class="pre">N</span></code>, specifies that this yum repo is to be referenced directly via automatic
+installation files and not mirrored locally on the cobbler server. Only <code class="docutils literal notranslate"><span class="pre">http://</span></code> and <code class="docutils literal notranslate"><span class="pre">ftp://</span></code>
+mirror urls are supported when using <code class="docutils literal notranslate"><span class="pre">--mirror-locally=N</span></code>, you cannot use filesystem URLs.</p></td>
+</tr>
+<tr class="row-even"><td><p>priority</p></td>
+<td><p>Specifies the priority of the repository (the lower the number, the higher the priority), which
+applies to installed machines using the repositories that also have the yum priorities plugin
+installed. The default priority for the plugins 99, as is that of all cobbler mirrored
+repositories.</p></td>
+</tr>
+<tr class="row-odd"><td><p>arch</p></td>
+<td><p>Specifies what architecture the repository should use. By default the current system arch (of the
+server) is used,which may not be desirable. Using this to override the default arch allows
+mirroring of source repositories(using <code class="docutils literal notranslate"><span class="pre">--arch=src</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p>yumopts</p></td>
+<td><p>Sets values for additional yum options that the repo should use on installed systems. For instance
+if a yum plugin takes a certain parameter “alpha” and “beta”, use something like
+<code class="docutils literal notranslate"><span class="pre">--yumopts=&quot;alpha=2</span> <span class="pre">beta=3&quot;</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>breed</p></td>
+<td><p>Ordinarily cobbler’s repo system will understand what you mean without supplying this parameter,
+though you can set it explicitly if needed.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="cobbler-image">
+<h3>3.2.5. cobbler image<a class="headerlink" href="#cobbler-image" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler image
+</pre></div>
+</div>
+</div>
+<div class="section" id="cobbler-mgmtclass">
+<h3>3.2.6. cobbler mgmtclass<a class="headerlink" href="#cobbler-mgmtclass" title="Permalink to this headline">¶</a></h3>
+<p>Management classes allows cobbler to function as an configuration management system. Cobbler currently supports the
+following resource types:</p>
+<ol class="arabic simple">
+<li><p>Packages</p></li>
+<li><p>Files</p></li>
+</ol>
+<p>Resources are executed in the order listed above.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler mgmtclass add --name<span class="o">=</span>string --comment<span class="o">=</span>string <span class="o">[</span>--packages<span class="o">=</span>list<span class="o">]</span> <span class="o">[</span>--files<span class="o">=</span>list<span class="o">]</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 91%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>name</p></td>
+<td><p>The name of the mgmtclass. Use this name when adding a management class to a system, profile, or distro.
+To add amgmtclass to an existing system use something like
+(<code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">system</span> <span class="pre">edit</span> <span class="pre">--name=&quot;madhatter&quot;</span> <span class="pre">--mgmt-classes=&quot;http</span> <span class="pre">mysql&quot;</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p>comment</p></td>
+<td><p>A comment that describes the functions of the management class.</p></td>
+</tr>
+<tr class="row-even"><td><p>packages</p></td>
+<td><p>Specifies a list of package resources required by the management class.</p></td>
+</tr>
+<tr class="row-odd"><td><p>files</p></td>
+<td><p>Specifies a list of file resources required by the management class.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="cobbler-package">
+<h3>3.2.7. cobbler package<a class="headerlink" href="#cobbler-package" title="Permalink to this headline">¶</a></h3>
+<p>Package resources are managed using <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">package</span> <span class="pre">add</span></code></p>
+<p>Actions:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 74%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>install</p></td>
+<td><p>Install the package. [Default]</p></td>
+</tr>
+<tr class="row-odd"><td><p>uninstall</p></td>
+<td><p>Uninstall the package.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Attributes:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 84%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>installer</p></td>
+<td><p>Which package manager to use, vaild options [rpm|yum].</p></td>
+</tr>
+<tr class="row-odd"><td><p>version</p></td>
+<td><p>Which version of the package to install.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler package add --name<span class="o">=</span>string --comment<span class="o">=</span>string <span class="o">[</span>--action<span class="o">=</span>install<span class="p">|</span>uninstall<span class="o">]</span> --installer<span class="o">=</span>string <span class="o">[</span>--version<span class="o">=</span>string<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cobbler-file">
+<h3>3.2.8. cobbler file<a class="headerlink" href="#cobbler-file" title="Permalink to this headline">¶</a></h3>
+<p>Actions:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 78%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>create</p></td>
+<td><p>Create the file. [Default]</p></td>
+</tr>
+<tr class="row-odd"><td><p>remove</p></td>
+<td><p>Remove the file.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Attributes:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>mode</p></td>
+<td><p>Permission mode (as in chmod).</p></td>
+</tr>
+<tr class="row-odd"><td><p>group</p></td>
+<td><p>The group owner of the file.</p></td>
+</tr>
+<tr class="row-even"><td><p>user</p></td>
+<td><p>The user for the file.</p></td>
+</tr>
+<tr class="row-odd"><td><p>path</p></td>
+<td><p>The path for the file.</p></td>
+</tr>
+<tr class="row-even"><td><p>template</p></td>
+<td><p>The template for the file.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler file add --name<span class="o">=</span>string --comment<span class="o">=</span>string <span class="o">[</span>--action<span class="o">=</span>string<span class="o">]</span> --mode<span class="o">=</span>string --group<span class="o">=</span>string --owner<span class="o">=</span>string --path<span class="o">=</span>string <span class="o">[</span>--template<span class="o">=</span>string<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cobbler-aclsetup">
+<h3>3.2.9. cobbler aclsetup<a class="headerlink" href="#cobbler-aclsetup" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler aclsetup
+</pre></div>
+</div>
+</div>
+<div class="section" id="cobbler-buildiso">
+<h3>3.2.10. cobbler buildiso<a class="headerlink" href="#cobbler-buildiso" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler buildiso
+</pre></div>
+</div>
+</div>
+<div class="section" id="cobbler-import">
+<h3>3.2.11. cobbler import<a class="headerlink" href="#cobbler-import" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler import
+</pre></div>
+</div>
+</div>
+<div class="section" id="cobbler-list">
+<h3>3.2.12. cobbler list<a class="headerlink" href="#cobbler-list" title="Permalink to this headline">¶</a></h3>
+<p>This list all the names grouped by type. Identically to <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">report</span></code> there are subcommands for most of the other
+cobbler commands. (Currently: distro, profile, system, repo, image, mgmtclass, package, file)</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler list
+</pre></div>
+</div>
+</div>
+<div class="section" id="cobbler-replicate">
+<h3>3.2.13. cobbler replicate<a class="headerlink" href="#cobbler-replicate" title="Permalink to this headline">¶</a></h3>
+<p>Cobbler can replicate configurations from a master cobbler server. Each cobbler server is still expected to have a
+locally relevant <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/cobbler.conf</span></code> and <code class="docutils literal notranslate"><span class="pre">modules.conf</span></code>, as these files are not synced.</p>
+<p>This feature is intended for load-balancing, disaster-recovery, backup, or multiple geography support.</p>
+<p>Cobbler can replicate data from a central server.</p>
+<p>Objects that need to be replicated should be specified with a pattern, such as <code class="docutils literal notranslate"><span class="pre">--profiles=&quot;webservers*</span> <span class="pre">dbservers*&quot;</span></code>
+or <code class="docutils literal notranslate"><span class="pre">--systems=&quot;*.example.org&quot;</span></code>. All objects matched by the pattern, and all dependencies of those objects matched by
+the pattern (recursively) will be transferred from the remote server to the central server. This is to say if you intend
+to transfer <code class="docutils literal notranslate"><span class="pre">*.example.org</span></code> and the definition of the systems have not changed, but a profile above them has changed,
+the changes to that profile will also be transferred.</p>
+<p>In the case where objects are more recent on the local server, those changes will not be overridden locally.</p>
+<p>Common data locations will be rsync’ed from the master server unless <code class="docutils literal notranslate"><span class="pre">--omit-data</span></code> is specified.</p>
+<p>To delete objects that are no longer present on the master server, use <code class="docutils literal notranslate"><span class="pre">--prune</span></code>.</p>
+<p><strong>Warning</strong>: This will delete all object types not present on the remote server from the local server, and is recursive.
+If you use prune, it is best to manage cobbler centrally and not expect changes made on the slave servers to be
+preserved. It is not currently possible to just prune objects of a specific type.</p>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler replicate --master<span class="o">=</span>cobbler.example.org <span class="o">[</span>--distros<span class="o">=</span>pattern<span class="o">]</span> <span class="o">[</span>--profiles<span class="o">=</span>pattern<span class="o">]</span> <span class="o">[</span>--systems<span class="o">=</span>pattern<span class="o">]</span> <span class="o">[</span>--repos-pattern<span class="o">]</span> <span class="o">[</span>--images<span class="o">=</span>pattern<span class="o">]</span> <span class="o">[</span>--prune<span class="o">]</span> <span class="o">[</span>--omit-data<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cobbler-report">
+<h3>3.2.14. cobbler report<a class="headerlink" href="#cobbler-report" title="Permalink to this headline">¶</a></h3>
+<p>This lists all configuration which cobbler can obtain from the saved data. There are also <code class="docutils literal notranslate"><span class="pre">report</span></code> subcommands for
+most of the other cobbler commands. (Currently: distro, profile, system, repo, image, mgmtclass, package, file)</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler report --name<span class="o">=[</span>object-name<span class="o">]</span>
+</pre></div>
+</div>
+<p>–name=[object-name]</p>
+<p>Optional parameter which filters for object with the given name.</p>
+</div>
+<div class="section" id="cobbler-reposync">
+<h3>3.2.15. cobbler reposync<a class="headerlink" href="#cobbler-reposync" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler reposync
+</pre></div>
+</div>
+</div>
+<div class="section" id="cobbler-sync">
+<h3>3.2.16. cobbler sync<a class="headerlink" href="#cobbler-sync" title="Permalink to this headline">¶</a></h3>
+<p>The sync command is very important, though very often unnecessary for most situations. It’s primary purpose is to force
+a rewrite of all configuration files, distribution files in the TFTP root, and to restart managed services. So why is it
+unnecessary? Because in most common situations (after an object is edited, for example), Cobbler executes what is known
+as a “lite sync” which rewrites most critical files.</p>
+<p>When is a full sync required? When you are using <code class="docutils literal notranslate"><span class="pre">manage_dhcpd</span></code> (Managing DHCP) with systems that use static leases.
+In that case, a full sync is required to rewrite the <code class="docutils literal notranslate"><span class="pre">dhcpd.conf</span></code> file and to restart the dhcpd service.</p>
+<p>Cobbler sync is used to repair or rebuild the contents <code class="docutils literal notranslate"><span class="pre">/tftpboot</span></code> or <code class="docutils literal notranslate"><span class="pre">/var/www/cobbler</span></code> when something has changed
+behind the scenes. It brings the filesystem up to date with the configuration as understood by cobbler.</p>
+<p>Sync should be run whenever files in <code class="docutils literal notranslate"><span class="pre">/var/lib/cobbler</span></code> are manually edited (which is not recommended except for the
+settings file) or when making changes to automatic installation files. In practice, this should not happen often, though
+running sync too many times does not cause any adverse effects.</p>
+<p>If using cobbler to manage a DHCP and/or DNS server (see the advanced section of this manpage), sync does need to be run
+after systems are added to regenerate and reload the DHCP/DNS configurations.</p>
+<p>The sync process can also be kicked off from the web interface.</p>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler sync
+</pre></div>
+</div>
+</div>
+<div class="section" id="cobbler-validate-autoinstalls">
+<h3>3.2.17. cobbler validate-autoinstalls<a class="headerlink" href="#cobbler-validate-autoinstalls" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler validate-autoinstalls
+</pre></div>
+</div>
+</div>
+<div class="section" id="cobbler-version">
+<h3>3.2.18. cobbler version<a class="headerlink" href="#cobbler-version" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler version
+</pre></div>
+</div>
+</div>
+<div class="section" id="cobbler-signature">
+<h3>3.2.19. cobbler signature<a class="headerlink" href="#cobbler-signature" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler signature
+</pre></div>
+</div>
+</div>
+<div class="section" id="cobbler-get-loaders">
+<h3>3.2.20. cobbler get-loaders<a class="headerlink" href="#cobbler-get-loaders" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler get-loaders
+</pre></div>
+</div>
+</div>
+<div class="section" id="cobbler-hardlink">
+<h3>3.2.21. cobbler hardlink<a class="headerlink" href="#cobbler-hardlink" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ cobbler hardlink
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="exit-status">
+<h2>3.3. EXIT_STATUS<a class="headerlink" href="#exit-status" title="Permalink to this headline">¶</a></h2>
+<p>cobbler’s command line returns a zero for success and non-zero for failure.</p>
+</div>
+<div class="section" id="additional-help">
+<h2>3.4. Additional Help<a class="headerlink" href="#additional-help" title="Permalink to this headline">¶</a></h2>
+<p>We have a Gitter Channel and you also can ask questions as Github-Issues. The IRC Channel on Freenode (#cobbler) is not
+that active but sometimes there are people who can help you.</p>
+<p>The way we would prefer are Github-Issues as they are easily searchable.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cobblerd.html" class="btn btn-neutral float-right" title="4. Cobblerd" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation-guide.html" class="btn btn-neutral float-left" title="2. Install Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

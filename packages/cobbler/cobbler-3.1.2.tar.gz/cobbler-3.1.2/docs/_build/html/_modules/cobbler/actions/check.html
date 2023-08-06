@@ -1,0 +1,541 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.actions.check &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.actions.check</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.actions.check</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">clogger</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">cobbler.utils</span> <span class="k">import</span> <span class="n">_</span>
+
+
+<div class="viewcode-block" id="CobblerCheck"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck">[docs]</a><span class="k">class</span> <span class="nc">CobblerCheck</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validates whether the system is reasonably well configured for</span>
+<span class="sd">    serving up content.  This is the code behind &#39;cobbler check&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="n">collection_mgr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span> <span class="o">=</span> <span class="n">clogger</span><span class="o">.</span><span class="n">Logger</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+
+<div class="viewcode-block" id="CobblerCheck.run"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns None if there are no errors, otherwise returns a list</span>
+<span class="sd">        of things to correct prior to running application &#39;for real&#39;.</span>
+<span class="sd">        (The CLI usage is &quot;cobbler check&quot; before &quot;cobbler sync&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">checked_family</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_family</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_name</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_selinux</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">manage_dhcp</span><span class="p">:</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_sync</span><span class="p">()</span><span class="o">.</span><span class="n">dhcp</span><span class="o">.</span><span class="n">what</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;isc&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">check_dhcpd_bin</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">check_dhcpd_conf</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">check_service</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="s2">&quot;dhcpd&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;dnsmasq&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">check_dnsmasq_bin</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">check_service</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="s2">&quot;dnsmasq&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">manage_dns</span><span class="p">:</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_sync</span><span class="p">()</span><span class="o">.</span><span class="n">dns</span><span class="o">.</span><span class="n">what</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;bind&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">check_bind_bin</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">check_service</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="s2">&quot;named&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;dnsmasq&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">manage_dhcp</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">check_dnsmasq_bin</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">check_service</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="s2">&quot;dnsmasq&quot;</span><span class="p">)</span>
+
+        <span class="n">mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_sync</span><span class="p">()</span><span class="o">.</span><span class="n">tftpd</span><span class="o">.</span><span class="n">what</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;in_tftpd&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_tftpd_dir</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;tftpd_py&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_ctftpd_dir</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_service</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="s2">&quot;cobblerd&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_bootloaders</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_for_wget_curl</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_rsync_conf</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_iptables</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_yum</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_debmirror</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_for_ksvalidator</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_for_default_password</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_for_unreferenced_repos</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_for_unsynced_repos</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_for_cman</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">status</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_for_ksvalidator"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_for_ksvalidator">[docs]</a>    <span class="k">def</span> <span class="nf">check_for_ksvalidator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="c1"># ubuntu also identifies as &quot;debian&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checked_family</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;debian&quot;</span><span class="p">,</span> <span class="s2">&quot;suse&quot;</span><span class="p">]:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/bin/ksvalidator&quot;</span><span class="p">):</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;ksvalidator was not found, install pykickstart&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_for_cman"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_for_cman">[docs]</a>    <span class="k">def</span> <span class="nf">check_for_cman</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checked_family</span> <span class="o">==</span> <span class="s2">&quot;suse&quot;</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="c1"># not doing rpm -q here to be cross-distro friendly</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/sbin/fence_ilo&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/sbin/fence_ilo&quot;</span><span class="p">):</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;fencing tools were not found, and are required to use the (optional) power management features. install cman or fence-agents to use them&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_service"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_service">[docs]</a>    <span class="k">def</span> <span class="nf">check_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">which</span><span class="p">,</span> <span class="n">notes</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">notes</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">notes</span> <span class="o">=</span> <span class="s2">&quot; (NOTE: </span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="n">notes</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checked_family</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;redhat&quot;</span><span class="p">,</span> <span class="s2">&quot;suse&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/etc/rc.d/init.d/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">which</span><span class="p">):</span>
+                <span class="n">rc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;/sbin/service </span><span class="si">%s</span><span class="s2"> status &gt; /dev/null 2&gt;/dev/null&quot;</span> <span class="o">%</span> <span class="n">which</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;service </span><span class="si">%s</span><span class="s2"> is not running</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">which</span><span class="p">,</span> <span class="n">notes</span><span class="p">))</span>
+                <span class="k">return</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">checked_family</span> <span class="o">==</span> <span class="s2">&quot;debian&quot;</span><span class="p">:</span>
+            <span class="c1"># we still use /etc/init.d</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/etc/init.d/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">which</span><span class="p">):</span>
+                <span class="n">rc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;/etc/init.d/</span><span class="si">%s</span><span class="s2"> status /dev/null 2&gt;/dev/null&quot;</span> <span class="o">%</span> <span class="n">which</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;service </span><span class="si">%s</span><span class="s2"> is not running</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">which</span><span class="p">,</span> <span class="n">notes</span><span class="p">))</span>
+                <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Unknown distribution type, cannot check for running service </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">which</span><span class="p">))</span>
+            <span class="k">return</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_iptables"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_iptables">[docs]</a>    <span class="k">def</span> <span class="nf">check_iptables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/etc/rc.d/init.d/iptables&quot;</span><span class="p">):</span>
+            <span class="n">rc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;/sbin/service iptables status &gt;/dev/null 2&gt;/dev/null&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;since iptables may be running, ensure 69, 80/443, and </span><span class="si">%(xmlrpc)s</span><span class="s2"> are unblocked&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">{</span><span class="s2">&quot;xmlrpc&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">xmlrpc_port</span><span class="p">})</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_yum"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_yum">[docs]</a>    <span class="k">def</span> <span class="nf">check_yum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checked_family</span> <span class="o">==</span> <span class="s2">&quot;debian&quot;</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/bin/createrepo&quot;</span><span class="p">):</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;createrepo package is not installed, needed for cobbler import and cobbler reposync, install createrepo?&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/bin/dnf&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/bin/reposync&quot;</span><span class="p">):</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;reposync not installed, install yum-utils&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/bin/dnf&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/bin/reposync&quot;</span><span class="p">):</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;reposync is not installed, install yum-utils or dnf-plugins-core&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/bin/dnf&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/bin/yumdownloader&quot;</span><span class="p">):</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;yumdownloader is not installed, install yum-utils&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/bin/dnf&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/bin/yumdownloader&quot;</span><span class="p">):</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;yumdownloader is not installed, install yum-utils or dnf-plugins-core&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_debmirror"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_debmirror">[docs]</a>    <span class="k">def</span> <span class="nf">check_debmirror</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checked_family</span> <span class="o">==</span> <span class="s2">&quot;suse&quot;</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/bin/debmirror&quot;</span><span class="p">):</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;debmirror package is not installed, it will be required to manage debian deployments and repositories&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/etc/debmirror.conf&quot;</span><span class="p">):</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/etc/debmirror.conf&quot;</span><span class="p">)</span>
+            <span class="n">re_dists</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;@dists=&#39;</span><span class="p">)</span>
+            <span class="n">re_arches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;@arches=&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">re_dists</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
+                    <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;comment out &#39;dists&#39; on /etc/debmirror.conf for proper debian support&quot;</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">re_arches</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
+                    <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;comment out &#39;arches&#39; on /etc/debmirror.conf for proper debian support&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_name"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_name">[docs]</a>    <span class="k">def</span> <span class="nf">check_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If the server name in the config file is still set to localhost</span>
+<span class="sd">        automatic installations run from koan will not have proper kernel line</span>
+<span class="sd">        parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">server</span> <span class="o">==</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">:</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;The &#39;server&#39; field in /etc/cobbler/settings must be set to something other than localhost, or automatic installation features will not work.  This should be a resolvable hostname or IP for the boot server as reachable by all machines that will use it.&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">next_server</span> <span class="o">==</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">:</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;For PXE to be functional, the &#39;next_server&#39; field in /etc/cobbler/settings must be set to something other than 127.0.0.1, and should match the IP of the boot server on the PXE network.&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_selinux"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_selinux">[docs]</a>    <span class="k">def</span> <span class="nf">check_selinux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Suggests various SELinux rules changes to run Cobbler happily with</span>
+<span class="sd">        SELinux in enforcing mode.  FIXME: this method could use some</span>
+<span class="sd">        refactoring in the future.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checked_family</span> <span class="o">==</span> <span class="s2">&quot;debian&quot;</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">is_selinux_enabled</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">enabled</span><span class="p">:</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;SELinux is enabled. Please review the following wiki page for details on ensuring cobbler works correctly in your SELinux environment:</span><span class="se">\n</span><span class="s2">    https://github.com/cobbler/cobbler/wiki/Selinux&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_for_default_password"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_for_default_password">[docs]</a>    <span class="k">def</span> <span class="nf">check_for_default_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="n">default_pass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">default_password_crypted</span>
+        <span class="k">if</span> <span class="n">default_pass</span> <span class="o">==</span> <span class="s2">&quot;$1$mF86/UHC$WvcIcX2t6crBz2onWxyac.&quot;</span><span class="p">:</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;The default password used by the sample templates for newly installed machines (default_password_crypted in /etc/cobbler/settings) is still set to &#39;cobbler&#39; and should be changed, try: </span><span class="se">\&quot;</span><span class="s2">openssl passwd -1 -salt &#39;random-phrase-here&#39; &#39;your-password-here&#39;</span><span class="se">\&quot;</span><span class="s2"> to generate new one&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_for_unreferenced_repos"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_for_unreferenced_repos">[docs]</a>    <span class="k">def</span> <span class="nf">check_for_unreferenced_repos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="n">repos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">referenced</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">not_found</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">repos</span><span class="p">():</span>
+            <span class="n">repos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">profiles</span><span class="p">():</span>
+            <span class="n">my_repos</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">repos</span>
+            <span class="k">if</span> <span class="n">my_repos</span> <span class="o">!=</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">:</span>
+                <span class="n">referenced</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">my_repos</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">referenced</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">r</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">repos</span> <span class="ow">and</span> <span class="n">r</span> <span class="o">!=</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">:</span>
+                <span class="n">not_found</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">not_found</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;One or more repos referenced by profile objects is no longer defined in cobbler: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">not_found</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_for_unsynced_repos"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_for_unsynced_repos">[docs]</a>    <span class="k">def</span> <span class="nf">check_for_unsynced_repos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="n">need_sync</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">repos</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">mirror_locally</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">lookfor</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;repo_mirror&quot;</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">lookfor</span><span class="p">):</span>
+                    <span class="n">need_sync</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">need_sync</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;One or more repos need to be processed by cobbler reposync for the first time before automating installations using them: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">need_sync</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_dhcpd_bin"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_dhcpd_bin">[docs]</a>    <span class="k">def</span> <span class="nf">check_dhcpd_bin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if dhcpd is installed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/sbin/dhcpd&quot;</span><span class="p">):</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;dhcpd is not installed&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_dnsmasq_bin"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_dnsmasq_bin">[docs]</a>    <span class="k">def</span> <span class="nf">check_dnsmasq_bin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if dnsmasq is installed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;dnsmasq --help&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Valid options&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;dnsmasq is not installed and/or in path&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_bind_bin"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_bind_bin">[docs]</a>    <span class="k">def</span> <span class="nf">check_bind_bin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if bind is installed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;named -v&quot;</span><span class="p">)</span>
+        <span class="c1"># it should return something like &quot;BIND 9.6.1-P1-RedHat-9.6.1-6.P1.fc11&quot;</span>
+        <span class="k">if</span> <span class="n">rc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;BIND&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;named is not installed and/or in path&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_for_wget_curl"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_for_wget_curl">[docs]</a>    <span class="k">def</span> <span class="nf">check_for_wget_curl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check to make sure wget or curl is installed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rc1</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;which wget&quot;</span><span class="p">)</span>
+        <span class="n">rc2</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;which curl&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc1</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">rc2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Neither wget nor curl are installed and/or available in $PATH. Cobbler requires that one of these utilities be installed.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_bootloaders"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_bootloaders">[docs]</a>    <span class="k">def</span> <span class="nf">check_bootloaders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if network bootloaders are installed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># FIXME: move zpxe.rexx to loaders</span>
+
+        <span class="n">bootloaders</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;menu.c32&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/usr/share/syslinux/menu.c32&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;/usr/lib/syslinux/menu.c32&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;/var/lib/cobbler/loaders/menu.c32&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;yaboot&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/var/lib/cobbler/loaders/yaboot*&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;pxelinux.0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/usr/share/syslinux/pxelinux.0&quot;</span><span class="p">,</span>
+                           <span class="s2">&quot;/usr/lib/syslinux/pxelinux.0&quot;</span><span class="p">,</span>
+                           <span class="s2">&quot;/var/lib/cobbler/loaders/pxelinux.0&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;efi&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/var/lib/cobbler/loaders/grub-x86.efi&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;/var/lib/cobbler/loaders/grub-x86_64.efi&quot;</span><span class="p">],</span>
+        <span class="p">}</span>
+
+        <span class="c1"># look for bootloaders at the glob locations above</span>
+        <span class="n">found_bootloaders</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">bootloaders</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">loader_name</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="n">patterns</span> <span class="o">=</span> <span class="n">bootloaders</span><span class="p">[</span><span class="n">loader_name</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">:</span>
+                <span class="n">matches</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">found_bootloaders</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loader_name</span><span class="p">)</span>
+        <span class="n">not_found</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># invert the list of what we&#39;ve found so we can report on what we haven&#39;t found</span>
+        <span class="k">for</span> <span class="n">loader_name</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">loader_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">found_bootloaders</span><span class="p">:</span>
+                <span class="n">not_found</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loader_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">not_found</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;some network boot-loaders are missing from /var/lib/cobbler/loaders, you may run &#39;cobbler get-loaders&#39; to download them, or, if you only want to handle x86/x86_64 netbooting, you may ensure that you have installed a *recent* version of the syslinux package installed and can ignore this message entirely.  Files in this directory, should you want to support all architectures, should include pxelinux.0, menu.c32, and yaboot. The &#39;cobbler get-loaders&#39; command is the easiest way to resolve these requirements.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_tftpd_dir"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_tftpd_dir">[docs]</a>    <span class="k">def</span> <span class="nf">check_tftpd_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if cobbler.conf&#39;s tftpboot directory exists</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checked_family</span> <span class="o">==</span> <span class="s2">&quot;debian&quot;</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">bootloc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">tftpboot_location</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">bootloc</span><span class="p">):</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;please create directory: </span><span class="si">%(dirname)s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">{</span><span class="s2">&quot;dirname&quot;</span><span class="p">:</span> <span class="n">bootloc</span><span class="p">})</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_ctftpd_dir"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_ctftpd_dir">[docs]</a>    <span class="k">def</span> <span class="nf">check_ctftpd_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if cobbler.conf&#39;s tftpboot directory exists</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checked_family</span> <span class="o">==</span> <span class="s2">&quot;debian&quot;</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">bootloc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">tftpboot_location</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">bootloc</span><span class="p">):</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;please create directory: </span><span class="si">%(dirname)s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">{</span><span class="s2">&quot;dirname&quot;</span><span class="p">:</span> <span class="n">bootloc</span><span class="p">})</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_rsync_conf"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_rsync_conf">[docs]</a>    <span class="k">def</span> <span class="nf">check_rsync_conf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that rsync is enabled to autostart</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checked_family</span> <span class="o">==</span> <span class="s2">&quot;debian&quot;</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/lib/systemd/system/rsyncd.service&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/etc/systemd/system/multi-user.target.wants/rsyncd.service&quot;</span><span class="p">):</span>
+                <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;enable and start rsyncd.service with systemctl&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CobblerCheck.check_dhcpd_conf"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.check.CobblerCheck.check_dhcpd_conf">[docs]</a>    <span class="k">def</span> <span class="nf">check_dhcpd_conf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NOTE: this code only applies if cobbler is *NOT* set to generate</span>
+<span class="sd">        a dhcp.conf file</span>
+
+<span class="sd">        Check that dhcpd *appears* to be configured for pxe booting.</span>
+<span class="sd">        We can&#39;t assure file correctness.  Since a cobbler user might</span>
+<span class="sd">        have dhcp on another server, it&#39;s okay if it&#39;s not there and/or</span>
+<span class="sd">        not configured correctly according to automated scans.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">manage_dhcp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">dhcpd_conf</span><span class="p">):</span>
+            <span class="n">match_next</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">match_file</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">dhcpd_conf</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;next-server&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">match_next</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;filename&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">match_file</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">match_next</span><span class="p">:</span>
+                <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;expecting next-server entry in </span><span class="si">%(file)s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">dhcpd_conf</span><span class="p">})</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">match_file</span><span class="p">:</span>
+                <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;missing file: </span><span class="si">%(file)s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">dhcpd_conf</span><span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;missing file: </span><span class="si">%(file)s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">dhcpd_conf</span><span class="p">})</span></div></div>
+
+<span class="c1"># EOF</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,726 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>8.1.2. cobbler.cobbler_collections package &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="8.1.3. cobbler.items package" href="cobbler.items.html" />
+    <link rel="prev" title="8.1.1. cobbler.actions package" href="cobbler.actions.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="cobbler.html">8. Cobbler-Code Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cobbler.html#subpackages">8.1. Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="cobbler.actions.html">8.1.1. cobbler.actions package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">8.1.2. cobbler.cobbler_collections package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">8.1.2.1. Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.cobbler_collections.collection">8.1.2.2. cobbler.cobbler_collections.collection module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.cobbler_collections.distros">8.1.2.3. cobbler.cobbler_collections.distros module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.cobbler_collections.files">8.1.2.4. cobbler.cobbler_collections.files module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.cobbler_collections.images">8.1.2.5. cobbler.cobbler_collections.images module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.cobbler_collections.manager">8.1.2.6. cobbler.cobbler_collections.manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.cobbler_collections.mgmtclasses">8.1.2.7. cobbler.cobbler_collections.mgmtclasses module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.cobbler_collections.packages">8.1.2.8. cobbler.cobbler_collections.packages module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.cobbler_collections.profiles">8.1.2.9. cobbler.cobbler_collections.profiles module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.cobbler_collections.repos">8.1.2.10. cobbler.cobbler_collections.repos module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.cobbler_collections.systems">8.1.2.11. cobbler.cobbler_collections.systems module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.cobbler_collections">8.1.2.12. Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.items.html">8.1.3. cobbler.items package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.modules.html">8.1.4. cobbler.modules package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.web.html">8.1.5. cobbler.web package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#submodules">8.2. Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.api">8.3. cobbler.api module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.autoinstall_manager">8.4. cobbler.autoinstall_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.autoinstallgen">8.5. cobbler.autoinstallgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.cexceptions">8.6. cobbler.cexceptions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.cli">8.7. cobbler.cli module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.clogger">8.8. cobbler.clogger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.cobblerd">8.9. cobbler.cobblerd module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.configgen">8.10. cobbler.configgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.download_manager">8.11. cobbler.download_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.field_info">8.12. cobbler.field_info module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.module_loader">8.13. cobbler.module_loader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.power_manager">8.14. cobbler.power_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.remote">8.15. cobbler.remote module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.resource">8.16. cobbler.resource module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.serializer">8.17. cobbler.serializer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.services">8.18. cobbler.services module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.settings">8.19. cobbler.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.templar">8.20. cobbler.templar module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.template_api">8.21. cobbler.template_api module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.tftpgen">8.22. cobbler.tftpgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.utils">8.23. cobbler.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.validate">8.24. cobbler.validate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.yumgen">8.25. cobbler.yumgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler">8.26. Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="cobbler.html">8. cobbler package</a> &raquo;</li>
+        
+      <li>8.1.2. cobbler.cobbler_collections package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/code-autodoc/cobbler.cobbler_collections.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cobbler-cobbler-collections-package">
+<h1>8.1.2. cobbler.cobbler_collections package<a class="headerlink" href="#cobbler-cobbler-collections-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>8.1.2.1. Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cobbler.cobbler_collections.collection">
+<span id="cobbler-cobbler-collections-collection-module"></span><h2>8.1.2.2. cobbler.cobbler_collections.collection module<a class="headerlink" href="#module-cobbler.cobbler_collections.collection" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.cobbler_collections.collection.Collection">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.cobbler_collections.collection.</code><code class="sig-name descname">Collection</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/collection.html#Collection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.collection.Collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Base class for any serializable list of things.</p>
+<dl class="attribute">
+<dt id="cobbler.cobbler_collections.collection.Collection.SEARCH_REKEY">
+<code class="sig-name descname">SEARCH_REKEY</code><em class="property"> = {'dhcp-tag': 'dhcp_tag', 'inherit': 'parent', 'ip': 'ip_address', 'kopts': 'kernel_options', 'kopts_post': 'kernel_options_post', 'mac': 'mac_address', 'netboot-enabled': 'netboot_enabled', 'virt-auto-boot': 'virt_auto_boot', 'virt-bridge': 'virt_bridge', 'virt-cpus': 'virt_cpus', 'virt-disk-driver': 'virt_disk_driver', 'virt-file-size': 'virt_file_size', 'virt-group': 'virt_group', 'virt-host': 'virt_host', 'virt-path': 'virt_path', 'virt-ram': 'virt_ram', 'virt-type': 'virt_type'}</em><a class="headerlink" href="#cobbler.cobbler_collections.collection.Collection.SEARCH_REKEY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.collection.Collection.add">
+<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param">ref</em>, <em class="sig-param">save=False</em>, <em class="sig-param">with_copy=False</em>, <em class="sig-param">with_triggers=True</em>, <em class="sig-param">with_sync=True</em>, <em class="sig-param">quick_pxe_update=False</em>, <em class="sig-param">check_for_duplicate_names=False</em>, <em class="sig-param">check_for_duplicate_netinfo=False</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/collection.html#Collection.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.collection.Collection.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an object to the collection</p>
+<p>with_copy is a bit of a misnomer, but lots of internal add operations
+can run with “with_copy” as False. True means a real final commit, as if
+entered from the command line (or basically, by a user).</p>
+<p>With with_copy as False, the particular add call might just be being run
+during deserialization, in which case extra semantics around the add don’t really apply.
+So, in that case, don’t run any triggers and don’t deal with any actual files.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.collection.Collection.collection_type">
+<code class="sig-name descname">collection_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/collection.html#Collection.collection_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.collection.Collection.collection_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the string key for the name of the collection (for use in messages for humans)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.collection.Collection.copy">
+<code class="sig-name descname">copy</code><span class="sig-paren">(</span><em class="sig-param">ref</em>, <em class="sig-param">newname</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/collection.html#Collection.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.collection.Collection.copy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.collection.Collection.factory_produce">
+<code class="sig-name descname">factory_produce</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">seed_data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/collection.html#Collection.factory_produce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.collection.Collection.factory_produce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Must override in subclass.  Factory_produce returns an Item object
+from dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.collection.Collection.find">
+<code class="sig-name descname">find</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">return_list=False</em>, <em class="sig-param">no_errors=False</em>, <em class="sig-param">**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/collection.html#Collection.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.collection.Collection.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return first object in the collection that maches all item=’value’
+pairs passed, else return None if no objects can be found.
+When return_list is set, can also return a list.  Empty list
+would be returned instead of None in that case.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.collection.Collection.from_list">
+<code class="sig-name descname">from_list</code><span class="sig-paren">(</span><em class="sig-param">_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/collection.html#Collection.from_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.collection.Collection.from_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.collection.Collection.get">
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/collection.html#Collection.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.collection.Collection.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return object with name in the collection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.collection.Collection.remove">
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">with_delete=True</em>, <em class="sig-param">with_sync=True</em>, <em class="sig-param">with_triggers=True</em>, <em class="sig-param">recursive=False</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/collection.html#Collection.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.collection.Collection.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove an item from collection. This method must be overriden in any subclass.</p>
+<p>&#64;param: str name (item name)
+&#64;param: bool with_delete (sync and run triggers)
+&#64;param: bool with_sync (sync to server file system)
+&#64;param: bool with_triggers (run “on delete” triggers)
+&#64;param: bool recursive (recursively delete children)
+&#64;param: clogger logger (logger object)
+&#64;returns: NotImplementedException</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.collection.Collection.rename">
+<code class="sig-name descname">rename</code><span class="sig-paren">(</span><em class="sig-param">ref</em>, <em class="sig-param">newname</em>, <em class="sig-param">with_sync=True</em>, <em class="sig-param">with_triggers=True</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/collection.html#Collection.rename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.collection.Collection.rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows an object “ref” to be given a newname without affecting the rest
+of the object tree.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.collection.Collection.to_list">
+<code class="sig-name descname">to_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/collection.html#Collection.to_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.collection.Collection.to_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize the collection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.collection.Collection.to_string">
+<code class="sig-name descname">to_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/collection.html#Collection.to_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.collection.Collection.to_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a printable representation of the collection suitable
+for reading by humans or parsing from scripts.  Actually scripts
+would be better off reading the JSON in the cobbler_collections files
+directly.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.cobbler_collections.distros">
+<span id="cobbler-cobbler-collections-distros-module"></span><h2>8.1.2.3. cobbler.cobbler_collections.distros module<a class="headerlink" href="#module-cobbler.cobbler_collections.distros" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.cobbler_collections.distros.Distros">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.cobbler_collections.distros.</code><code class="sig-name descname">Distros</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/distros.html#Distros"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.distros.Distros" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cobbler.cobbler_collections.collection.Collection" title="cobbler.cobbler_collections.collection.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.cobbler_collections.collection.Collection</span></code></a></p>
+<p>A distro represents a network bootable matched set of kernels and initrd files.</p>
+<dl class="method">
+<dt id="cobbler.cobbler_collections.distros.Distros.collection_type">
+<code class="sig-name descname">collection_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/distros.html#Distros.collection_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.distros.Distros.collection_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the string key for the name of the collection (for use in messages for humans)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.distros.Distros.factory_produce">
+<code class="sig-name descname">factory_produce</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">item_dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/distros.html#Distros.factory_produce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.distros.Distros.factory_produce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a Distro forged from item_dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.distros.Distros.remove">
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">with_delete=True</em>, <em class="sig-param">with_sync=True</em>, <em class="sig-param">with_triggers=True</em>, <em class="sig-param">recursive=False</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/distros.html#Distros.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.distros.Distros.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove element named ‘name’ from the collection</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.cobbler_collections.files">
+<span id="cobbler-cobbler-collections-files-module"></span><h2>8.1.2.4. cobbler.cobbler_collections.files module<a class="headerlink" href="#module-cobbler.cobbler_collections.files" title="Permalink to this headline">¶</a></h2>
+<p>Copyright 2010, Kelsey Hightower
+Kelsey Hightower &lt;<a class="reference external" href="mailto:kelsey&#46;hightower&#37;&#52;&#48;gmail&#46;com">kelsey<span>&#46;</span>hightower<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</p>
+<p>This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+02110-1301  USA</p>
+<dl class="class">
+<dt id="cobbler.cobbler_collections.files.Files">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.cobbler_collections.files.</code><code class="sig-name descname">Files</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/files.html#Files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.files.Files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cobbler.cobbler_collections.collection.Collection" title="cobbler.cobbler_collections.collection.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.cobbler_collections.collection.Collection</span></code></a></p>
+<p>Files provide a container for file resources.</p>
+<dl class="method">
+<dt id="cobbler.cobbler_collections.files.Files.collection_type">
+<code class="sig-name descname">collection_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/files.html#Files.collection_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.files.Files.collection_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the string key for the name of the collection (for use in messages for humans)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.files.Files.factory_produce">
+<code class="sig-name descname">factory_produce</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">item_dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/files.html#Files.factory_produce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.files.Files.factory_produce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a File forged from item_dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.files.Files.remove">
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">with_delete=True</em>, <em class="sig-param">with_sync=True</em>, <em class="sig-param">with_triggers=True</em>, <em class="sig-param">recursive=False</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/files.html#Files.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.files.Files.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove element named ‘name’ from the collection</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.cobbler_collections.images">
+<span id="cobbler-cobbler-collections-images-module"></span><h2>8.1.2.5. cobbler.cobbler_collections.images module<a class="headerlink" href="#module-cobbler.cobbler_collections.images" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.cobbler_collections.images.Images">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.cobbler_collections.images.</code><code class="sig-name descname">Images</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/images.html#Images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.images.Images" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cobbler.cobbler_collections.collection.Collection" title="cobbler.cobbler_collections.collection.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.cobbler_collections.collection.Collection</span></code></a></p>
+<p>A image instance represents a ISO or virt image we want to track
+and repeatedly install.  It differs from a answer-file based installation.</p>
+<dl class="method">
+<dt id="cobbler.cobbler_collections.images.Images.collection_type">
+<code class="sig-name descname">collection_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/images.html#Images.collection_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.images.Images.collection_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the string key for the name of the collection (for use in messages for humans)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.images.Images.factory_produce">
+<code class="sig-name descname">factory_produce</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">item_dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/images.html#Images.factory_produce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.images.Images.factory_produce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a Distro forged from item_dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.images.Images.remove">
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">with_delete=True</em>, <em class="sig-param">with_sync=True</em>, <em class="sig-param">with_triggers=True</em>, <em class="sig-param">recursive=True</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/images.html#Images.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.images.Images.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove element named ‘name’ from the collection</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.cobbler_collections.manager">
+<span id="cobbler-cobbler-collections-manager-module"></span><h2>8.1.2.6. cobbler.cobbler_collections.manager module<a class="headerlink" href="#module-cobbler.cobbler_collections.manager" title="Permalink to this headline">¶</a></h2>
+<p>Repository of the Cobbler object model</p>
+<dl class="class">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.cobbler_collections.manager.</code><code class="sig-name descname">CollectionManager</code><span class="sig-paren">(</span><em class="sig-param">api</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.deserialize">
+<code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load all cobbler_collections from disk</p>
+<p>&#64;raise CX if there is an error in deserialization</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.distros">
+<code class="sig-name descname">distros</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager.distros"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.distros" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the definitive copy of the Distros collection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.files">
+<code class="sig-name descname">files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager.files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the definitive copy of the Files collection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.generate_uid">
+<code class="sig-name descname">generate_uid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager.generate_uid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.generate_uid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cobbler itself does not use this GUID’s though they are provided
+to allow for easier API linkage with other applications.
+Cobbler uses unique names in each collection as the object id
+aka primary key</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.get_items">
+<code class="sig-name descname">get_items</code><span class="sig-paren">(</span><em class="sig-param">collection_type</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager.get_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.get_items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.has_loaded">
+<code class="sig-name descname">has_loaded</code><em class="property"> = False</em><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.has_loaded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.images">
+<code class="sig-name descname">images</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager.images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.images" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the definitive copy of the Images collection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.mgmtclasses">
+<code class="sig-name descname">mgmtclasses</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager.mgmtclasses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.mgmtclasses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the definitive copy of the Mgmtclasses collection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.packages">
+<code class="sig-name descname">packages</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager.packages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.packages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the definitive copy of the Packages collection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.profiles">
+<code class="sig-name descname">profiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager.profiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.profiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the definitive copy of the Profiles collection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.repos">
+<code class="sig-name descname">repos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager.repos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.repos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the definitive copy of the Repos collection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save all cobbler_collections to disk</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.serialize_delete">
+<code class="sig-name descname">serialize_delete</code><span class="sig-paren">(</span><em class="sig-param">collection</em>, <em class="sig-param">item</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager.serialize_delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.serialize_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a collection item from disk</p>
+<p>&#64;param Collection collection collection
+&#64;param Item item collection item</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.serialize_item">
+<code class="sig-name descname">serialize_item</code><span class="sig-paren">(</span><em class="sig-param">collection</em>, <em class="sig-param">item</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager.serialize_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.serialize_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a collection item to disk</p>
+<p>&#64;param Collection collection Collection
+&#64;param Item item collection item</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.settings">
+<code class="sig-name descname">settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager.settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the definitive copy of the application settings</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.manager.CollectionManager.systems">
+<code class="sig-name descname">systems</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/manager.html#CollectionManager.systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.manager.CollectionManager.systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the definitive copy of the Systems collection</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.cobbler_collections.mgmtclasses">
+<span id="cobbler-cobbler-collections-mgmtclasses-module"></span><h2>8.1.2.7. cobbler.cobbler_collections.mgmtclasses module<a class="headerlink" href="#module-cobbler.cobbler_collections.mgmtclasses" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.cobbler_collections.mgmtclasses.Mgmtclasses">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.cobbler_collections.mgmtclasses.</code><code class="sig-name descname">Mgmtclasses</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/mgmtclasses.html#Mgmtclasses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.mgmtclasses.Mgmtclasses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cobbler.cobbler_collections.collection.Collection" title="cobbler.cobbler_collections.collection.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.cobbler_collections.collection.Collection</span></code></a></p>
+<p>A mgmtclass provides a container for management resources.</p>
+<dl class="method">
+<dt id="cobbler.cobbler_collections.mgmtclasses.Mgmtclasses.collection_type">
+<code class="sig-name descname">collection_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/mgmtclasses.html#Mgmtclasses.collection_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.mgmtclasses.Mgmtclasses.collection_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the string key for the name of the collection (for use in messages for humans)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.mgmtclasses.Mgmtclasses.factory_produce">
+<code class="sig-name descname">factory_produce</code><span class="sig-paren">(</span><em class="sig-param">config</em>, <em class="sig-param">item_dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/mgmtclasses.html#Mgmtclasses.factory_produce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.mgmtclasses.Mgmtclasses.factory_produce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a mgmtclass forged from item_dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.mgmtclasses.Mgmtclasses.remove">
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">with_delete=True</em>, <em class="sig-param">with_sync=True</em>, <em class="sig-param">with_triggers=True</em>, <em class="sig-param">recursive=False</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/mgmtclasses.html#Mgmtclasses.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.mgmtclasses.Mgmtclasses.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove element named ‘name’ from the collection</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.cobbler_collections.packages">
+<span id="cobbler-cobbler-collections-packages-module"></span><h2>8.1.2.8. cobbler.cobbler_collections.packages module<a class="headerlink" href="#module-cobbler.cobbler_collections.packages" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.cobbler_collections.packages.Packages">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.cobbler_collections.packages.</code><code class="sig-name descname">Packages</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/packages.html#Packages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.packages.Packages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cobbler.cobbler_collections.collection.Collection" title="cobbler.cobbler_collections.collection.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.cobbler_collections.collection.Collection</span></code></a></p>
+<p>A package provides a container for package resources.</p>
+<dl class="method">
+<dt id="cobbler.cobbler_collections.packages.Packages.collection_type">
+<code class="sig-name descname">collection_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/packages.html#Packages.collection_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.packages.Packages.collection_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the string key for the name of the collection (for use in messages for humans)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.packages.Packages.factory_produce">
+<code class="sig-name descname">factory_produce</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">item_dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/packages.html#Packages.factory_produce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.packages.Packages.factory_produce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a Package forged from item_dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.packages.Packages.remove">
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">with_delete=True</em>, <em class="sig-param">with_sync=True</em>, <em class="sig-param">with_triggers=True</em>, <em class="sig-param">recursive=False</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/packages.html#Packages.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.packages.Packages.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove element named ‘name’ from the collection</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.cobbler_collections.profiles">
+<span id="cobbler-cobbler-collections-profiles-module"></span><h2>8.1.2.9. cobbler.cobbler_collections.profiles module<a class="headerlink" href="#module-cobbler.cobbler_collections.profiles" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.cobbler_collections.profiles.Profiles">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.cobbler_collections.profiles.</code><code class="sig-name descname">Profiles</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/profiles.html#Profiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.profiles.Profiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cobbler.cobbler_collections.collection.Collection" title="cobbler.cobbler_collections.collection.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.cobbler_collections.collection.Collection</span></code></a></p>
+<p>A profile represents a distro paired with an automatic OS installation
+template file.</p>
+<dl class="method">
+<dt id="cobbler.cobbler_collections.profiles.Profiles.collection_type">
+<code class="sig-name descname">collection_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/profiles.html#Profiles.collection_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.profiles.Profiles.collection_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the string key for the name of the collection (for use in messages for humans)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.profiles.Profiles.factory_produce">
+<code class="sig-name descname">factory_produce</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">item_dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/profiles.html#Profiles.factory_produce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.profiles.Profiles.factory_produce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a Distro forged from item_dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.profiles.Profiles.remove">
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">with_delete=True</em>, <em class="sig-param">with_sync=True</em>, <em class="sig-param">with_triggers=True</em>, <em class="sig-param">recursive=False</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/profiles.html#Profiles.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.profiles.Profiles.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove element named ‘name’ from the collection</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.cobbler_collections.repos">
+<span id="cobbler-cobbler-collections-repos-module"></span><h2>8.1.2.10. cobbler.cobbler_collections.repos module<a class="headerlink" href="#module-cobbler.cobbler_collections.repos" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.cobbler_collections.repos.Repos">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.cobbler_collections.repos.</code><code class="sig-name descname">Repos</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/repos.html#Repos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.repos.Repos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cobbler.cobbler_collections.collection.Collection" title="cobbler.cobbler_collections.collection.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.cobbler_collections.collection.Collection</span></code></a></p>
+<p>Repositories in cobbler are way to create a local mirror of a yum repository.
+When used in conjunction with a mirrored distro tree (see “cobbler import”),
+outside bandwidth needs can be reduced and/or eliminated.</p>
+<dl class="method">
+<dt id="cobbler.cobbler_collections.repos.Repos.collection_type">
+<code class="sig-name descname">collection_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/repos.html#Repos.collection_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.repos.Repos.collection_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the string key for the name of the collection (for use in messages for humans)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.repos.Repos.factory_produce">
+<code class="sig-name descname">factory_produce</code><span class="sig-paren">(</span><em class="sig-param">config</em>, <em class="sig-param">item_dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/repos.html#Repos.factory_produce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.repos.Repos.factory_produce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a Distro forged from item_dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.repos.Repos.remove">
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">with_delete=True</em>, <em class="sig-param">with_sync=True</em>, <em class="sig-param">with_triggers=True</em>, <em class="sig-param">recursive=False</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/repos.html#Repos.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.repos.Repos.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove element named ‘name’ from the collection</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.cobbler_collections.systems">
+<span id="cobbler-cobbler-collections-systems-module"></span><h2>8.1.2.11. cobbler.cobbler_collections.systems module<a class="headerlink" href="#module-cobbler.cobbler_collections.systems" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.cobbler_collections.systems.Systems">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.cobbler_collections.systems.</code><code class="sig-name descname">Systems</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/systems.html#Systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.systems.Systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cobbler.cobbler_collections.collection.Collection" title="cobbler.cobbler_collections.collection.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.cobbler_collections.collection.Collection</span></code></a></p>
+<p>Systems are hostnames/MACs/IP names and the associated profile
+they belong to.</p>
+<dl class="method">
+<dt id="cobbler.cobbler_collections.systems.Systems.collection_type">
+<code class="sig-name descname">collection_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/systems.html#Systems.collection_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.systems.Systems.collection_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the string key for the name of the collection (for use in messages for humans)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.systems.Systems.factory_produce">
+<code class="sig-name descname">factory_produce</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">item_dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/systems.html#Systems.factory_produce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.systems.Systems.factory_produce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a Distro forged from item_dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.cobbler_collections.systems.Systems.remove">
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">with_delete=True</em>, <em class="sig-param">with_sync=True</em>, <em class="sig-param">with_triggers=True</em>, <em class="sig-param">recursive=False</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/cobbler_collections/systems.html#Systems.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.cobbler_collections.systems.Systems.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove element named ‘name’ from the collection</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.cobbler_collections">
+<span id="module-contents"></span><h2>8.1.2.12. Module contents<a class="headerlink" href="#module-cobbler.cobbler_collections" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cobbler.items.html" class="btn btn-neutral float-right" title="8.1.3. cobbler.items package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cobbler.actions.html" class="btn btn-neutral float-left" title="8.1.1. cobbler.actions package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

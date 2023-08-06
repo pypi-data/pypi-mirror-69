@@ -1,0 +1,879 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.actions.buildiso &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.actions.buildiso</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.actions.buildiso</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Builds bootable CD images that have PXE-equivalent behavior</span>
+<span class="sd">for all Cobbler distros/profiles/systems currently in memory.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">clogger</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+
+
+<div class="viewcode-block" id="BuildIso"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.buildiso.BuildIso">[docs]</a><span class="k">class</span> <span class="nc">BuildIso</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handles conversion of internal state to the isolinux tree layout</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="n">collection_mgr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distros</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">distros</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">profiles</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">systems</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">systems</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distros</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">distros</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distmap</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distctr</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span> <span class="o">=</span> <span class="n">clogger</span><span class="o">.</span><span class="n">Logger</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+        <span class="c1"># grab the header from buildiso.header file</span>
+        <span class="n">header_src</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">iso_template_dir</span><span class="p">,</span> <span class="s2">&quot;buildiso.template&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iso_template</span> <span class="o">=</span> <span class="n">header_src</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">header_src</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BuildIso.add_remaining_kopts"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.buildiso.BuildIso.add_remaining_kopts">[docs]</a>    <span class="k">def</span> <span class="nf">add_remaining_kopts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">koptdict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add remaining kernel_options to append_line</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">koptdict</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">k</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+                        <span class="n">_i</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="s1">&#39; &#39;</span> <span class="ow">in</span> <span class="n">_i</span><span class="p">:</span>
+                            <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2">=&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">_i</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">_i</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_v</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="s1">&#39; &#39;</span> <span class="ow">in</span> <span class="n">_v</span><span class="p">:</span>
+                        <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2">=&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">_v</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">_v</span><span class="p">)</span>
+        <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">append_line</span></div>
+
+<div class="viewcode-block" id="BuildIso.make_shorter"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.buildiso.BuildIso.make_shorter">[docs]</a>    <span class="k">def</span> <span class="nf">make_shorter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a short distro identifier</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">distname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">distmap</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">distmap</span><span class="p">[</span><span class="n">distname</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">distctr</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">distmap</span><span class="p">[</span><span class="n">distname</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distctr</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distctr</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BuildIso.copy_boot_files"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.buildiso.BuildIso.copy_boot_files">[docs]</a>    <span class="k">def</span> <span class="nf">copy_boot_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span> <span class="n">destdir</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Copy kernel/initrd to destdir with (optional) newfile prefix</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">kernel</span><span class="p">):</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;path does not exist: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">distro</span><span class="o">.</span><span class="n">kernel</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">initrd</span><span class="p">):</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;path does not exist: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">distro</span><span class="o">.</span><span class="n">initrd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prefix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">kernel</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">destdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">kernel</span><span class="p">)))</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">initrd</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">destdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">initrd</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">kernel</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">destdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.krn&quot;</span> <span class="o">%</span> <span class="n">prefix</span><span class="p">))</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">initrd</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">destdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.img&quot;</span> <span class="o">%</span> <span class="n">prefix</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="BuildIso.filter_systems_or_profiles"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.buildiso.BuildIso.filter_systems_or_profiles">[docs]</a>    <span class="k">def</span> <span class="nf">filter_systems_or_profiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selected_items</span><span class="p">,</span> <span class="n">list_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a list of valid profile or system objects selected from all profiles</span>
+<span class="sd">        or systems by name, or everything if selected_items is empty</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">list_type</span> <span class="o">==</span> <span class="s1">&#39;profile&#39;</span><span class="p">:</span>
+            <span class="n">all_objs</span> <span class="o">=</span> <span class="p">[</span><span class="n">profile</span> <span class="k">for</span> <span class="n">profile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">profiles</span><span class="p">()]</span>
+        <span class="k">elif</span> <span class="n">list_type</span> <span class="o">==</span> <span class="s1">&#39;system&#39;</span><span class="p">:</span>
+            <span class="n">all_objs</span> <span class="o">=</span> <span class="p">[</span><span class="n">system</span> <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">systems</span><span class="p">()]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;Invalid list_type argument: &quot;</span> <span class="o">+</span> <span class="n">list_type</span><span class="p">)</span>
+
+        <span class="n">all_objs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">profile</span><span class="p">:</span> <span class="n">profile</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># no profiles/systems selection is made, let&#39;s process everything</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">selected_items</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">all_objs</span>
+
+        <span class="n">which_objs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">selected_list</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_list</span><span class="p">(</span><span class="n">selected_items</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">all_objs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">selected_list</span><span class="p">:</span>
+                <span class="n">which_objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">which_objs</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;No valid systems or profiles were specified.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">which_objs</span></div>
+
+<div class="viewcode-block" id="BuildIso.generate_netboot_iso"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.buildiso.BuildIso.generate_netboot_iso">[docs]</a>    <span class="k">def</span> <span class="nf">generate_netboot_iso</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imagesdir</span><span class="p">,</span> <span class="n">isolinuxdir</span><span class="p">,</span> <span class="n">profiles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">systems</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude_dns</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create bootable CD image to be used for network installations</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">which_profiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_systems_or_profiles</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="s1">&#39;profile&#39;</span><span class="p">)</span>
+        <span class="n">which_systems</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_systems_or_profiles</span><span class="p">(</span><span class="n">systems</span><span class="p">,</span> <span class="s1">&#39;system&#39;</span><span class="p">)</span>
+
+        <span class="c1"># setup isolinux.cfg</span>
+        <span class="n">isolinuxcfg</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">isolinuxdir</span><span class="p">,</span> <span class="s2">&quot;isolinux.cfg&quot;</span><span class="p">)</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">isolinuxcfg</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span>
+        <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iso_template</span><span class="p">)</span>
+
+        <span class="c1"># iterate through selected profiles</span>
+        <span class="k">for</span> <span class="n">profile</span> <span class="ow">in</span> <span class="n">which_profiles</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;processing profile: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">profile</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+            <span class="n">distname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_shorter</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">copy_boot_files</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">isolinuxdir</span><span class="p">,</span> <span class="n">distname</span><span class="p">)</span>
+
+            <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;LABEL </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">profile</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;  MENU LABEL </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">profile</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;  kernel </span><span class="si">%s</span><span class="s2">.krn</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">distname</span><span class="p">)</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">profile</span><span class="p">)</span>
+
+            <span class="c1"># SUSE is not using &#39;text&#39;. Instead &#39;textmode&#39; is used as kernel option.</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">kopts_overwrite</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;kernel_options&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">settings</span><span class="p">())</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-z]+://.*&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">]):</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;http://</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">/cblr/svc/op/autoinstall/profile/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;server&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">http_port</span><span class="p">,</span> <span class="n">profile</span><span class="o">.</span><span class="n">name</span>
+                <span class="p">)</span>
+
+            <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot; append initrd=</span><span class="si">%s</span><span class="s2">.img&quot;</span> <span class="o">%</span> <span class="n">distname</span>
+            <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;suse&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;proxy&quot;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; proxy=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;install&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;install&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;install&quot;</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                        <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; install=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">v</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;install&quot;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; install=http://</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">/cblr/links/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;server&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">http_port</span><span class="p">,</span> <span class="n">dist</span><span class="o">.</span><span class="n">name</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="s2">&quot;autoyast&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;autoyast&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; autoyast=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;autoyast&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;autoyast&quot;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; autoyast=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;redhat&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;proxy&quot;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; proxy=</span><span class="si">%s</span><span class="s2"> http_proxy=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">])</span>
+                <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; ks=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ubuntu&quot;</span><span class="p">,</span> <span class="s2">&quot;debian&quot;</span><span class="p">]:</span>
+                <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; auto-install/enable=true url=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;proxy&quot;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; mirror/http/proxy=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">]</span>
+            <span class="n">append_line</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_remaining_kopts</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">])</span>
+            <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">append_line</span><span class="p">)</span>
+
+        <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">MENU SEPARATOR</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># iterate through all selected systems</span>
+        <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="n">which_systems</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;processing system: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">profile</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+            <span class="n">distname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_shorter</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">copy_boot_files</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">isolinuxdir</span><span class="p">,</span> <span class="n">distname</span><span class="p">)</span>
+
+            <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;LABEL </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;  MENU LABEL </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;  kernel </span><span class="si">%s</span><span class="s2">.krn</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">distname</span><span class="p">)</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-z]+://.*&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">]):</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;http://</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">/cblr/svc/op/autoinstall/system/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;server&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">http_port</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span>
+                <span class="p">)</span>
+
+            <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot; append initrd=</span><span class="si">%s</span><span class="s2">.img&quot;</span> <span class="o">%</span> <span class="n">distname</span>
+            <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;suse&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;proxy&quot;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; proxy=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;install&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;install&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; install=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;install&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;install&quot;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; install=http://</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">/cblr/links/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;server&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">http_port</span><span class="p">,</span> <span class="n">dist</span><span class="o">.</span><span class="n">name</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="s2">&quot;autoyast&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;autoyast&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; autoyast=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;autoyast&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;autoyast&quot;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; autoyast=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;redhat&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;proxy&quot;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; proxy=</span><span class="si">%s</span><span class="s2"> http_proxy=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">])</span>
+                <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; ks=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ubuntu&quot;</span><span class="p">,</span> <span class="s2">&quot;debian&quot;</span><span class="p">]:</span>
+                <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; auto-install/enable=true url=</span><span class="si">%s</span><span class="s2"> netcfg/disable_autoconfig=true&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;proxy&quot;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; mirror/http/proxy=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">]</span>
+                <span class="c1"># hostname is required as a parameter, the one in the preseed is not respected</span>
+                <span class="n">my_domain</span> <span class="o">=</span> <span class="s2">&quot;local.lan&quot;</span>
+                <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">hostname</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="c1"># if this is a FQDN, grab the first bit</span>
+                    <span class="n">my_hostname</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">hostname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">_domain</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">hostname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+                    <span class="k">if</span> <span class="n">_domain</span><span class="p">:</span>
+                        <span class="n">my_domain</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_domain</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">my_hostname</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">_domain</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+                    <span class="k">if</span> <span class="n">_domain</span><span class="p">:</span>
+                        <span class="n">my_domain</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_domain</span><span class="p">)</span>
+                <span class="c1"># at least for debian deployments configured for DHCP networking</span>
+                <span class="c1"># this values are not used, but specifying here avoids questions</span>
+                <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; hostname=</span><span class="si">%s</span><span class="s2"> domain=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">my_hostname</span><span class="p">,</span> <span class="n">my_domain</span><span class="p">)</span>
+                <span class="c1"># a similar issue exists with suite name, as installer requires</span>
+                <span class="c1"># the existence of &quot;stable&quot; in the dists directory</span>
+                <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; suite=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dist</span><span class="o">.</span><span class="n">os_version</span>
+
+            <span class="c1"># try to add static ip boot options to avoid DHCP (interface/ip/netmask/gw/dns)</span>
+            <span class="c1"># check for overrides first and clear them from kernel_options</span>
+            <span class="n">my_int</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">my_ip</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">my_mask</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">my_gw</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">my_dns</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;suse&quot;</span><span class="p">,</span> <span class="s2">&quot;redhat&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="s2">&quot;netmask&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netmask&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_mask</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netmask&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netmask&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;gateway&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;gateway&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_gw</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;gateway&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;gateway&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;redhat&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;ksdevice&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;ksdevice&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_int</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;ksdevice&quot;</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">my_int</span> <span class="o">==</span> <span class="s2">&quot;bootif&quot;</span><span class="p">:</span>
+                        <span class="n">my_int</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;ksdevice&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;ip&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;ip&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_ip</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;ip&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;ip&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;dns&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;dns&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_dns</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;dns&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;dns&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;suse&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;netdevice&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netdevice&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_int</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netdevice&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netdevice&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;hostip&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;hostip&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_ip</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;hostip&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;hostip&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;nameserver&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;nameserver&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_dns</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;nameserver&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;nameserver&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ubuntu&quot;</span><span class="p">,</span> <span class="s2">&quot;debian&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="s2">&quot;netcfg/choose_interface&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netcfg/choose_interface&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_int</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netcfg/choose_interface&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netcfg/choose_interface&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;netcfg/get_ipaddress&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netcfg/get_ipaddress&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_ip</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netcfg/get_ipaddress&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netcfg/get_ipaddress&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;netcfg/get_netmask&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netcfg/get_netmask&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_mask</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netcfg/get_netmask&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netcfg/get_netmask&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;netcfg/get_gateway&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netcfg/get_gateway&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_gw</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netcfg/get_gateway&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netcfg/get_gateway&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;netcfg/get_nameservers&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netcfg/get_nameservers&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_dns</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netcfg/get_nameservers&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;netcfg/get_nameservers&quot;</span><span class="p">]</span>
+
+            <span class="c1"># if no kernel_options overrides are present find the management interface</span>
+            <span class="c1"># do nothing when zero or multiple management interfaces are found</span>
+            <span class="k">if</span> <span class="n">my_int</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">mgmt_ints</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">mgmt_ints_multi</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">slave_ints</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;interfaces&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="n">iname</span><span class="p">,</span> <span class="n">idata</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;interfaces&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                        <span class="k">if</span> <span class="n">idata</span><span class="p">[</span><span class="s2">&quot;management&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">idata</span><span class="p">[</span><span class="s2">&quot;interface_type&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bond&quot;</span><span class="p">,</span> <span class="s2">&quot;bridge&quot;</span><span class="p">]:</span>
+                            <span class="c1"># bonded/bridged management interface</span>
+                            <span class="n">mgmt_ints_multi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">iname</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">idata</span><span class="p">[</span><span class="s2">&quot;management&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">idata</span><span class="p">[</span><span class="s2">&quot;interface_type&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bond&quot;</span><span class="p">,</span> <span class="s2">&quot;bridge&quot;</span><span class="p">,</span> <span class="s2">&quot;bond_slave&quot;</span><span class="p">,</span> <span class="s2">&quot;bridge_slave&quot;</span><span class="p">,</span> <span class="s2">&quot;bonded_bridge_slave&quot;</span><span class="p">]:</span>
+                            <span class="c1"># single management interface</span>
+                            <span class="n">mgmt_ints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">iname</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mgmt_ints_multi</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">mgmt_ints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># bonded/bridged management interface, find a slave interface</span>
+                    <span class="c1"># if eth0 is a slave use that (it&#39;s what people expect)</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="n">iname</span><span class="p">,</span> <span class="n">idata</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;interfaces&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                        <span class="k">if</span> <span class="n">idata</span><span class="p">[</span><span class="s2">&quot;interface_type&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bond_slave&quot;</span><span class="p">,</span> <span class="s2">&quot;bridge_slave&quot;</span><span class="p">,</span> <span class="s2">&quot;bonded_bridge_slave&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">idata</span><span class="p">[</span><span class="s2">&quot;interface_master&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">mgmt_ints_multi</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                            <span class="n">slave_ints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">iname</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="s2">&quot;eth0&quot;</span> <span class="ow">in</span> <span class="n">slave_ints</span><span class="p">:</span>
+                        <span class="n">my_int</span> <span class="o">=</span> <span class="s2">&quot;eth0&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">my_int</span> <span class="o">=</span> <span class="n">slave_ints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="c1"># set my_ip from the bonded/bridged interface here</span>
+                    <span class="n">my_ip</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;ip_address_&quot;</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;interface_master_&quot;</span> <span class="o">+</span> <span class="n">my_int</span><span class="p">]]</span>
+                    <span class="n">my_mask</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;netmask_&quot;</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;interface_master_&quot;</span> <span class="o">+</span> <span class="n">my_int</span><span class="p">]]</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mgmt_ints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">mgmt_ints_multi</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># single management interface</span>
+                    <span class="n">my_int</span> <span class="o">=</span> <span class="n">mgmt_ints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># lookup tcp/ip configuration data</span>
+            <span class="k">if</span> <span class="n">my_ip</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">my_int</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">intip</span> <span class="o">=</span> <span class="s2">&quot;ip_address_&quot;</span> <span class="o">+</span> <span class="n">my_int</span>
+                <span class="k">if</span> <span class="n">intip</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="n">intip</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_ip</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;ip_address_&quot;</span> <span class="o">+</span> <span class="n">my_int</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">my_mask</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">my_int</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">intmask</span> <span class="o">=</span> <span class="s2">&quot;netmask_&quot;</span> <span class="o">+</span> <span class="n">my_int</span>
+                <span class="k">if</span> <span class="n">intmask</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="n">intmask</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_mask</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;netmask_&quot;</span> <span class="o">+</span> <span class="n">my_int</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">my_gw</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;gateway&quot;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;gateway&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_gw</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;gateway&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">my_dns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;name_servers&quot;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;name_servers&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">my_dns</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;name_servers&quot;</span><span class="p">]</span>
+
+            <span class="c1"># add information to the append_line</span>
+            <span class="k">if</span> <span class="n">my_int</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">intmac</span> <span class="o">=</span> <span class="s2">&quot;mac_address_&quot;</span> <span class="o">+</span> <span class="n">my_int</span>
+                <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;suse&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">intmac</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="n">intmac</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                        <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; netdevice=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;mac_address_&quot;</span> <span class="o">+</span> <span class="n">my_int</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; netdevice=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">my_int</span>
+                <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;redhat&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">intmac</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="n">intmac</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                        <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; ksdevice=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;mac_address_&quot;</span> <span class="o">+</span> <span class="n">my_int</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; ksdevice=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">my_int</span>
+                <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ubuntu&quot;</span><span class="p">,</span> <span class="s2">&quot;debian&quot;</span><span class="p">]:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; netcfg/choose_interface=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">my_int</span>
+
+            <span class="k">if</span> <span class="n">my_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;suse&quot;</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; hostip=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">my_ip</span>
+                <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;redhat&quot;</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; ip=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">my_ip</span>
+                <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ubuntu&quot;</span><span class="p">,</span> <span class="s2">&quot;debian&quot;</span><span class="p">]:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; netcfg/get_ipaddress=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">my_ip</span>
+
+            <span class="k">if</span> <span class="n">my_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;suse&quot;</span><span class="p">,</span> <span class="s2">&quot;redhat&quot;</span><span class="p">]:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; netmask=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">my_mask</span>
+                <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ubuntu&quot;</span><span class="p">,</span> <span class="s2">&quot;debian&quot;</span><span class="p">]:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; netcfg/get_netmask=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">my_mask</span>
+
+            <span class="k">if</span> <span class="n">my_gw</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;suse&quot;</span><span class="p">,</span> <span class="s2">&quot;redhat&quot;</span><span class="p">]:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; gateway=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">my_gw</span>
+                <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ubuntu&quot;</span><span class="p">,</span> <span class="s2">&quot;debian&quot;</span><span class="p">]:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; netcfg/get_gateway=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">my_gw</span>
+
+            <span class="k">if</span> <span class="n">exclude_dns</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">my_dns</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;suse&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">my_dns</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+                        <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; nameserver=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">my_dns</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; nameserver=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">my_dns</span>
+                <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;redhat&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">my_dns</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+                        <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; dns=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">my_dns</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; dns=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">my_dns</span>
+                <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">breed</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ubuntu&quot;</span><span class="p">,</span> <span class="s2">&quot;debian&quot;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">my_dns</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+                        <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; netcfg/get_nameservers=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">my_dns</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; netcfg/get_nameservers=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">my_dns</span>
+
+            <span class="c1"># add remaining kernel_options to append_line</span>
+            <span class="n">append_line</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_remaining_kopts</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">])</span>
+            <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">append_line</span><span class="p">)</span>
+
+        <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;MENU END</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">cfg</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BuildIso.generate_standalone_iso"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.buildiso.BuildIso.generate_standalone_iso">[docs]</a>    <span class="k">def</span> <span class="nf">generate_standalone_iso</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imagesdir</span><span class="p">,</span> <span class="n">isolinuxdir</span><span class="p">,</span> <span class="n">distname</span><span class="p">,</span> <span class="n">filesource</span><span class="p">,</span> <span class="n">airgapped</span><span class="p">,</span> <span class="n">profiles</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create bootable CD image to be used for handsoff CD installtions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get the distro object for the requested distro</span>
+        <span class="c1"># and then get all of its descendants (profiles/sub-profiles/systems)</span>
+        <span class="c1"># with sort=True for profile/system heirarchy to allow menu indenting</span>
+        <span class="n">distro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_distro</span><span class="p">(</span><span class="n">distname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">distro</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;distro </span><span class="si">%s</span><span class="s2"> was not found, aborting&quot;</span> <span class="o">%</span> <span class="n">distname</span><span class="p">)</span>
+        <span class="n">descendants</span> <span class="o">=</span> <span class="n">distro</span><span class="o">.</span><span class="n">get_descendants</span><span class="p">(</span><span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">profiles</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_list</span><span class="p">(</span><span class="n">profiles</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">filesource</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Try to determine the source from the distro kernel path</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;trying to locate source for distro&quot;</span><span class="p">)</span>
+            <span class="n">found_source</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="p">(</span><span class="n">source_head</span><span class="p">,</span> <span class="n">source_tail</span><span class="p">)</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">kernel</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">source_tail</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">source_head</span> <span class="o">==</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;distro_mirror&quot;</span><span class="p">):</span>
+                    <span class="n">filesource</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">source_head</span><span class="p">,</span> <span class="n">source_tail</span><span class="p">)</span>
+                    <span class="n">found_source</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;found source in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">filesource</span><span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="p">(</span><span class="n">source_head</span><span class="p">,</span> <span class="n">source_tail</span><span class="p">)</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">source_head</span><span class="p">)</span>
+            <span class="c1"># Can&#39;t find the source, raise an error</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">found_source</span><span class="p">:</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;Error, no installation source found. When building a standalone ISO, you must specify a --source if the distro install tree is not hosted locally&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;copying kernels and initrds for standalone distro&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">copy_boot_files</span><span class="p">(</span><span class="n">distro</span><span class="p">,</span> <span class="n">isolinuxdir</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;generating an isolinux.cfg&quot;</span><span class="p">)</span>
+        <span class="n">isolinuxcfg</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">isolinuxdir</span><span class="p">,</span> <span class="s2">&quot;isolinux.cfg&quot;</span><span class="p">)</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">isolinuxcfg</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span>
+        <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iso_template</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">airgapped</span><span class="p">:</span>
+            <span class="n">repo_names_to_copy</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">descendant</span> <span class="ow">in</span> <span class="n">descendants</span><span class="p">:</span>
+            <span class="c1"># if a list of profiles was given, skip any others and their systems</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">profiles</span> <span class="ow">and</span> <span class="p">((</span><span class="n">descendant</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s1">&#39;profile&#39;</span> <span class="ow">and</span> <span class="n">descendant</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">profiles</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">descendant</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s1">&#39;system&#39;</span> <span class="ow">and</span> <span class="n">descendant</span><span class="o">.</span><span class="n">profile</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">profiles</span><span class="p">))):</span>
+                <span class="k">continue</span>
+
+            <span class="n">menu_indent</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">descendant</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s1">&#39;system&#39;</span><span class="p">:</span>
+                <span class="n">menu_indent</span> <span class="o">=</span> <span class="mi">4</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">descendant</span><span class="p">)</span>
+
+            <span class="c1"># SUSE is not using &#39;text&#39;. Instead &#39;textmode&#39; is used as kernel option.</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">kopts_overwrite</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;kernel_options&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+
+            <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;LABEL </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">descendant</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">menu_indent</span><span class="p">:</span>
+                <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;  MENU INDENT </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">menu_indent</span><span class="p">)</span>
+            <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;  MENU LABEL </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">descendant</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;  kernel </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">kernel</span><span class="p">))</span>
+
+            <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;  append initrd=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">initrd</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;redhat&quot;</span><span class="p">:</span>
+                <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; ks=cdrom:/isolinux/</span><span class="si">%s</span><span class="s2">.cfg&quot;</span> <span class="o">%</span> <span class="n">descendant</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">if</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;suse&quot;</span><span class="p">:</span>
+                <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; autoyast=file:///isolinux/</span><span class="si">%s</span><span class="s2">.cfg install=cdrom:///&quot;</span> <span class="o">%</span> <span class="n">descendant</span><span class="o">.</span><span class="n">name</span>
+                <span class="k">if</span> <span class="s2">&quot;install&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]:</span>
+                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">][</span><span class="s2">&quot;install&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ubuntu&quot;</span><span class="p">,</span> <span class="s2">&quot;debian&quot;</span><span class="p">]:</span>
+                <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; auto-install/enable=true preseed/file=/cdrom/isolinux/</span><span class="si">%s</span><span class="s2">.cfg&quot;</span> <span class="o">%</span> <span class="n">descendant</span><span class="o">.</span><span class="n">name</span>
+
+            <span class="c1"># add remaining kernel_options to append_line</span>
+            <span class="n">append_line</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_remaining_kopts</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">])</span>
+            <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">append_line</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">descendant</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s1">&#39;profile&#39;</span><span class="p">:</span>
+                <span class="n">autoinstall_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">autoinstallgen</span><span class="o">.</span><span class="n">generate_autoinstall_for_profile</span><span class="p">(</span><span class="n">descendant</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">descendant</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s1">&#39;system&#39;</span><span class="p">:</span>
+                <span class="n">autoinstall_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">autoinstallgen</span><span class="o">.</span><span class="n">generate_autoinstall_for_system</span><span class="p">(</span><span class="n">descendant</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;redhat&quot;</span><span class="p">:</span>
+                <span class="n">cdregex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*url .*\n&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+                <span class="n">autoinstall_data</span> <span class="o">=</span> <span class="n">cdregex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;cdrom</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">autoinstall_data</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">airgapped</span><span class="p">:</span>
+                <span class="n">descendant_repos</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;repos&#39;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">repo_name</span> <span class="ow">in</span> <span class="n">descendant_repos</span><span class="p">:</span>
+                    <span class="n">repo_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_repo</span><span class="p">(</span><span class="n">repo_name</span><span class="p">)</span>
+                    <span class="n">error_fmt</span> <span class="o">=</span> <span class="p">(</span><span class="n">descendant</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">descendant</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; refers to repo &quot;</span> <span class="o">+</span> <span class="n">repo_name</span> <span class="o">+</span> <span class="s2">&quot;, which </span><span class="si">%%</span><span class="s2">s; cannot build airgapped ISO&quot;</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">repo_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">error_fmt</span> <span class="o">%</span> <span class="s2">&quot;does not exist&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">repo_obj</span><span class="o">.</span><span class="n">mirror_locally</span><span class="p">:</span>
+                        <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">error_fmt</span> <span class="o">%</span> <span class="s2">&quot;is not configured for local mirroring&quot;</span><span class="p">)</span>
+                    <span class="c1"># FIXME: don&#39;t hardcode</span>
+                    <span class="n">mirrordir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;repo_mirror&quot;</span><span class="p">,</span> <span class="n">repo_obj</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">mirrordir</span><span class="p">):</span>
+                        <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">error_fmt</span> <span class="o">%</span> <span class="s2">&quot;has a missing local mirror directory&quot;</span><span class="p">)</span>
+
+                    <span class="n">repo_names_to_copy</span><span class="p">[</span><span class="n">repo_obj</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">mirrordir</span>
+
+                    <span class="c1"># update the baseurl in autoinstall_data to use the cdrom copy of this repo</span>
+                    <span class="n">reporegex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(\s*repo --name=&quot;</span> <span class="o">+</span> <span class="n">repo_obj</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; --baseurl=).*&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+                    <span class="n">autoinstall_data</span> <span class="o">=</span> <span class="n">reporegex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\1&quot;</span> <span class="o">+</span> <span class="s2">&quot;file:///mnt/source/repo_mirror/&quot;</span> <span class="o">+</span> <span class="n">repo_obj</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">autoinstall_data</span><span class="p">)</span>
+
+                <span class="c1"># rewrite any split-tree repos, such as in redhat, to use cdrom</span>
+                <span class="n">srcreporegex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(\s*repo --name=\S+ --baseurl=).*/cobbler/distro_mirror/&quot;</span> <span class="o">+</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;/?(.*)&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+                <span class="n">autoinstall_data</span> <span class="o">=</span> <span class="n">srcreporegex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\1&quot;</span> <span class="o">+</span> <span class="s2">&quot;file:///mnt/source&quot;</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;\2&quot;</span><span class="p">,</span> <span class="n">autoinstall_data</span><span class="p">)</span>
+
+            <span class="n">autoinstall_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">isolinuxdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.cfg&quot;</span> <span class="o">%</span> <span class="n">descendant</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">autoinstall_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">autoinstall_name</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span>
+            <span class="n">autoinstall_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">autoinstall_data</span><span class="p">)</span>
+            <span class="n">autoinstall_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;done writing config&quot;</span><span class="p">)</span>
+        <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;MENU END</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">cfg</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">airgapped</span><span class="p">:</span>
+            <span class="c1"># copy any repos found in profiles or systems to the iso build</span>
+            <span class="n">repodir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">isolinuxdir</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;repo_mirror&quot;</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">repodir</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">repodir</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">repo_name</span> <span class="ow">in</span> <span class="n">repo_names_to_copy</span><span class="p">:</span>
+                <span class="n">src</span> <span class="o">=</span> <span class="n">repo_names_to_copy</span><span class="p">[</span><span class="n">repo_name</span><span class="p">]</span>
+                <span class="n">dst</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">repodir</span><span class="p">,</span> <span class="n">repo_name</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; - copying repo &#39;&quot;</span> <span class="o">+</span> <span class="n">repo_name</span> <span class="o">+</span> <span class="s2">&quot;&#39; for airgapped ISO&quot;</span><span class="p">)</span>
+
+                <span class="n">ok</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">rsync_files</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="s2">&quot;--exclude=TRANS.TBL --exclude=cache/ --no-g&quot;</span><span class="p">,</span>
+                                       <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;rsync of repo &#39;&quot;</span> <span class="o">+</span> <span class="n">repo_name</span> <span class="o">+</span> <span class="s2">&quot;&#39; failed&quot;</span><span class="p">)</span>
+
+        <span class="c1"># copy distro files last, since they take the most time</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;rsync -rlptgu --exclude=boot.cat --exclude=TRANS.TBL --exclude=isolinux/ </span><span class="si">%s</span><span class="s2">/ </span><span class="si">%s</span><span class="s2">/../&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">filesource</span><span class="p">,</span> <span class="n">isolinuxdir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;- copying distro </span><span class="si">%s</span><span class="s2"> files (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">distname</span><span class="p">,</span> <span class="n">cmd</span><span class="p">))</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;rsync of distro files failed&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BuildIso.run"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.buildiso.BuildIso.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iso</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">buildisodir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">profiles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">systems</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">distro</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">standalone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">airgapped</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude_dns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mkisofs_opts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="c1"># the airgapped option implies standalone</span>
+        <span class="k">if</span> <span class="n">airgapped</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">standalone</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># the distro option is for stand-alone builds only</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">standalone</span> <span class="ow">and</span> <span class="n">distro</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;The --distro option should only be used when creating a standalone or airgapped ISO&quot;</span><span class="p">)</span>
+        <span class="c1"># if building standalone, we only want --distro and --profiles (optional),</span>
+        <span class="c1"># systems are disallowed</span>
+        <span class="k">if</span> <span class="n">standalone</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">systems</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;When building a standalone ISO, use --distro and --profiles only, not --systems&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">distro</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;When building a standalone ISO, you must specify a --distro&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">source</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">source</span><span class="p">):</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;The source specified (</span><span class="si">%s</span><span class="s2">) does not exist&quot;</span> <span class="o">%</span> <span class="n">source</span><span class="p">)</span>
+
+            <span class="c1"># insure all profiles specified are children of the distro</span>
+            <span class="k">if</span> <span class="n">profiles</span><span class="p">:</span>
+                <span class="n">which_profiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_systems_or_profiles</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="s1">&#39;profile&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">profile</span> <span class="ow">in</span> <span class="n">which_profiles</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">profile</span><span class="o">.</span><span class="n">distro</span> <span class="o">!=</span> <span class="n">distro</span><span class="p">:</span>
+                        <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;When building a standalone ISO, all --profiles must be under --distro&quot;</span><span class="p">)</span>
+
+        <span class="c1"># if iso is none, create it in . as &quot;autoinst.iso&quot;</span>
+        <span class="k">if</span> <span class="n">iso</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">iso</span> <span class="o">=</span> <span class="s2">&quot;autoinst.iso&quot;</span>
+
+        <span class="k">if</span> <span class="n">buildisodir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">buildisodir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">buildisodir</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">buildisodir</span><span class="p">):</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;The --tempdir specified is not a directory&quot;</span><span class="p">)</span>
+
+            <span class="p">(</span><span class="n">buildisodir_head</span><span class="p">,</span> <span class="n">buildisodir_tail</span><span class="p">)</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">buildisodir</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">buildisodir_tail</span> <span class="o">!=</span> <span class="s2">&quot;buildiso&quot;</span><span class="p">:</span>
+                <span class="n">buildisodir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">buildisodir</span><span class="p">,</span> <span class="s2">&quot;buildiso&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;using/creating buildisodir: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">buildisodir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">buildisodir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">buildisodir</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">buildisodir</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">buildisodir</span><span class="p">)</span>
+
+        <span class="c1"># if base of buildisodir does not exist, fail</span>
+        <span class="c1"># create all profiles unless filtered by &quot;profiles&quot;</span>
+
+        <span class="n">imagesdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">buildisodir</span><span class="p">,</span> <span class="s2">&quot;images&quot;</span><span class="p">)</span>
+        <span class="n">isolinuxdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">buildisodir</span><span class="p">,</span> <span class="s2">&quot;isolinux&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;building tree for isolinux&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">imagesdir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">imagesdir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">isolinuxdir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">isolinuxdir</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;copying miscellaneous files&quot;</span><span class="p">)</span>
+
+        <span class="n">files_to_copy</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;isolinux.bin&quot;</span><span class="p">,</span> <span class="s2">&quot;menu.c32&quot;</span><span class="p">,</span> <span class="s2">&quot;chain.c32&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;ldlinux.c32&quot;</span><span class="p">,</span> <span class="s2">&quot;libcom32.c32&quot;</span><span class="p">,</span> <span class="s2">&quot;libutil.c32&quot;</span><span class="p">]</span>
+
+        <span class="n">optional_files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ldlinux.c32&quot;</span><span class="p">,</span> <span class="s2">&quot;libcom32.c32&quot;</span><span class="p">,</span> <span class="s2">&quot;libutil.c32&quot;</span><span class="p">]</span>
+
+        <span class="n">syslinux_folders</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;/usr/share/syslinux/&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;/usr/lib/syslinux/modules/bios/&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;/usr/lib/syslinux/&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;/usr/lib/ISOLINUX/&quot;</span><span class="p">]</span>
+
+        <span class="c1"># file_copy_success will be used to check for missing files</span>
+        <span class="n">file_copy_success</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="p">:</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files_to_copy</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">optional_files</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">syslinux_folder</span> <span class="ow">in</span> <span class="n">syslinux_folders</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">syslinux_folder</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">file_to_copy</span> <span class="ow">in</span> <span class="n">files_to_copy</span><span class="p">:</span>
+                    <span class="n">source_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">syslinux_folder</span><span class="p">,</span> <span class="n">file_to_copy</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">source_file</span><span class="p">):</span>
+                        <span class="n">utils</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">source_file</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">isolinuxdir</span><span class="p">,</span> <span class="n">file_to_copy</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
+                        <span class="n">file_copy_success</span><span class="p">[</span><span class="n">file_to_copy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="kc">False</span> <span class="ow">in</span> <span class="n">file_copy_success</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">file_copy_success</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;File not found: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;Required file(s) not found. Please check your syslinux installation&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">standalone</span> <span class="ow">or</span> <span class="n">airgapped</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generate_standalone_iso</span><span class="p">(</span><span class="n">imagesdir</span><span class="p">,</span> <span class="n">isolinuxdir</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">airgapped</span><span class="p">,</span> <span class="n">profiles</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generate_netboot_iso</span><span class="p">(</span><span class="n">imagesdir</span><span class="p">,</span> <span class="n">isolinuxdir</span><span class="p">,</span> <span class="n">profiles</span><span class="p">,</span> <span class="n">systems</span><span class="p">,</span> <span class="n">exclude_dns</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mkisofs_opts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mkisofs_opts</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mkisofs_opts</span> <span class="o">=</span> <span class="n">mkisofs_opts</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># removed --quiet</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;mkisofs -o </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> -r -b isolinux/isolinux.bin -c isolinux/boot.cat&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">iso</span><span class="p">,</span> <span class="n">mkisofs_opts</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span> <span class="o">+</span> <span class="s2">&quot; -no-emul-boot -boot-load-size 4&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; -boot-info-table -V Cobbler\ Install -R -J -T </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">buildisodir</span>
+
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;mkisofs failed&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;ISO build complete&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;You may wish to delete: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">buildisodir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;The output file is: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">iso</span><span class="p">)</span></div></div>
+
+<span class="c1"># EOF</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

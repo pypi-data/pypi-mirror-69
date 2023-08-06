@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.modules.authentication.ldap &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.modules.authentication.ldap</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.modules.authentication.ldap</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Authentication module that uses ldap</span>
+<span class="sd">Settings in /etc/cobbler/authn_ldap.conf</span>
+<span class="sd">Choice of authentication module is in /etc/cobbler/modules.conf</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+
+<span class="c1"># we&#39;ll import this just a bit later</span>
+<span class="c1"># to keep it from being a requirement</span>
+<span class="c1"># import ldap</span>
+
+<span class="kn">import</span> <span class="nn">cobbler.api</span> <span class="k">as</span> <span class="nn">cobbler_api</span>
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">CX</span>
+
+
+<div class="viewcode-block" id="register"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.authentication.html#cobbler.modules.authentication.ldap.register">[docs]</a><span class="k">def</span> <span class="nf">register</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The mandatory cobbler module registration hook.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="s2">&quot;authn&quot;</span></div>
+
+
+<div class="viewcode-block" id="authenticate"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.authentication.html#cobbler.modules.authentication.ldap.authenticate">[docs]</a><span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="n">api_handle</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validate an ldap bind, returning True/False</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">password</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="kn">import</span> <span class="nn">ldap</span>
+
+    <span class="n">server</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">ldap_server</span>
+    <span class="n">basedn</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">ldap_base_dn</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">api_handle</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">ldap_port</span><span class="p">)</span>
+    <span class="n">tls</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">ldap_tls</span>
+    <span class="n">anon_bind</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">ldap_anonymous_bind</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">ldap_search_prefix</span>
+
+    <span class="c1"># Support for LDAP client certificates</span>
+    <span class="n">tls_cacertfile</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">ldap_tls_cacertfile</span>
+    <span class="n">tls_keyfile</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">ldap_tls_keyfile</span>
+    <span class="n">tls_certfile</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">ldap_tls_certfile</span>
+
+    <span class="c1"># allow multiple servers split by a space</span>
+    <span class="k">if</span> <span class="n">server</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">):</span>
+        <span class="n">servers</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">servers</span> <span class="o">=</span> <span class="p">[</span><span class="n">server</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">tls_cacertfile</span><span class="p">:</span>
+        <span class="n">ldap</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="n">ldap</span><span class="o">.</span><span class="n">OPT_X_TLS_CACERTFILE</span><span class="p">,</span> <span class="n">tls_cacertfile</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tls_keyfile</span><span class="p">:</span>
+        <span class="n">ldap</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="n">ldap</span><span class="o">.</span><span class="n">OPT_X_TLS_KEYFILE</span><span class="p">,</span> <span class="n">tls_keyfile</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tls_certfile</span><span class="p">:</span>
+        <span class="n">ldap</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="n">ldap</span><span class="o">.</span><span class="n">OPT_X_TLS_CERTFILE</span><span class="p">,</span> <span class="n">tls_certfile</span><span class="p">)</span>
+
+    <span class="n">uri</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">server</span> <span class="ow">in</span> <span class="n">servers</span><span class="p">:</span>
+        <span class="c1"># form our ldap uri based on connection port</span>
+        <span class="k">if</span> <span class="n">port</span> <span class="o">==</span> <span class="s1">&#39;389&#39;</span><span class="p">:</span>
+            <span class="n">uri</span> <span class="o">+=</span> <span class="s1">&#39;ldap://&#39;</span> <span class="o">+</span> <span class="n">server</span>
+        <span class="k">elif</span> <span class="n">port</span> <span class="o">==</span> <span class="s1">&#39;636&#39;</span><span class="p">:</span>
+            <span class="n">uri</span> <span class="o">+=</span> <span class="s1">&#39;ldaps://&#39;</span> <span class="o">+</span> <span class="n">server</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">uri</span> <span class="o">+=</span> <span class="s1">&#39;ldap://&#39;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+        <span class="n">uri</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span>
+
+    <span class="n">uri</span> <span class="o">=</span> <span class="n">uri</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="c1"># connect to LDAP host</span>
+    <span class="nb">dir</span> <span class="o">=</span> <span class="n">ldap</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+
+    <span class="c1"># start_tls if tls is &#39;on&#39;, &#39;true&#39; or &#39;yes&#39;</span>
+    <span class="c1"># and we&#39;re not already using old-SSL</span>
+    <span class="n">tls</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">tls</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">port</span> <span class="o">!=</span> <span class="s1">&#39;636&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tls</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">]:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nb">dir</span><span class="o">.</span><span class="n">start_tls_s</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># if we&#39;re not allowed to search anonymously,</span>
+    <span class="c1"># grok the search bind settings and attempt to bind</span>
+    <span class="n">anon_bind</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">anon_bind</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">anon_bind</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">]:</span>
+        <span class="n">searchdn</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">ldap_search_bind_dn</span>
+        <span class="n">searchpw</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">ldap_search_passwd</span>
+
+        <span class="k">if</span> <span class="n">searchdn</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="ow">or</span> <span class="n">searchpw</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Missing search bind settings&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">dir</span><span class="o">.</span><span class="n">simple_bind_s</span><span class="p">(</span><span class="n">searchdn</span><span class="p">,</span> <span class="n">searchpw</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># perform a subtree search in basedn to find the full dn of the user</span>
+    <span class="c1"># TODO: what if username is a CN?  maybe it goes into the config file as well?</span>
+    <span class="nb">filter</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">username</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">dir</span><span class="o">.</span><span class="n">search_s</span><span class="p">(</span><span class="n">basedn</span><span class="p">,</span> <span class="n">ldap</span><span class="o">.</span><span class="n">SCOPE_SUBTREE</span><span class="p">,</span> <span class="nb">filter</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">dn</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+            <span class="c1"># username _should_ be unique so we should only have one result</span>
+            <span class="c1"># ignore entry; we don&#39;t need it</span>
+            <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># attempt to bind as the user</span>
+        <span class="nb">dir</span><span class="o">.</span><span class="n">simple_bind_s</span><span class="p">(</span><span class="n">dn</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+        <span class="nb">dir</span><span class="o">.</span><span class="n">unbind</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="c1"># traceback.print_exc()</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="c1"># catch-all</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">api_handle</span> <span class="o">=</span> <span class="n">cobbler_api</span><span class="o">.</span><span class="n">CobblerAPI</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">((</span><span class="n">authenticate</span><span class="p">(</span><span class="n">api_handle</span><span class="p">,</span> <span class="s2">&quot;guest&quot;</span><span class="p">,</span> <span class="s2">&quot;guest&quot;</span><span class="p">)))</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

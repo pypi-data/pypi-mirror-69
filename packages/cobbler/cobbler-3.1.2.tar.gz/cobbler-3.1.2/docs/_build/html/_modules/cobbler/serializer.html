@@ -1,0 +1,315 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.serializer &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.serializer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.serializer</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Serializer code for cobbler</span>
+<span class="sd">Now adapted to support different storage backends</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">fcntl</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">module_loader</span>
+
+<span class="n">LOCK_ENABLED</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">LOCK_HANDLE</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="handler"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.serializer.handler">[docs]</a><span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ctrl-C not allowed during writes.  Please wait.&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<span class="k">def</span> <span class="nf">__grab_lock</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dual purpose locking:</span>
+<span class="sd">    (A) flock to avoid multiple process access</span>
+<span class="sd">    (B) block signal handler to avoid ctrl+c while writing YAML</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">LOCK_ENABLED</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/var/lib/cobbler/lock&quot;</span><span class="p">):</span>
+                <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/var/lib/cobbler/lock&quot;</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">LOCK_HANDLE</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/var/lib/cobbler/lock&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+            <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">LOCK_HANDLE</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="c1"># this is pretty much FATAL, avoid corruption and quit now.</span>
+        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">__release_lock</span><span class="p">(</span><span class="n">with_changes</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">with_changes</span><span class="p">:</span>
+        <span class="c1"># this file is used to know the time of last modification on cobbler_collections</span>
+        <span class="c1"># was made -- allowing the API to work more smoothly without</span>
+        <span class="c1"># a lot of unneccessary reloads.</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/var/lib/cobbler/.mtime&quot;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">LOCK_ENABLED</span><span class="p">:</span>
+        <span class="n">LOCK_HANDLE</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/var/lib/cobbler/lock&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">LOCK_HANDLE</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
+        <span class="n">LOCK_HANDLE</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="serialize"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.serializer.serialize">[docs]</a><span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="n">collection</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save a collection to disk</span>
+
+<span class="sd">    @param Collection collection collection</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__grab_lock</span><span class="p">()</span>
+    <span class="n">storage_module</span> <span class="o">=</span> <span class="n">__get_storage_module</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">collection_type</span><span class="p">())</span>
+    <span class="n">storage_module</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+    <span class="n">__release_lock</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="serialize_item"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.serializer.serialize_item">[docs]</a><span class="k">def</span> <span class="nf">serialize_item</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save a collection item to disk</span>
+
+<span class="sd">    @param Collection collection collection</span>
+<span class="sd">    @param Item item collection item</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__grab_lock</span><span class="p">()</span>
+    <span class="n">storage_module</span> <span class="o">=</span> <span class="n">__get_storage_module</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">collection_type</span><span class="p">())</span>
+    <span class="n">storage_module</span><span class="o">.</span><span class="n">serialize_item</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+    <span class="n">__release_lock</span><span class="p">(</span><span class="n">with_changes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="serialize_delete"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.serializer.serialize_delete">[docs]</a><span class="k">def</span> <span class="nf">serialize_delete</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delete a collection item from disk</span>
+
+<span class="sd">    @param Collection collection collection</span>
+<span class="sd">    @param Item item collection item</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__grab_lock</span><span class="p">()</span>
+    <span class="n">storage_module</span> <span class="o">=</span> <span class="n">__get_storage_module</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">collection_type</span><span class="p">())</span>
+    <span class="n">storage_module</span><span class="o">.</span><span class="n">serialize_delete</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+    <span class="n">__release_lock</span><span class="p">(</span><span class="n">with_changes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="deserialize"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.serializer.deserialize">[docs]</a><span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="n">topological</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a collection from disk</span>
+
+<span class="sd">    @param Collection collection collection</span>
+<span class="sd">    @param bool topological</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__grab_lock</span><span class="p">()</span>
+    <span class="n">storage_module</span> <span class="o">=</span> <span class="n">__get_storage_module</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">collection_type</span><span class="p">())</span>
+    <span class="n">storage_module</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="n">topological</span><span class="p">)</span>
+    <span class="n">__release_lock</span><span class="p">()</span></div>
+
+
+<span class="k">def</span> <span class="nf">__get_storage_module</span><span class="p">(</span><span class="n">collection_type</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Look up serializer in /etc/cobbler/modules.conf</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">module_loader</span><span class="o">.</span><span class="n">get_module_from_file</span><span class="p">(</span><span class="s2">&quot;serializers&quot;</span><span class="p">,</span> <span class="n">collection_type</span><span class="p">,</span> <span class="s2">&quot;serializers.file&quot;</span><span class="p">)</span>
+
+<span class="c1"># EOF</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

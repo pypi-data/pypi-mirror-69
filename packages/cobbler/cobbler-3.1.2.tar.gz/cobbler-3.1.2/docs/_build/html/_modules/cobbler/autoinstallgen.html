@@ -1,0 +1,499 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.autoinstallgen &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.autoinstallgen</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.autoinstallgen</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Builds out filesystem trees/data based on the object tree.</span>
+<span class="sd">This is the code behind &#39;cobbler sync&#39;.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
+<span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>
+<span class="kn">import</span> <span class="nn">xml.dom.minidom</span>
+
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">templar</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">validate</span>
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">FileNotFoundException</span><span class="p">,</span> <span class="n">CX</span>
+<span class="kn">from</span> <span class="nn">cobbler.utils</span> <span class="k">import</span> <span class="n">_</span>
+
+
+<div class="viewcode-block" id="AutoInstallationGen"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.autoinstallgen.AutoInstallationGen">[docs]</a><span class="k">class</span> <span class="nc">AutoInstallationGen</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handles conversion of internal state to the tftpboot tree layout</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="n">collection_mgr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distros</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">distros</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">profiles</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">systems</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">systems</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repos</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">repos</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">templar</span> <span class="o">=</span> <span class="n">templar</span><span class="o">.</span><span class="n">Templar</span><span class="p">(</span><span class="n">collection_mgr</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AutoInstallationGen.createAutoYaSTScript"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.autoinstallgen.AutoInstallationGen.createAutoYaSTScript">[docs]</a>    <span class="k">def</span> <span class="nf">createAutoYaSTScript</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">script</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">newScript</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s2">&quot;script&quot;</span><span class="p">)</span>
+        <span class="n">newScriptSource</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s2">&quot;source&quot;</span><span class="p">)</span>
+        <span class="n">newScriptSourceText</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createCDATASection</span><span class="p">(</span><span class="n">script</span><span class="p">)</span>
+        <span class="n">newScript</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">newScriptSource</span><span class="p">)</span>
+
+        <span class="n">newScriptFile</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s2">&quot;filename&quot;</span><span class="p">)</span>
+        <span class="n">newScriptFileText</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createTextNode</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">newScript</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">newScriptFile</span><span class="p">)</span>
+
+        <span class="n">newScriptSource</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">newScriptSourceText</span><span class="p">)</span>
+        <span class="n">newScriptFile</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">newScriptFileText</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">newScript</span></div>
+
+<div class="viewcode-block" id="AutoInstallationGen.addAutoYaSTScript"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.autoinstallgen.AutoInstallationGen.addAutoYaSTScript">[docs]</a>    <span class="k">def</span> <span class="nf">addAutoYaSTScript</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+        <span class="n">scripts</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;scripts&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">scripts</span><span class="o">.</span><span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">newScripts</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s2">&quot;scripts&quot;</span><span class="p">)</span>
+            <span class="n">document</span><span class="o">.</span><span class="n">documentElement</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">newScripts</span><span class="p">)</span>
+            <span class="n">scripts</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;scripts&quot;</span><span class="p">)</span>
+        <span class="n">added</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">stype</span> <span class="ow">in</span> <span class="n">scripts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">childNodes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">stype</span><span class="o">.</span><span class="n">nodeType</span> <span class="o">==</span> <span class="n">stype</span><span class="o">.</span><span class="n">ELEMENT_NODE</span> <span class="ow">and</span> <span class="n">stype</span><span class="o">.</span><span class="n">tagName</span> <span class="o">==</span> <span class="nb">type</span><span class="p">:</span>
+                <span class="n">stype</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">createAutoYaSTScript</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="nb">type</span> <span class="o">+</span> <span class="s2">&quot;_cobbler&quot;</span><span class="p">))</span>
+                <span class="n">added</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">added</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">newChrootScripts</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="nb">type</span><span class="p">)</span>
+            <span class="n">newChrootScripts</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s2">&quot;config:type&quot;</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">)</span>
+            <span class="n">newChrootScripts</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">createAutoYaSTScript</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="nb">type</span> <span class="o">+</span> <span class="s2">&quot;_cobbler&quot;</span><span class="p">))</span>
+            <span class="n">scripts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">newChrootScripts</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutoInstallationGen.generate_autoyast"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.autoinstallgen.AutoInstallationGen.generate_autoyast">[docs]</a>    <span class="k">def</span> <span class="nf">generate_autoyast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raw_data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;autoyast XML file found. Checkpoint: profile=</span><span class="si">%s</span><span class="s2"> system=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">profile</span><span class="p">,</span> <span class="n">system</span><span class="p">))</span>
+        <span class="n">runpost</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">curl </span><span class="se">\&quot;</span><span class="s2">http://</span><span class="si">%s</span><span class="s2">/cblr/svc/op/trig/mode/post/</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> &gt; /dev/null&quot;</span>
+        <span class="n">runpre</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">curl </span><span class="se">\&quot;</span><span class="s2">http://</span><span class="si">%s</span><span class="s2">/cblr/svc/op/trig/mode/pre/</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> &gt; /dev/null&quot;</span>
+
+        <span class="n">what</span> <span class="o">=</span> <span class="s2">&quot;profile&quot;</span>
+        <span class="n">blend_this</span> <span class="o">=</span> <span class="n">profile</span>
+        <span class="k">if</span> <span class="n">system</span><span class="p">:</span>
+            <span class="n">what</span> <span class="o">=</span> <span class="s2">&quot;system&quot;</span>
+            <span class="n">blend_this</span> <span class="o">=</span> <span class="n">system</span>
+        <span class="n">blended</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">blend_this</span><span class="p">)</span>
+        <span class="n">srv</span> <span class="o">=</span> <span class="n">blended</span><span class="p">[</span><span class="s2">&quot;http_server&quot;</span><span class="p">]</span>
+
+        <span class="n">document</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">dom</span><span class="o">.</span><span class="n">minidom</span><span class="o">.</span><span class="n">parseString</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+
+        <span class="c1"># do we already have the #raw comment in the XML? (addComment = 0 means, don&#39;t add #raw comment)</span>
+        <span class="n">addComment</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">document</span><span class="o">.</span><span class="n">childNodes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">childNodes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">nodeType</span> <span class="o">==</span> <span class="n">node</span><span class="o">.</span><span class="n">ELEMENT_NODE</span> <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">tagName</span> <span class="o">==</span> <span class="s2">&quot;cobbler&quot;</span><span class="p">:</span>
+                <span class="n">addComment</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">break</span>
+
+        <span class="c1"># add some cobbler information to the XML file</span>
+        <span class="c1"># maybe that should be configureable</span>
+        <span class="k">if</span> <span class="n">addComment</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># startComment = document.createComment(&quot;\ncobbler_system_name=$system_name\ncobbler_server=$server\n#raw\n&quot;)</span>
+            <span class="c1"># endComment = document.createComment(&quot;\n#end raw\n&quot;)</span>
+            <span class="n">cobblerElement</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s2">&quot;cobbler&quot;</span><span class="p">)</span>
+            <span class="n">cobblerElementSystem</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">dom</span><span class="o">.</span><span class="n">minidom</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;system_name&quot;</span><span class="p">)</span>
+            <span class="n">cobblerElementProfile</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">dom</span><span class="o">.</span><span class="n">minidom</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;profile_name&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">system</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">cobblerTextSystem</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createTextNode</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">cobblerElementSystem</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">cobblerTextSystem</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">profile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">cobblerTextProfile</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createTextNode</span><span class="p">(</span><span class="n">profile</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">cobblerElementProfile</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">cobblerTextProfile</span><span class="p">)</span>
+
+            <span class="n">cobblerElementServer</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s2">&quot;server&quot;</span><span class="p">)</span>
+            <span class="n">cobblerTextServer</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createTextNode</span><span class="p">(</span><span class="n">blended</span><span class="p">[</span><span class="s2">&quot;http_server&quot;</span><span class="p">])</span>
+            <span class="n">cobblerElementServer</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">cobblerTextServer</span><span class="p">)</span>
+
+            <span class="n">cobblerElement</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">cobblerElementServer</span><span class="p">)</span>
+            <span class="n">cobblerElement</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">cobblerElementSystem</span><span class="p">)</span>
+            <span class="n">cobblerElement</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">cobblerElementProfile</span><span class="p">)</span>
+
+            <span class="c1"># FIXME: this is all broken and no longer works.</span>
+            <span class="c1">#        this entire if block should probably not be</span>
+            <span class="c1">#        hard-coded anyway</span>
+            <span class="c1"># self.api.log(document.childNodes[2].childNodes)</span>
+            <span class="c1"># document.childNodes[1].insertBefore( cobblerElement, document.childNodes[2].childNodes[1])</span>
+            <span class="c1"># document.childNodes[1].insertBefore( cobblerElement, document.childNodes[1].childNodes[0])</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">if</span> <span class="n">system</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">run_install_triggers</span><span class="p">:</span>
+            <span class="c1"># notify cobblerd when we start/finished the installation</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">addAutoYaSTScript</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="s2">&quot;pre-scripts&quot;</span><span class="p">,</span> <span class="n">runpre</span> <span class="o">%</span> <span class="p">(</span><span class="n">srv</span><span class="p">,</span> <span class="n">what</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">addAutoYaSTScript</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="s2">&quot;init-scripts&quot;</span><span class="p">,</span> <span class="n">runpost</span> <span class="o">%</span> <span class="p">(</span><span class="n">srv</span><span class="p">,</span> <span class="n">what</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">document</span><span class="o">.</span><span class="n">toxml</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="AutoInstallationGen.generate_repo_stanza"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.autoinstallgen.AutoInstallationGen.generate_repo_stanza">[docs]</a>    <span class="k">def</span> <span class="nf">generate_repo_stanza</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">is_profile</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Automatically attaches yum repos to profiles/systems in automatic</span>
+<span class="sd">        installation files (kickstart files) that contain the magic</span>
+<span class="sd">        $yum_repo_stanza variable.  This includes repo objects as well as the</span>
+<span class="sd">        yum repos that are part of split tree installs, whose data is stored</span>
+<span class="sd">        with the distro (example: RHEL5 imports)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">buf</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">blended</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+        <span class="n">repos</span> <span class="o">=</span> <span class="n">blended</span><span class="p">[</span><span class="s2">&quot;repos&quot;</span><span class="p">]</span>
+
+        <span class="c1"># keep track of URLs and be sure to not include any duplicates</span>
+        <span class="n">included</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">repo</span> <span class="ow">in</span> <span class="n">repos</span><span class="p">:</span>
+            <span class="c1"># see if this is a source_repo or not</span>
+            <span class="n">repo_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_repo</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">repo_obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">yumopts</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                <span class="k">for</span> <span class="n">opt</span> <span class="ow">in</span> <span class="n">repo_obj</span><span class="o">.</span><span class="n">yumopts</span><span class="p">:</span>
+                    <span class="c1"># filter invalid values to the repo statement in automatic</span>
+                    <span class="c1"># installation files</span>
+
+                    <span class="k">if</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;include&#39;</span><span class="p">]:</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="n">repo_obj</span><span class="o">.</span><span class="n">yumopts</span><span class="p">[</span><span class="n">opt</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                        <span class="n">yumopts</span> <span class="o">=</span> <span class="n">yumopts</span> <span class="o">+</span> <span class="s2">&quot; --</span><span class="si">%s</span><span class="s2">pkgs=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="ow">not</span> <span class="n">opt</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">validate</span><span class="o">.</span><span class="n">AUTOINSTALL_REPO_BLACKLIST</span><span class="p">:</span>
+                        <span class="n">yumopts</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="n">repo_obj</span><span class="o">.</span><span class="n">yumopts</span><span class="p">[</span><span class="n">opt</span><span class="p">])</span>
+                <span class="k">if</span> <span class="s1">&#39;enabled&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">repo_obj</span><span class="o">.</span><span class="n">yumopts</span> <span class="ow">or</span> <span class="n">repo_obj</span><span class="o">.</span><span class="n">yumopts</span><span class="p">[</span><span class="s1">&#39;enabled&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">repo_obj</span><span class="o">.</span><span class="n">mirror_locally</span><span class="p">:</span>
+                        <span class="n">baseurl</span> <span class="o">=</span> <span class="s2">&quot;http://</span><span class="si">%s</span><span class="s2">/cobbler/repo_mirror/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">blended</span><span class="p">[</span><span class="s2">&quot;http_server&quot;</span><span class="p">],</span> <span class="n">repo_obj</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">baseurl</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">included</span><span class="p">:</span>
+                            <span class="n">buf</span> <span class="o">+=</span> <span class="s2">&quot;repo --name=</span><span class="si">%s</span><span class="s2"> --baseurl=</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">repo_obj</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">baseurl</span><span class="p">)</span>
+                        <span class="n">included</span><span class="p">[</span><span class="n">baseurl</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">repo_obj</span><span class="o">.</span><span class="n">mirror</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">included</span><span class="p">:</span>
+                            <span class="n">buf</span> <span class="o">+=</span> <span class="s2">&quot;repo --name=</span><span class="si">%s</span><span class="s2"> --baseurl=</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">repo_obj</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">repo_obj</span><span class="o">.</span><span class="n">mirror</span><span class="p">,</span> <span class="n">yumopts</span><span class="p">)</span>
+                        <span class="n">included</span><span class="p">[</span><span class="n">repo_obj</span><span class="o">.</span><span class="n">mirror</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># FIXME: what to do if we can&#39;t find the repo object that is listed?</span>
+                <span class="c1"># this should be a warning at another point, probably not here</span>
+                <span class="c1"># so we&#39;ll just not list it so the automatic installation file</span>
+                <span class="c1"># will still work as nothing will be here to read the output noise.</span>
+                <span class="c1"># Logging might be useful.</span>
+                <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="n">is_profile</span><span class="p">:</span>
+            <span class="n">distro</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">distro</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+
+        <span class="n">source_repos</span> <span class="o">=</span> <span class="n">distro</span><span class="o">.</span><span class="n">source_repos</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">source_repos</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">included</span><span class="p">:</span>
+                <span class="n">buf</span> <span class="o">+=</span> <span class="s2">&quot;repo --name=source-</span><span class="si">%s</span><span class="s2"> --baseurl=</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">included</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">buf</span></div>
+
+<div class="viewcode-block" id="AutoInstallationGen.generate_config_stanza"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.autoinstallgen.AutoInstallationGen.generate_config_stanza">[docs]</a>    <span class="k">def</span> <span class="nf">generate_config_stanza</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">is_profile</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add in automatic to configure /etc/yum.repos.d on the remote system</span>
+<span class="sd">        if the automatic installation file (kickstart file) contains the magic</span>
+<span class="sd">        $yum_config_stanza.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">yum_post_install_mirror</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="n">blended</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_profile</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;http://</span><span class="si">%s</span><span class="s2">/cblr/svc/op/yum/profile/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">blended</span><span class="p">[</span><span class="s2">&quot;http_server&quot;</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;http://</span><span class="si">%s</span><span class="s2">/cblr/svc/op/yum/system/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">blended</span><span class="p">[</span><span class="s2">&quot;http_server&quot;</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;curl </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> --output /etc/yum.repos.d/cobbler-config.repo</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">url</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutoInstallationGen.generate_autoinstall_for_system"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.autoinstallgen.AutoInstallationGen.generate_autoinstall_for_system">[docs]</a>    <span class="k">def</span> <span class="nf">generate_autoinstall_for_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sys_name</span><span class="p">):</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_system</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">sys_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;# system not found&quot;</span>
+
+        <span class="n">p</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;system </span><span class="si">%(system)s</span><span class="s2"> references missing profile </span><span class="si">%(profile)s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">{</span><span class="s2">&quot;system&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;profile&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">profile</span><span class="p">})</span>
+
+        <span class="n">distro</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">distro</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># this is an image parented system, no automatic installation file available</span>
+            <span class="k">return</span> <span class="s2">&quot;# image based systems do not have automatic installation files&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_autoinstall</span><span class="p">(</span><span class="n">profile</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="n">s</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutoInstallationGen.generate_autoinstall"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.autoinstallgen.AutoInstallationGen.generate_autoinstall">[docs]</a>    <span class="k">def</span> <span class="nf">generate_autoinstall</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">system</span>
+        <span class="n">obj_type</span> <span class="o">=</span> <span class="s2">&quot;system&quot;</span>
+        <span class="k">if</span> <span class="n">system</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">profile</span>
+            <span class="n">obj_type</span> <span class="o">=</span> <span class="s2">&quot;profile&quot;</span>
+
+        <span class="n">meta</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+        <span class="n">autoinstall_rel_path</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">autoinstall_rel_path</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;# automatic installation file value missing or invalid at </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># get parent distro</span>
+        <span class="n">distro</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">system</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">distro</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+
+        <span class="c1"># make autoinstall_meta metavariable available at top level</span>
+        <span class="n">autoinstall_meta</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;autoinstall_meta&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;autoinstall_meta&quot;</span><span class="p">]</span>
+        <span class="n">meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">autoinstall_meta</span><span class="p">)</span>
+
+        <span class="c1"># add package repositories metadata to autoinstall metavariables</span>
+        <span class="k">if</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;redhat&quot;</span><span class="p">:</span>
+            <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;yum_repo_stanza&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_repo_stanza</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="n">system</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">))</span>
+            <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;yum_config_stanza&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_config_stanza</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="n">system</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="c1"># FIXME: implement something similar to zypper (SUSE based distros) and apt</span>
+        <span class="c1">#        (Debian based distros)</span>
+
+        <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">dict_to_string</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">&quot;kernel_options_post&quot;</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">:</span>
+            <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;kernel_options_post&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">dict_to_string</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;kernel_options_post&quot;</span><span class="p">])</span>
+
+        <span class="c1"># add install_source_directory metavariable to autoinstall metavariables</span>
+        <span class="c1"># if distro is based on Debian</span>
+        <span class="k">if</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;debian&quot;</span><span class="p">,</span> <span class="s2">&quot;ubuntu&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="s2">&quot;tree&quot;</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">:</span>
+            <span class="n">urlparts</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlsplit</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;tree&quot;</span><span class="p">])</span>
+            <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;install_source_directory&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">urlparts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">autoinstall_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">autoinstall_templates_dir</span><span class="p">,</span> <span class="n">autoinstall_rel_path</span><span class="p">)</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">read_file_contents</span><span class="p">(</span><span class="n">autoinstall_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">templar</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">data</span>
+        <span class="k">except</span> <span class="n">FileNotFoundException</span><span class="p">:</span>
+            <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;automatic installation file </span><span class="si">%s</span><span class="s2"> not found at </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">autoinstall_templates_dir</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">&quot;# </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">error_msg</span></div>
+
+<div class="viewcode-block" id="AutoInstallationGen.generate_autoinstall_for_profile"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.autoinstallgen.AutoInstallationGen.generate_autoinstall_for_profile">[docs]</a>    <span class="k">def</span> <span class="nf">generate_autoinstall_for_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">):</span>
+
+        <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_profile</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">g</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">g</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;# profile not found&quot;</span>
+
+        <span class="n">distro</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">distro</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;profile </span><span class="si">%(profile)s</span><span class="s2"> references missing distro </span><span class="si">%(distro)s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">{</span><span class="s2">&quot;profile&quot;</span><span class="p">:</span> <span class="n">g</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;distro&quot;</span><span class="p">:</span> <span class="n">g</span><span class="o">.</span><span class="n">distro</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_autoinstall</span><span class="p">(</span><span class="n">profile</span><span class="o">=</span><span class="n">g</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutoInstallationGen.get_last_errors"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.autoinstallgen.AutoInstallationGen.get_last_errors">[docs]</a>    <span class="k">def</span> <span class="nf">get_last_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the list of errors generated by</span>
+<span class="sd">        the last template render action</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">templar</span><span class="o">.</span><span class="n">last_errors</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

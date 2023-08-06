@@ -1,0 +1,387 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.items.image &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.items.image</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.items.image</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">string</span>
+
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">autoinstall_manager</span>
+<span class="kn">from</span> <span class="nn">cobbler.items</span> <span class="k">import</span> <span class="n">item</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">CX</span>
+<span class="kn">from</span> <span class="nn">cobbler.utils</span> <span class="k">import</span> <span class="n">_</span>
+
+
+<span class="c1"># this data structure is described in item.py</span>
+<span class="n">FIELDS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># non-editable in UI (internal)</span>
+    <span class="p">[</span><span class="s1">&#39;ctime&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;depth&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;mtime&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;parent&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;uid&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+
+    <span class="c1"># editable in UI</span>
+    <span class="p">[</span><span class="s1">&#39;arch&#39;</span><span class="p">,</span> <span class="s1">&#39;x86_64&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Architecture&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_valid_archs</span><span class="p">(),</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;autoinstall&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Automatic installation file&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Path to autoinst/answer file template&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;breed&#39;</span><span class="p">,</span> <span class="s1">&#39;redhat&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Breed&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_valid_breeds</span><span class="p">(),</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;comment&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Comment&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Free form text description&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;File&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Path to local file or nfs://user@host:path&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;image_type&#39;</span><span class="p">,</span> <span class="s2">&quot;iso&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Image Type&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;iso&quot;</span><span class="p">,</span> <span class="s2">&quot;direct&quot;</span><span class="p">,</span> <span class="s2">&quot;memdisk&quot;</span><span class="p">,</span> <span class="s2">&quot;virt-image&quot;</span><span class="p">],</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;network_count&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt NICs&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;os_version&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;OS Version&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;ex: rhel4&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_valid_os_versions</span><span class="p">(),</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;owners&#39;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_ownership&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Owners&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Owners list for authz_ownership (space delimited)&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;virt_auto_boot&#39;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:virt_auto_boot&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt Auto Boot&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Auto boot this VM?&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;virt_bridge&#39;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_virt_bridge&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt Bridge&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;virt_cpus&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt CPUs&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_disk_driver&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_virt_disk_driver&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt Disk Driver Type&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;The on-disk format for the virtualization disk&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;virt_file_size&#39;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_virt_file_size&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt File Size (GB)&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;virt_path&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt Path&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: /directory or VolGroup00&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;virt_ram&#39;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_virt_ram&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt RAM (MB)&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;virt_type&#39;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_virt_type&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt Type&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;xenpv&quot;</span><span class="p">,</span> <span class="s2">&quot;xenfv&quot;</span><span class="p">,</span> <span class="s2">&quot;qemu&quot;</span><span class="p">,</span> <span class="s2">&quot;kvm&quot;</span><span class="p">,</span> <span class="s2">&quot;vmware&quot;</span><span class="p">],</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="Image"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image">[docs]</a><span class="k">class</span> <span class="nc">Image</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Cobbler Image.  Tracks a virtual or physical image, as opposed to a answer</span>
+<span class="sd">    file (autoinst) led installation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">TYPE_NAME</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">)</span>
+    <span class="n">COLLECTION_TYPE</span> <span class="o">=</span> <span class="s2">&quot;image&quot;</span>
+
+    <span class="c1">#</span>
+    <span class="c1"># override some base class methods first (item.Item)</span>
+    <span class="c1">#</span>
+
+<div class="viewcode-block" id="Image.make_clone"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.make_clone">[docs]</a>    <span class="k">def</span> <span class="nf">make_clone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">cloned</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="p">)</span>
+        <span class="n">cloned</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">_dict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cloned</span></div>
+
+<div class="viewcode-block" id="Image.get_fields"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.get_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FIELDS</span></div>
+
+<div class="viewcode-block" id="Image.get_parent"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.get_parent">[docs]</a>    <span class="k">def</span> <span class="nf">get_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Images have no parent object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+    <span class="c1">#</span>
+    <span class="c1"># specific methods for item.Image</span>
+    <span class="c1">#</span>
+
+<div class="viewcode-block" id="Image.set_arch"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.set_arch">[docs]</a>    <span class="k">def</span> <span class="nf">set_arch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The field is mainly relevant to PXE provisioning.</span>
+<span class="sd">        see comments for set_arch in item_distro.py, this works the same.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_arch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arch</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.set_autoinstall"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.set_autoinstall">[docs]</a>    <span class="k">def</span> <span class="nf">set_autoinstall</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autoinstall</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the automatic installation file path, this must be a local file.</span>
+
+<span class="sd">        It may not make sense for images to have automatic installation templates.</span>
+<span class="sd">        It really doesn&#39;t. However if the image type is &#39;iso&#39; koan can create a virtual</span>
+<span class="sd">        floppy and shove an answer file on it, to script an installation.  This may</span>
+<span class="sd">        not be a automatic installation template per se, it might be a Windows answer</span>
+<span class="sd">        file (SIF) etc.</span>
+
+<span class="sd">        @param str local automatic installation template file path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">autoinstall_mgr</span> <span class="o">=</span> <span class="n">autoinstall_manager</span><span class="o">.</span><span class="n">AutoInstallationManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoinstall</span> <span class="o">=</span> <span class="n">autoinstall_mgr</span><span class="o">.</span><span class="n">validate_autoinstall_template_file_path</span><span class="p">(</span><span class="n">autoinstall</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.set_file"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.set_file">[docs]</a>    <span class="k">def</span> <span class="nf">set_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stores the image location.  This should be accessible on all nodes</span>
+<span class="sd">        that need to access it.  Format: can be one of the following:</span>
+<span class="sd">        * username:password@hostname:/path/to/the/filename.ext</span>
+<span class="sd">        * username@hostname:/path/to/the/filename.ext</span>
+<span class="sd">        * hostname:/path/to/the/filename.ext</span>
+<span class="sd">        * /path/to/the/filename.ext</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">auth</span> <span class="o">=</span> <span class="n">hostname</span> <span class="o">=</span> <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># validate file location format</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;://&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Invalid image file path location, it should not contain a protocol&quot;</span><span class="p">)</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="n">filename</span>
+
+        <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">auth</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)</span>
+        <span class="c1"># extract the hostname</span>
+        <span class="c1"># 1. if we have a colon, then everything before it is a hostname</span>
+        <span class="c1"># 2. if we don&#39;t have a colon, there is no hostname</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">hostname</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;/&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;invalid file: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">))</span>
+        <span class="c1"># raise an exception if we don&#39;t have a valid path</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;/&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;file contains an invalid path: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;missing filename&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;a hostname must be specified with authentication details&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">uri</span></div>
+
+<div class="viewcode-block" id="Image.set_os_version"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.set_os_version">[docs]</a>    <span class="k">def</span> <span class="nf">set_os_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">os_version</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_os_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">os_version</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.set_breed"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.set_breed">[docs]</a>    <span class="k">def</span> <span class="nf">set_breed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">breed</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_breed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">breed</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.set_image_type"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.set_image_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_image_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Indicates what type of image this is.</span>
+<span class="sd">        direct     = something like &quot;memdisk&quot;, physical only</span>
+<span class="sd">        iso        = a bootable ISO that pxe&#39;s or can be used for virt installs, virtual only</span>
+<span class="sd">        virt-clone = a cloned virtual disk (FIXME: not yet supported), virtual only</span>
+<span class="sd">        memdisk    = hdd image (physical only)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">image_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_valid_image_types</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;image type must be on of the following: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">string</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_valid_image_types</span><span class="p">(),</span> <span class="s2">&quot;, &quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_type</span> <span class="o">=</span> <span class="n">image_type</span></div>
+
+<div class="viewcode-block" id="Image.set_virt_cpus"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.set_virt_cpus">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_cpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_cpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.set_network_count"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.set_network_count">[docs]</a>    <span class="k">def</span> <span class="nf">set_network_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">num</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">num</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">network_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;invalid network count (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="n">num</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.set_virt_auto_boot"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.set_virt_auto_boot">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_auto_boot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_auto_boot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.set_virt_file_size"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.set_virt_file_size">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_file_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_file_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.set_virt_disk_driver"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.set_virt_disk_driver">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_disk_driver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_disk_driver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.set_virt_ram"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.set_virt_ram">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_ram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_ram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.set_virt_type"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.set_virt_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vtype</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vtype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.set_virt_bridge"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.set_virt_bridge">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_bridge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vbridge</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_bridge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vbridge</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.set_virt_path"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.set_virt_path">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Image.get_valid_image_types"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.image.Image.get_valid_image_types">[docs]</a>    <span class="k">def</span> <span class="nf">get_valid_image_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;direct&quot;</span><span class="p">,</span> <span class="s2">&quot;iso&quot;</span><span class="p">,</span> <span class="s2">&quot;memdisk&quot;</span><span class="p">,</span> <span class="s2">&quot;virt-clone&quot;</span><span class="p">]</span></div></div>
+
+<span class="c1"># EOF</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

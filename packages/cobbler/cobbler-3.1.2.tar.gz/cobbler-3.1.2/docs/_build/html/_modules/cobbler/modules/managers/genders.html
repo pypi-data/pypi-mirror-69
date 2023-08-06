@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.modules.managers.genders &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.modules.managers.genders</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.modules.managers.genders</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">distutils.sysconfig</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">cobbler.templar</span>
+<span class="kn">from</span> <span class="nn">cobbler.utils</span> <span class="k">import</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">CX</span>
+
+<span class="n">plib</span> <span class="o">=</span> <span class="n">distutils</span><span class="o">.</span><span class="n">sysconfig</span><span class="o">.</span><span class="n">get_python_lib</span><span class="p">()</span>
+<span class="n">mod_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/cobbler&quot;</span> <span class="o">%</span> <span class="n">plib</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mod_path</span><span class="p">)</span>
+<span class="n">template_file</span> <span class="o">=</span> <span class="s2">&quot;/etc/cobbler/genders.template&quot;</span>
+<span class="n">settings_file</span> <span class="o">=</span> <span class="s2">&quot;/etc/genders&quot;</span>
+
+
+<div class="viewcode-block" id="register"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.genders.register">[docs]</a><span class="k">def</span> <span class="nf">register</span><span class="p">():</span>
+    <span class="c1"># we should run anytime something inside of cobbler changes.</span>
+    <span class="k">return</span> <span class="s2">&quot;/var/lib/cobbler/triggers/change/*&quot;</span></div>
+
+
+<div class="viewcode-block" id="write_genders_file"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.genders.write_genders_file">[docs]</a><span class="k">def</span> <span class="nf">write_genders_file</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">profiles_genders</span><span class="p">,</span> <span class="n">distros_genders</span><span class="p">,</span> <span class="n">mgmtcls_genders</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    genders file is over-written when manage_genders is set in</span>
+<span class="sd">    /var/lib/cobbler/settings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">templar_inst</span> <span class="o">=</span> <span class="n">cobbler</span><span class="o">.</span><span class="n">templar</span><span class="o">.</span><span class="n">Templar</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">f2</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">template_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;error reading template: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">template_file</span><span class="p">)</span>
+    <span class="n">template_data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">template_data</span> <span class="o">=</span> <span class="n">f2</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">f2</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">asctime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">()),</span>
+        <span class="s2">&quot;profiles_genders&quot;</span><span class="p">:</span> <span class="n">profiles_genders</span><span class="p">,</span>
+        <span class="s2">&quot;distros_genders&quot;</span><span class="p">:</span> <span class="n">distros_genders</span><span class="p">,</span>
+        <span class="s2">&quot;mgmtcls_genders&quot;</span><span class="p">:</span> <span class="n">mgmtcls_genders</span>
+    <span class="p">}</span>
+
+    <span class="n">templar_inst</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template_data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">settings_file</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="run"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.genders.run">[docs]</a><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
+
+    <span class="c1"># do not run if we are not enabled.</span>
+    <span class="k">if</span><span class="p">(</span><span class="ow">not</span> <span class="n">api</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">manage_genders</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="n">profiles_genders</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">distros_genders</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">mgmtcls_genders</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="c1"># let&#39;s populate our dicts</span>
+
+    <span class="c1"># TODO: the lists that are created here are strictly comma separated.</span>
+    <span class="c1"># /etc/genders allows for host lists that are in the notation</span>
+    <span class="c1"># similar to: node00[01-07,08,09,70-71]</span>
+    <span class="c1"># at some point, need to come up with code to generate these types of lists.</span>
+
+    <span class="c1"># profiles</span>
+    <span class="k">for</span> <span class="n">prof</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">profiles</span><span class="p">():</span>
+        <span class="c1"># create the key</span>
+        <span class="n">profiles_genders</span><span class="p">[</span><span class="n">prof</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">find_system</span><span class="p">(</span><span class="n">profile</span><span class="o">=</span><span class="n">prof</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">return_list</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">profiles_genders</span><span class="p">[</span><span class="n">prof</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">+=</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span>
+        <span class="c1"># remove a trailing comma</span>
+        <span class="n">profiles_genders</span><span class="p">[</span><span class="n">prof</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">profiles_genders</span><span class="p">[</span><span class="n">prof</span><span class="o">.</span><span class="n">name</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">profiles_genders</span><span class="p">[</span><span class="n">prof</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="n">profiles_genders</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">prof</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># distros</span>
+    <span class="k">for</span> <span class="n">dist</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">distros</span><span class="p">():</span>
+        <span class="c1"># create the key</span>
+        <span class="n">distros_genders</span><span class="p">[</span><span class="n">dist</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">find_system</span><span class="p">(</span><span class="n">distro</span><span class="o">=</span><span class="n">dist</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">return_list</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">distros_genders</span><span class="p">[</span><span class="n">dist</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">+=</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span>
+        <span class="c1"># remove a trailing comma</span>
+        <span class="n">distros_genders</span><span class="p">[</span><span class="n">dist</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">distros_genders</span><span class="p">[</span><span class="n">dist</span><span class="o">.</span><span class="n">name</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">distros_genders</span><span class="p">[</span><span class="n">dist</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="n">distros_genders</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># mgmtclasses</span>
+    <span class="k">for</span> <span class="n">mgmtcls</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">mgmtclasses</span><span class="p">():</span>
+        <span class="c1"># create the key</span>
+        <span class="n">mgmtcls_genders</span><span class="p">[</span><span class="n">mgmtcls</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">find_system</span><span class="p">(</span><span class="n">mgmt_classes</span><span class="o">=</span><span class="n">mgmtcls</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">return_list</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">mgmtcls_genders</span><span class="p">[</span><span class="n">mgmtcls</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">+=</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span>
+        <span class="c1"># remove a trailing comma</span>
+        <span class="n">mgmtcls_genders</span><span class="p">[</span><span class="n">mgmtcls</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">mgmtcls_genders</span><span class="p">[</span><span class="n">mgmtcls</span><span class="o">.</span><span class="n">name</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">mgmtcls_genders</span><span class="p">[</span><span class="n">mgmtcls</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="n">mgmtcls_genders</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">mgmtcls</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="c1"># the file doesn&#39;t exist and for some reason the template engine</span>
+    <span class="c1"># won&#39;t create it, so spit out an error and tell the user what to do.</span>
+    <span class="k">if</span><span class="p">(</span><span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">settings_file</span><span class="p">)):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Error: &quot;</span> <span class="o">+</span> <span class="n">settings_file</span> <span class="o">+</span> <span class="s2">&quot; does not exist.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Please run: touch &quot;</span> <span class="o">+</span> <span class="n">settings_file</span> <span class="o">+</span> <span class="s2">&quot; as root and try again.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="n">write_genders_file</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">_collection_mgr</span><span class="p">,</span> <span class="n">profiles_genders</span><span class="p">,</span> <span class="n">distros_genders</span><span class="p">,</span> <span class="n">mgmtcls_genders</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">0</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,391 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.items.repo &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.items.repo</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.items.repo</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">from</span> <span class="nn">cobbler.items</span> <span class="k">import</span> <span class="n">item</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">validate</span>
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">CX</span>
+<span class="kn">from</span> <span class="nn">cobbler.utils</span> <span class="k">import</span> <span class="n">_</span>
+
+
+<span class="c1"># this data structure is described in item.py</span>
+<span class="n">FIELDS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># non-editable in UI (internal)</span>
+    <span class="p">[</span><span class="s2">&quot;ctime&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;depth&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;mtime&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;parent&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+
+    <span class="c1"># editable in UI</span>
+    <span class="p">[</span><span class="s2">&quot;apt_components&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Apt Components (apt only)&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;ex: main restricted universe&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;apt_dists&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Apt Dist Names (apt only)&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;ex: precise precise-updates&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;arch&quot;</span><span class="p">,</span> <span class="s2">&quot;x86_64&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Arch&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;ex: i386, x86_64&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;i386&#39;</span><span class="p">,</span> <span class="s1">&#39;x86_64&#39;</span><span class="p">,</span> <span class="s1">&#39;ia64&#39;</span><span class="p">,</span> <span class="s1">&#39;ppc&#39;</span><span class="p">,</span> <span class="s1">&#39;ppc64&#39;</span><span class="p">,</span> <span class="s1">&#39;ppc64le&#39;</span><span class="p">,</span> <span class="s1">&#39;ppc64el&#39;</span><span class="p">,</span> <span class="s1">&#39;s390&#39;</span><span class="p">,</span> <span class="s1">&#39;s390x&#39;</span><span class="p">,</span> <span class="s1">&#39;arm&#39;</span><span class="p">,</span> <span class="s1">&#39;aarch64&#39;</span><span class="p">,</span> <span class="s1">&#39;noarch&#39;</span><span class="p">,</span> <span class="s1">&#39;src&#39;</span><span class="p">],</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;breed&quot;</span><span class="p">,</span> <span class="s2">&quot;rsync&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Breed&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">validate</span><span class="o">.</span><span class="n">REPO_BREEDS</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Comment&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Free form text description&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;createrepo_flags&quot;</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Createrepo Flags&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Flags to use with createrepo&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Environment Variables&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Use these environment variables during commands (key=value, space delimited)&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;keep_updated&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Keep Updated&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Update this repo on next &#39;cobbler reposync&#39;?&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;mirror&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Mirror&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Address of yum or rsync repo to mirror&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;mirror_locally&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Mirror locally&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Copy files or just reference the repo externally?&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: f10-i386-updates&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;owners&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_ownership&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Owners&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Owners list for authz_ownership (space delimited)&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;priority&quot;</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Priority&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Value for yum priorities plugin, if installed&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Proxy information&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;http://example.com:8080, or &lt;&lt;inherit&gt;&gt; to use proxy_url_ext from settings, blank or &lt;&lt;None&gt;&gt; for no proxy&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;rpm_list&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;RPM List&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Mirror just these RPMs (yum only)&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;yumopts&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Yum Options&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Options to write to yum config file&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="Repo"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo">[docs]</a><span class="k">class</span> <span class="nc">Repo</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Cobbler repo object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">TYPE_NAME</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;repo&quot;</span><span class="p">)</span>
+    <span class="n">COLLECTION_TYPE</span> <span class="o">=</span> <span class="s2">&quot;repo&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Repo</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">breed</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arch</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yumopts</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1">#</span>
+    <span class="c1"># override some base class methods first (item.Item)</span>
+    <span class="c1">#</span>
+
+<div class="viewcode-block" id="Repo.make_clone"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.make_clone">[docs]</a>    <span class="k">def</span> <span class="nf">make_clone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">cloned</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="p">)</span>
+        <span class="n">cloned</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">_dict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cloned</span></div>
+
+<div class="viewcode-block" id="Repo.get_fields"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.get_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FIELDS</span></div>
+
+<div class="viewcode-block" id="Repo.get_parent"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.get_parent">[docs]</a>    <span class="k">def</span> <span class="nf">get_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        currently the Cobbler object space does not support subobjects of this object</span>
+<span class="sd">        as it is conceptually not useful.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Repo.check_if_valid"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.check_if_valid">[docs]</a>    <span class="k">def</span> <span class="nf">check_if_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;name is required&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Error with repo </span><span class="si">%s</span><span class="s2"> - mirror is required&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
+
+    <span class="c1">#</span>
+    <span class="c1"># specific methods for item.File</span>
+    <span class="c1">#</span>
+
+    <span class="k">def</span> <span class="nf">_guess_breed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># backwards compatibility</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">breed</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ftp://&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_breed</span><span class="p">(</span><span class="s2">&quot;yum&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;rhn://&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_breed</span><span class="p">(</span><span class="s2">&quot;rhn&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_breed</span><span class="p">(</span><span class="s2">&quot;rsync&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Repo.set_mirror"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.set_mirror">[docs]</a>    <span class="k">def</span> <span class="nf">set_mirror</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mirror</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A repo is (initially, as in right now) is something that can be rsynced.</span>
+<span class="sd">        reposync/repotrack integration over HTTP might come later.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span> <span class="o">=</span> <span class="n">mirror</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mirror</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;x86_64&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_arch</span><span class="p">(</span><span class="s2">&quot;x86_64&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">mirror</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;x86&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">mirror</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;i386&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_arch</span><span class="p">(</span><span class="s2">&quot;i386&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_guess_breed</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Repo.set_keep_updated"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.set_keep_updated">[docs]</a>    <span class="k">def</span> <span class="nf">set_keep_updated</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keep_updated</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This allows the user to disable updates to a particular repo for whatever reason.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keep_updated</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="n">keep_updated</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Repo.set_yumopts"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.set_yumopts">[docs]</a>    <span class="k">def</span> <span class="nf">set_yumopts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Kernel options are a space delimited list,</span>
+<span class="sd">        like &#39;a=b c=d e=f g h i=j&#39; or a dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_dict</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">allow_multiples</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;invalid yum options&quot;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yumopts</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="Repo.set_environment"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.set_environment">[docs]</a>    <span class="k">def</span> <span class="nf">set_environment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Yum can take options from the environment.  This puts them there before</span>
+<span class="sd">        each reposync.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_dict</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">allow_multiples</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;invalid environment options&quot;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="Repo.set_priority"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.set_priority">[docs]</a>    <span class="k">def</span> <span class="nf">set_priority</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">priority</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the priority of the repository.  1= highest, 99=default</span>
+<span class="sd">        Only works if host is using priorities plugin for yum.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">priority</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">priority</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;invalid priority level: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">priority</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">priority</span></div>
+
+<div class="viewcode-block" id="Repo.set_rpm_list"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.set_rpm_list">[docs]</a>    <span class="k">def</span> <span class="nf">set_rpm_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rpms</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Rather than mirroring the entire contents of a repository (Fedora Extras, for instance,</span>
+<span class="sd">        contains games, and we probably don&#39;t want those), make it possible to list the packages</span>
+<span class="sd">        one wants out of those repos, so only those packages + deps can be mirrored.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rpm_list</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_list</span><span class="p">(</span><span class="n">rpms</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Repo.set_createrepo_flags"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.set_createrepo_flags">[docs]</a>    <span class="k">def</span> <span class="nf">set_createrepo_flags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">createrepo_flags</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Flags passed to createrepo when it is called.  Common flags to use would be</span>
+<span class="sd">        -c cache or -g comps.xml to generate group information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">createrepo_flags</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">createrepo_flags</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">createrepo_flags</span> <span class="o">=</span> <span class="n">createrepo_flags</span></div>
+
+<div class="viewcode-block" id="Repo.set_breed"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.set_breed">[docs]</a>    <span class="k">def</span> <span class="nf">set_breed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">breed</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">breed</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_repo_breed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">breed</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Repo.set_os_version"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.set_os_version">[docs]</a>    <span class="k">def</span> <span class="nf">set_os_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">os_version</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">os_version</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_repo_os_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">os_version</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Repo.set_arch"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.set_arch">[docs]</a>    <span class="k">def</span> <span class="nf">set_arch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Override the arch used for reposync</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_arch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arch</span><span class="p">,</span> <span class="n">repo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Repo.set_mirror_locally"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.set_mirror_locally">[docs]</a>    <span class="k">def</span> <span class="nf">set_mirror_locally</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mirror_locally</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Repo.set_apt_components"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.set_apt_components">[docs]</a>    <span class="k">def</span> <span class="nf">set_apt_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">apt_components</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_list</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Repo.set_apt_dists"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.set_apt_dists">[docs]</a>    <span class="k">def</span> <span class="nf">set_apt_dists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">apt_dists</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_list</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Repo.set_proxy"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.repo.Repo.set_proxy">[docs]</a>    <span class="k">def</span> <span class="nf">set_proxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+
+
+<span class="c1"># EOF</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

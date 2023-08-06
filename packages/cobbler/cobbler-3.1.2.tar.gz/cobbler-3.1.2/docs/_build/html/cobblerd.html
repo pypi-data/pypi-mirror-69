@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>4. Cobblerd &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="5. Cobbler Configuration" href="cobbler-conf.html" />
+    <link rel="prev" title="3. Cobbler CLI" href="cobbler.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Cobbler Server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#preamble">4.1. Preamble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#description">4.2. Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup">4.3. Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#autoinstallation-autoyast-kickstart">4.4. Autoinstallation (Autoyast/Kickstart)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#options">4.5. Options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>4. Cobblerd</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cobblerd.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cobblerd">
+<h1>4. Cobblerd<a class="headerlink" href="#cobblerd" title="Permalink to this headline">¶</a></h1>
+<p>cobbler - a provisioning and update server</p>
+<div class="section" id="preamble">
+<h2>4.1. Preamble<a class="headerlink" href="#preamble" title="Permalink to this headline">¶</a></h2>
+<p>We will reefer to cobblerd here as “cobbler” because cobblerd is short for cobbler-daemon which is basically the server.
+The CLI will be referred to as Cobbler-CLI and Koan as Koan.</p>
+</div>
+<div class="section" id="description">
+<h2>4.2. Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Cobbler manages provisioning using a tiered concept of Distributions, Profiles, Systems, and (optionally) Images and
+Repositories.</p>
+<p>Distributions contain information about what kernel and initrd are used, plus metadata (required kernel parameters,
+etc).</p>
+<p>Profiles associate a Distribution with an automated installation template file and optionally customize the metadata
+further.</p>
+<p>Systems associate a MAC, IP, and other networking details with a profile and optionally customize the metadata further.</p>
+<p>Repositories contain yum mirror information. Using cobbler to mirror repositories is an optional feature, though
+provisioning and package management share a lot in common.</p>
+<p>Images are a catch-all concept for things that do not play nicely in the “distribution” category.  Most users will not
+need these records initially and these are described later in the document.</p>
+<p>The main advantage of cobbler is that it glues together many disjoint technologies and concepts and abstracts the user
+from the need to understand them. It allows the systems administrator to concentrate on what he needs to do, and not
+how it is done.</p>
+<p>This manpage will focus on the cobbler command line tool for use in configuring cobbler. There is also mention of the
+Cobbler WebUI which is usable for day-to-day operation of Cobbler once installed/configured. Docs on the API and XMLRPC
+components are available online at <a class="reference external" href="https://cobbler.github.io">https://cobbler.github.io</a> or
+<a class="reference external" href="https://cobbler.readthedocs.io">https://cobbler.readthedocs.io</a></p>
+<p>Most users will be interested in the Web UI and should set it up, though the command line is needed for initial
+configuration – in particular <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">check</span></code> and <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">import</span></code>, as well as the repo mirroring features. All of
+these are described later in the documentation.</p>
+</div>
+<div class="section" id="setup">
+<h2>4.3. Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>After installing, run <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">check</span></code> to verify that cobbler’s ecosystem is configured correctly. Cobbler check will
+direct you on how to modify it’s config files using a text editor.</p>
+<p>Any problems detected should be corrected, with the potential exception of DHCP related warnings where you will need to
+use your judgement as to whether they apply to your environment. Run <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">sync</span></code> after making any changes to the
+configuration files to ensure those changes are applied to the environment.</p>
+<p>It is especially important that the server name field be accurate in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/settings</span></code>, without this field being
+correct, automatic installation trees will not be found, and automated installations will fail.</p>
+<p>For PXE, if DHCP is to be run from the cobbler server, the dhcp configuration file should be changed as suggested by
+<code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">check</span></code>. If DHCP is not run locally, the <code class="docutils literal notranslate"><span class="pre">next-server</span></code> field on the DHCP server should at minimum point to
+the cobbler server’s IP and the filename should be set to <code class="docutils literal notranslate"><span class="pre">pxelinux.0</span></code>. Alternatively, cobbler can also generate your
+dhcp configuration file if you want to run dhcp locally – this is covered in a later section. If you don’t already have
+a DHCP setup managed by some other tool, allowing cobbler to manage your DHCP environment will prove to be useful as it
+can manage DHCP reservations and other data. If you already have a DHCP setup, moving an existing setup to be managed
+from within cobbler is relatively painless – though usage of the DHCP management feature is entirely optional. If you
+are not interested in network booting via PXE and just want to use koan to install virtual systems or replace existing
+ones, DHCP configuration can be totally ignored. Koan also has a live CD (see koan’s manpage) capability that can be
+used to simulate PXE environments.</p>
+</div>
+<div class="section" id="autoinstallation-autoyast-kickstart">
+<h2>4.4. Autoinstallation (Autoyast/Kickstart)<a class="headerlink" href="#autoinstallation-autoyast-kickstart" title="Permalink to this headline">¶</a></h2>
+<p>For help in building kickstarts, try using the <code class="docutils literal notranslate"><span class="pre">system-config-kickstart</span></code> tool, or install a new system and look at the
+<code class="docutils literal notranslate"><span class="pre">/root/anaconda-ks.cfg</span></code> file left over from the installer. General kickstart questions can also be asked at
+<a class="reference external" href="mailto:kickstart-list&#37;&#52;&#48;redhat&#46;com">kickstart-list<span>&#64;</span>redhat<span>&#46;</span>com</a>. Cobbler ships some autoinstall templates in /etc/cobbler that may also be helpful.</p>
+<p>For autoyast guides and help please reefer to <a class="reference external" href="https://doc.opensuse.org/projects/autoyast/">the opensuse project</a></p>
+<p>Also see the website or documentation for additional documentation, user contributed tips, and so on.</p>
+</div>
+<div class="section" id="options">
+<h2>4.5. Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>-B –daemonize</dt><dd><p>If you pass no options this is the default one. The Cobbler-Server runs in the background.</p>
+</dd>
+<dt>-F –no-daemonize</dt><dd><p>The Cobbler-Server runs in the foreground.</p>
+</dd>
+<dt>-f –log-file</dt><dd><p>Choose a destination for the logfile (currently has no effect).</p>
+</dd>
+<dt>-l –log-level</dt><dd><p>Choose a loglevel for the application (currently has no effect).</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cobbler-conf.html" class="btn btn-neutral float-right" title="5. Cobbler Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cobbler.html" class="btn btn-neutral float-left" title="3. Cobbler CLI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

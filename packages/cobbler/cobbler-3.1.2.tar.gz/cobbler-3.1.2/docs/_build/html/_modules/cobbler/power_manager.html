@@ -1,0 +1,479 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.power_manager &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.power_manager</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.power_manager</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Power management library.  Encapsulate the logic to run power management</span>
+<span class="sd">commands so that the Cobbler user does not have to remember different power</span>
+<span class="sd">management tools syntaxes.  This makes rebooting a system for OS installation</span>
+<span class="sd">much easier.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">range</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">stat</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">CX</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">clogger</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+
+<span class="c1"># Try the power command 3 times before giving up.</span>
+<span class="c1"># Some power switches are flakey</span>
+
+<span class="n">POWER_RETRIES</span> <span class="o">=</span> <span class="mi">3</span>
+
+
+<div class="viewcode-block" id="get_power_types"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.power_manager.get_power_types">[docs]</a><span class="k">def</span> <span class="nf">get_power_types</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get possible power management types</span>
+
+<span class="sd">    @return list possible power management types</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">power_types</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">power_template</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;fence_(.*)&#39;</span><span class="p">)</span>
+    <span class="n">fence_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;/usr/sbin/fence_*&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;/sbin/fence_*&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fence_files</span><span class="p">:</span>
+        <span class="n">templated_x</span> <span class="o">=</span> <span class="n">power_template</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">templated_x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">power_types</span><span class="p">:</span>
+            <span class="n">power_types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">templated_x</span><span class="p">)</span>
+    <span class="n">power_types</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">power_types</span></div>
+
+
+<div class="viewcode-block" id="validate_power_type"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.power_manager.validate_power_type">[docs]</a><span class="k">def</span> <span class="nf">validate_power_type</span><span class="p">(</span><span class="n">power_type</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if a power management type is valid</span>
+
+<span class="sd">    @param str power_type power management type</span>
+<span class="sd">    @raise CX if power management type is invalid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">power_types</span> <span class="o">=</span> <span class="n">get_power_types</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">power_types</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;you need to have fence-agents installed&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">power_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">power_types</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;power management type must be one of: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">power_types</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="get_power_command"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.power_manager.get_power_command">[docs]</a><span class="k">def</span> <span class="nf">get_power_command</span><span class="p">(</span><span class="n">power_type</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get power management command path</span>
+
+<span class="sd">    @param str power_type power management type</span>
+<span class="sd">    @return str power management command path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">power_type</span><span class="p">:</span>
+        <span class="c1"># try /sbin, then /usr/sbin</span>
+        <span class="n">power_path1</span> <span class="o">=</span> <span class="s2">&quot;/sbin/fence_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">power_type</span>
+        <span class="n">power_path2</span> <span class="o">=</span> <span class="s2">&quot;/usr/sbin/fence_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">power_type</span>
+        <span class="k">for</span> <span class="n">power_path</span> <span class="ow">in</span> <span class="p">(</span><span class="n">power_path1</span><span class="p">,</span> <span class="n">power_path2</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">power_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">power_path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">X_OK</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">power_path</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="PowerManager"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.power_manager.PowerManager">[docs]</a><span class="k">class</span> <span class="nc">PowerManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handles power management in systems</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+
+<span class="sd">        @param CobblerAPI api Cobbler API</span>
+<span class="sd">        @param CollectionManager collection_mgr collection manager</span>
+<span class="sd">        @param Logger logger logger</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="n">collection_mgr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="n">api</span>
+        <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span> <span class="o">=</span> <span class="n">clogger</span><span class="o">.</span><span class="n">Logger</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+
+    <span class="k">def</span> <span class="nf">_check_power_conf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints a warning for invalid power configuraitons</span>
+<span class="sd">        @param System system Cobbler system</span>
+<span class="sd">        @param Logger logger logger</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">power_pass</span> <span class="ow">or</span> <span class="n">password</span><span class="p">)</span> <span class="ow">and</span> <span class="n">system</span><span class="o">.</span><span class="n">power_identity_file</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Both password and identity-file are specified&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">power_identity_file</span><span class="p">:</span>
+            <span class="n">ident_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">power_identity_file</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ident_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;identity-file &quot;</span> <span class="o">+</span> <span class="n">system</span><span class="o">.</span><span class="n">power_identity_file</span> <span class="o">+</span> <span class="s2">&quot; does not exist&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ident_stat</span> <span class="o">=</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IMODE</span><span class="p">(</span><span class="n">ident_path</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mode</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">ident_stat</span> <span class="o">&amp;</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IRWXO</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">ident_stat</span> <span class="o">&amp;</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IRWXG</span><span class="p">):</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;identity-file &quot;</span> <span class="o">+</span> <span class="n">system</span><span class="o">.</span><span class="n">power_identity_file</span> <span class="o">+</span>
+                                   <span class="s2">&quot; must not be read/write/exec by group or others&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">system</span><span class="o">.</span><span class="n">power_address</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;power-address is missing&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">power_user</span> <span class="ow">or</span> <span class="n">user</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;power-user is missing&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">power_pass</span> <span class="ow">or</span> <span class="n">password</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">system</span><span class="o">.</span><span class="n">power_identity_file</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;neither power-identity-file nor power-password specified&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_power_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">power_operation</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creats an option string for the fence agent from the system data</span>
+<span class="sd">        Internal method</span>
+
+<span class="sd">        @param System system Cobbler system</span>
+<span class="sd">        @param str power_operation power operation. Valid values: on, off, status.</span>
+<span class="sd">                Rebooting is implemented as a set of 2 operations (off and on) in</span>
+<span class="sd">                a higher level method.</span>
+<span class="sd">        @param Logger logger logger</span>
+<span class="sd">        @param str user user to override system.power_user</span>
+<span class="sd">        @param str password password to override system.power_pass</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_power_conf</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+        <span class="n">power_input</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">power_operation</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">power_operation</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;on&#39;</span><span class="p">,</span> <span class="s1">&#39;off&#39;</span><span class="p">,</span> <span class="s1">&#39;status&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;invalid power operation&quot;</span><span class="p">)</span>
+        <span class="n">power_input</span> <span class="o">+=</span> <span class="s2">&quot;action=&quot;</span> <span class="o">+</span> <span class="n">power_operation</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">power_address</span><span class="p">:</span>
+            <span class="n">power_input</span> <span class="o">+=</span> <span class="s2">&quot;ip=&quot;</span> <span class="o">+</span> <span class="n">system</span><span class="o">.</span><span class="n">power_address</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">power_user</span><span class="p">:</span>
+            <span class="n">power_input</span> <span class="o">+=</span> <span class="s2">&quot;username=&quot;</span> <span class="o">+</span> <span class="n">system</span><span class="o">.</span><span class="n">power_user</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">power_id</span><span class="p">:</span>
+            <span class="n">power_input</span> <span class="o">+=</span> <span class="s2">&quot;plug=&quot;</span> <span class="o">+</span> <span class="n">system</span><span class="o">.</span><span class="n">power_id</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">power_pass</span><span class="p">:</span>
+            <span class="n">power_input</span> <span class="o">+=</span> <span class="s2">&quot;password=&quot;</span> <span class="o">+</span> <span class="n">system</span><span class="o">.</span><span class="n">power_pass</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">power_identity_file</span><span class="p">:</span>
+            <span class="n">power_input</span> <span class="o">+=</span> <span class="s2">&quot;identity-file=&quot;</span> <span class="o">+</span> <span class="n">system</span><span class="o">.</span><span class="n">power_identity_file</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">power_options</span><span class="p">:</span>
+            <span class="n">power_input</span> <span class="o">+=</span> <span class="n">system</span><span class="o">.</span><span class="n">power_options</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">power_input</span>
+
+    <span class="k">def</span> <span class="nf">_power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">power_operation</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs a power operation on a system.</span>
+<span class="sd">        Internal method</span>
+
+<span class="sd">        @param System system Cobbler system</span>
+<span class="sd">        @param str power_operation power operation. Valid values: on, off, status.</span>
+<span class="sd">                Rebooting is implemented as a set of 2 operations (off and on) in</span>
+<span class="sd">                a higher level method.</span>
+<span class="sd">        @param str user power management user. If user and password are not</span>
+<span class="sd">                supplied, environment variables COBBLER_POWER_USER and</span>
+<span class="sd">                COBBLER_POWER_PASS will be used.</span>
+<span class="sd">        @param str password power management password</span>
+<span class="sd">        @param Logger logger logger</span>
+<span class="sd">        @return bool/None if power operation is &#39;status&#39;, return if system is on;</span>
+<span class="sd">                otherwise, return None</span>
+<span class="sd">        @raise CX if there are errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span>
+
+        <span class="n">power_command</span> <span class="o">=</span> <span class="n">get_power_command</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">power_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">power_command</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;no power type set for system&quot;</span><span class="p">)</span>
+
+        <span class="n">meta</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+        <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;power_mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">power_operation</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;cobbler power configuration is:&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;      type   : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">system</span><span class="o">.</span><span class="n">power_type</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;      address: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">system</span><span class="o">.</span><span class="n">power_address</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;      user   : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">system</span><span class="o">.</span><span class="n">power_user</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;      id     : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">system</span><span class="o">.</span><span class="n">power_id</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;      options: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">system</span><span class="o">.</span><span class="n">power_options</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;identity_file: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">system</span><span class="o">.</span><span class="n">power_identity_file</span><span class="p">)</span>
+
+        <span class="c1"># if no username/password data, check the environment</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">system</span><span class="o">.</span><span class="n">power_user</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;COBBLER_POWER_USER&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">system</span><span class="o">.</span><span class="n">power_pass</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">password</span><span class="p">:</span>
+            <span class="n">password</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;COBBLER_POWER_PASS&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">power_input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_power_input</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">power_operation</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;power command: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">power_command</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;power command input: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">power_input</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">POWER_RETRIES</span><span class="p">):</span>
+            <span class="n">output</span><span class="p">,</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_sp</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">power_command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">power_input</span><span class="p">)</span>
+            <span class="c1"># fencing agent returns 2 if the system is powered off</span>
+            <span class="k">if</span> <span class="n">rc</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="p">(</span><span class="n">rc</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">power_operation</span> <span class="o">==</span> <span class="s1">&#39;status&#39;</span><span class="p">):</span>
+                <span class="c1"># If the desired state is actually a query for the status</span>
+                <span class="c1"># return different information than command return code</span>
+                <span class="k">if</span> <span class="n">power_operation</span> <span class="o">==</span> <span class="s1">&#39;status&#39;</span><span class="p">:</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(Status:|.+power\s=)\s(on|off)$&#39;</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                        <span class="n">power_status</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">power_status</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;on&#39;</span><span class="p">:</span>
+                            <span class="k">return</span> <span class="kc">True</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">return</span> <span class="kc">False</span>
+                    <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;command succeeded (rc=</span><span class="si">%s</span><span class="s2">), but output (&#39;</span><span class="si">%s</span><span class="s2">&#39;) was not understood&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">error_msg</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;command failed (rc=</span><span class="si">%s</span><span class="s2">), please validate the physical setup and cobbler config&quot;</span> <span class="o">%</span> <span class="n">rc</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">error_msg</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PowerManager.power_on"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.power_manager.PowerManager.power_on">[docs]</a>    <span class="k">def</span> <span class="nf">power_on</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Powers up a system that has power management configured.</span>
+
+<span class="sd">        @param System system Cobbler system</span>
+<span class="sd">        @param str user power management user</span>
+<span class="sd">        @param str password power management password</span>
+<span class="sd">        @param Logger logger logger</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_power</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PowerManager.power_off"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.power_manager.PowerManager.power_off">[docs]</a>    <span class="k">def</span> <span class="nf">power_off</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Powers down a system that has power management configured.</span>
+
+<span class="sd">        @param System system Cobbler system</span>
+<span class="sd">        @param str user power management user</span>
+<span class="sd">        @param str password power management password</span>
+<span class="sd">        @param Logger logger logger</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_power</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="s2">&quot;off&quot;</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PowerManager.reboot"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.power_manager.PowerManager.reboot">[docs]</a>    <span class="k">def</span> <span class="nf">reboot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reboot a system that has power management configured.</span>
+
+<span class="sd">        @param System system Cobbler system</span>
+<span class="sd">        @param str user power management user</span>
+<span class="sd">        @param str password power management password</span>
+<span class="sd">        @param Logger logger logger</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_off</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_on</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PowerManager.get_power_status"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.power_manager.PowerManager.get_power_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_power_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get power status for a system that has power management configured.</span>
+
+<span class="sd">        @param System system Cobbler system</span>
+<span class="sd">        @param str user power management user</span>
+<span class="sd">        @param str password power management password</span>
+<span class="sd">        @param Logger logger logger</span>
+<span class="sd">        @return bool if system is powered on</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_power</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

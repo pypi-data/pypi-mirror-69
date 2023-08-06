@@ -1,0 +1,1696 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>8.1.3. cobbler.items package &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="8.1.4. cobbler.modules package" href="cobbler.modules.html" />
+    <link rel="prev" title="8.1.2. cobbler.cobbler_collections package" href="cobbler.cobbler_collections.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="cobbler.html">8. Cobbler-Code Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cobbler.html#subpackages">8.1. Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="cobbler.actions.html">8.1.1. cobbler.actions package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.cobbler_collections.html">8.1.2. cobbler.cobbler_collections package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">8.1.3. cobbler.items package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">8.1.3.1. Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.items.distro">8.1.3.2. cobbler.items.distro module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.items.file">8.1.3.3. cobbler.items.file module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.items.image">8.1.3.4. cobbler.items.image module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.items.item">8.1.3.5. cobbler.items.item module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.items.mgmtclass">8.1.3.6. cobbler.items.mgmtclass module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.items.package">8.1.3.7. cobbler.items.package module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.items.profile">8.1.3.8. cobbler.items.profile module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.items.repo">8.1.3.9. cobbler.items.repo module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.items.system">8.1.3.10. cobbler.items.system module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.items">8.1.3.11. Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.modules.html">8.1.4. cobbler.modules package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.web.html">8.1.5. cobbler.web package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#submodules">8.2. Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.api">8.3. cobbler.api module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.autoinstall_manager">8.4. cobbler.autoinstall_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.autoinstallgen">8.5. cobbler.autoinstallgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.cexceptions">8.6. cobbler.cexceptions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.cli">8.7. cobbler.cli module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.clogger">8.8. cobbler.clogger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.cobblerd">8.9. cobbler.cobblerd module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.configgen">8.10. cobbler.configgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.download_manager">8.11. cobbler.download_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.field_info">8.12. cobbler.field_info module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.module_loader">8.13. cobbler.module_loader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.power_manager">8.14. cobbler.power_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.remote">8.15. cobbler.remote module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.resource">8.16. cobbler.resource module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.serializer">8.17. cobbler.serializer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.services">8.18. cobbler.services module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.settings">8.19. cobbler.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.templar">8.20. cobbler.templar module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.template_api">8.21. cobbler.template_api module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.tftpgen">8.22. cobbler.tftpgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.utils">8.23. cobbler.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.validate">8.24. cobbler.validate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.yumgen">8.25. cobbler.yumgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler">8.26. Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="cobbler.html">8. cobbler package</a> &raquo;</li>
+        
+      <li>8.1.3. cobbler.items package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/code-autodoc/cobbler.items.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cobbler-items-package">
+<h1>8.1.3. cobbler.items package<a class="headerlink" href="#cobbler-items-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>8.1.3.1. Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cobbler.items.distro">
+<span id="cobbler-items-distro-module"></span><h2>8.1.3.2. cobbler.items.distro module<a class="headerlink" href="#module-cobbler.items.distro" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.items.distro.Distro">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.items.distro.</code><code class="sig-name descname">Distro</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cobbler.items.item.Item" title="cobbler.items.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.items.item.Item</span></code></a></p>
+<p>A cobbler distribution object</p>
+<dl class="attribute">
+<dt id="cobbler.items.distro.Distro.COLLECTION_TYPE">
+<code class="sig-name descname">COLLECTION_TYPE</code><em class="property"> = 'distro'</em><a class="headerlink" href="#cobbler.items.distro.Distro.COLLECTION_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cobbler.items.distro.Distro.TYPE_NAME">
+<code class="sig-name descname">TYPE_NAME</code><em class="property"> = 'distro'</em><a class="headerlink" href="#cobbler.items.distro.Distro.TYPE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.check_if_valid">
+<code class="sig-name descname">check_if_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.check_if_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.check_if_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise exceptions if the object state is inconsistent</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.get_arch">
+<code class="sig-name descname">get_arch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.get_arch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.get_arch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the architecture of the distribution</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.get_fields">
+<code class="sig-name descname">get_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.get_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.get_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of fields and their properties</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.get_parent">
+<code class="sig-name descname">get_parent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.get_parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.get_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distros don’t have parent objects.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.get_redhat_management_key">
+<code class="sig-name descname">get_redhat_management_key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.get_redhat_management_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.get_redhat_management_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.make_clone">
+<code class="sig-name descname">make_clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.make_clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.make_clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.set_arch">
+<code class="sig-name descname">set_arch</code><span class="sig-paren">(</span><em class="sig-param">arch</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.set_arch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.set_arch" title="Permalink to this definition">¶</a></dt>
+<dd><p>The field is mainly relevant to PXE provisioning.</p>
+<p>Using an alternative distro type allows for dhcpd.conf templating
+to “do the right thing” with those systems – this also relates to
+bootloader configuration files which have different syntax for different
+distro types (because of the bootloaders).</p>
+<p>This field is named “arch” because mainly on Linux, we only care about
+the architecture, though if (in the future) new provisioning types
+are added, an arch value might be something like “bsd_x86”.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.set_boot_loader">
+<code class="sig-name descname">set_boot_loader</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.set_boot_loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.set_boot_loader" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.set_breed">
+<code class="sig-name descname">set_breed</code><span class="sig-paren">(</span><em class="sig-param">breed</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.set_breed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.set_breed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.set_initrd">
+<code class="sig-name descname">set_initrd</code><span class="sig-paren">(</span><em class="sig-param">initrd</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.set_initrd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.set_initrd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies an initrd image.  Path search works as in set_kernel.
+File must be named appropriately.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.set_kernel">
+<code class="sig-name descname">set_kernel</code><span class="sig-paren">(</span><em class="sig-param">kernel</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.set_kernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.set_kernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a kernel.  The kernel parameter is a full path, a filename
+in the configured kernel directory (set in /etc/cobbler.conf) or a
+directory path that would contain a selectable kernel.  Kernel
+naming conventions are checked, see docs in the utils module
+for find_kernel.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.set_os_version">
+<code class="sig-name descname">set_os_version</code><span class="sig-paren">(</span><em class="sig-param">os_version</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.set_os_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.set_os_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.set_redhat_management_key">
+<code class="sig-name descname">set_redhat_management_key</code><span class="sig-paren">(</span><em class="sig-param">management_key</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.set_redhat_management_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.set_redhat_management_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.set_source_repos">
+<code class="sig-name descname">set_source_repos</code><span class="sig-paren">(</span><em class="sig-param">repos</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.set_source_repos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.set_source_repos" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of <a class="reference external" href="http://">http://</a> URLs on the cobbler server that point to
+yum configuration files that can be used to
+install core packages.  Use by cobbler import only.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.set_supported_boot_loaders">
+<code class="sig-name descname">set_supported_boot_loaders</code><span class="sig-paren">(</span><em class="sig-param">supported_boot_loaders</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.set_supported_boot_loaders"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.set_supported_boot_loaders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Some distributions, particularly on powerpc, can only be netbooted using
+specific bootloaders.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.distro.Distro.set_tree_build_time">
+<code class="sig-name descname">set_tree_build_time</code><span class="sig-paren">(</span><em class="sig-param">datestamp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/distro.html#Distro.set_tree_build_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.distro.Distro.set_tree_build_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the import time of the distro.
+If not imported, this field is not meaningful.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.items.file">
+<span id="cobbler-items-file-module"></span><h2>8.1.3.3. cobbler.items.file module<a class="headerlink" href="#module-cobbler.items.file" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.items.file.File">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.items.file.</code><code class="sig-name descname">File</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">is_subobject=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/file.html#File"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.file.File" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="cobbler.html#cobbler.resource.Resource" title="cobbler.resource.Resource"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.resource.Resource</span></code></a></p>
+<p>A Cobbler file object.</p>
+<dl class="attribute">
+<dt id="cobbler.items.file.File.COLLECTION_TYPE">
+<code class="sig-name descname">COLLECTION_TYPE</code><em class="property"> = 'file'</em><a class="headerlink" href="#cobbler.items.file.File.COLLECTION_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cobbler.items.file.File.TYPE_NAME">
+<code class="sig-name descname">TYPE_NAME</code><em class="property"> = 'file'</em><a class="headerlink" href="#cobbler.items.file.File.TYPE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.file.File.check_if_valid">
+<code class="sig-name descname">check_if_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/file.html#File.check_if_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.file.File.check_if_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insure name, path, owner, group, and mode are set.
+Templates are only required for files, is_dir = False</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.file.File.get_fields">
+<code class="sig-name descname">get_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/file.html#File.get_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.file.File.get_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get serializable fields
+Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.file.File.make_clone">
+<code class="sig-name descname">make_clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/file.html#File.make_clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.file.File.make_clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.file.File.set_is_dir">
+<code class="sig-name descname">set_is_dir</code><span class="sig-paren">(</span><em class="sig-param">is_dir</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/file.html#File.set_is_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.file.File.set_is_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>If true, treat file resource as a directory. Templates are ignored.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.items.image">
+<span id="cobbler-items-image-module"></span><h2>8.1.3.4. cobbler.items.image module<a class="headerlink" href="#module-cobbler.items.image" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.items.image.Image">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.items.image.</code><code class="sig-name descname">Image</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">is_subobject=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cobbler.items.item.Item" title="cobbler.items.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.items.item.Item</span></code></a></p>
+<p>A Cobbler Image.  Tracks a virtual or physical image, as opposed to a answer
+file (autoinst) led installation.</p>
+<dl class="attribute">
+<dt id="cobbler.items.image.Image.COLLECTION_TYPE">
+<code class="sig-name descname">COLLECTION_TYPE</code><em class="property"> = 'image'</em><a class="headerlink" href="#cobbler.items.image.Image.COLLECTION_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cobbler.items.image.Image.TYPE_NAME">
+<code class="sig-name descname">TYPE_NAME</code><em class="property"> = 'image'</em><a class="headerlink" href="#cobbler.items.image.Image.TYPE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.get_fields">
+<code class="sig-name descname">get_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.get_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.get_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get serializable fields
+Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.get_parent">
+<code class="sig-name descname">get_parent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.get_parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.get_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Images have no parent object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.get_valid_image_types">
+<code class="sig-name descname">get_valid_image_types</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.get_valid_image_types"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.get_valid_image_types" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.make_clone">
+<code class="sig-name descname">make_clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.make_clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.make_clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.set_arch">
+<code class="sig-name descname">set_arch</code><span class="sig-paren">(</span><em class="sig-param">arch</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.set_arch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.set_arch" title="Permalink to this definition">¶</a></dt>
+<dd><p>The field is mainly relevant to PXE provisioning.
+see comments for set_arch in item_distro.py, this works the same.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.set_autoinstall">
+<code class="sig-name descname">set_autoinstall</code><span class="sig-paren">(</span><em class="sig-param">autoinstall</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.set_autoinstall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.set_autoinstall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the automatic installation file path, this must be a local file.</p>
+<p>It may not make sense for images to have automatic installation templates.
+It really doesn’t. However if the image type is ‘iso’ koan can create a virtual
+floppy and shove an answer file on it, to script an installation.  This may
+not be a automatic installation template per se, it might be a Windows answer
+file (SIF) etc.</p>
+<p>&#64;param str local automatic installation template file path</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.set_breed">
+<code class="sig-name descname">set_breed</code><span class="sig-paren">(</span><em class="sig-param">breed</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.set_breed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.set_breed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.set_file">
+<code class="sig-name descname">set_file</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.set_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.set_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores the image location.  This should be accessible on all nodes
+that need to access it.  Format: can be one of the following:
+* username:password&#64;hostname:/path/to/the/filename.ext
+* username&#64;hostname:/path/to/the/filename.ext
+* hostname:/path/to/the/filename.ext
+* /path/to/the/filename.ext</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.set_image_type">
+<code class="sig-name descname">set_image_type</code><span class="sig-paren">(</span><em class="sig-param">image_type</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.set_image_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.set_image_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates what type of image this is.
+direct     = something like “memdisk”, physical only
+iso        = a bootable ISO that pxe’s or can be used for virt installs, virtual only
+virt-clone = a cloned virtual disk (FIXME: not yet supported), virtual only
+memdisk    = hdd image (physical only)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.set_network_count">
+<code class="sig-name descname">set_network_count</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.set_network_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.set_network_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.set_os_version">
+<code class="sig-name descname">set_os_version</code><span class="sig-paren">(</span><em class="sig-param">os_version</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.set_os_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.set_os_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.set_virt_auto_boot">
+<code class="sig-name descname">set_virt_auto_boot</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.set_virt_auto_boot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.set_virt_auto_boot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.set_virt_bridge">
+<code class="sig-name descname">set_virt_bridge</code><span class="sig-paren">(</span><em class="sig-param">vbridge</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.set_virt_bridge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.set_virt_bridge" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.set_virt_cpus">
+<code class="sig-name descname">set_virt_cpus</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.set_virt_cpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.set_virt_cpus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.set_virt_disk_driver">
+<code class="sig-name descname">set_virt_disk_driver</code><span class="sig-paren">(</span><em class="sig-param">driver</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.set_virt_disk_driver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.set_virt_disk_driver" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.set_virt_file_size">
+<code class="sig-name descname">set_virt_file_size</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.set_virt_file_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.set_virt_file_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.set_virt_path">
+<code class="sig-name descname">set_virt_path</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.set_virt_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.set_virt_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.set_virt_ram">
+<code class="sig-name descname">set_virt_ram</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.set_virt_ram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.set_virt_ram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.image.Image.set_virt_type">
+<code class="sig-name descname">set_virt_type</code><span class="sig-paren">(</span><em class="sig-param">vtype</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/image.html#Image.set_virt_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.image.Image.set_virt_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.items.item">
+<span id="cobbler-items-item-module"></span><h2>8.1.3.5. cobbler.items.item module<a class="headerlink" href="#module-cobbler.items.item" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.items.item.Item">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.items.item.</code><code class="sig-name descname">Item</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">is_subobject=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>An Item is a serializable thing that can appear in a Collection</p>
+<dl class="attribute">
+<dt id="cobbler.items.item.Item.TYPE_NAME">
+<code class="sig-name descname">TYPE_NAME</code><em class="property"> = 'generic'</em><a class="headerlink" href="#cobbler.items.item.Item.TYPE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.check_if_valid">
+<code class="sig-name descname">check_if_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.check_if_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.check_if_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise exceptions if the object state is inconsistent</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.clear">
+<code class="sig-name descname">clear</code><span class="sig-paren">(</span><em class="sig-param">is_subobject=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset this object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cobbler.items.item.Item.converted_cache">
+<code class="sig-name descname">converted_cache</code><em class="property"> = {}</em><a class="headerlink" href="#cobbler.items.item.Item.converted_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.dump_vars">
+<code class="sig-name descname">dump_vars</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">format=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.dump_vars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.dump_vars" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.find_match">
+<code class="sig-name descname">find_match</code><span class="sig-paren">(</span><em class="sig-param">kwargs</em>, <em class="sig-param">no_errors=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.find_match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.find_match" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.find_match_single_key">
+<code class="sig-name descname">find_match_single_key</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">key</em>, <em class="sig-param">value</em>, <em class="sig-param">no_errors=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.find_match_single_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.find_match_single_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.from_dict">
+<code class="sig-name descname">from_dict</code><span class="sig-paren">(</span><em class="sig-param">_dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.from_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.from_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify this object to take on values in seed_data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.get_children">
+<code class="sig-name descname">get_children</code><span class="sig-paren">(</span><em class="sig-param">sorted=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.get_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get direct children of this object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.get_conceptual_parent">
+<code class="sig-name descname">get_conceptual_parent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.get_conceptual_parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.get_conceptual_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parent may just be a superclass for something like a
+subprofile.  Get the first parent of a different type.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.get_descendants">
+<code class="sig-name descname">get_descendants</code><span class="sig-paren">(</span><em class="sig-param">sort=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.get_descendants"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.get_descendants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get objects that depend on this object, i.e. those that
+would be affected by a cascading delete, etc.
+With sort=True the list will be a walk of the tree,
+e.g., distro -&gt; [profile, sys, sys, profile, sys, sys]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.get_fields">
+<code class="sig-name descname">get_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.get_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.get_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get serializable fields
+Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.get_from_cache">
+<em class="property">classmethod </em><code class="sig-name descname">get_from_cache</code><span class="sig-paren">(</span><em class="sig-param">ref</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.get_from_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.get_from_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.get_parent">
+<code class="sig-name descname">get_parent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.get_parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.get_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>For objects with a tree relationship, what’s the parent object?</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.get_setter_methods">
+<code class="sig-name descname">get_setter_methods</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.get_setter_methods"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.get_setter_methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.make_clone">
+<code class="sig-name descname">make_clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.make_clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.make_clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.remove_from_cache">
+<em class="property">classmethod </em><code class="sig-name descname">remove_from_cache</code><span class="sig-paren">(</span><em class="sig-param">ref</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.remove_from_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.remove_from_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_autoinstall_meta">
+<code class="sig-name descname">set_autoinstall_meta</code><span class="sig-paren">(</span><em class="sig-param">options</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_autoinstall_meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_autoinstall_meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>A comma delimited list of key value pairs, like ‘a=b,c=d,e=f’ or a dict.
+The meta tags are used as input to the templating system
+to preprocess automatic installation template files</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_boot_files">
+<code class="sig-name descname">set_boot_files</code><span class="sig-paren">(</span><em class="sig-param">boot_files</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_boot_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_boot_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>A comma seperated list of req_name=source_file_path
+that should be fetchable via tftp</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_cache">
+<em class="property">classmethod </em><code class="sig-name descname">set_cache</code><span class="sig-paren">(</span><em class="sig-param">ref</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_comment">
+<code class="sig-name descname">set_comment</code><span class="sig-paren">(</span><em class="sig-param">comment</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_comment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_comment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_ctime">
+<code class="sig-name descname">set_ctime</code><span class="sig-paren">(</span><em class="sig-param">ctime</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_ctime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_ctime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_depth">
+<code class="sig-name descname">set_depth</code><span class="sig-paren">(</span><em class="sig-param">depth</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_depth" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_fetchable_files">
+<code class="sig-name descname">set_fetchable_files</code><span class="sig-paren">(</span><em class="sig-param">fetchable_files</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_fetchable_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_fetchable_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>A comma seperated list of virt_name=path_to_template
+that should be fetchable via tftp or a webserver</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_kernel_options">
+<code class="sig-name descname">set_kernel_options</code><span class="sig-paren">(</span><em class="sig-param">options</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_kernel_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_kernel_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kernel options are a space delimited list,
+like ‘a=b c=d e=f g h i=j’ or a dict.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_kernel_options_post">
+<code class="sig-name descname">set_kernel_options_post</code><span class="sig-paren">(</span><em class="sig-param">options</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_kernel_options_post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_kernel_options_post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post kernel options are a space delimited list,
+like ‘a=b c=d e=f g h i=j’ or a dict.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_mgmt_classes">
+<code class="sig-name descname">set_mgmt_classes</code><span class="sig-paren">(</span><em class="sig-param">mgmt_classes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_mgmt_classes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_mgmt_classes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assigns a list of configuration management classes that can be assigned
+to any object, such as those used by Puppet’s external_nodes feature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_mgmt_parameters">
+<code class="sig-name descname">set_mgmt_parameters</code><span class="sig-paren">(</span><em class="sig-param">mgmt_parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_mgmt_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_mgmt_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>A YAML string which can be assigned to any object, this is used by
+Puppet’s external_nodes feature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_mtime">
+<code class="sig-name descname">set_mtime</code><span class="sig-paren">(</span><em class="sig-param">mtime</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_mtime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_mtime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_name">
+<code class="sig-name descname">set_name</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the objects name.</p>
+<p>&#64;param: str name (object name string)
+&#64;returns: True or CX</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_owners">
+<code class="sig-name descname">set_owners</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_owners"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_owners" title="Permalink to this definition">¶</a></dt>
+<dd><p>The owners field is a comment unless using an authz module that pays attention to it,
+like authz_ownership, which ships with Cobbler but is off by default.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_parent">
+<code class="sig-name descname">set_parent</code><span class="sig-paren">(</span><em class="sig-param">parent</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_parent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_template_files">
+<code class="sig-name descname">set_template_files</code><span class="sig-paren">(</span><em class="sig-param">template_files</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_template_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_template_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>A comma seperated list of source=destination templates
+that should be generated during a sync.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.set_uid">
+<code class="sig-name descname">set_uid</code><span class="sig-paren">(</span><em class="sig-param">uid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.set_uid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.set_uid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.sort_key">
+<code class="sig-name descname">sort_key</code><span class="sig-paren">(</span><em class="sig-param">sort_fields=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.sort_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.sort_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.to_dict">
+<code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.to_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.item.Item.to_string">
+<code class="sig-name descname">to_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/item.html#Item.to_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.item.Item.to_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.items.mgmtclass">
+<span id="cobbler-items-mgmtclass-module"></span><h2>8.1.3.6. cobbler.items.mgmtclass module<a class="headerlink" href="#module-cobbler.items.mgmtclass" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.items.mgmtclass.Mgmtclass">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.items.mgmtclass.</code><code class="sig-name descname">Mgmtclass</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/mgmtclass.html#Mgmtclass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.mgmtclass.Mgmtclass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cobbler.items.item.Item" title="cobbler.items.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.items.item.Item</span></code></a></p>
+<dl class="attribute">
+<dt id="cobbler.items.mgmtclass.Mgmtclass.COLLECTION_TYPE">
+<code class="sig-name descname">COLLECTION_TYPE</code><em class="property"> = 'mgmtclass'</em><a class="headerlink" href="#cobbler.items.mgmtclass.Mgmtclass.COLLECTION_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cobbler.items.mgmtclass.Mgmtclass.TYPE_NAME">
+<code class="sig-name descname">TYPE_NAME</code><em class="property"> = 'mgmtclass'</em><a class="headerlink" href="#cobbler.items.mgmtclass.Mgmtclass.TYPE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.mgmtclass.Mgmtclass.check_if_valid">
+<code class="sig-name descname">check_if_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/mgmtclass.html#Mgmtclass.check_if_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.mgmtclass.Mgmtclass.check_if_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise exceptions if the object state is inconsistent</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.mgmtclass.Mgmtclass.get_fields">
+<code class="sig-name descname">get_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/mgmtclass.html#Mgmtclass.get_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.mgmtclass.Mgmtclass.get_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get serializable fields
+Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.mgmtclass.Mgmtclass.make_clone">
+<code class="sig-name descname">make_clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/mgmtclass.html#Mgmtclass.make_clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.mgmtclass.Mgmtclass.make_clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.mgmtclass.Mgmtclass.set_class_name">
+<code class="sig-name descname">set_class_name</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/mgmtclass.html#Mgmtclass.set_class_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.mgmtclass.Mgmtclass.set_class_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.mgmtclass.Mgmtclass.set_files">
+<code class="sig-name descname">set_files</code><span class="sig-paren">(</span><em class="sig-param">files</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/mgmtclass.html#Mgmtclass.set_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.mgmtclass.Mgmtclass.set_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.mgmtclass.Mgmtclass.set_is_definition">
+<code class="sig-name descname">set_is_definition</code><span class="sig-paren">(</span><em class="sig-param">isdef</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/mgmtclass.html#Mgmtclass.set_is_definition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.mgmtclass.Mgmtclass.set_is_definition" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.mgmtclass.Mgmtclass.set_packages">
+<code class="sig-name descname">set_packages</code><span class="sig-paren">(</span><em class="sig-param">packages</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/mgmtclass.html#Mgmtclass.set_packages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.mgmtclass.Mgmtclass.set_packages" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.mgmtclass.Mgmtclass.set_params">
+<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param">params</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/mgmtclass.html#Mgmtclass.set_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.mgmtclass.Mgmtclass.set_params" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.items.package">
+<span id="cobbler-items-package-module"></span><h2>8.1.3.7. cobbler.items.package module<a class="headerlink" href="#module-cobbler.items.package" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.items.package.Package">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.items.package.</code><code class="sig-name descname">Package</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">is_subobject=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/package.html#Package"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.package.Package" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="cobbler.html#cobbler.resource.Resource" title="cobbler.resource.Resource"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.resource.Resource</span></code></a></p>
+<dl class="attribute">
+<dt id="cobbler.items.package.Package.COLLECTION_TYPE">
+<code class="sig-name descname">COLLECTION_TYPE</code><em class="property"> = 'package'</em><a class="headerlink" href="#cobbler.items.package.Package.COLLECTION_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cobbler.items.package.Package.TYPE_NAME">
+<code class="sig-name descname">TYPE_NAME</code><em class="property"> = 'package'</em><a class="headerlink" href="#cobbler.items.package.Package.TYPE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.package.Package.check_if_valid">
+<code class="sig-name descname">check_if_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/package.html#Package.check_if_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.package.Package.check_if_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise exceptions if the object state is inconsistent</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.package.Package.get_fields">
+<code class="sig-name descname">get_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/package.html#Package.get_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.package.Package.get_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get serializable fields
+Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.package.Package.make_clone">
+<code class="sig-name descname">make_clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/package.html#Package.make_clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.package.Package.make_clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.package.Package.set_installer">
+<code class="sig-name descname">set_installer</code><span class="sig-paren">(</span><em class="sig-param">installer</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/package.html#Package.set_installer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.package.Package.set_installer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.package.Package.set_version">
+<code class="sig-name descname">set_version</code><span class="sig-paren">(</span><em class="sig-param">version</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/package.html#Package.set_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.package.Package.set_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.items.profile">
+<span id="cobbler-items-profile-module"></span><h2>8.1.3.8. cobbler.items.profile module<a class="headerlink" href="#module-cobbler.items.profile" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.items.profile.Profile">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.items.profile.</code><code class="sig-name descname">Profile</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cobbler.items.item.Item" title="cobbler.items.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.items.item.Item</span></code></a></p>
+<p>A Cobbler profile object.</p>
+<dl class="attribute">
+<dt id="cobbler.items.profile.Profile.COLLECTION_TYPE">
+<code class="sig-name descname">COLLECTION_TYPE</code><em class="property"> = 'profile'</em><a class="headerlink" href="#cobbler.items.profile.Profile.COLLECTION_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cobbler.items.profile.Profile.TYPE_NAME">
+<code class="sig-name descname">TYPE_NAME</code><em class="property"> = 'profile'</em><a class="headerlink" href="#cobbler.items.profile.Profile.TYPE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.check_if_valid">
+<code class="sig-name descname">check_if_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.check_if_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.check_if_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise exceptions if the object state is inconsistent</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.get_arch">
+<code class="sig-name descname">get_arch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.get_arch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.get_arch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.get_fields">
+<code class="sig-name descname">get_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.get_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.get_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of fields and their properties</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.get_parent">
+<code class="sig-name descname">get_parent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.get_parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.get_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return object next highest up the tree.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.get_redhat_management_key">
+<code class="sig-name descname">get_redhat_management_key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.get_redhat_management_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.get_redhat_management_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.make_clone">
+<code class="sig-name descname">make_clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.make_clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.make_clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_autoinstall">
+<code class="sig-name descname">set_autoinstall</code><span class="sig-paren">(</span><em class="sig-param">autoinstall</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_autoinstall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_autoinstall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the automatic OS installation template file path,
+this must be a local file.</p>
+<p>&#64;param str local automatic installation template path</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_dhcp_tag">
+<code class="sig-name descname">set_dhcp_tag</code><span class="sig-paren">(</span><em class="sig-param">dhcp_tag</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_dhcp_tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_dhcp_tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_distro">
+<code class="sig-name descname">set_distro</code><span class="sig-paren">(</span><em class="sig-param">distro_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_distro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_distro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the distro.  This must be the name of an existing
+Distro object in the Distros collection.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_enable_gpxe">
+<code class="sig-name descname">set_enable_gpxe</code><span class="sig-paren">(</span><em class="sig-param">enable_gpxe</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_enable_gpxe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_enable_gpxe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets whether or not the profile will use gPXE for booting.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_enable_menu">
+<code class="sig-name descname">set_enable_menu</code><span class="sig-paren">(</span><em class="sig-param">enable_menu</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_enable_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_enable_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets whether or not the profile will be listed in the default
+PXE boot menu.  This is pretty forgiving for YAML’s sake.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_name_servers">
+<code class="sig-name descname">set_name_servers</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_name_servers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_name_servers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the DNS servers.</p>
+<p>&#64;param: str/list data (string or list of nameservers)
+&#64;returns: True or CX</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_name_servers_search">
+<code class="sig-name descname">set_name_servers_search</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_name_servers_search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_name_servers_search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the DNS search paths.</p>
+<p>&#64;param: str/list data (string or list of search domains)
+&#64;returns: True or CX</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_next_server">
+<code class="sig-name descname">set_next_server</code><span class="sig-paren">(</span><em class="sig-param">server</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_next_server"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_next_server" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_parent">
+<code class="sig-name descname">set_parent</code><span class="sig-paren">(</span><em class="sig-param">parent_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instead of a –distro, set the parent of this object to another profile
+and use the values from the parent instead of this one where the values
+for this profile aren’t filled in, and blend them together where they
+are dictionaries.  Basically this enables profile inheritance.  To use this,
+the object MUST have been constructed with is_subobject=True or the
+default values for everything will be screwed up and this will likely NOT
+work.  So, API users – make sure you pass is_subobject=True into the
+constructor when using this.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_proxy">
+<code class="sig-name descname">set_proxy</code><span class="sig-paren">(</span><em class="sig-param">proxy</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_proxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_proxy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_redhat_management_key">
+<code class="sig-name descname">set_redhat_management_key</code><span class="sig-paren">(</span><em class="sig-param">management_key</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_redhat_management_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_redhat_management_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_repos">
+<code class="sig-name descname">set_repos</code><span class="sig-paren">(</span><em class="sig-param">repos</em>, <em class="sig-param">bypass_check=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_repos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_repos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_server">
+<code class="sig-name descname">set_server</code><span class="sig-paren">(</span><em class="sig-param">server</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_server"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_server" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_virt_auto_boot">
+<code class="sig-name descname">set_virt_auto_boot</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_virt_auto_boot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_virt_auto_boot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_virt_bridge">
+<code class="sig-name descname">set_virt_bridge</code><span class="sig-paren">(</span><em class="sig-param">vbridge</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_virt_bridge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_virt_bridge" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_virt_cpus">
+<code class="sig-name descname">set_virt_cpus</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_virt_cpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_virt_cpus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_virt_disk_driver">
+<code class="sig-name descname">set_virt_disk_driver</code><span class="sig-paren">(</span><em class="sig-param">driver</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_virt_disk_driver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_virt_disk_driver" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_virt_file_size">
+<code class="sig-name descname">set_virt_file_size</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_virt_file_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_virt_file_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_virt_path">
+<code class="sig-name descname">set_virt_path</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_virt_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_virt_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_virt_ram">
+<code class="sig-name descname">set_virt_ram</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_virt_ram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_virt_ram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.profile.Profile.set_virt_type">
+<code class="sig-name descname">set_virt_type</code><span class="sig-paren">(</span><em class="sig-param">vtype</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/profile.html#Profile.set_virt_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.profile.Profile.set_virt_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.items.repo">
+<span id="cobbler-items-repo-module"></span><h2>8.1.3.9. cobbler.items.repo module<a class="headerlink" href="#module-cobbler.items.repo" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.items.repo.Repo">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.items.repo.</code><code class="sig-name descname">Repo</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cobbler.items.item.Item" title="cobbler.items.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.items.item.Item</span></code></a></p>
+<p>A Cobbler repo object.</p>
+<dl class="attribute">
+<dt id="cobbler.items.repo.Repo.COLLECTION_TYPE">
+<code class="sig-name descname">COLLECTION_TYPE</code><em class="property"> = 'repo'</em><a class="headerlink" href="#cobbler.items.repo.Repo.COLLECTION_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cobbler.items.repo.Repo.TYPE_NAME">
+<code class="sig-name descname">TYPE_NAME</code><em class="property"> = 'repo'</em><a class="headerlink" href="#cobbler.items.repo.Repo.TYPE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.check_if_valid">
+<code class="sig-name descname">check_if_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.check_if_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.check_if_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise exceptions if the object state is inconsistent</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.get_fields">
+<code class="sig-name descname">get_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.get_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.get_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get serializable fields
+Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.get_parent">
+<code class="sig-name descname">get_parent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.get_parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.get_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>currently the Cobbler object space does not support subobjects of this object
+as it is conceptually not useful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.make_clone">
+<code class="sig-name descname">make_clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.make_clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.make_clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.set_apt_components">
+<code class="sig-name descname">set_apt_components</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.set_apt_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.set_apt_components" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.set_apt_dists">
+<code class="sig-name descname">set_apt_dists</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.set_apt_dists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.set_apt_dists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.set_arch">
+<code class="sig-name descname">set_arch</code><span class="sig-paren">(</span><em class="sig-param">arch</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.set_arch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.set_arch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override the arch used for reposync</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.set_breed">
+<code class="sig-name descname">set_breed</code><span class="sig-paren">(</span><em class="sig-param">breed</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.set_breed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.set_breed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.set_createrepo_flags">
+<code class="sig-name descname">set_createrepo_flags</code><span class="sig-paren">(</span><em class="sig-param">createrepo_flags</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.set_createrepo_flags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.set_createrepo_flags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flags passed to createrepo when it is called.  Common flags to use would be
+-c cache or -g comps.xml to generate group information.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.set_environment">
+<code class="sig-name descname">set_environment</code><span class="sig-paren">(</span><em class="sig-param">options</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.set_environment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.set_environment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yum can take options from the environment.  This puts them there before
+each reposync.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.set_keep_updated">
+<code class="sig-name descname">set_keep_updated</code><span class="sig-paren">(</span><em class="sig-param">keep_updated</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.set_keep_updated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.set_keep_updated" title="Permalink to this definition">¶</a></dt>
+<dd><p>This allows the user to disable updates to a particular repo for whatever reason.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.set_mirror">
+<code class="sig-name descname">set_mirror</code><span class="sig-paren">(</span><em class="sig-param">mirror</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.set_mirror"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.set_mirror" title="Permalink to this definition">¶</a></dt>
+<dd><p>A repo is (initially, as in right now) is something that can be rsynced.
+reposync/repotrack integration over HTTP might come later.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.set_mirror_locally">
+<code class="sig-name descname">set_mirror_locally</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.set_mirror_locally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.set_mirror_locally" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.set_os_version">
+<code class="sig-name descname">set_os_version</code><span class="sig-paren">(</span><em class="sig-param">os_version</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.set_os_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.set_os_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.set_priority">
+<code class="sig-name descname">set_priority</code><span class="sig-paren">(</span><em class="sig-param">priority</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.set_priority"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.set_priority" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the priority of the repository.  1= highest, 99=default
+Only works if host is using priorities plugin for yum.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.set_proxy">
+<code class="sig-name descname">set_proxy</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.set_proxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.set_proxy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.set_rpm_list">
+<code class="sig-name descname">set_rpm_list</code><span class="sig-paren">(</span><em class="sig-param">rpms</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.set_rpm_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.set_rpm_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rather than mirroring the entire contents of a repository (Fedora Extras, for instance,
+contains games, and we probably don’t want those), make it possible to list the packages
+one wants out of those repos, so only those packages + deps can be mirrored.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.repo.Repo.set_yumopts">
+<code class="sig-name descname">set_yumopts</code><span class="sig-paren">(</span><em class="sig-param">options</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/repo.html#Repo.set_yumopts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.repo.Repo.set_yumopts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kernel options are a space delimited list,
+like ‘a=b c=d e=f g h i=j’ or a dictionary.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.items.system">
+<span id="cobbler-items-system-module"></span><h2>8.1.3.10. cobbler.items.system module<a class="headerlink" href="#module-cobbler.items.system" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.items.system.System">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.items.system.</code><code class="sig-name descname">System</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cobbler.items.item.Item" title="cobbler.items.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">cobbler.items.item.Item</span></code></a></p>
+<p>A Cobbler system object.</p>
+<dl class="attribute">
+<dt id="cobbler.items.system.System.COLLECTION_TYPE">
+<code class="sig-name descname">COLLECTION_TYPE</code><em class="property"> = 'system'</em><a class="headerlink" href="#cobbler.items.system.System.COLLECTION_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cobbler.items.system.System.TYPE_NAME">
+<code class="sig-name descname">TYPE_NAME</code><em class="property"> = 'system'</em><a class="headerlink" href="#cobbler.items.system.System.TYPE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.check_if_valid">
+<code class="sig-name descname">check_if_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.check_if_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.check_if_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise exceptions if the object state is inconsistent</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.delete_interface">
+<code class="sig-name descname">delete_interface</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.delete_interface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.delete_interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to remove an interface.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.from_dict">
+<code class="sig-name descname">from_dict</code><span class="sig-paren">(</span><em class="sig-param">seed_data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.from_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.from_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify this object to take on values in seed_data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.get_config_filename">
+<code class="sig-name descname">get_config_filename</code><span class="sig-paren">(</span><em class="sig-param">interface</em>, <em class="sig-param">loader=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.get_config_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.get_config_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>The configuration file for each system pxe uses is either
+a form of the MAC address of the hex version of the IP.  If none
+of that is available, just use the given name, though the name
+given will be unsuitable for PXE configuration (For this, check
+system.is_management_supported()). This same file is used to store
+system config information in the Apache tree, so it’s still relevant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loader</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Bootloader type.</p></li>
+<li><p><strong>interface</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Name of the interface.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.get_fields">
+<code class="sig-name descname">get_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.get_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.get_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get serializable fields
+Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.get_ip_address">
+<code class="sig-name descname">get_ip_address</code><span class="sig-paren">(</span><em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.get_ip_address"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.get_ip_address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the IP address for the given interface.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.get_mac_address">
+<code class="sig-name descname">get_mac_address</code><span class="sig-paren">(</span><em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.get_mac_address"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.get_mac_address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the mac address, which may be implicit in the object name or explicit with –mac-address.
+Use the explicit location first.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.get_parent">
+<code class="sig-name descname">get_parent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.get_parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.get_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return object next highest up the tree.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.get_redhat_management_key">
+<code class="sig-name descname">get_redhat_management_key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.get_redhat_management_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.get_redhat_management_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.is_management_supported">
+<code class="sig-name descname">is_management_supported</code><span class="sig-paren">(</span><em class="sig-param">cidr_ok=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.is_management_supported"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.is_management_supported" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can only add system PXE records if a MAC or IP address is available, else it’s a koan
+only record.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.make_clone">
+<code class="sig-name descname">make_clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.make_clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.make_clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Must be defined in any subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.modify_interface">
+<code class="sig-name descname">modify_interface</code><span class="sig-paren">(</span><em class="sig-param">_dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.modify_interface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.modify_interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used by the WUI to modify an interface more-efficiently</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.rename_interface">
+<code class="sig-name descname">rename_interface</code><span class="sig-paren">(</span><em class="sig-param">names</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.rename_interface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.rename_interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to rename an interface.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_autoinstall">
+<code class="sig-name descname">set_autoinstall</code><span class="sig-paren">(</span><em class="sig-param">autoinstall</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_autoinstall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_autoinstall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the automatic installation template filepath, this must be a local file.</p>
+<p>&#64;param str local automatic installation template file path</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_bonding_opts">
+<code class="sig-name descname">set_bonding_opts</code><span class="sig-paren">(</span><em class="sig-param">bonding_opts</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_bonding_opts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_bonding_opts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_boot_loader">
+<code class="sig-name descname">set_boot_loader</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_boot_loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_boot_loader" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_bridge_opts">
+<code class="sig-name descname">set_bridge_opts</code><span class="sig-paren">(</span><em class="sig-param">bridge_opts</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_bridge_opts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_bridge_opts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_cnames">
+<code class="sig-name descname">set_cnames</code><span class="sig-paren">(</span><em class="sig-param">cnames</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_cnames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_cnames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_connected_mode">
+<code class="sig-name descname">set_connected_mode</code><span class="sig-paren">(</span><em class="sig-param">truthiness</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_connected_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_connected_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_dhcp_tag">
+<code class="sig-name descname">set_dhcp_tag</code><span class="sig-paren">(</span><em class="sig-param">dhcp_tag</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_dhcp_tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_dhcp_tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_dns_name">
+<code class="sig-name descname">set_dns_name</code><span class="sig-paren">(</span><em class="sig-param">dns_name</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_dns_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_dns_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set DNS name for interface.</p>
+<p>&#64;param: str dns_name (dns name)
+&#64;param: str interface (interface name)
+&#64;returns: True or CX</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_enable_gpxe">
+<code class="sig-name descname">set_enable_gpxe</code><span class="sig-paren">(</span><em class="sig-param">enable_gpxe</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_enable_gpxe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_enable_gpxe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets whether or not the system will use gPXE for booting.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_gateway">
+<code class="sig-name descname">set_gateway</code><span class="sig-paren">(</span><em class="sig-param">gateway</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_gateway"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_gateway" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a gateway IPv4 address.</p>
+<p>&#64;param: str gateway (ip address)
+&#64;returns: True or CX</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_hostname">
+<code class="sig-name descname">set_hostname</code><span class="sig-paren">(</span><em class="sig-param">hostname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_hostname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_hostname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set hostname.</p>
+<p>&#64;param: str hostname (hostname for system)
+&#64;returns: True or CX</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_if_gateway">
+<code class="sig-name descname">set_if_gateway</code><span class="sig-paren">(</span><em class="sig-param">gateway</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_if_gateway"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_if_gateway" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the per-interface gateway.</p>
+<p>&#64;param: str gateway (ipv4 address for the gateway)
+&#64;param: str interface (interface name)
+&#64;returns: True or CX</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_image">
+<code class="sig-name descname">set_image</code><span class="sig-paren">(</span><em class="sig-param">image_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the system to use a certain named image.  Works like set_profile
+but cannot be used at the same time.  It’s one or the other.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_interface_master">
+<code class="sig-name descname">set_interface_master</code><span class="sig-paren">(</span><em class="sig-param">interface_master</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_interface_master"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_interface_master" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_interface_type">
+<code class="sig-name descname">set_interface_type</code><span class="sig-paren">(</span><em class="sig-param">type</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_interface_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_interface_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_ip_address">
+<code class="sig-name descname">set_ip_address</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_ip_address"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_ip_address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set IPv4 address on interface.</p>
+<p>&#64;param: str address (ip address)
+&#64;param: str interface (interface name)
+&#64;returns: True or CX</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_ipv6_address">
+<code class="sig-name descname">set_ipv6_address</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_ipv6_address"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_ipv6_address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set IPv6 address on interface.</p>
+<p>&#64;param: str address (ip address)
+&#64;param: str interface (interface name)
+&#64;returns: True or CX</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_ipv6_autoconfiguration">
+<code class="sig-name descname">set_ipv6_autoconfiguration</code><span class="sig-paren">(</span><em class="sig-param">truthiness</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_ipv6_autoconfiguration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_ipv6_autoconfiguration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_ipv6_default_device">
+<code class="sig-name descname">set_ipv6_default_device</code><span class="sig-paren">(</span><em class="sig-param">interface_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_ipv6_default_device"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_ipv6_default_device" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_ipv6_default_gateway">
+<code class="sig-name descname">set_ipv6_default_gateway</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_ipv6_default_gateway"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_ipv6_default_gateway" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_ipv6_mtu">
+<code class="sig-name descname">set_ipv6_mtu</code><span class="sig-paren">(</span><em class="sig-param">mtu</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_ipv6_mtu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_ipv6_mtu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_ipv6_prefix">
+<code class="sig-name descname">set_ipv6_prefix</code><span class="sig-paren">(</span><em class="sig-param">prefix</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_ipv6_prefix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_ipv6_prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a IPv6 prefix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_ipv6_secondaries">
+<code class="sig-name descname">set_ipv6_secondaries</code><span class="sig-paren">(</span><em class="sig-param">addresses</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_ipv6_secondaries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_ipv6_secondaries" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_ipv6_static_routes">
+<code class="sig-name descname">set_ipv6_static_routes</code><span class="sig-paren">(</span><em class="sig-param">routes</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_ipv6_static_routes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_ipv6_static_routes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_mac_address">
+<code class="sig-name descname">set_mac_address</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_mac_address"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_mac_address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set mac address on interface.</p>
+<p>&#64;param: str address (mac address)
+&#64;param: str interface (interface name)
+&#64;returns: True or CX</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_management">
+<code class="sig-name descname">set_management</code><span class="sig-paren">(</span><em class="sig-param">truthiness</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_management"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_management" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_mtu">
+<code class="sig-name descname">set_mtu</code><span class="sig-paren">(</span><em class="sig-param">mtu</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_mtu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_mtu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_name_servers">
+<code class="sig-name descname">set_name_servers</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_name_servers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_name_servers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the DNS servers.</p>
+<p>&#64;param: str/list data (string or list of nameservers)
+&#64;returns: True or CX</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_name_servers_search">
+<code class="sig-name descname">set_name_servers_search</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_name_servers_search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_name_servers_search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the DNS search paths.</p>
+<p>&#64;param: str/list data (string or list of search domains)
+&#64;returns: True or CX</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_netboot_enabled">
+<code class="sig-name descname">set_netboot_enabled</code><span class="sig-paren">(</span><em class="sig-param">netboot_enabled</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_netboot_enabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_netboot_enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>If true, allows per-system PXE files to be generated on sync (or add).  If false,
+these files are not generated, thus eliminating the potential for an infinite install
+loop when systems are set to PXE boot first in the boot order.  In general, users
+who are PXE booting first in the boot order won’t create system definitions, so this
+feature primarily comes into play for programmatic users of the API, who want to
+initially create a system with netboot enabled and then disable it after the system installs,
+as triggered by some action in automatic installation file’s  %post section.
+For this reason, this option is not urfaced in the CLI, output, or documentation (yet).</p>
+<p>Use of this option does not affect the ability to use PXE menus.  If an admin has machines
+set up to PXE only after local boot fails, this option isn’t even relevant.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_netmask">
+<code class="sig-name descname">set_netmask</code><span class="sig-paren">(</span><em class="sig-param">netmask</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_netmask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_netmask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the netmask for given interface.</p>
+<p>&#64;param: str netmask (netmask)
+&#64;param: str interface (interface name)
+&#64;returns: True or CX</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_next_server">
+<code class="sig-name descname">set_next_server</code><span class="sig-paren">(</span><em class="sig-param">server</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_next_server"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_next_server" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_power_address">
+<code class="sig-name descname">set_power_address</code><span class="sig-paren">(</span><em class="sig-param">power_address</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_power_address"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_power_address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_power_id">
+<code class="sig-name descname">set_power_id</code><span class="sig-paren">(</span><em class="sig-param">power_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_power_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_power_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_power_identity_file">
+<code class="sig-name descname">set_power_identity_file</code><span class="sig-paren">(</span><em class="sig-param">power_identity_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_power_identity_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_power_identity_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_power_options">
+<code class="sig-name descname">set_power_options</code><span class="sig-paren">(</span><em class="sig-param">power_options</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_power_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_power_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_power_pass">
+<code class="sig-name descname">set_power_pass</code><span class="sig-paren">(</span><em class="sig-param">power_pass</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_power_pass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_power_pass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_power_type">
+<code class="sig-name descname">set_power_type</code><span class="sig-paren">(</span><em class="sig-param">power_type</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_power_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_power_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_power_user">
+<code class="sig-name descname">set_power_user</code><span class="sig-paren">(</span><em class="sig-param">power_user</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_power_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_power_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_profile">
+<code class="sig-name descname">set_profile</code><span class="sig-paren">(</span><em class="sig-param">profile_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the system to use a certain named profile. The profile
+must have already been loaded into the Profiles collection.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_proxy">
+<code class="sig-name descname">set_proxy</code><span class="sig-paren">(</span><em class="sig-param">proxy</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_proxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_proxy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_redhat_management_key">
+<code class="sig-name descname">set_redhat_management_key</code><span class="sig-paren">(</span><em class="sig-param">management_key</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_redhat_management_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_redhat_management_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_repos_enabled">
+<code class="sig-name descname">set_repos_enabled</code><span class="sig-paren">(</span><em class="sig-param">repos_enabled</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_repos_enabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_repos_enabled" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_serial_baud_rate">
+<code class="sig-name descname">set_serial_baud_rate</code><span class="sig-paren">(</span><em class="sig-param">baud_rate</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_serial_baud_rate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_serial_baud_rate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_serial_device">
+<code class="sig-name descname">set_serial_device</code><span class="sig-paren">(</span><em class="sig-param">device_number</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_serial_device"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_serial_device" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_server">
+<code class="sig-name descname">set_server</code><span class="sig-paren">(</span><em class="sig-param">server</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_server"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_server" title="Permalink to this definition">¶</a></dt>
+<dd><p>If a system can’t reach the boot server at the value configured in settings
+because it doesn’t have the same name on it’s subnet this is there for an override.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_static">
+<code class="sig-name descname">set_static</code><span class="sig-paren">(</span><em class="sig-param">truthiness</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_static"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_static" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_static_routes">
+<code class="sig-name descname">set_static_routes</code><span class="sig-paren">(</span><em class="sig-param">routes</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_static_routes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_static_routes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_status">
+<code class="sig-name descname">set_status</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_virt_auto_boot">
+<code class="sig-name descname">set_virt_auto_boot</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_virt_auto_boot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_virt_auto_boot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_virt_bridge">
+<code class="sig-name descname">set_virt_bridge</code><span class="sig-paren">(</span><em class="sig-param">bridge</em>, <em class="sig-param">interface</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_virt_bridge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_virt_bridge" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_virt_cpus">
+<code class="sig-name descname">set_virt_cpus</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_virt_cpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_virt_cpus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_virt_disk_driver">
+<code class="sig-name descname">set_virt_disk_driver</code><span class="sig-paren">(</span><em class="sig-param">driver</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_virt_disk_driver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_virt_disk_driver" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_virt_file_size">
+<code class="sig-name descname">set_virt_file_size</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_virt_file_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_virt_file_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_virt_path">
+<code class="sig-name descname">set_virt_path</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_virt_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_virt_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_virt_pxe_boot">
+<code class="sig-name descname">set_virt_pxe_boot</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_virt_pxe_boot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_virt_pxe_boot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_virt_ram">
+<code class="sig-name descname">set_virt_ram</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_virt_ram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_virt_ram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.items.system.System.set_virt_type">
+<code class="sig-name descname">set_virt_type</code><span class="sig-paren">(</span><em class="sig-param">vtype</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/items/system.html#System.set_virt_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.items.system.System.set_virt_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.items">
+<span id="module-contents"></span><h2>8.1.3.11. Module contents<a class="headerlink" href="#module-cobbler.items" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cobbler.modules.html" class="btn btn-neutral float-right" title="8.1.4. cobbler.modules package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cobbler.cobbler_collections.html" class="btn btn-neutral float-left" title="8.1.2. cobbler.cobbler_collections package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

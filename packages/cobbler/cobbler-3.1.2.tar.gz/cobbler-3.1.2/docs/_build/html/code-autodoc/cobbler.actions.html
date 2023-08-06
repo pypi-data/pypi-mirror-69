@@ -1,0 +1,945 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>8.1.1. cobbler.actions package &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="8.1.2. cobbler.cobbler_collections package" href="cobbler.cobbler_collections.html" />
+    <link rel="prev" title="8. cobbler package" href="cobbler.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="cobbler.html">8. Cobbler-Code Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cobbler.html#subpackages">8.1. Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">8.1.1. cobbler.actions package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">8.1.1.1. Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.actions.acl">8.1.1.2. cobbler.actions.acl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.actions.buildiso">8.1.1.3. cobbler.actions.buildiso module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.actions.check">8.1.1.4. cobbler.actions.check module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.actions.dlcontent">8.1.1.5. cobbler.actions.dlcontent module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.actions.hardlink">8.1.1.6. cobbler.actions.hardlink module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.actions.litesync">8.1.1.7. cobbler.actions.litesync module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.actions.log">8.1.1.8. cobbler.actions.log module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.actions.replicate">8.1.1.9. cobbler.actions.replicate module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.actions.report">8.1.1.10. cobbler.actions.report module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.actions.reposync">8.1.1.11. cobbler.actions.reposync module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.actions.status">8.1.1.12. cobbler.actions.status module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.actions.sync">8.1.1.13. cobbler.actions.sync module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-cobbler.actions">8.1.1.14. Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.cobbler_collections.html">8.1.2. cobbler.cobbler_collections package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.items.html">8.1.3. cobbler.items package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.modules.html">8.1.4. cobbler.modules package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.web.html">8.1.5. cobbler.web package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#submodules">8.2. Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.api">8.3. cobbler.api module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.autoinstall_manager">8.4. cobbler.autoinstall_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.autoinstallgen">8.5. cobbler.autoinstallgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.cexceptions">8.6. cobbler.cexceptions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.cli">8.7. cobbler.cli module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.clogger">8.8. cobbler.clogger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.cobblerd">8.9. cobbler.cobblerd module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.configgen">8.10. cobbler.configgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.download_manager">8.11. cobbler.download_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.field_info">8.12. cobbler.field_info module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.module_loader">8.13. cobbler.module_loader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.power_manager">8.14. cobbler.power_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.remote">8.15. cobbler.remote module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.resource">8.16. cobbler.resource module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.serializer">8.17. cobbler.serializer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.services">8.18. cobbler.services module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.settings">8.19. cobbler.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.templar">8.20. cobbler.templar module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.template_api">8.21. cobbler.template_api module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.tftpgen">8.22. cobbler.tftpgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.utils">8.23. cobbler.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.validate">8.24. cobbler.validate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler.yumgen">8.25. cobbler.yumgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#module-cobbler">8.26. Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="cobbler.html">8. cobbler package</a> &raquo;</li>
+        
+      <li>8.1.1. cobbler.actions package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/code-autodoc/cobbler.actions.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cobbler-actions-package">
+<h1>8.1.1. cobbler.actions package<a class="headerlink" href="#cobbler-actions-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>8.1.1.1. Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cobbler.actions.acl">
+<span id="cobbler-actions-acl-module"></span><h2>8.1.1.2. cobbler.actions.acl module<a class="headerlink" href="#module-cobbler.actions.acl" title="Permalink to this headline">¶</a></h2>
+<p>Configures acls for various users/groups so they can access the cobbler command
+line as non-root.  Now that CLI is largely remoted (XMLRPC) this is largely just
+useful for not having to log in (access to shared-secret) file but also grants
+access to hand-edit various cobbler_collections files and other useful things.</p>
+<dl class="class">
+<dt id="cobbler.actions.acl.AclConfig">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.actions.acl.</code><code class="sig-name descname">AclConfig</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/acl.html#AclConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.acl.AclConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.actions.acl.AclConfig.modacl">
+<code class="sig-name descname">modacl</code><span class="sig-paren">(</span><em class="sig-param">isadd</em>, <em class="sig-param">isuser</em>, <em class="sig-param">who</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/acl.html#AclConfig.modacl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.acl.AclConfig.modacl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.acl.AclConfig.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">adduser=None</em>, <em class="sig-param">addgroup=None</em>, <em class="sig-param">removeuser=None</em>, <em class="sig-param">removegroup=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/acl.html#AclConfig.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.acl.AclConfig.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automate setfacl commands</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.actions.buildiso">
+<span id="cobbler-actions-buildiso-module"></span><h2>8.1.1.3. cobbler.actions.buildiso module<a class="headerlink" href="#module-cobbler.actions.buildiso" title="Permalink to this headline">¶</a></h2>
+<p>Builds bootable CD images that have PXE-equivalent behavior
+for all Cobbler distros/profiles/systems currently in memory.</p>
+<dl class="class">
+<dt id="cobbler.actions.buildiso.BuildIso">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.actions.buildiso.</code><code class="sig-name descname">BuildIso</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/buildiso.html#BuildIso"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.buildiso.BuildIso" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Handles conversion of internal state to the isolinux tree layout</p>
+<dl class="method">
+<dt id="cobbler.actions.buildiso.BuildIso.add_remaining_kopts">
+<code class="sig-name descname">add_remaining_kopts</code><span class="sig-paren">(</span><em class="sig-param">koptdict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/buildiso.html#BuildIso.add_remaining_kopts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.buildiso.BuildIso.add_remaining_kopts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add remaining kernel_options to append_line</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.buildiso.BuildIso.copy_boot_files">
+<code class="sig-name descname">copy_boot_files</code><span class="sig-paren">(</span><em class="sig-param">distro</em>, <em class="sig-param">destdir</em>, <em class="sig-param">prefix=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/buildiso.html#BuildIso.copy_boot_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.buildiso.BuildIso.copy_boot_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy kernel/initrd to destdir with (optional) newfile prefix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.buildiso.BuildIso.filter_systems_or_profiles">
+<code class="sig-name descname">filter_systems_or_profiles</code><span class="sig-paren">(</span><em class="sig-param">selected_items</em>, <em class="sig-param">list_type</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/buildiso.html#BuildIso.filter_systems_or_profiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.buildiso.BuildIso.filter_systems_or_profiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of valid profile or system objects selected from all profiles
+or systems by name, or everything if selected_items is empty</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.buildiso.BuildIso.generate_netboot_iso">
+<code class="sig-name descname">generate_netboot_iso</code><span class="sig-paren">(</span><em class="sig-param">imagesdir</em>, <em class="sig-param">isolinuxdir</em>, <em class="sig-param">profiles=None</em>, <em class="sig-param">systems=None</em>, <em class="sig-param">exclude_dns=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/buildiso.html#BuildIso.generate_netboot_iso"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.buildiso.BuildIso.generate_netboot_iso" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create bootable CD image to be used for network installations</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.buildiso.BuildIso.generate_standalone_iso">
+<code class="sig-name descname">generate_standalone_iso</code><span class="sig-paren">(</span><em class="sig-param">imagesdir</em>, <em class="sig-param">isolinuxdir</em>, <em class="sig-param">distname</em>, <em class="sig-param">filesource</em>, <em class="sig-param">airgapped</em>, <em class="sig-param">profiles</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/buildiso.html#BuildIso.generate_standalone_iso"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.buildiso.BuildIso.generate_standalone_iso" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create bootable CD image to be used for handsoff CD installtions</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.buildiso.BuildIso.make_shorter">
+<code class="sig-name descname">make_shorter</code><span class="sig-paren">(</span><em class="sig-param">distname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/buildiso.html#BuildIso.make_shorter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.buildiso.BuildIso.make_shorter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a short distro identifier</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.buildiso.BuildIso.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">iso=None</em>, <em class="sig-param">buildisodir=None</em>, <em class="sig-param">profiles=None</em>, <em class="sig-param">systems=None</em>, <em class="sig-param">distro=None</em>, <em class="sig-param">standalone=None</em>, <em class="sig-param">airgapped=None</em>, <em class="sig-param">source=None</em>, <em class="sig-param">exclude_dns=None</em>, <em class="sig-param">mkisofs_opts=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/buildiso.html#BuildIso.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.buildiso.BuildIso.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.actions.check">
+<span id="cobbler-actions-check-module"></span><h2>8.1.1.4. cobbler.actions.check module<a class="headerlink" href="#module-cobbler.actions.check" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.actions.check.CobblerCheck">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.actions.check.</code><code class="sig-name descname">CobblerCheck</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Validates whether the system is reasonably well configured for
+serving up content.  This is the code behind ‘cobbler check’.</p>
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_bind_bin">
+<code class="sig-name descname">check_bind_bin</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_bind_bin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_bind_bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if bind is installed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_bootloaders">
+<code class="sig-name descname">check_bootloaders</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_bootloaders"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_bootloaders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if network bootloaders are installed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_ctftpd_dir">
+<code class="sig-name descname">check_ctftpd_dir</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_ctftpd_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_ctftpd_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if cobbler.conf’s tftpboot directory exists</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_debmirror">
+<code class="sig-name descname">check_debmirror</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_debmirror"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_debmirror" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_dhcpd_bin">
+<code class="sig-name descname">check_dhcpd_bin</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_dhcpd_bin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_dhcpd_bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if dhcpd is installed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_dhcpd_conf">
+<code class="sig-name descname">check_dhcpd_conf</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_dhcpd_conf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_dhcpd_conf" title="Permalink to this definition">¶</a></dt>
+<dd><p>NOTE: this code only applies if cobbler is <em>NOT</em> set to generate
+a dhcp.conf file</p>
+<p>Check that dhcpd <em>appears</em> to be configured for pxe booting.
+We can’t assure file correctness.  Since a cobbler user might
+have dhcp on another server, it’s okay if it’s not there and/or
+not configured correctly according to automated scans.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_dnsmasq_bin">
+<code class="sig-name descname">check_dnsmasq_bin</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_dnsmasq_bin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_dnsmasq_bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if dnsmasq is installed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_for_cman">
+<code class="sig-name descname">check_for_cman</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_for_cman"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_for_cman" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_for_default_password">
+<code class="sig-name descname">check_for_default_password</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_for_default_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_for_default_password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_for_ksvalidator">
+<code class="sig-name descname">check_for_ksvalidator</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_for_ksvalidator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_for_ksvalidator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_for_unreferenced_repos">
+<code class="sig-name descname">check_for_unreferenced_repos</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_for_unreferenced_repos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_for_unreferenced_repos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_for_unsynced_repos">
+<code class="sig-name descname">check_for_unsynced_repos</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_for_unsynced_repos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_for_unsynced_repos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_for_wget_curl">
+<code class="sig-name descname">check_for_wget_curl</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_for_wget_curl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_for_wget_curl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check to make sure wget or curl is installed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_iptables">
+<code class="sig-name descname">check_iptables</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_iptables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_iptables" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_name">
+<code class="sig-name descname">check_name</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the server name in the config file is still set to localhost
+automatic installations run from koan will not have proper kernel line
+parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_rsync_conf">
+<code class="sig-name descname">check_rsync_conf</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_rsync_conf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_rsync_conf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that rsync is enabled to autostart</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_selinux">
+<code class="sig-name descname">check_selinux</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_selinux"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_selinux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Suggests various SELinux rules changes to run Cobbler happily with
+SELinux in enforcing mode.  FIXME: this method could use some
+refactoring in the future.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_service">
+<code class="sig-name descname">check_service</code><span class="sig-paren">(</span><em class="sig-param">status</em>, <em class="sig-param">which</em>, <em class="sig-param">notes=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_service" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_tftpd_dir">
+<code class="sig-name descname">check_tftpd_dir</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_tftpd_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_tftpd_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if cobbler.conf’s tftpboot directory exists</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.check_yum">
+<code class="sig-name descname">check_yum</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.check_yum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.check_yum" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.check.CobblerCheck.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/check.html#CobblerCheck.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.check.CobblerCheck.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns None if there are no errors, otherwise returns a list
+of things to correct prior to running application ‘for real’.
+(The CLI usage is “cobbler check” before “cobbler sync”)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.actions.dlcontent">
+<span id="cobbler-actions-dlcontent-module"></span><h2>8.1.1.5. cobbler.actions.dlcontent module<a class="headerlink" href="#module-cobbler.actions.dlcontent" title="Permalink to this headline">¶</a></h2>
+<p>Downloads bootloader content for all arches for when the user doesn’t want to supply their own.</p>
+<dl class="class">
+<dt id="cobbler.actions.dlcontent.ContentDownloader">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.actions.dlcontent.</code><code class="sig-name descname">ContentDownloader</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/dlcontent.html#ContentDownloader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.dlcontent.ContentDownloader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.actions.dlcontent.ContentDownloader.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">force=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/dlcontent.html#ContentDownloader.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.dlcontent.ContentDownloader.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download bootloader content for all of the latest bootloaders, since the user
+has chosen to not supply their own.  You may ask “why not get this from yum”,
+we also want this to be able to work on Debian and
+further do not want folks to have to install a cross compiler.  For those that don’t like this approach
+they can still source their cross-arch bootloader content manually.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.actions.hardlink">
+<span id="cobbler-actions-hardlink-module"></span><h2>8.1.1.6. cobbler.actions.hardlink module<a class="headerlink" href="#module-cobbler.actions.hardlink" title="Permalink to this headline">¶</a></h2>
+<p>Hard links cobbler content together to save space.</p>
+<dl class="class">
+<dt id="cobbler.actions.hardlink.HardLinker">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.actions.hardlink.</code><code class="sig-name descname">HardLinker</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/hardlink.html#HardLinker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.hardlink.HardLinker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.actions.hardlink.HardLinker.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/hardlink.html#HardLinker.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.hardlink.HardLinker.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simply hardlinks directories that are cobbler managed.
+This is a /very/ simple command but may grow more complex
+and intelligent over time.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.actions.litesync">
+<span id="cobbler-actions-litesync-module"></span><h2>8.1.1.7. cobbler.actions.litesync module<a class="headerlink" href="#module-cobbler.actions.litesync" title="Permalink to this headline">¶</a></h2>
+<p>Running small pieces of cobbler sync when certain actions are taken,
+such that we don’t need a time consuming sync when adding new
+systems if nothing has changed for systems that have already
+been created.</p>
+<dl class="class">
+<dt id="cobbler.actions.litesync.CobblerLiteSync">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.actions.litesync.</code><code class="sig-name descname">CobblerLiteSync</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/litesync.html#CobblerLiteSync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.litesync.CobblerLiteSync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Handles conversion of internal state to the tftpboot tree layout</p>
+<dl class="method">
+<dt id="cobbler.actions.litesync.CobblerLiteSync.add_single_distro">
+<code class="sig-name descname">add_single_distro</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/litesync.html#CobblerLiteSync.add_single_distro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.litesync.CobblerLiteSync.add_single_distro" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.litesync.CobblerLiteSync.add_single_image">
+<code class="sig-name descname">add_single_image</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/litesync.html#CobblerLiteSync.add_single_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.litesync.CobblerLiteSync.add_single_image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.litesync.CobblerLiteSync.add_single_profile">
+<code class="sig-name descname">add_single_profile</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">rebuild_menu=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/litesync.html#CobblerLiteSync.add_single_profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.litesync.CobblerLiteSync.add_single_profile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.litesync.CobblerLiteSync.add_single_system">
+<code class="sig-name descname">add_single_system</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/litesync.html#CobblerLiteSync.add_single_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.litesync.CobblerLiteSync.add_single_system" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.litesync.CobblerLiteSync.remove_single_distro">
+<code class="sig-name descname">remove_single_distro</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/litesync.html#CobblerLiteSync.remove_single_distro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.litesync.CobblerLiteSync.remove_single_distro" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.litesync.CobblerLiteSync.remove_single_image">
+<code class="sig-name descname">remove_single_image</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/litesync.html#CobblerLiteSync.remove_single_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.litesync.CobblerLiteSync.remove_single_image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.litesync.CobblerLiteSync.remove_single_profile">
+<code class="sig-name descname">remove_single_profile</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">rebuild_menu=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/litesync.html#CobblerLiteSync.remove_single_profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.litesync.CobblerLiteSync.remove_single_profile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.litesync.CobblerLiteSync.remove_single_system">
+<code class="sig-name descname">remove_single_system</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/litesync.html#CobblerLiteSync.remove_single_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.litesync.CobblerLiteSync.remove_single_system" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.litesync.CobblerLiteSync.update_system_netboot_status">
+<code class="sig-name descname">update_system_netboot_status</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/litesync.html#CobblerLiteSync.update_system_netboot_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.litesync.CobblerLiteSync.update_system_netboot_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.actions.log">
+<span id="cobbler-actions-log-module"></span><h2>8.1.1.8. cobbler.actions.log module<a class="headerlink" href="#module-cobbler.actions.log" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.actions.log.LogTool">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.actions.log.</code><code class="sig-name descname">LogTool</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">system</em>, <em class="sig-param">api</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/log.html#LogTool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.log.LogTool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Helpers for dealing with System logs, anamon, etc..</p>
+<dl class="method">
+<dt id="cobbler.actions.log.LogTool.clear">
+<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/log.html#LogTool.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.log.LogTool.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the system logs</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.actions.replicate">
+<span id="cobbler-actions-replicate-module"></span><h2>8.1.1.9. cobbler.actions.replicate module<a class="headerlink" href="#module-cobbler.actions.replicate" title="Permalink to this headline">¶</a></h2>
+<p>Replicate from a cobbler master.</p>
+<dl class="class">
+<dt id="cobbler.actions.replicate.Replicate">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.actions.replicate.</code><code class="sig-name descname">Replicate</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/replicate.html#Replicate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.replicate.Replicate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.actions.replicate.Replicate.add_objects_not_on_local">
+<code class="sig-name descname">add_objects_not_on_local</code><span class="sig-paren">(</span><em class="sig-param">obj_type</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/replicate.html#Replicate.add_objects_not_on_local"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.replicate.Replicate.add_objects_not_on_local" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.replicate.Replicate.generate_include_map">
+<code class="sig-name descname">generate_include_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/replicate.html#Replicate.generate_include_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.replicate.Replicate.generate_include_map" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.replicate.Replicate.link_distros">
+<code class="sig-name descname">link_distros</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/replicate.html#Replicate.link_distros"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.replicate.Replicate.link_distros" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.replicate.Replicate.remove_objects_not_on_master">
+<code class="sig-name descname">remove_objects_not_on_master</code><span class="sig-paren">(</span><em class="sig-param">obj_type</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/replicate.html#Replicate.remove_objects_not_on_master"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.replicate.Replicate.remove_objects_not_on_master" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.replicate.Replicate.replace_objects_newer_on_remote">
+<code class="sig-name descname">replace_objects_newer_on_remote</code><span class="sig-paren">(</span><em class="sig-param">obj_type</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/replicate.html#Replicate.replace_objects_newer_on_remote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.replicate.Replicate.replace_objects_newer_on_remote" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.replicate.Replicate.replicate_data">
+<code class="sig-name descname">replicate_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/replicate.html#Replicate.replicate_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.replicate.Replicate.replicate_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.replicate.Replicate.rsync_it">
+<code class="sig-name descname">rsync_it</code><span class="sig-paren">(</span><em class="sig-param">from_path</em>, <em class="sig-param">to_path</em>, <em class="sig-param">type=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/replicate.html#Replicate.rsync_it"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.replicate.Replicate.rsync_it" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.replicate.Replicate.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">cobbler_master=None</em>, <em class="sig-param">port='80'</em>, <em class="sig-param">distro_patterns=None</em>, <em class="sig-param">profile_patterns=None</em>, <em class="sig-param">system_patterns=None</em>, <em class="sig-param">repo_patterns=None</em>, <em class="sig-param">image_patterns=None</em>, <em class="sig-param">mgmtclass_patterns=None</em>, <em class="sig-param">package_patterns=None</em>, <em class="sig-param">file_patterns=None</em>, <em class="sig-param">prune=False</em>, <em class="sig-param">omit_data=False</em>, <em class="sig-param">sync_all=False</em>, <em class="sig-param">use_ssl=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/replicate.html#Replicate.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.replicate.Replicate.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get remote profiles and distros and sync them locally</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.actions.report">
+<span id="cobbler-actions-report-module"></span><h2>8.1.1.10. cobbler.actions.report module<a class="headerlink" href="#module-cobbler.actions.report" title="Permalink to this headline">¶</a></h2>
+<p>Report from a cobbler master.
+FIXME: reinstante functionality for 2.0</p>
+<dl class="class">
+<dt id="cobbler.actions.report.Report">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.actions.report.</code><code class="sig-name descname">Report</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/report.html#Report"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.report.Report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.actions.report.Report.fielder">
+<code class="sig-name descname">fielder</code><span class="sig-paren">(</span><em class="sig-param">structure</em>, <em class="sig-param">fields_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/report.html#Report.fielder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.report.Report.fielder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return data from a subset of fields of some item</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.report.Report.print_formatted_data">
+<code class="sig-name descname">print_formatted_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">order</em>, <em class="sig-param">report_type</em>, <em class="sig-param">noheaders</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/report.html#Report.print_formatted_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.report.Report.print_formatted_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used for picking the correct format to output data as</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.report.Report.reporting_csv">
+<code class="sig-name descname">reporting_csv</code><span class="sig-paren">(</span><em class="sig-param">info</em>, <em class="sig-param">order</em>, <em class="sig-param">noheaders</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/report.html#Report.reporting_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.report.Report.reporting_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Formats data on ‘info’ for csv output</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.report.Report.reporting_doku">
+<code class="sig-name descname">reporting_doku</code><span class="sig-paren">(</span><em class="sig-param">info</em>, <em class="sig-param">order</em>, <em class="sig-param">noheaders</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/report.html#Report.reporting_doku"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.report.Report.reporting_doku" title="Permalink to this definition">¶</a></dt>
+<dd><p>Formats data on ‘info’ for doku wiki table output</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.report.Report.reporting_list_names2">
+<code class="sig-name descname">reporting_list_names2</code><span class="sig-paren">(</span><em class="sig-param">collection</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/report.html#Report.reporting_list_names2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.report.Report.reporting_list_names2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints a specific object in a collection.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.report.Report.reporting_mediawiki">
+<code class="sig-name descname">reporting_mediawiki</code><span class="sig-paren">(</span><em class="sig-param">info</em>, <em class="sig-param">order</em>, <em class="sig-param">noheaders</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/report.html#Report.reporting_mediawiki"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.report.Report.reporting_mediawiki" title="Permalink to this definition">¶</a></dt>
+<dd><p>Formats data on ‘info’ for mediawiki table output</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.report.Report.reporting_print_all_fields">
+<code class="sig-name descname">reporting_print_all_fields</code><span class="sig-paren">(</span><em class="sig-param">collection</em>, <em class="sig-param">report_name</em>, <em class="sig-param">report_type</em>, <em class="sig-param">report_noheaders</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/report.html#Report.reporting_print_all_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.report.Report.reporting_print_all_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints all fields in a collection as a table given the report type</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.report.Report.reporting_print_sorted">
+<code class="sig-name descname">reporting_print_sorted</code><span class="sig-paren">(</span><em class="sig-param">collection</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/report.html#Report.reporting_print_sorted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.report.Report.reporting_print_sorted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints all objects in a collection sorted by name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.report.Report.reporting_print_x_fields">
+<code class="sig-name descname">reporting_print_x_fields</code><span class="sig-paren">(</span><em class="sig-param">collection</em>, <em class="sig-param">report_name</em>, <em class="sig-param">report_type</em>, <em class="sig-param">report_fields</em>, <em class="sig-param">report_noheaders</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/report.html#Report.reporting_print_x_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.report.Report.reporting_print_x_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints specific fields in a collection as a table given the report type</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.report.Report.reporting_sorter">
+<code class="sig-name descname">reporting_sorter</code><span class="sig-paren">(</span><em class="sig-param">a</em>, <em class="sig-param">b</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/report.html#Report.reporting_sorter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.report.Report.reporting_sorter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used for sorting cobbler objects for report commands</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.report.Report.reporting_trac">
+<code class="sig-name descname">reporting_trac</code><span class="sig-paren">(</span><em class="sig-param">info</em>, <em class="sig-param">order</em>, <em class="sig-param">noheaders</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/report.html#Report.reporting_trac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.report.Report.reporting_trac" title="Permalink to this definition">¶</a></dt>
+<dd><p>Formats data on ‘info’ for trac wiki table output</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.report.Report.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">report_what=None</em>, <em class="sig-param">report_name=None</em>, <em class="sig-param">report_type=None</em>, <em class="sig-param">report_fields=None</em>, <em class="sig-param">report_noheaders=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/report.html#Report.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.report.Report.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get remote profiles and distros and sync them locally</p>
+<ol class="arabic simple">
+<li><p>Handles original report output</p></li>
+<li><p>Handles all fields of report outputs as table given a format</p></li>
+<li><p>Handles specific fields of report outputs as table given a format</p></li>
+</ol>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.actions.reposync">
+<span id="cobbler-actions-reposync-module"></span><h2>8.1.1.11. cobbler.actions.reposync module<a class="headerlink" href="#module-cobbler.actions.reposync" title="Permalink to this headline">¶</a></h2>
+<p>Builds out and synchronizes yum repo mirrors.
+Initial support for rsync, perhaps reposync coming later.</p>
+<dl class="class">
+<dt id="cobbler.actions.reposync.RepoSync">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.actions.reposync.</code><code class="sig-name descname">RepoSync</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">tries=1</em>, <em class="sig-param">nofail=False</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/reposync.html#RepoSync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.reposync.RepoSync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Handles conversion of internal state to the tftpboot tree layout</p>
+<dl class="method">
+<dt id="cobbler.actions.reposync.RepoSync.apt_sync">
+<code class="sig-name descname">apt_sync</code><span class="sig-paren">(</span><em class="sig-param">repo</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/reposync.html#RepoSync.apt_sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.reposync.RepoSync.apt_sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle copying of <a class="reference external" href="http://">http://</a> and <a class="reference external" href="ftp://">ftp://</a> debian repos.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.reposync.RepoSync.create_local_file">
+<code class="sig-name descname">create_local_file</code><span class="sig-paren">(</span><em class="sig-param">dest_path</em>, <em class="sig-param">repo</em>, <em class="sig-param">output=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/reposync.html#RepoSync.create_local_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.reposync.RepoSync.create_local_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates Yum config files for use by reposync</p>
+<p>Two uses:
+(A) output=True, Create local files that can be used with yum on provisioned clients to make use of this mirror.
+(B) output=False, Create a temporary file for yum to feed into yum for mirroring</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.reposync.RepoSync.createrepo_walker">
+<code class="sig-name descname">createrepo_walker</code><span class="sig-paren">(</span><em class="sig-param">repo</em>, <em class="sig-param">dirname</em>, <em class="sig-param">fnames</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/reposync.html#RepoSync.createrepo_walker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.reposync.RepoSync.createrepo_walker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to run createrepo on a copied Yum mirror.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.reposync.RepoSync.gen_urlgrab_ssl_opts">
+<code class="sig-name descname">gen_urlgrab_ssl_opts</code><span class="sig-paren">(</span><em class="sig-param">yumopts</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/reposync.html#RepoSync.gen_urlgrab_ssl_opts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.reposync.RepoSync.gen_urlgrab_ssl_opts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.reposync.RepoSync.reposync_cmd">
+<code class="sig-name descname">reposync_cmd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/reposync.html#RepoSync.reposync_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.reposync.RepoSync.reposync_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine reposync command</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.reposync.RepoSync.rhn_sync">
+<code class="sig-name descname">rhn_sync</code><span class="sig-paren">(</span><em class="sig-param">repo</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/reposync.html#RepoSync.rhn_sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.reposync.RepoSync.rhn_sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle mirroring of RHN repos.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.reposync.RepoSync.rsync_sync">
+<code class="sig-name descname">rsync_sync</code><span class="sig-paren">(</span><em class="sig-param">repo</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/reposync.html#RepoSync.rsync_sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.reposync.RepoSync.rsync_sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle copying of rsync:// and rsync-over-ssh repos.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.reposync.RepoSync.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/reposync.html#RepoSync.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.reposync.RepoSync.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Syncs the current repo configuration file with the filesystem.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.reposync.RepoSync.sync">
+<code class="sig-name descname">sync</code><span class="sig-paren">(</span><em class="sig-param">repo</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/reposync.html#RepoSync.sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.reposync.RepoSync.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conditionally sync a repo, based on type.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.reposync.RepoSync.update_permissions">
+<code class="sig-name descname">update_permissions</code><span class="sig-paren">(</span><em class="sig-param">repo_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/reposync.html#RepoSync.update_permissions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.reposync.RepoSync.update_permissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verifies that permissions and contexts after an rsync are as expected.
+Sending proper rsync flags should prevent the need for this, though this is largely
+a safeguard.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.reposync.RepoSync.wget_sync">
+<code class="sig-name descname">wget_sync</code><span class="sig-paren">(</span><em class="sig-param">repo</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/reposync.html#RepoSync.wget_sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.reposync.RepoSync.wget_sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle mirroring of directories using wget</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.reposync.RepoSync.yum_sync">
+<code class="sig-name descname">yum_sync</code><span class="sig-paren">(</span><em class="sig-param">repo</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/reposync.html#RepoSync.yum_sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.reposync.RepoSync.yum_sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle copying of <a class="reference external" href="http://">http://</a> and <a class="reference external" href="ftp://">ftp://</a> yum repos.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cobbler.actions.reposync.repo_walker">
+<code class="sig-prename descclassname">cobbler.actions.reposync.</code><code class="sig-name descname">repo_walker</code><span class="sig-paren">(</span><em class="sig-param">top</em>, <em class="sig-param">func</em>, <em class="sig-param">arg</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/reposync.html#repo_walker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.reposync.repo_walker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Directory tree walk with callback function.
+For each directory in the directory tree rooted at top (including top
+itself, but excluding ‘.’ and ‘..’), call func(arg, dirname, fnames).
+dirname is the name of the directory, and fnames a list of the names of
+the files and subdirectories in dirname (excluding ‘.’ and ‘..’).  func
+may modify the fnames list in-place (e.g. via del or slice assignment),
+and walk will only recurse into the subdirectories whose names remain in
+fnames; this can be used to implement a filter, or to impose a specific
+order of visiting.  No semantics are defined for, or required of, arg,
+beyond that arg is always passed to func.  It can be used, e.g., to pass
+a filename pattern, or a mutable object designed to accumulate
+statistics.  Passing None for arg is common.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.actions.status">
+<span id="cobbler-actions-status-module"></span><h2>8.1.1.12. cobbler.actions.status module<a class="headerlink" href="#module-cobbler.actions.status" title="Permalink to this headline">¶</a></h2>
+<p>Reports on automatic installation activity by examining the logs in
+/var/log/cobbler.</p>
+<dl class="class">
+<dt id="cobbler.actions.status.CobblerStatusReport">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.actions.status.</code><code class="sig-name descname">CobblerStatusReport</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">mode</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/status.html#CobblerStatusReport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.status.CobblerStatusReport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.actions.status.CobblerStatusReport.catalog">
+<code class="sig-name descname">catalog</code><span class="sig-paren">(</span><em class="sig-param">profile_or_system</em>, <em class="sig-param">name</em>, <em class="sig-param">ip</em>, <em class="sig-param">start_or_stop</em>, <em class="sig-param">ts</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/status.html#CobblerStatusReport.catalog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.status.CobblerStatusReport.catalog" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.status.CobblerStatusReport.get_printable_results">
+<code class="sig-name descname">get_printable_results</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/status.html#CobblerStatusReport.get_printable_results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.status.CobblerStatusReport.get_printable_results" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.status.CobblerStatusReport.process_results">
+<code class="sig-name descname">process_results</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/status.html#CobblerStatusReport.process_results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.status.CobblerStatusReport.process_results" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.status.CobblerStatusReport.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/status.html#CobblerStatusReport.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.status.CobblerStatusReport.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate and print a automatic installation status report.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.status.CobblerStatusReport.scan_logfiles">
+<code class="sig-name descname">scan_logfiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/status.html#CobblerStatusReport.scan_logfiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.status.CobblerStatusReport.scan_logfiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scan the install log-files - starting with the oldest file.
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.actions.sync">
+<span id="cobbler-actions-sync-module"></span><h2>8.1.1.13. cobbler.actions.sync module<a class="headerlink" href="#module-cobbler.actions.sync" title="Permalink to this headline">¶</a></h2>
+<p>Builds out filesystem trees/data based on the object tree.
+This is the code behind ‘cobbler sync’.</p>
+<dl class="class">
+<dt id="cobbler.actions.sync.CobblerSync">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.actions.sync.</code><code class="sig-name descname">CobblerSync</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">verbose=True</em>, <em class="sig-param">dhcp=None</em>, <em class="sig-param">dns=None</em>, <em class="sig-param">logger=None</em>, <em class="sig-param">tftpd=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/sync.html#CobblerSync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.sync.CobblerSync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Handles conversion of internal state to the tftpboot tree layout</p>
+<dl class="method">
+<dt id="cobbler.actions.sync.CobblerSync.clean_link_cache">
+<code class="sig-name descname">clean_link_cache</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/sync.html#CobblerSync.clean_link_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.sync.CobblerSync.clean_link_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.sync.CobblerSync.clean_trees">
+<code class="sig-name descname">clean_trees</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/sync.html#CobblerSync.clean_trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.sync.CobblerSync.clean_trees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete any previously built pxelinux.cfg tree and virt tree info and then create
+directories.</p>
+<p>Note: for SELinux reasons, some information goes in /tftpboot, some in
+/var/www/cobbler and some must be duplicated in both.  This is because
+PXE needs tftp, and automatic installation and Virt operations need http.
+Only the kernel and initrd images are duplicated, which is unfortunate,
+though SELinux won’t let me give them two contexts, so symlinks are not
+a solution.  <em>Otherwise</em> duplication is minimal.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.sync.CobblerSync.make_tftpboot">
+<code class="sig-name descname">make_tftpboot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/sync.html#CobblerSync.make_tftpboot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.sync.CobblerSync.make_tftpboot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make directories for tftpboot images</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.sync.CobblerSync.rsync_gen">
+<code class="sig-name descname">rsync_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/sync.html#CobblerSync.rsync_gen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.sync.CobblerSync.rsync_gen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate rsync modules of all repositories and distributions</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.sync.CobblerSync.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/sync.html#CobblerSync.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.sync.CobblerSync.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Syncs the current configuration file with the config tree.
+Using the Check().run_ functions previously is recommended</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.sync.CobblerSync.sync_dhcp">
+<code class="sig-name descname">sync_dhcp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/sync.html#CobblerSync.sync_dhcp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.sync.CobblerSync.sync_dhcp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.actions.sync.CobblerSync.write_dhcp">
+<code class="sig-name descname">write_dhcp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cobbler/actions/sync.html#CobblerSync.write_dhcp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.actions.sync.CobblerSync.write_dhcp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.actions">
+<span id="module-contents"></span><h2>8.1.1.14. Module contents<a class="headerlink" href="#module-cobbler.actions" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cobbler.cobbler_collections.html" class="btn btn-neutral float-right" title="8.1.2. cobbler.cobbler_collections package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cobbler.html" class="btn btn-neutral float-left" title="8. cobbler package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

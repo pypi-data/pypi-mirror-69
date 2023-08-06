@@ -1,0 +1,649 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.cobbler_collections.collection &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.cobbler_collections.collection</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.cobbler_collections.collection</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">range</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="k">import</span> <span class="n">Lock</span>
+
+<span class="kn">from</span> <span class="nn">cobbler.actions</span> <span class="k">import</span> <span class="n">litesync</span>
+<span class="kn">from</span> <span class="nn">cobbler.items</span> <span class="k">import</span> <span class="n">package</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">item</span> <span class="k">as</span> <span class="n">item_base</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">mgmtclass</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span> <span class="n">file</span>
+
+<span class="kn">from</span> <span class="nn">cobbler.utils</span> <span class="k">import</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">CX</span><span class="p">,</span> <span class="n">NotImplementedException</span>
+
+
+<div class="viewcode-block" id="Collection"><a class="viewcode-back" href="../../../code-autodoc/cobbler.cobbler_collections.html#cobbler.cobbler_collections.collection.Collection">[docs]</a><span class="k">class</span> <span class="nc">Collection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for any serializable list of things.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="n">collection_mgr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">listing</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lite_sync</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Iterator for the collection.  Allows list comprehensions, etc.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listing</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+            <span class="k">yield</span> <span class="n">a</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns size of the collection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listing</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+
+<div class="viewcode-block" id="Collection.factory_produce"><a class="viewcode-back" href="../../../code-autodoc/cobbler.cobbler_collections.html#cobbler.cobbler_collections.collection.Collection.factory_produce">[docs]</a>    <span class="k">def</span> <span class="nf">factory_produce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">,</span> <span class="n">seed_data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Must override in subclass.  Factory_produce returns an Item object</span>
+<span class="sd">        from dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="n">NotImplementedException</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Collection.remove"><a class="viewcode-back" href="../../../code-autodoc/cobbler.cobbler_collections.html#cobbler.cobbler_collections.collection.Collection.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">with_delete</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_sync</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_triggers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove an item from collection. This method must be overriden in any subclass.</span>
+
+<span class="sd">        @param: str name (item name)</span>
+<span class="sd">        @param: bool with_delete (sync and run triggers)</span>
+<span class="sd">        @param: bool with_sync (sync to server file system)</span>
+<span class="sd">        @param: bool with_triggers (run &quot;on delete&quot; triggers)</span>
+<span class="sd">        @param: bool recursive (recursively delete children)</span>
+<span class="sd">        @param: clogger logger (logger object)</span>
+<span class="sd">        @returns: NotImplementedException</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="n">NotImplementedException</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Collection.get"><a class="viewcode-back" href="../../../code-autodoc/cobbler.cobbler_collections.html#cobbler.cobbler_collections.collection.Collection.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return object with name in the collection</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">listing</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Collection.find"><a class="viewcode-back" href="../../../code-autodoc/cobbler.cobbler_collections.html#cobbler.cobbler_collections.collection.Collection.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_list</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">no_errors</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return first object in the collection that maches all item=&#39;value&#39;</span>
+<span class="sd">        pairs passed, else return None if no objects can be found.</span>
+<span class="sd">        When return_list is set, can also return a list.  Empty list</span>
+<span class="sd">        would be returned instead of None in that case.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># support the old style innovation without kwargs</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kargs</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+
+        <span class="n">kargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rekey</span><span class="p">(</span><span class="n">kargs</span><span class="p">)</span>
+
+        <span class="c1"># no arguments is an error, so we don&#39;t return a false match</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kargs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;calling find with no arguments&quot;</span><span class="p">))</span>
+
+        <span class="c1"># performance: if the only key is name we can skip the whole loop</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kargs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="s2">&quot;name&quot;</span> <span class="ow">in</span> <span class="n">kargs</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">return_list</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">listing</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">kargs</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">listing</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">kargs</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listing</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">find_match</span><span class="p">(</span><span class="n">kargs</span><span class="p">,</span> <span class="n">no_errors</span><span class="o">=</span><span class="n">no_errors</span><span class="p">):</span>
+                    <span class="n">matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">return_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">matches</span></div>
+
+    <span class="n">SEARCH_REKEY</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;kopts&#39;</span><span class="p">:</span> <span class="s1">&#39;kernel_options&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;kopts_post&#39;</span><span class="p">:</span> <span class="s1">&#39;kernel_options_post&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;inherit&#39;</span><span class="p">:</span> <span class="s1">&#39;parent&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ip&#39;</span><span class="p">:</span> <span class="s1">&#39;ip_address&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mac&#39;</span><span class="p">:</span> <span class="s1">&#39;mac_address&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;virt-auto-boot&#39;</span><span class="p">:</span> <span class="s1">&#39;virt_auto_boot&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;virt-file-size&#39;</span><span class="p">:</span> <span class="s1">&#39;virt_file_size&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;virt-disk-driver&#39;</span><span class="p">:</span> <span class="s1">&#39;virt_disk_driver&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;virt-ram&#39;</span><span class="p">:</span> <span class="s1">&#39;virt_ram&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;virt-path&#39;</span><span class="p">:</span> <span class="s1">&#39;virt_path&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;virt-type&#39;</span><span class="p">:</span> <span class="s1">&#39;virt_type&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;virt-bridge&#39;</span><span class="p">:</span> <span class="s1">&#39;virt_bridge&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;virt-cpus&#39;</span><span class="p">:</span> <span class="s1">&#39;virt_cpus&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;virt-host&#39;</span><span class="p">:</span> <span class="s1">&#39;virt_host&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;virt-group&#39;</span><span class="p">:</span> <span class="s1">&#39;virt_group&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;dhcp-tag&#39;</span><span class="p">:</span> <span class="s1">&#39;dhcp_tag&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;netboot-enabled&#39;</span><span class="p">:</span> <span class="s1">&#39;netboot_enabled&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__rekey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find calls from the command line (&quot;cobbler system find&quot;)</span>
+<span class="sd">        don&#39;t always match with the keys from the datastructs and this</span>
+<span class="sd">        makes them both line up without breaking compatibility with either.</span>
+<span class="sd">        Thankfully we don&#39;t have a LOT to remap.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SEARCH_REKEY</span><span class="p">:</span>
+                <span class="n">newkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SEARCH_REKEY</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+                <span class="n">new_dict</span><span class="p">[</span><span class="n">newkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_dict</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">new_dict</span>
+
+<div class="viewcode-block" id="Collection.to_list"><a class="viewcode-back" href="../../../code-autodoc/cobbler.cobbler_collections.html#cobbler.cobbler_collections.collection.Collection.to_list">[docs]</a>    <span class="k">def</span> <span class="nf">to_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serialize the collection</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listing</span><span class="o">.</span><span class="n">values</span><span class="p">())]</span>
+        <span class="k">return</span> <span class="n">_list</span></div>
+
+<div class="viewcode-block" id="Collection.from_list"><a class="viewcode-back" href="../../../code-autodoc/cobbler.cobbler_collections.html#cobbler.cobbler_collections.collection.Collection.from_list">[docs]</a>    <span class="k">def</span> <span class="nf">from_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">item_dict</span> <span class="ow">in</span> <span class="n">_list</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factory_produce</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="p">,</span> <span class="n">item_dict</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Collection.copy"><a class="viewcode-back" href="../../../code-autodoc/cobbler.cobbler_collections.html#cobbler.cobbler_collections.collection.Collection.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">newname</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">make_clone</span><span class="p">()</span>
+        <span class="n">ref</span><span class="o">.</span><span class="n">uid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">generate_uid</span><span class="p">()</span>
+        <span class="n">ref</span><span class="o">.</span><span class="n">ctime</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">ref</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">newname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ref</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s2">&quot;system&quot;</span><span class="p">:</span>
+            <span class="c1"># this should only happen for systems</span>
+            <span class="k">for</span> <span class="n">iname</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="c1"># clear all these out to avoid DHCP/DNS conflicts</span>
+                <span class="n">ref</span><span class="o">.</span><span class="n">set_dns_name</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">iname</span><span class="p">)</span>
+                <span class="n">ref</span><span class="o">.</span><span class="n">set_mac_address</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">iname</span><span class="p">)</span>
+                <span class="n">ref</span><span class="o">.</span><span class="n">set_ip_address</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">iname</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="n">ref</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_triggers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_sync</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">check_for_duplicate_names</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">check_for_duplicate_netinfo</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Collection.rename"><a class="viewcode-back" href="../../../code-autodoc/cobbler.cobbler_collections.html#cobbler.cobbler_collections.collection.Collection.rename">[docs]</a>    <span class="k">def</span> <span class="nf">rename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">newname</span><span class="p">,</span> <span class="n">with_sync</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_triggers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Allows an object &quot;ref&quot; to be given a newname without affecting the rest</span>
+<span class="sd">        of the object tree.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Nothing to do when it is the same name</span>
+        <span class="k">if</span> <span class="n">newname</span> <span class="o">==</span> <span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># make a copy of the object, but give it a new name.</span>
+        <span class="n">oldname</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">newref</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">make_clone</span><span class="p">()</span>
+        <span class="n">newref</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">newname</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">newref</span><span class="p">,</span> <span class="n">with_triggers</span><span class="o">=</span><span class="n">with_triggers</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># for mgmt classes, update all objects that use it</span>
+        <span class="k">if</span> <span class="n">ref</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s2">&quot;mgmtclass&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">what</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;distro&quot;</span><span class="p">,</span> <span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="s2">&quot;system&quot;</span><span class="p">]:</span>
+                <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_items</span><span class="p">(</span><span class="n">what</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;mgmt_classes&quot;</span><span class="p">:</span> <span class="n">oldname</span><span class="p">})</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">mgmt_classes</span><span class="p">)):</span>
+                        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">mgmt_classes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">oldname</span><span class="p">:</span>
+                            <span class="n">item</span><span class="o">.</span><span class="n">mgmt_classes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">newname</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">what</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># for a repo, rename the mirror directory</span>
+        <span class="k">if</span> <span class="n">ref</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s2">&quot;repo&quot;</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/var/www/cobbler/repo_mirror/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">ref</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="n">newpath</span> <span class="o">=</span> <span class="s2">&quot;/var/www/cobbler/repo_mirror/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">newref</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">renames</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">newpath</span><span class="p">)</span>
+
+        <span class="c1"># for a distro, rename the mirror and references to it</span>
+        <span class="k">if</span> <span class="n">ref</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s1">&#39;distro&#39;</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">find_distro_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">settings</span><span class="p">(),</span> <span class="n">ref</span><span class="p">)</span>
+
+            <span class="c1"># create a symlink for the new distro name</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">link_distro</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">settings</span><span class="p">(),</span> <span class="n">newref</span><span class="p">)</span>
+
+            <span class="c1"># test to see if the distro path is based directly</span>
+            <span class="c1"># on the name of the distro. If it is, things need</span>
+            <span class="c1"># to updated accordingly</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">path</span> <span class="o">==</span> <span class="s2">&quot;/var/www/cobbler/distro_mirror/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">newpath</span> <span class="o">=</span> <span class="s2">&quot;/var/www/cobbler/distro_mirror/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">newref</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">renames</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">newpath</span><span class="p">)</span>
+
+                <span class="c1"># update any reference to this path ...</span>
+                <span class="n">distros</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">distros</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">distros</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">kernel</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">d</span><span class="o">.</span><span class="n">set_kernel</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">kernel</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">newpath</span><span class="p">))</span>
+                        <span class="n">d</span><span class="o">.</span><span class="n">set_initrd</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">initrd</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">newpath</span><span class="p">))</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">serialize_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+
+        <span class="c1"># now descend to any direct ancestors and point them at the new object allowing</span>
+        <span class="c1"># the original object to be removed without orphanage.  Direct ancestors</span>
+        <span class="c1"># will either be profiles or systems.  Note that we do have to care as</span>
+        <span class="c1"># set_parent is only really meaningful for subprofiles. We ideally want a more</span>
+        <span class="c1"># generic set_parent.</span>
+        <span class="n">kids</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">get_children</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kids</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s2">&quot;distro&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;internal error, not expected to have distro child objects&quot;</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">k</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s2">&quot;profile&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">parent</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">k</span><span class="o">.</span><span class="n">set_parent</span><span class="p">(</span><span class="n">newname</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">k</span><span class="o">.</span><span class="n">set_distro</span><span class="p">(</span><span class="n">newname</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">profiles</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_sync</span><span class="o">=</span><span class="n">with_sync</span><span class="p">,</span> <span class="n">with_triggers</span><span class="o">=</span><span class="n">with_triggers</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">k</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s2">&quot;system&quot;</span><span class="p">:</span>
+                <span class="n">k</span><span class="o">.</span><span class="n">set_profile</span><span class="p">(</span><span class="n">newname</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">systems</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_sync</span><span class="o">=</span><span class="n">with_sync</span><span class="p">,</span> <span class="n">with_triggers</span><span class="o">=</span><span class="n">with_triggers</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">k</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s2">&quot;repo&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;internal error, not expected to have repo child objects&quot;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;internal error, unknown child type (</span><span class="si">%s</span><span class="s2">), cannot finish rename&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span><span class="p">))</span>
+
+        <span class="c1"># now delete the old version</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">oldname</span><span class="p">,</span> <span class="n">with_delete</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_triggers</span><span class="o">=</span><span class="n">with_triggers</span><span class="p">)</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Collection.add"><a class="viewcode-back" href="../../../code-autodoc/cobbler.cobbler_collections.html#cobbler.cobbler_collections.collection.Collection.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">with_copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">with_triggers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_sync</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">quick_pxe_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">check_for_duplicate_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">check_for_duplicate_netinfo</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add an object to the collection</span>
+
+<span class="sd">        with_copy is a bit of a misnomer, but lots of internal add operations</span>
+<span class="sd">        can run with &quot;with_copy&quot; as False. True means a real final commit, as if</span>
+<span class="sd">        entered from the command line (or basically, by a user).</span>
+
+<span class="sd">        With with_copy as False, the particular add call might just be being run</span>
+<span class="sd">        during deserialization, in which case extra semantics around the add don&#39;t really apply.</span>
+<span class="sd">        So, in that case, don&#39;t run any triggers and don&#39;t deal with any actual files.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">item_base</span><span class="o">.</span><span class="n">Item</span><span class="o">.</span><span class="n">remove_from_cache</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ref</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Unable to add a None object&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ref</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Unable to add an object without a name&quot;</span><span class="p">)</span>
+
+        <span class="n">ref</span><span class="o">.</span><span class="n">check_if_valid</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">ref</span><span class="o">.</span><span class="n">uid</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">ref</span><span class="o">.</span><span class="n">uid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">generate_uid</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">save</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">ref</span><span class="o">.</span><span class="n">ctime</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ref</span><span class="o">.</span><span class="n">ctime</span> <span class="o">=</span> <span class="n">now</span>
+            <span class="n">ref</span><span class="o">.</span><span class="n">mtime</span> <span class="o">=</span> <span class="n">now</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lite_sync</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lite_sync</span> <span class="o">=</span> <span class="n">litesync</span><span class="o">.</span><span class="n">CobblerLiteSync</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+
+        <span class="c1"># migration path for old API parameter that I&#39;ve renamed.</span>
+        <span class="k">if</span> <span class="n">with_copy</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">save</span><span class="p">:</span>
+            <span class="n">save</span> <span class="o">=</span> <span class="n">with_copy</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">save</span><span class="p">:</span>
+            <span class="c1"># for people that aren&#39;t quite aware of the API</span>
+            <span class="c1"># if not saving the object, you can&#39;t run these features</span>
+            <span class="n">with_triggers</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">with_sync</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Avoid adding objects to the collection</span>
+        <span class="c1"># if an object of the same/ip/mac already exists.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__duplication_checks</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">check_for_duplicate_names</span><span class="p">,</span> <span class="n">check_for_duplicate_netinfo</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ref</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_type</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;API error: storing wrong data type in collection&quot;</span><span class="p">))</span>
+
+        <span class="c1"># failure of a pre trigger will prevent the object from being added</span>
+        <span class="k">if</span> <span class="n">save</span> <span class="ow">and</span> <span class="n">with_triggers</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">run_triggers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="s2">&quot;/var/lib/cobbler/triggers/add/</span><span class="si">%s</span><span class="s2">/pre/*&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_type</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">listing</span><span class="p">[</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="o">=</span> <span class="n">ref</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+        <span class="c1"># perform filesystem operations</span>
+        <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
+            <span class="c1"># save just this item if possible, if not, save</span>
+            <span class="c1"># the whole collection</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">serialize_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">with_sync</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">System</span><span class="p">):</span>
+                    <span class="c1"># we don&#39;t need openvz containers to be network bootable</span>
+                    <span class="k">if</span> <span class="n">ref</span><span class="o">.</span><span class="n">virt_type</span> <span class="o">==</span> <span class="s2">&quot;openvz&quot;</span><span class="p">:</span>
+                        <span class="n">ref</span><span class="o">.</span><span class="n">netboot_enabled</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">lite_sync</span><span class="o">.</span><span class="n">add_single_system</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">profile</span><span class="o">.</span><span class="n">Profile</span><span class="p">):</span>
+                    <span class="c1"># we don&#39;t need openvz containers to be network bootable</span>
+                    <span class="k">if</span> <span class="n">ref</span><span class="o">.</span><span class="n">virt_type</span> <span class="o">==</span> <span class="s2">&quot;openvz&quot;</span><span class="p">:</span>
+                        <span class="n">ref</span><span class="o">.</span><span class="n">enable_menu</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">lite_sync</span><span class="o">.</span><span class="n">add_single_profile</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">Distro</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">lite_sync</span><span class="o">.</span><span class="n">add_single_distro</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">lite_sync</span><span class="o">.</span><span class="n">add_single_image</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">Repo</span><span class="p">):</span>
+                    <span class="k">pass</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">mgmtclass</span><span class="o">.</span><span class="n">Mgmtclass</span><span class="p">):</span>
+                    <span class="k">pass</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">package</span><span class="o">.</span><span class="n">Package</span><span class="p">):</span>
+                    <span class="k">pass</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">File</span><span class="p">):</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Internal error. Object type not recognized: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">with_sync</span> <span class="ow">and</span> <span class="n">quick_pxe_update</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">System</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">lite_sync</span><span class="o">.</span><span class="n">update_system_netboot_status</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="c1"># save the tree, so if neccessary, scripts can examine it.</span>
+            <span class="k">if</span> <span class="n">with_triggers</span><span class="p">:</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">run_triggers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="s2">&quot;/var/lib/cobbler/triggers/change/*&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="n">logger</span><span class="p">)</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">run_triggers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="s2">&quot;/var/lib/cobbler/triggers/add/</span><span class="si">%s</span><span class="s2">/post/*&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_type</span><span class="p">(),</span> <span class="p">[],</span> <span class="n">logger</span><span class="p">)</span>
+
+        <span class="c1"># update children cache in parent object</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">get_parent</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parent</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span></div>
+
+    <span class="k">def</span> <span class="nf">__duplication_checks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">check_for_duplicate_names</span><span class="p">,</span> <span class="n">check_for_duplicate_netinfo</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prevents adding objects with the same name.</span>
+<span class="sd">        Prevents adding or editing to provide the same IP, or MAC.</span>
+<span class="sd">        Enforcement is based on whether the API caller requests it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># always protect against duplicate names</span>
+        <span class="k">if</span> <span class="n">check_for_duplicate_names</span><span class="p">:</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">System</span><span class="p">):</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_system</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">profile</span><span class="o">.</span><span class="n">Profile</span><span class="p">):</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_profile</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">Distro</span><span class="p">):</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_distro</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">Repo</span><span class="p">):</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_repo</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_image</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">mgmtclass</span><span class="o">.</span><span class="n">Mgmtclass</span><span class="p">):</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_mgmtclass</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">package</span><span class="o">.</span><span class="n">Package</span><span class="p">):</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_package</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">File</span><span class="p">):</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_file</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;internal error, unknown object type&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;An object already exists with that name.  Try &#39;edit&#39;?&quot;</span><span class="p">))</span>
+
+        <span class="c1"># the duplicate mac/ip checks can be disabled.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">check_for_duplicate_netinfo</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">System</span><span class="p">):</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">intf</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                <span class="n">match_ip</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">match_mac</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">match_hosts</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">input_mac</span> <span class="o">=</span> <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;mac_address&quot;</span><span class="p">]</span>
+                <span class="n">input_ip</span> <span class="o">=</span> <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;ip_address&quot;</span><span class="p">]</span>
+                <span class="n">input_dns</span> <span class="o">=</span> <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;dns_name&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">allow_duplicate_macs</span> <span class="ow">and</span> <span class="n">input_mac</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">input_mac</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">match_mac</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_system</span><span class="p">(</span><span class="n">mac_address</span><span class="o">=</span><span class="n">input_mac</span><span class="p">,</span> <span class="n">return_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">allow_duplicate_ips</span> <span class="ow">and</span> <span class="n">input_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">input_ip</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">match_ip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_system</span><span class="p">(</span><span class="n">ip_address</span><span class="o">=</span><span class="n">input_ip</span><span class="p">,</span> <span class="n">return_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="c1"># it&#39;s ok to conflict with your own net info.</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">allow_duplicate_hostnames</span> <span class="ow">and</span> <span class="n">input_dns</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">input_dns</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">match_hosts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_system</span><span class="p">(</span><span class="n">dns_name</span><span class="o">=</span><span class="n">input_dns</span><span class="p">,</span> <span class="n">return_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">match_mac</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Can&#39;t save system </span><span class="si">%s</span><span class="s2">. The MAC address (</span><span class="si">%s</span><span class="s2">) is already used by system </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;mac_address&quot;</span><span class="p">],</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">match_ip</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Can&#39;t save system </span><span class="si">%s</span><span class="s2">. The IP address (</span><span class="si">%s</span><span class="s2">) is already used by system </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;ip_address&quot;</span><span class="p">],</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">match_hosts</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Can&#39;t save system </span><span class="si">%s</span><span class="s2">.  The dns name (</span><span class="si">%s</span><span class="s2">) is already used by system </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;dns_name&quot;</span><span class="p">],</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Collection.to_string"><a class="viewcode-back" href="../../../code-autodoc/cobbler.cobbler_collections.html#cobbler.cobbler_collections.collection.Collection.to_string">[docs]</a>    <span class="k">def</span> <span class="nf">to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a printable representation of the collection suitable</span>
+<span class="sd">        for reading by humans or parsing from scripts.  Actually scripts</span>
+<span class="sd">        would be better off reading the JSON in the cobbler_collections files</span>
+<span class="sd">        directly.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">listing</span><span class="o">.</span><span class="n">values</span><span class="p">())[:]</span>   <span class="c1"># copy the values</span>
+        <span class="n">values</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>                       <span class="c1"># sort the copy (2.3 fix)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;No objects found&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Collection.collection_type"><a class="viewcode-back" href="../../../code-autodoc/cobbler.cobbler_collections.html#cobbler.cobbler_collections.collection.Collection.collection_type">[docs]</a>    <span class="k">def</span> <span class="nf">collection_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the string key for the name of the collection (for use in messages for humans)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">NotImplementedException</span><span class="p">()</span></div></div>
+
+<span class="c1"># EOF</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

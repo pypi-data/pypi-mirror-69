@@ -1,0 +1,346 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.actions.litesync &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.actions.litesync</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.actions.litesync</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Running small pieces of cobbler sync when certain actions are taken,</span>
+<span class="sd">such that we don&#39;t need a time consuming sync when adding new</span>
+<span class="sd">systems if nothing has changed for systems that have already</span>
+<span class="sd">been created.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">clogger</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">module_loader</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+
+
+<div class="viewcode-block" id="CobblerLiteSync"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.litesync.CobblerLiteSync">[docs]</a><span class="k">class</span> <span class="nc">CobblerLiteSync</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handles conversion of internal state to the tftpboot tree layout</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="n">collection_mgr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distros</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">distros</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">profiles</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">systems</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">systems</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">images</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repos</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">repos</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span> <span class="o">=</span> <span class="n">clogger</span><span class="o">.</span><span class="n">Logger</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tftpd</span> <span class="o">=</span> <span class="n">module_loader</span><span class="o">.</span><span class="n">get_module_from_file</span><span class="p">(</span><span class="s2">&quot;tftpd&quot;</span><span class="p">,</span> <span class="s2">&quot;module&quot;</span><span class="p">,</span> <span class="s2">&quot;in_tftpd&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_manager</span><span class="p">(</span><span class="n">collection_mgr</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_sync</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync</span><span class="o">.</span><span class="n">make_tftpboot</span><span class="p">()</span>
+
+<div class="viewcode-block" id="CobblerLiteSync.add_single_distro"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.litesync.CobblerLiteSync.add_single_distro">[docs]</a>    <span class="k">def</span> <span class="nf">add_single_distro</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="c1"># get the distro record</span>
+        <span class="n">distro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distros</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">distro</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="c1"># copy image files to images/$name in webdir &amp; tftpboot:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync</span><span class="o">.</span><span class="n">tftpgen</span><span class="o">.</span><span class="n">copy_single_distro_files</span><span class="p">(</span><span class="n">distro</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tftpd</span><span class="o">.</span><span class="n">add_single_distro</span><span class="p">(</span><span class="n">distro</span><span class="p">)</span>
+
+        <span class="c1"># create the symlink for this distro</span>
+        <span class="n">src_dir</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">find_distro_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span> <span class="n">distro</span><span class="p">)</span>
+        <span class="n">dst_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;links&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dst_dir</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;skipping symlink, destination (</span><span class="si">%s</span><span class="s2">) exists&quot;</span> <span class="o">%</span> <span class="n">dst_dir</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">utils</span><span class="o">.</span><span class="n">path_tail</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;distro_mirror&quot;</span><span class="p">),</span> <span class="n">src_dir</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;skipping symlink, the source (</span><span class="si">%s</span><span class="s2">) is not in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">src_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;distro_mirror&quot;</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;trying symlink </span><span class="si">%s</span><span class="s2"> -&gt; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">src_dir</span><span class="p">,</span> <span class="n">dst_dir</span><span class="p">))</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">src_dir</span><span class="p">,</span> <span class="n">dst_dir</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">IOError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;symlink failed (</span><span class="si">%s</span><span class="s2"> -&gt; </span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">src_dir</span><span class="p">,</span> <span class="n">dst_dir</span><span class="p">))</span>
+
+        <span class="c1"># generate any templates listed in the distro</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync</span><span class="o">.</span><span class="n">tftpgen</span><span class="o">.</span><span class="n">write_templates</span><span class="p">(</span><span class="n">distro</span><span class="p">,</span> <span class="n">write_file</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># cascade sync</span>
+        <span class="n">kids</span> <span class="o">=</span> <span class="n">distro</span><span class="o">.</span><span class="n">get_children</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kids</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_single_profile</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rebuild_menu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync</span><span class="o">.</span><span class="n">tftpgen</span><span class="o">.</span><span class="n">make_pxe_menu</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CobblerLiteSync.add_single_image"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.litesync.CobblerLiteSync.add_single_image">[docs]</a>    <span class="k">def</span> <span class="nf">add_single_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync</span><span class="o">.</span><span class="n">tftpgen</span><span class="o">.</span><span class="n">copy_single_image_files</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="n">kids</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get_children</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kids</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_single_system</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync</span><span class="o">.</span><span class="n">tftpgen</span><span class="o">.</span><span class="n">make_pxe_menu</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CobblerLiteSync.remove_single_distro"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.litesync.CobblerLiteSync.remove_single_distro">[docs]</a>    <span class="k">def</span> <span class="nf">remove_single_distro</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">bootloc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">tftpboot_location</span>
+        <span class="c1"># delete contents of images/$name directory in webdir</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;images&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="c1"># delete contents of images/$name in tftpboot</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;images&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="c1"># delete potential symlink to tree in webdir/links</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">rmfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;links&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CobblerLiteSync.remove_single_image"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.litesync.CobblerLiteSync.remove_single_image">[docs]</a>    <span class="k">def</span> <span class="nf">remove_single_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">bootloc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">tftpboot_location</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">rmfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;images2&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CobblerLiteSync.add_single_profile"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.litesync.CobblerLiteSync.add_single_profile">[docs]</a>    <span class="k">def</span> <span class="nf">add_single_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">rebuild_menu</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="c1"># get the profile object:</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">profile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># most likely a subprofile&#39;s kid has been</span>
+            <span class="c1"># removed already, though the object tree has</span>
+            <span class="c1"># not been reloaded ... and this is just noise.</span>
+            <span class="k">return</span>
+        <span class="c1"># rebuild the yum configuration files for any attached repos</span>
+        <span class="c1"># generate any templates listed in the distro</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync</span><span class="o">.</span><span class="n">tftpgen</span><span class="o">.</span><span class="n">write_templates</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
+        <span class="c1"># cascade sync</span>
+        <span class="n">kids</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">get_children</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kids</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s2">&quot;profile&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_single_profile</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rebuild_menu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_single_system</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rebuild_menu</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sync</span><span class="o">.</span><span class="n">tftpgen</span><span class="o">.</span><span class="n">make_pxe_menu</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="CobblerLiteSync.remove_single_profile"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.litesync.CobblerLiteSync.remove_single_profile">[docs]</a>    <span class="k">def</span> <span class="nf">remove_single_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">rebuild_menu</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="c1"># delete profiles/$name file in webdir</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">rmfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;profiles&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="c1"># delete contents on autoinstalls/$name directory in webdir</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;autoinstalls&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">rebuild_menu</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sync</span><span class="o">.</span><span class="n">tftpgen</span><span class="o">.</span><span class="n">make_pxe_menu</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CobblerLiteSync.update_system_netboot_status"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.litesync.CobblerLiteSync.update_system_netboot_status">[docs]</a>    <span class="k">def</span> <span class="nf">update_system_netboot_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tftpd</span><span class="o">.</span><span class="n">update_netboot</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CobblerLiteSync.add_single_system"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.litesync.CobblerLiteSync.add_single_system">[docs]</a>    <span class="k">def</span> <span class="nf">add_single_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="c1"># get the system object:</span>
+        <span class="n">system</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">system</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="c1"># rebuild system_list file in webdir</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">manage_dhcp</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sync</span><span class="o">.</span><span class="n">dhcp</span><span class="o">.</span><span class="n">regen_ethers</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">manage_dns</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sync</span><span class="o">.</span><span class="n">dns</span><span class="o">.</span><span class="n">regen_hosts</span><span class="p">()</span>
+        <span class="c1"># write the PXE files for the system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tftpd</span><span class="o">.</span><span class="n">add_single_system</span><span class="p">(</span><span class="n">system</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CobblerLiteSync.remove_single_system"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.litesync.CobblerLiteSync.remove_single_system">[docs]</a>    <span class="k">def</span> <span class="nf">remove_single_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">bootloc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">tftpboot_location</span>
+        <span class="c1"># delete contents of autoinsts_sys/$name in webdir</span>
+        <span class="n">system_record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">system_record</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">system_record</span><span class="o">.</span><span class="n">get_config_filename</span><span class="p">(</span><span class="n">interface</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">rmfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;pxelinux.cfg&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">rmfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;grub&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">.</span><span class="n">upper</span><span class="p">()))</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,462 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.items.profile &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.items.profile</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.items.profile</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">autoinstall_manager</span>
+<span class="kn">from</span> <span class="nn">cobbler.items</span> <span class="k">import</span> <span class="n">item</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">validate</span>
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">CX</span>
+<span class="kn">from</span> <span class="nn">cobbler.utils</span> <span class="k">import</span> <span class="n">_</span>
+
+
+<span class="c1"># this data structure is described in item.py</span>
+<span class="n">FIELDS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># non-editable in UI (internal)</span>
+    <span class="p">[</span><span class="s2">&quot;ctime&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;depth&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;mtime&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+
+    <span class="c1"># editable in UI</span>
+    <span class="p">[</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_autoinstall&quot;</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Automatic Installation Template&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Path to automatic installation template&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;autoinstall_meta&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Automatic Installation Metadata&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: dog=fang agent=86&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;boot_files&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;TFTP Boot Files&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Files copied into tftpboot beyond the kernel/initrd&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Comment&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Free form text description&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;dhcp_tag&quot;</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;DHCP Tag&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;See manpage or leave blank&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;distro&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Distribution&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Parent distribution&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;enable_gpxe&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:enable_gpxe&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Enable gPXE?&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Use gPXE instead of PXELINUX for advanced booting options&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;enable_menu&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:enable_menu&quot;</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Enable PXE Menu?&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Show this profile in the PXE menu?&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;fetchable_files&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Fetchable Files&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Templates for tftp or wget/curl&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Kernel Options&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: selinux=permissive&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;kernel_options_post&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Kernel Options (Post Install)&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: clocksource=pit noapic&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;mgmt_classes&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Management Classes&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;For external configuration management&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;mgmt_parameters&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;Management Parameters&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Parameters which will be handed to your management application (Must be valid YAML dictionary)&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: F10-i386-webserver&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;name_servers&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_name_servers&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="s2">&quot;Name Servers&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;space delimited&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;name_servers_search&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_name_servers_search&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="s2">&quot;Name Servers Search Path&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;space delimited&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;next_server&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Next Server Override&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;See manpage or leave blank&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;owners&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_ownership&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_ownership&quot;</span><span class="p">,</span> <span class="s2">&quot;Owners&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Owners list for authz_ownership (space delimited)&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;parent&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s2">&quot;Parent Profile&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:proxy_url_int&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;Proxy&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Proxy URL&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;redhat_management_key&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;Red Hat Management Key&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Registration key for RHN, Spacewalk, or Satellite&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;repos&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Repos&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Repos to auto-assign to this profile&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;server&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Server Override&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;See manpage or leave blank&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;template_files&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Template Files&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;File mappings for built-in config management&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_auto_boot&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:virt_auto_boot&quot;</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Virt Auto Boot&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Auto boot this VM?&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_bridge&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_virt_bridge&quot;</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Virt Bridge&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_cpus&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Virt CPUs&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_disk_driver&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_virt_disk_driver&quot;</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Virt Disk Driver Type&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;The on-disk format for the virtualization disk&quot;</span><span class="p">,</span> <span class="n">validate</span><span class="o">.</span><span class="n">VIRT_DISK_DRIVERS</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_file_size&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_virt_file_size&quot;</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Virt File Size(GB)&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_path&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Virt Path&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: /directory OR VolGroup00&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_ram&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_virt_ram&quot;</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Virt RAM (MB)&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_type&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_virt_type&quot;</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Virt Type&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Virtualization technology to use&quot;</span><span class="p">,</span> <span class="n">validate</span><span class="o">.</span><span class="n">VIRT_TYPES</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="Profile"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile">[docs]</a><span class="k">class</span> <span class="nc">Profile</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Cobbler profile object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">TYPE_NAME</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;profile&quot;</span><span class="p">)</span>
+    <span class="n">COLLECTION_TYPE</span> <span class="o">=</span> <span class="s2">&quot;profile&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Profile</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel_options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel_options_post</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoinstall_meta</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fetchable_files</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boot_files</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">template_files</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1">#</span>
+    <span class="c1"># override some base class methods first (item.Item)</span>
+    <span class="c1">#</span>
+
+<div class="viewcode-block" id="Profile.make_clone"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.make_clone">[docs]</a>    <span class="k">def</span> <span class="nf">make_clone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">cloned</span> <span class="o">=</span> <span class="n">Profile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="p">)</span>
+        <span class="n">cloned</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">_dict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cloned</span></div>
+
+<div class="viewcode-block" id="Profile.get_fields"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.get_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the list of fields and their properties</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">FIELDS</span></div>
+
+<div class="viewcode-block" id="Profile.get_parent"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.get_parent">[docs]</a>    <span class="k">def</span> <span class="nf">get_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return object next highest up the tree.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distro</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">distros</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">distro</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">profiles</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Profile.check_if_valid"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.check_if_valid">[docs]</a>    <span class="k">def</span> <span class="nf">check_if_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># name validation</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Name is required&quot;</span><span class="p">)</span>
+
+        <span class="c1"># distro validation</span>
+        <span class="n">distro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">distro</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Error with profile </span><span class="si">%s</span><span class="s2"> - distro is required&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
+
+    <span class="c1">#</span>
+    <span class="c1"># specific methods for item.Profile</span>
+    <span class="c1">#</span>
+
+<div class="viewcode-block" id="Profile.set_parent"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_parent">[docs]</a>    <span class="k">def</span> <span class="nf">set_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Instead of a --distro, set the parent of this object to another profile</span>
+<span class="sd">        and use the values from the parent instead of this one where the values</span>
+<span class="sd">        for this profile aren&#39;t filled in, and blend them together where they</span>
+<span class="sd">        are dictionaries.  Basically this enables profile inheritance.  To use this,</span>
+<span class="sd">        the object MUST have been constructed with is_subobject=True or the</span>
+<span class="sd">        default values for everything will be screwed up and this will likely NOT</span>
+<span class="sd">        work.  So, API users -- make sure you pass is_subobject=True into the</span>
+<span class="sd">        constructor when using this.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">old_parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parent</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">old_parent</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+            <span class="n">old_parent</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">parent_name</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">parent_name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="c1"># check must be done in two places as set_parent could be called before/after</span>
+            <span class="c1"># set_name...</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;self parentage is weird&quot;</span><span class="p">))</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">profiles</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">parent_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">found</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;profile </span><span class="si">%s</span><span class="s2"> not found, inheritance not possible&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">parent_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">found</span><span class="o">.</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parent</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+            <span class="n">parent</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="Profile.set_distro"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_distro">[docs]</a>    <span class="k">def</span> <span class="nf">set_distro</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distro_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the distro.  This must be the name of an existing</span>
+<span class="sd">        Distro object in the Distros collection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">distros</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">distro_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">old_parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parent</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">old_parent</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+                <span class="n">old_parent</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">distro</span> <span class="o">=</span> <span class="n">distro_name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span>    <span class="c1"># reset depth if previously a subprofile and now top-level</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>
+            <span class="k">return</span>
+        <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;distribution not found&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Profile.set_name_servers"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_name_servers">[docs]</a>    <span class="k">def</span> <span class="nf">set_name_servers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the DNS servers.</span>
+
+<span class="sd">        @param: str/list data (string or list of nameservers)</span>
+<span class="sd">        @returns: True or CX</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name_servers</span> <span class="o">=</span> <span class="n">validate</span><span class="o">.</span><span class="n">name_servers</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Profile.set_name_servers_search"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_name_servers_search">[docs]</a>    <span class="k">def</span> <span class="nf">set_name_servers_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the DNS search paths.</span>
+
+<span class="sd">        @param: str/list data (string or list of search domains)</span>
+<span class="sd">        @returns: True or CX</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name_servers_search</span> <span class="o">=</span> <span class="n">validate</span><span class="o">.</span><span class="n">name_servers_search</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Profile.set_proxy"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_proxy">[docs]</a>    <span class="k">def</span> <span class="nf">set_proxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proxy</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span> <span class="o">=</span> <span class="n">proxy</span></div>
+
+<div class="viewcode-block" id="Profile.set_enable_gpxe"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_enable_gpxe">[docs]</a>    <span class="k">def</span> <span class="nf">set_enable_gpxe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enable_gpxe</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets whether or not the profile will use gPXE for booting.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enable_gpxe</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="n">enable_gpxe</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Profile.set_enable_menu"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_enable_menu">[docs]</a>    <span class="k">def</span> <span class="nf">set_enable_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enable_menu</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets whether or not the profile will be listed in the default</span>
+<span class="sd">        PXE boot menu.  This is pretty forgiving for YAML&#39;s sake.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enable_menu</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="n">enable_menu</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Profile.set_dhcp_tag"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_dhcp_tag">[docs]</a>    <span class="k">def</span> <span class="nf">set_dhcp_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dhcp_tag</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">dhcp_tag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dhcp_tag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dhcp_tag</span> <span class="o">=</span> <span class="n">dhcp_tag</span></div>
+
+<div class="viewcode-block" id="Profile.set_server"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_server">[docs]</a>    <span class="k">def</span> <span class="nf">set_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">server</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]:</span>
+            <span class="n">server</span> <span class="o">=</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">server</span></div>
+
+<div class="viewcode-block" id="Profile.set_next_server"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_next_server">[docs]</a>    <span class="k">def</span> <span class="nf">set_next_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">server</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">next_server</span> <span class="o">=</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">server</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">server</span> <span class="o">!=</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">next_server</span> <span class="o">=</span> <span class="n">validate</span><span class="o">.</span><span class="n">ipv4_address</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">next_server</span> <span class="o">=</span> <span class="n">server</span></div>
+
+<div class="viewcode-block" id="Profile.set_autoinstall"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_autoinstall">[docs]</a>    <span class="k">def</span> <span class="nf">set_autoinstall</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autoinstall</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the automatic OS installation template file path,</span>
+<span class="sd">        this must be a local file.</span>
+
+<span class="sd">        @param str local automatic installation template path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">autoinstall_mgr</span> <span class="o">=</span> <span class="n">autoinstall_manager</span><span class="o">.</span><span class="n">AutoInstallationManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoinstall</span> <span class="o">=</span> <span class="n">autoinstall_mgr</span><span class="o">.</span><span class="n">validate_autoinstall_template_file_path</span><span class="p">(</span><span class="n">autoinstall</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Profile.set_virt_auto_boot"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_virt_auto_boot">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_auto_boot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_auto_boot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Profile.set_virt_cpus"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_virt_cpus">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_cpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_cpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Profile.set_virt_file_size"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_virt_file_size">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_file_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_file_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Profile.set_virt_disk_driver"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_virt_disk_driver">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_disk_driver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_disk_driver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Profile.set_virt_ram"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_virt_ram">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_ram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_ram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Profile.set_virt_type"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_virt_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vtype</span><span class="p">):</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vtype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Profile.set_virt_bridge"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_virt_bridge">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_bridge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vbridge</span><span class="p">):</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_bridge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vbridge</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Profile.set_virt_path"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_virt_path">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Profile.set_repos"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_repos">[docs]</a>    <span class="k">def</span> <span class="nf">set_repos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repos</span><span class="p">,</span> <span class="n">bypass_check</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">set_repos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repos</span><span class="p">,</span> <span class="n">bypass_check</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Profile.set_redhat_management_key"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.set_redhat_management_key">[docs]</a>    <span class="k">def</span> <span class="nf">set_redhat_management_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">management_key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">management_key</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">redhat_management_key</span> <span class="o">=</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">redhat_management_key</span> <span class="o">=</span> <span class="n">management_key</span></div>
+
+<div class="viewcode-block" id="Profile.get_redhat_management_key"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.get_redhat_management_key">[docs]</a>    <span class="k">def</span> <span class="nf">get_redhat_management_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">redhat_management_key</span></div>
+
+<div class="viewcode-block" id="Profile.get_arch"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.profile.Profile.get_arch">[docs]</a>    <span class="k">def</span> <span class="nf">get_arch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parent</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">parent</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">parent</span><span class="o">.</span><span class="n">get_arch</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">None</span></div></div>
+<span class="c1"># EOF</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,887 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.actions.reposync &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.actions.reposync</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.actions.reposync</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Builds out and synchronizes yum repo mirrors.</span>
+<span class="sd">Initial support for rsync, perhaps reposync coming later.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">range</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">pipes</span>
+<span class="kn">import</span> <span class="nn">stat</span>
+
+<span class="n">HAS_YUM</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">yum</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">HAS_YUM</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">clogger</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">download_manager</span>
+<span class="kn">from</span> <span class="nn">cobbler.utils</span> <span class="k">import</span> <span class="n">os_release</span>
+
+
+<div class="viewcode-block" id="repo_walker"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.reposync.repo_walker">[docs]</a><span class="k">def</span> <span class="nf">repo_walker</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Directory tree walk with callback function.</span>
+<span class="sd">    For each directory in the directory tree rooted at top (including top</span>
+<span class="sd">    itself, but excluding &#39;.&#39; and &#39;..&#39;), call func(arg, dirname, fnames).</span>
+<span class="sd">    dirname is the name of the directory, and fnames a list of the names of</span>
+<span class="sd">    the files and subdirectories in dirname (excluding &#39;.&#39; and &#39;..&#39;).  func</span>
+<span class="sd">    may modify the fnames list in-place (e.g. via del or slice assignment),</span>
+<span class="sd">    and walk will only recurse into the subdirectories whose names remain in</span>
+<span class="sd">    fnames; this can be used to implement a filter, or to impose a specific</span>
+<span class="sd">    order of visiting.  No semantics are defined for, or required of, arg,</span>
+<span class="sd">    beyond that arg is always passed to func.  It can be used, e.g., to pass</span>
+<span class="sd">    a filename pattern, or a mutable object designed to accumulate</span>
+<span class="sd">    statistics.  Passing None for arg is common.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">top</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">os</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">func</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">lstat</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">os</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_ISDIR</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">st_mode</span><span class="p">):</span>
+            <span class="n">repo_walker</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RepoSync"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.reposync.RepoSync">[docs]</a><span class="k">class</span> <span class="nc">RepoSync</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handles conversion of internal state to the tftpboot tree layout</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># ==================================================================================</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">,</span> <span class="n">tries</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nofail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="n">collection_mgr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distros</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">distros</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">profiles</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">systems</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">systems</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repos</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">repos</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rflags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">reposync_flags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tries</span> <span class="o">=</span> <span class="n">tries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nofail</span> <span class="o">=</span> <span class="n">nofail</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dlmgr</span> <span class="o">=</span> <span class="n">download_manager</span><span class="o">.</span><span class="n">DownloadManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">clogger</span><span class="o">.</span><span class="n">Logger</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;hello, reposync&quot;</span><span class="p">)</span>
+
+    <span class="c1"># ===================================================================</span>
+
+<div class="viewcode-block" id="RepoSync.run"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.reposync.RepoSync.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Syncs the current repo configuration file with the filesystem.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;run, reposync, run!&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tries</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tries</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;retry value must be an integer&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+
+        <span class="n">report_failure</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">repo</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">repos</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">repo</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">name</span><span class="p">:</span>
+                <span class="c1"># invoked to sync only a specific repo, this is not the one</span>
+                <span class="k">continue</span>
+            <span class="k">elif</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">repo</span><span class="o">.</span><span class="n">keep_updated</span><span class="p">:</span>
+                <span class="c1"># invoked to run against all repos, but this one is off</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is set to not be updated&quot;</span> <span class="o">%</span> <span class="n">repo</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">repo_mirror</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;repo_mirror&quot;</span><span class="p">)</span>
+            <span class="n">repo_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">repo_mirror</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">repo_path</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;rhn://&quot;</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">repo_path</span><span class="p">)</span>
+
+            <span class="c1"># set the environment keys specified for this repo</span>
+            <span class="c1"># save the old ones if they modify an existing variable</span>
+
+            <span class="n">env</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">environment</span>
+            <span class="n">old_env</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;setting repo environment: </span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">env</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+                <span class="k">if</span> <span class="n">env</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+                        <span class="n">old_env</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+            <span class="c1"># which may actually NOT reposync if the repo is set to not mirror locally</span>
+            <span class="c1"># but that&#39;s a technicality</span>
+
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tries</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
+                    <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">log_exc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;reposync failed, tries left: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
+
+            <span class="c1"># cleanup/restore any environment variables that were</span>
+            <span class="c1"># added or changed above</span>
+
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="n">env</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">old_env</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;resetting repo environment: </span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">old_env</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">old_env</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;removing repo environment: </span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">env</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+                        <span class="k">del</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+                <span class="n">report_failure</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">nofail</span><span class="p">:</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;reposync failed, retry limit reached, aborting&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;reposync failed, retry limit reached, skipping&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_permissions</span><span class="p">(</span><span class="n">repo_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">report_failure</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;overall reposync failed, at least one repo failed to synchronize&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># ==================================================================================</span>
+
+<div class="viewcode-block" id="RepoSync.sync"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.reposync.RepoSync.sync">[docs]</a>    <span class="k">def</span> <span class="nf">sync</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Conditionally sync a repo, based on type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;rhn&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rhn_sync</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">repo</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;yum&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yum_sync</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">repo</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;apt&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apt_sync</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">repo</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;rsync&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rsync_sync</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">repo</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;wget&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wget_sync</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;unable to sync repo (</span><span class="si">%s</span><span class="s2">), unknown or unsupported repo type (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">repo</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">breed</span><span class="p">))</span></div>
+
+    <span class="c1"># ====================================================================================</span>
+
+<div class="viewcode-block" id="RepoSync.createrepo_walker"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.reposync.RepoSync.createrepo_walker">[docs]</a>    <span class="k">def</span> <span class="nf">createrepo_walker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">fnames</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to run createrepo on a copied Yum mirror.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span> <span class="ow">or</span> <span class="n">repo</span><span class="p">[</span><span class="s1">&#39;breed&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;rsync&#39;</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">remove_yum_olddata</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span>
+
+            <span class="c1"># add any repo metadata we can use</span>
+            <span class="n">mdoptions</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/.origin/repomd.xml&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dirname</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">HAS_YUM</span><span class="p">:</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;yum is required to use this feature&quot;</span><span class="p">)</span>
+
+                <span class="n">rmd</span> <span class="o">=</span> <span class="n">yum</span><span class="o">.</span><span class="n">repoMDObject</span><span class="o">.</span><span class="n">RepoMD</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/.origin/repomd.xml&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dirname</span><span class="p">))</span>
+                <span class="k">if</span> <span class="s2">&quot;group&quot;</span> <span class="ow">in</span> <span class="n">rmd</span><span class="o">.</span><span class="n">repoData</span><span class="p">:</span>
+                    <span class="n">groupmdfile</span> <span class="o">=</span> <span class="n">rmd</span><span class="o">.</span><span class="n">getData</span><span class="p">(</span><span class="s2">&quot;group&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">location</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">mdoptions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-g </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">groupmdfile</span><span class="p">)</span>
+                <span class="k">if</span> <span class="s2">&quot;prestodelta&quot;</span> <span class="ow">in</span> <span class="n">rmd</span><span class="o">.</span><span class="n">repoData</span><span class="p">:</span>
+                    <span class="c1"># need createrepo &gt;= 0.9.7 to add deltas</span>
+                    <span class="k">if</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_family</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;redhat&quot;</span><span class="p">,</span> <span class="s2">&quot;suse&quot;</span><span class="p">):</span>
+                        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/rpmquery --queryformat=%</span><span class="si">{VERSION}</span><span class="s2"> createrepo&quot;</span>
+                        <span class="n">createrepo_ver</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">utils</span><span class="o">.</span><span class="n">compare_versions_gt</span><span class="p">(</span><span class="n">createrepo_ver</span><span class="p">,</span> <span class="s2">&quot;0.9.7&quot;</span><span class="p">):</span>
+                            <span class="n">mdoptions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--deltas&quot;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;this repo has presto metadata; you must upgrade createrepo to &gt;= 0.9.7 first and then need to resync the repo through cobbler.&quot;</span><span class="p">)</span>
+
+            <span class="n">blended</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">repo</span><span class="p">)</span>
+            <span class="n">flags</span> <span class="o">=</span> <span class="n">blended</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;createrepo_flags&quot;</span><span class="p">,</span> <span class="s2">&quot;(ERROR: FLAGS)&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># BOOKMARK</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;createrepo </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mdoptions</span><span class="p">),</span> <span class="n">flags</span><span class="p">,</span> <span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">dirname</span><span class="p">))</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">log_exc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;createrepo failed.&quot;</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">fnames</span><span class="p">[:]</span>           <span class="c1"># we&#39;re in the right place</span></div>
+
+    <span class="c1"># ====================================================================================</span>
+
+<div class="viewcode-block" id="RepoSync.wget_sync"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.reposync.RepoSync.wget_sync">[docs]</a>    <span class="k">def</span> <span class="nf">wget_sync</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handle mirroring of directories using wget</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">repo_mirror</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">rpm_list</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">repo</span><span class="o">.</span><span class="n">rpm_list</span> <span class="o">!=</span> <span class="p">[]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;--rpm-list is not supported for wget&#39;d repositories&quot;</span><span class="p">)</span>
+
+        <span class="c1"># FIXME: don&#39;t hardcode</span>
+        <span class="n">dest_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span> <span class="o">+</span> <span class="s2">&quot;/repo_mirror&quot;</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># FIXME: wrapper for subprocess that logs to logger</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;wget -N -np -r -l inf -nd -P </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">dest_path</span><span class="p">),</span> <span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">repo_mirror</span><span class="p">))</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;cobbler reposync failed&quot;</span><span class="p">)</span>
+        <span class="n">repo_walker</span><span class="p">(</span><span class="n">dest_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">createrepo_walker</span><span class="p">,</span> <span class="n">repo</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_local_file</span><span class="p">(</span><span class="n">dest_path</span><span class="p">,</span> <span class="n">repo</span><span class="p">)</span></div>
+
+    <span class="c1"># ====================================================================================</span>
+
+<div class="viewcode-block" id="RepoSync.rsync_sync"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.reposync.RepoSync.rsync_sync">[docs]</a>    <span class="k">def</span> <span class="nf">rsync_sync</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handle copying of rsync:// and rsync-over-ssh repos.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror_locally</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;rsync:// urls must be mirrored locally, yum cannot access them directly&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">rpm_list</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">repo</span><span class="o">.</span><span class="n">rpm_list</span> <span class="o">!=</span> <span class="p">[]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;--rpm-list is not supported for rsync&#39;d repositories&quot;</span><span class="p">)</span>
+
+        <span class="c1"># FIXME: don&#39;t hardcode</span>
+        <span class="n">dest_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span> <span class="o">+</span> <span class="s2">&quot;/repo_mirror&quot;</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">spacer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;rsync://&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+            <span class="n">spacer</span> <span class="o">=</span> <span class="s2">&quot;-e ssh&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+            <span class="n">repo</span><span class="o">.</span><span class="n">mirror</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror</span>
+
+        <span class="c1"># FIXME: wrapper for subprocess that logs to logger</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;rsync -rltDv --copy-unsafe-links --delete-after </span><span class="si">%s</span><span class="s2"> --delete --exclude-from=/etc/cobbler/rsync.exclude </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">spacer</span><span class="p">,</span> <span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">repo</span><span class="o">.</span><span class="n">mirror</span><span class="p">),</span> <span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">dest_path</span><span class="p">))</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;cobbler reposync failed&quot;</span><span class="p">)</span>
+        <span class="n">repo_walker</span><span class="p">(</span><span class="n">dest_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">createrepo_walker</span><span class="p">,</span> <span class="n">repo</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_local_file</span><span class="p">(</span><span class="n">dest_path</span><span class="p">,</span> <span class="n">repo</span><span class="p">)</span></div>
+
+    <span class="c1"># ====================================================================================</span>
+
+<div class="viewcode-block" id="RepoSync.reposync_cmd"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.reposync.RepoSync.reposync_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">reposync_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine reposync command</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="kc">None</span>                <span class="c1"># reposync command</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/bin/dnf&quot;</span><span class="p">):</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/dnf reposync&quot;</span>
+        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/bin/reposync&quot;</span><span class="p">):</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/reposync&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># warn about not having yum-utils.  We don&#39;t want to require it in the package because</span>
+            <span class="c1"># Fedora 22+ has moved to dnf.</span>
+
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;no /usr/bin/reposync found, please install yum-utils&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd</span></div>
+
+    <span class="c1"># ====================================================================================</span>
+
+<div class="viewcode-block" id="RepoSync.rhn_sync"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.reposync.RepoSync.rhn_sync">[docs]</a>    <span class="k">def</span> <span class="nf">rhn_sync</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handle mirroring of RHN repos.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reposync_cmd</span><span class="p">()</span>  <span class="c1"># reposync command</span>
+
+        <span class="n">has_rpm_list</span> <span class="o">=</span> <span class="kc">False</span>       <span class="c1"># flag indicating not to pull the whole repo</span>
+
+        <span class="c1"># detect cases that require special handling</span>
+
+        <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">rpm_list</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">repo</span><span class="o">.</span><span class="n">rpm_list</span> <span class="o">!=</span> <span class="p">[]:</span>
+            <span class="n">has_rpm_list</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># create yum config file for use by reposync</span>
+        <span class="c1"># FIXME: don&#39;t hardcode</span>
+        <span class="n">dest_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span> <span class="o">+</span> <span class="s2">&quot;/repo_mirror&quot;</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">temp_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dest_path</span><span class="p">,</span> <span class="s2">&quot;.origin&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">temp_path</span><span class="p">):</span>
+            <span class="c1"># FIXME: there&#39;s a chance this might break the RHN D/L case</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">temp_path</span><span class="p">)</span>
+
+        <span class="c1"># how we invoke reposync depends on whether this is RHN content or not.</span>
+
+        <span class="c1"># this is the somewhat more-complex RHN case.</span>
+        <span class="c1"># NOTE: this requires that you have entitlements for the server and you give the mirror as rhn://$channelname</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror_locally</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;rhn:// repos do not work with --mirror-locally=1&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">has_rpm_list</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;warning: --rpm-list is not supported for RHN content&quot;</span><span class="p">)</span>
+        <span class="n">rest</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror</span><span class="p">[</span><span class="mi">6</span><span class="p">:]</span>      <span class="c1"># everything after rhn://</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> --repo=</span><span class="si">%s</span><span class="s2"> --download_path=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rflags</span><span class="p">,</span> <span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">rest</span><span class="p">),</span> <span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span> <span class="o">+</span> <span class="s2">&quot;/repo_mirror&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">rest</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">repo</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;rest&quot;</span><span class="p">:</span> <span class="n">rest</span><span class="p">}</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;ERROR: repository </span><span class="si">%(name)s</span><span class="s2"> needs to be renamed </span><span class="si">%(rest)s</span><span class="s2"> as the name of the cobbler repository must match the name of the RHN channel&quot;</span> <span class="o">%</span> <span class="n">args</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;i386&quot;</span><span class="p">:</span>
+            <span class="c1"># counter-intuitive, but we want the newish kernels too</span>
+            <span class="n">repo</span><span class="o">.</span><span class="n">arch</span> <span class="o">=</span> <span class="s2">&quot;i686&quot;</span>
+
+        <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">arch</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> -a </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">arch</span><span class="p">)</span>
+
+        <span class="c1"># now regardless of whether we&#39;re doing yumdownloader or reposync</span>
+        <span class="c1"># or whether the repo was http://, ftp://, or rhn://, execute all queued</span>
+        <span class="c1"># commands here.  Any failure at any point stops the operation.</span>
+
+        <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror_locally</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+
+        <span class="c1"># some more special case handling for RHN.</span>
+        <span class="c1"># create the config file now, because the directory didn&#39;t exist earlier</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_local_file</span><span class="p">(</span><span class="n">temp_path</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># now run createrepo to rebuild the index</span>
+
+        <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror_locally</span><span class="p">:</span>
+            <span class="n">repo_walker</span><span class="p">(</span><span class="n">dest_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">createrepo_walker</span><span class="p">,</span> <span class="n">repo</span><span class="p">)</span>
+
+        <span class="c1"># create the config file the hosts will use to access the repository.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_local_file</span><span class="p">(</span><span class="n">dest_path</span><span class="p">,</span> <span class="n">repo</span><span class="p">)</span></div>
+
+    <span class="c1"># ====================================================================================</span>
+
+    <span class="c1"># This function translates yum repository options into the appropriate</span>
+    <span class="c1"># options for python-requests</span>
+<div class="viewcode-block" id="RepoSync.gen_urlgrab_ssl_opts"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.reposync.RepoSync.gen_urlgrab_ssl_opts">[docs]</a>    <span class="k">def</span> <span class="nf">gen_urlgrab_ssl_opts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yumopts</span><span class="p">):</span>
+        <span class="c1"># use SSL options if specified in yum opts</span>
+        <span class="k">if</span> <span class="s1">&#39;sslclientkey&#39;</span> <span class="ow">and</span> <span class="s1">&#39;sslclientcert&#39;</span> <span class="ow">in</span> <span class="n">yumopts</span><span class="p">:</span>
+            <span class="n">cert</span> <span class="o">=</span> <span class="p">(</span><span class="n">yumopts</span><span class="p">[</span><span class="s1">&#39;sslclientcert&#39;</span><span class="p">],</span> <span class="n">yumopts</span><span class="p">[</span><span class="s1">&#39;sslclientkey&#39;</span><span class="p">])</span>
+        <span class="c1"># note that the default of requests is to verify the peer and host</span>
+        <span class="c1"># but the default here is NOT to verify them unless sslverify is</span>
+        <span class="c1"># explicitly set to 1 in yumopts</span>
+        <span class="k">if</span> <span class="s1">&#39;sslverify&#39;</span> <span class="ow">in</span> <span class="n">yumopts</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">yumopts</span><span class="p">[</span><span class="s1">&#39;sslverify&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">verify</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">verify</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">cert</span><span class="p">,</span> <span class="n">verify</span><span class="p">)</span></div>
+
+    <span class="c1"># ====================================================================================</span>
+
+<div class="viewcode-block" id="RepoSync.yum_sync"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.reposync.RepoSync.yum_sync">[docs]</a>    <span class="k">def</span> <span class="nf">yum_sync</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handle copying of http:// and ftp:// yum repos.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># create the config file the hosts will use to access the repository.</span>
+        <span class="n">repo_mirror</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">dest_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span> <span class="o">+</span> <span class="s2">&quot;/repo_mirror&quot;</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_local_file</span><span class="p">(</span><span class="n">dest_path</span><span class="p">,</span> <span class="n">repo</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror_locally</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reposync_cmd</span><span class="p">()</span>  <span class="c1"># command to run</span>
+        <span class="n">has_rpm_list</span> <span class="o">=</span> <span class="kc">False</span>       <span class="c1"># flag indicating not to pull the whole repo</span>
+
+        <span class="c1"># detect cases that require special handling</span>
+
+        <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">rpm_list</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">repo</span><span class="o">.</span><span class="n">rpm_list</span> <span class="o">!=</span> <span class="p">[]:</span>
+            <span class="n">has_rpm_list</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># create yum config file for use by reposync</span>
+        <span class="n">temp_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dest_path</span><span class="p">,</span> <span class="s2">&quot;.origin&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">temp_path</span><span class="p">):</span>
+            <span class="c1"># FIXME: there&#39;s a chance this might break the RHN D/L case</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">temp_path</span><span class="p">)</span>
+
+        <span class="n">temp_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_local_file</span><span class="p">(</span><span class="n">temp_path</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">has_rpm_list</span><span class="p">:</span>
+            <span class="c1"># if we have not requested only certain RPMs, use reposync</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> --config=</span><span class="si">%s</span><span class="s2"> --repoid=</span><span class="si">%s</span><span class="s2"> --download_path=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rflags</span><span class="p">,</span> <span class="n">temp_file</span><span class="p">,</span> <span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">repo</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span> <span class="o">+</span> <span class="s2">&quot;/repo_mirror&quot;</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">arch</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;x86&quot;</span><span class="p">:</span>
+                    <span class="n">repo</span><span class="o">.</span><span class="n">arch</span> <span class="o">=</span> <span class="s2">&quot;i386&quot;</span>      <span class="c1"># FIX potential arch errors</span>
+                <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;i386&quot;</span><span class="p">:</span>
+                    <span class="c1"># counter-intuitive, but we want the newish kernels too</span>
+                    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> -a i686&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> -a </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">arch</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="c1"># create the output directory if it doesn&#39;t exist</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest_path</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dest_path</span><span class="p">)</span>
+
+            <span class="n">use_source</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;src&quot;</span><span class="p">:</span>
+                <span class="n">use_source</span> <span class="o">=</span> <span class="s2">&quot;--source&quot;</span>
+
+            <span class="c1"># older yumdownloader sometimes explodes on --resolvedeps</span>
+            <span class="c1"># if this happens to you, upgrade yum &amp; yum-utils</span>
+            <span class="n">extra_flags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">yumdownloader_flags</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/usr/bin/dnf&quot;</span><span class="p">):</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/dnf download&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/yumdownloader&quot;</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> --disablerepo=* --enablerepo=</span><span class="si">%s</span><span class="s2"> -c </span><span class="si">%s</span><span class="s2"> --destdir=</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">extra_flags</span><span class="p">,</span> <span class="n">use_source</span><span class="p">,</span> <span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">repo</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="n">temp_file</span><span class="p">,</span> <span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">dest_path</span><span class="p">),</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">repo</span><span class="o">.</span><span class="n">rpm_list</span><span class="p">))</span>
+
+        <span class="c1"># now regardless of whether we&#39;re doing yumdownloader or reposync</span>
+        <span class="c1"># or whether the repo was http://, ftp://, or rhn://, execute all queued</span>
+        <span class="c1"># commands here.  Any failure at any point stops the operation.</span>
+
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;cobbler reposync failed&quot;</span><span class="p">)</span>
+
+        <span class="n">repodata_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dest_path</span><span class="p">,</span> <span class="s2">&quot;repodata&quot;</span><span class="p">)</span>
+
+        <span class="c1"># grab repomd.xml and use it to download any metadata we can use</span>
+        <span class="n">proxies</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">proxy</span> <span class="o">==</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">:</span>
+            <span class="n">proxies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">proxy_url_ext</span>
+        <span class="k">elif</span> <span class="n">repo</span><span class="o">.</span><span class="n">proxy</span> <span class="o">!=</span> <span class="s1">&#39;&lt;&lt;None&gt;&gt;&#39;</span> <span class="ow">and</span> <span class="n">repo</span><span class="o">.</span><span class="n">proxy</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">proxies</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;http&#39;</span><span class="p">:</span> <span class="n">repo</span><span class="o">.</span><span class="n">proxy</span><span class="p">,</span> <span class="s1">&#39;https&#39;</span><span class="p">:</span> <span class="n">repo</span><span class="o">.</span><span class="n">proxy</span><span class="p">}</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="n">repo_mirror</span> <span class="o">+</span> <span class="s2">&quot;/repodata/repomd.xml&quot;</span>
+        <span class="n">dst</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">+</span> <span class="s2">&quot;/repomd.xml&quot;</span>
+        <span class="p">(</span><span class="n">cert</span><span class="p">,</span> <span class="n">verify</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_urlgrab_ssl_opts</span><span class="p">(</span><span class="n">repo</span><span class="o">.</span><span class="n">yumopts</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dlmgr</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">proxies</span><span class="p">,</span> <span class="n">cert</span><span class="p">,</span> <span class="n">verify</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;failed to fetch &quot;</span> <span class="o">+</span> <span class="n">src</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="c1"># create our repodata directory now, as any extra metadata we&#39;re</span>
+        <span class="c1"># about to download probably lives there</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">repodata_path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">repodata_path</span><span class="p">)</span>
+        <span class="n">rmd</span> <span class="o">=</span> <span class="n">yum</span><span class="o">.</span><span class="n">repoMDObject</span><span class="o">.</span><span class="n">RepoMD</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/repomd.xml&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">temp_path</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">mdtype</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">rmd</span><span class="o">.</span><span class="n">repoData</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="c1"># don&#39;t download metadata files that are created by default</span>
+            <span class="k">if</span> <span class="n">mdtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;primary&quot;</span><span class="p">,</span> <span class="s2">&quot;primary_db&quot;</span><span class="p">,</span> <span class="s2">&quot;filelists&quot;</span><span class="p">,</span> <span class="s2">&quot;filelists_db&quot;</span><span class="p">,</span> <span class="s2">&quot;other&quot;</span><span class="p">,</span> <span class="s2">&quot;other_db&quot;</span><span class="p">]:</span>
+                <span class="n">mdfile</span> <span class="o">=</span> <span class="n">rmd</span><span class="o">.</span><span class="n">getData</span><span class="p">(</span><span class="n">mdtype</span><span class="p">)</span><span class="o">.</span><span class="n">location</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">src</span> <span class="o">=</span> <span class="n">repo_mirror</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">mdfile</span>
+                <span class="n">dst</span> <span class="o">=</span> <span class="n">dest_path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">mdfile</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dlmgr</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">proxies</span><span class="p">,</span> <span class="n">cert</span><span class="p">,</span> <span class="n">verify</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;failed to fetch &quot;</span> <span class="o">+</span> <span class="n">src</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="c1"># now run createrepo to rebuild the index</span>
+        <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror_locally</span><span class="p">:</span>
+            <span class="n">repo_walker</span><span class="p">(</span><span class="n">dest_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">createrepo_walker</span><span class="p">,</span> <span class="n">repo</span><span class="p">)</span></div>
+
+    <span class="c1"># ====================================================================================</span>
+
+<div class="viewcode-block" id="RepoSync.apt_sync"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.reposync.RepoSync.apt_sync">[docs]</a>    <span class="k">def</span> <span class="nf">apt_sync</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handle copying of http:// and ftp:// debian repos.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># warn about not having mirror program.</span>
+
+        <span class="n">mirror_program</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/debmirror&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">mirror_program</span><span class="p">):</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;no </span><span class="si">%s</span><span class="s2"> found, please install it&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mirror_program</span><span class="p">))</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>                  <span class="c1"># command to run</span>
+
+        <span class="c1"># detect cases that require special handling</span>
+
+        <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">rpm_list</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">repo</span><span class="o">.</span><span class="n">rpm_list</span> <span class="o">!=</span> <span class="p">[]:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;has_rpm_list not yet supported on apt repos&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">repo</span><span class="o">.</span><span class="n">arch</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;Architecture is required for apt repositories&quot;</span><span class="p">)</span>
+
+        <span class="c1"># built destination path for the repo</span>
+        <span class="n">dest_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/var/www/cobbler/repo_mirror&quot;</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror_locally</span><span class="p">:</span>
+            <span class="c1"># NOTE: Dropping @@suite@@ replace as it is also dropped from</span>
+            <span class="c1"># from manage_import_debian_ubuntu.py due that repo has no os_version</span>
+            <span class="c1"># attribute. If it is added again it will break the Web UI!</span>
+            <span class="c1"># mirror = repo.mirror.replace(&quot;@@suite@@&quot;,repo.os_version)</span>
+            <span class="n">mirror</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror</span>
+
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">mirror</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;://&quot;</span><span class="p">)</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="n">mirror</span><span class="p">[:</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">mirror</span> <span class="o">=</span> <span class="n">mirror</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">3</span><span class="p">:]</span>
+
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">mirror</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+            <span class="n">host</span> <span class="o">=</span> <span class="n">mirror</span><span class="p">[:</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">mirror</span> <span class="o">=</span> <span class="n">mirror</span><span class="p">[</span><span class="n">idx</span><span class="p">:]</span>
+
+            <span class="n">dists</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">repo</span><span class="o">.</span><span class="n">apt_dists</span><span class="p">)</span>
+            <span class="n">components</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">repo</span><span class="o">.</span><span class="n">apt_components</span><span class="p">)</span>
+
+            <span class="n">mirror_data</span> <span class="o">=</span> <span class="s2">&quot;--method=</span><span class="si">%s</span><span class="s2"> --host=</span><span class="si">%s</span><span class="s2"> --root=</span><span class="si">%s</span><span class="s2"> --dist=</span><span class="si">%s</span><span class="s2"> --section=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">method</span><span class="p">),</span> <span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">host</span><span class="p">),</span> <span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">mirror</span><span class="p">),</span> <span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">dists</span><span class="p">),</span> <span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">components</span><span class="p">))</span>
+
+            <span class="n">rflags</span> <span class="o">=</span> <span class="s2">&quot;--nocleanup&quot;</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">repo</span><span class="o">.</span><span class="n">yumopts</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">yumopts</span><span class="p">[</span><span class="n">x</span><span class="p">]:</span>
+                    <span class="n">rflags</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">yumopts</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">rflags</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">x</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mirror_program</span><span class="p">,</span> <span class="n">rflags</span><span class="p">,</span> <span class="n">mirror_data</span><span class="p">,</span> <span class="n">dest_path</span><span class="p">)</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mirror_program</span><span class="p">,</span> <span class="n">rflags</span><span class="p">,</span> <span class="n">mirror_data</span><span class="p">,</span> <span class="n">pipes</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">dest_path</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;src&quot;</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> --source&quot;</span> <span class="o">%</span> <span class="n">cmd</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">arch</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">arch</span>
+                <span class="k">if</span> <span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;x86&quot;</span><span class="p">:</span>
+                    <span class="n">arch</span> <span class="o">=</span> <span class="s2">&quot;i386&quot;</span>       <span class="c1"># FIX potential arch errors</span>
+                <span class="k">if</span> <span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;x86_64&quot;</span><span class="p">:</span>
+                    <span class="n">arch</span> <span class="o">=</span> <span class="s2">&quot;amd64&quot;</span>      <span class="c1"># FIX potential arch errors</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> --nosource -a </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">arch</span><span class="p">)</span>
+
+            <span class="c1"># Set&#39;s an environment variable for subprocess, otherwise debmirror will fail</span>
+            <span class="c1"># as it needs this variable to exist.</span>
+            <span class="c1"># FIXME: might this break anything? So far it doesn&#39;t</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">putenv</span><span class="p">(</span><span class="s2">&quot;HOME&quot;</span><span class="p">,</span> <span class="s2">&quot;/var/lib/cobbler&quot;</span><span class="p">)</span>
+
+            <span class="n">rc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;cobbler reposync failed&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RepoSync.create_local_file"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.reposync.RepoSync.create_local_file">[docs]</a>    <span class="k">def</span> <span class="nf">create_local_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dest_path</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Creates Yum config files for use by reposync</span>
+
+<span class="sd">        Two uses:</span>
+<span class="sd">        (A) output=True, Create local files that can be used with yum on provisioned clients to make use of this mirror.</span>
+<span class="sd">        (B) output=False, Create a temporary file for yum to feed into yum for mirroring</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># the output case will generate repo configuration files which are usable</span>
+        <span class="c1"># for the installed systems.  They need to be made compatible with --server-override</span>
+        <span class="c1"># which means they are actually templates, which need to be rendered by a cobbler-sync</span>
+        <span class="c1"># on per profile/system basis.</span>
+
+        <span class="k">if</span> <span class="n">output</span><span class="p">:</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dest_path</span><span class="p">,</span> <span class="s2">&quot;config.repo&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dest_path</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.repo&quot;</span> <span class="o">%</span> <span class="n">repo</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;creating: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest_path</span><span class="p">):</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">dest_path</span><span class="p">)</span>
+        <span class="n">config_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">output</span><span class="p">:</span>
+            <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;[main]</span><span class="se">\n</span><span class="s2">reposdir=/dev/null</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;[</span><span class="si">%s</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">repo</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;name=</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">repo</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">optenabled</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">optgpgcheck</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">output</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror_locally</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;baseurl=http://$</span><span class="si">{http_server}</span><span class="s2">/cobbler/repo_mirror/</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">repo</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mstr</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror</span>
+                <span class="k">if</span> <span class="n">mstr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+                    <span class="n">mstr</span> <span class="o">=</span> <span class="s2">&quot;file://</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">mstr</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;baseurl=</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">mstr</span>
+
+            <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="c1"># user may have options specific to certain yum plugins</span>
+            <span class="c1"># add them to the file</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">repo</span><span class="o">.</span><span class="n">yumopts</span><span class="p">:</span>
+                <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">yumopts</span><span class="p">[</span><span class="n">x</span><span class="p">]))</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;enabled&quot;</span><span class="p">:</span>
+                    <span class="n">optenabled</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;gpgcheck&quot;</span><span class="p">:</span>
+                    <span class="n">optgpgcheck</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mstr</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">mirror</span>
+            <span class="k">if</span> <span class="n">mstr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+                <span class="n">mstr</span> <span class="o">=</span> <span class="s2">&quot;file://</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">mstr</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;baseurl=</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">mstr</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">http_port</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="s1">&#39;80&#39;</span><span class="p">):</span>
+                <span class="n">http_server</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">http_port</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">http_server</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">server</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;@@server@@&quot;</span><span class="p">,</span> <span class="n">http_server</span><span class="p">)</span>
+            <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+            <span class="n">config_proxy</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">proxy</span> <span class="o">==</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">:</span>
+                <span class="n">config_proxy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">proxy_url_ext</span>
+            <span class="k">elif</span> <span class="n">repo</span><span class="o">.</span><span class="n">proxy</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span> <span class="ow">and</span> <span class="n">repo</span><span class="o">.</span><span class="n">proxy</span> <span class="o">!=</span> <span class="s1">&#39;&lt;&lt;None&gt;&gt;&#39;</span><span class="p">:</span>
+                <span class="n">config_proxy</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">proxy</span>
+
+            <span class="k">if</span> <span class="n">config_proxy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;proxy=</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">config_proxy</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;exclude&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">repo</span><span class="o">.</span><span class="n">yumopts</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;excluding: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">repo</span><span class="o">.</span><span class="n">yumopts</span><span class="p">[</span><span class="s1">&#39;exclude&#39;</span><span class="p">])</span>
+                <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;exclude=</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">repo</span><span class="o">.</span><span class="n">yumopts</span><span class="p">[</span><span class="s1">&#39;exclude&#39;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">optenabled</span><span class="p">:</span>
+            <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;enabled=1</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;priority=</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">repo</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span>
+        <span class="c1"># FIXME: potentially might want a way to turn this on/off on a per-repo basis</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">optgpgcheck</span><span class="p">:</span>
+            <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;gpgcheck=0</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># user may have options specific to certain yum plugins</span>
+            <span class="c1"># add them to the file</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">repo</span><span class="o">.</span><span class="n">yumopts</span><span class="p">:</span>
+                <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">yumopts</span><span class="p">[</span><span class="n">x</span><span class="p">]))</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;enabled&quot;</span><span class="p">:</span>
+                    <span class="n">optenabled</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;gpgcheck&quot;</span><span class="p">:</span>
+                    <span class="n">optgpgcheck</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">config_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">fname</span></div>
+
+    <span class="c1"># ==================================================================================</span>
+
+<div class="viewcode-block" id="RepoSync.update_permissions"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.reposync.RepoSync.update_permissions">[docs]</a>    <span class="k">def</span> <span class="nf">update_permissions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Verifies that permissions and contexts after an rsync are as expected.</span>
+<span class="sd">        Sending proper rsync flags should prevent the need for this, though this is largely</span>
+<span class="sd">        a safeguard.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># all_path = os.path.join(repo_path, &quot;*&quot;)</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="s2">&quot;root:apache&quot;</span>
+
+        <span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">os_release</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dist</span> <span class="o">==</span> <span class="s2">&quot;suse&quot;</span><span class="p">:</span>
+            <span class="n">owner</span> <span class="o">=</span> <span class="s2">&quot;root:www&quot;</span>
+        <span class="k">elif</span> <span class="n">dist</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;debian&quot;</span><span class="p">,</span> <span class="s2">&quot;ubuntu&quot;</span><span class="p">):</span>
+            <span class="n">owner</span> <span class="o">=</span> <span class="s2">&quot;root:www-data&quot;</span>
+
+        <span class="n">cmd1</span> <span class="o">=</span> <span class="s2">&quot;chown -R &quot;</span> <span class="o">+</span> <span class="n">owner</span> <span class="o">+</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">repo_path</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">cmd1</span><span class="p">)</span>
+
+        <span class="n">cmd2</span> <span class="o">=</span> <span class="s2">&quot;chmod -R 755 </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">repo_path</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">cmd2</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

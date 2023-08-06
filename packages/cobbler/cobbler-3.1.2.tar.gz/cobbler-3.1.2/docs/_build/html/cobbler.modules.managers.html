@@ -1,0 +1,737 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.modules.managers package &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>cobbler.modules.managers package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cobbler.modules.managers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cobbler-modules-managers-package">
+<h1>cobbler.modules.managers package<a class="headerlink" href="#cobbler-modules-managers-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cobbler.modules.managers.bind">
+<span id="cobbler-modules-managers-bind-module"></span><h2>cobbler.modules.managers.bind module<a class="headerlink" href="#module-cobbler.modules.managers.bind" title="Permalink to this headline">¶</a></h2>
+<p>This is some of the code behind ‘cobbler sync’.</p>
+<dl class="class">
+<dt id="cobbler.modules.managers.bind.BindManager">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.modules.managers.bind.</code><code class="sig-name descname">BindManager</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/bind.html#BindManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.bind.BindManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.modules.managers.bind.BindManager.regen_hosts">
+<code class="sig-name descname">regen_hosts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/bind.html#BindManager.regen_hosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.bind.BindManager.regen_hosts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.bind.BindManager.what">
+<code class="sig-name descname">what</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/bind.html#BindManager.what"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.bind.BindManager.what" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.bind.BindManager.write_dns_files">
+<code class="sig-name descname">write_dns_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/bind.html#BindManager.write_dns_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.bind.BindManager.write_dns_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>BIND files are written when manage_dns is set in
+/var/lib/cobbler/settings.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.bind.get_manager">
+<code class="sig-prename descclassname">cobbler.modules.managers.bind.</code><code class="sig-name descname">get_manager</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/bind.html#get_manager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.bind.get_manager" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.bind.register">
+<code class="sig-prename descclassname">cobbler.modules.managers.bind.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/bind.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.bind.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mandatory cobbler module registration hook.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.modules.managers.dnsmasq">
+<span id="cobbler-modules-managers-dnsmasq-module"></span><h2>cobbler.modules.managers.dnsmasq module<a class="headerlink" href="#module-cobbler.modules.managers.dnsmasq" title="Permalink to this headline">¶</a></h2>
+<p>This is some of the code behind ‘cobbler sync’.</p>
+<dl class="class">
+<dt id="cobbler.modules.managers.dnsmasq.DnsmasqManager">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.modules.managers.dnsmasq.</code><code class="sig-name descname">DnsmasqManager</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger</em>, <em class="sig-param">dhcp=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/dnsmasq.html#DnsmasqManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.dnsmasq.DnsmasqManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Handles conversion of internal state to the tftpboot tree layout</p>
+<dl class="method">
+<dt id="cobbler.modules.managers.dnsmasq.DnsmasqManager.regen_ethers">
+<code class="sig-name descname">regen_ethers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/dnsmasq.html#DnsmasqManager.regen_ethers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.dnsmasq.DnsmasqManager.regen_ethers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.dnsmasq.DnsmasqManager.regen_hosts">
+<code class="sig-name descname">regen_hosts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/dnsmasq.html#DnsmasqManager.regen_hosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.dnsmasq.DnsmasqManager.regen_hosts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.dnsmasq.DnsmasqManager.remove_dhcp_lease">
+<code class="sig-name descname">remove_dhcp_lease</code><span class="sig-paren">(</span><em class="sig-param">port</em>, <em class="sig-param">host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/dnsmasq.html#DnsmasqManager.remove_dhcp_lease"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.dnsmasq.DnsmasqManager.remove_dhcp_lease" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.dnsmasq.DnsmasqManager.sync_dhcp">
+<code class="sig-name descname">sync_dhcp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/dnsmasq.html#DnsmasqManager.sync_dhcp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.dnsmasq.DnsmasqManager.sync_dhcp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.dnsmasq.DnsmasqManager.what">
+<code class="sig-name descname">what</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/dnsmasq.html#DnsmasqManager.what"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.dnsmasq.DnsmasqManager.what" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.dnsmasq.DnsmasqManager.write_dhcp_file">
+<code class="sig-name descname">write_dhcp_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/dnsmasq.html#DnsmasqManager.write_dhcp_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.dnsmasq.DnsmasqManager.write_dhcp_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>DHCP files are written when manage_dhcp is set in
+/etc/cobbler/settings.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.dnsmasq.DnsmasqManager.write_dhcp_lease">
+<code class="sig-name descname">write_dhcp_lease</code><span class="sig-paren">(</span><em class="sig-param">port</em>, <em class="sig-param">host</em>, <em class="sig-param">ip</em>, <em class="sig-param">mac</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/dnsmasq.html#DnsmasqManager.write_dhcp_lease"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.dnsmasq.DnsmasqManager.write_dhcp_lease" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.dnsmasq.DnsmasqManager.write_dns_files">
+<code class="sig-name descname">write_dns_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/dnsmasq.html#DnsmasqManager.write_dns_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.dnsmasq.DnsmasqManager.write_dns_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.dnsmasq.get_manager">
+<code class="sig-prename descclassname">cobbler.modules.managers.dnsmasq.</code><code class="sig-name descname">get_manager</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/dnsmasq.html#get_manager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.dnsmasq.get_manager" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.dnsmasq.register">
+<code class="sig-prename descclassname">cobbler.modules.managers.dnsmasq.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/dnsmasq.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.dnsmasq.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.modules.managers.genders">
+<span id="cobbler-modules-managers-genders-module"></span><h2>cobbler.modules.managers.genders module<a class="headerlink" href="#module-cobbler.modules.managers.genders" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="cobbler.modules.managers.genders.register">
+<code class="sig-prename descclassname">cobbler.modules.managers.genders.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/genders.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.genders.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.genders.run">
+<code class="sig-prename descclassname">cobbler.modules.managers.genders.</code><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">api</em>, <em class="sig-param">args</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/genders.html#run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.genders.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.genders.write_genders_file">
+<code class="sig-prename descclassname">cobbler.modules.managers.genders.</code><code class="sig-name descname">write_genders_file</code><span class="sig-paren">(</span><em class="sig-param">config</em>, <em class="sig-param">profiles_genders</em>, <em class="sig-param">distros_genders</em>, <em class="sig-param">mgmtcls_genders</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/genders.html#write_genders_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.genders.write_genders_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>genders file is over-written when manage_genders is set in
+/var/lib/cobbler/settings.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.modules.managers.import_signatures">
+<span id="cobbler-modules-managers-import-signatures-module"></span><h2>cobbler.modules.managers.import_signatures module<a class="headerlink" href="#module-cobbler.modules.managers.import_signatures" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.modules.managers.import_signatures.</code><code class="sig-name descname">ImportSignatureManager</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.add_entry">
+<code class="sig-name descname">add_entry</code><span class="sig-paren">(</span><em class="sig-param">dirname</em>, <em class="sig-param">kernel</em>, <em class="sig-param">initrd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.add_entry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.add_entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>When we find a directory with a valid kernel/initrd in it, create the distribution objects
+as appropriate and save them.  This includes creating xen and rescue distros/profiles
+if possible.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.apt_repo_adder">
+<code class="sig-name descname">apt_repo_adder</code><span class="sig-paren">(</span><em class="sig-param">distro</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.apt_repo_adder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.apt_repo_adder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.arch_walker">
+<code class="sig-name descname">arch_walker</code><span class="sig-paren">(</span><em class="sig-param">foo</em>, <em class="sig-param">dirname</em>, <em class="sig-param">fnames</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.arch_walker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.arch_walker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for recursively searching through a directory for
+a kernel file matching a given architecture, called by
+learn_arch_from_tree()</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.configure_tree_location">
+<code class="sig-name descname">configure_tree_location</code><span class="sig-paren">(</span><em class="sig-param">distro</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.configure_tree_location"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.configure_tree_location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Once a distribution is identified, find the part of the distribution
+that has the URL in it that we want to use for automating the Linux
+distribution installation, and create a autoinstall_meta variable $tree
+that contains this.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.distro_adder">
+<code class="sig-name descname">distro_adder</code><span class="sig-paren">(</span><em class="sig-param">distros_added</em>, <em class="sig-param">dirname</em>, <em class="sig-param">fnames</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.distro_adder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.distro_adder" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is an import_walker routine that finds distributions in the directory
+to be scanned and then creates them.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.get_file_lines">
+<code class="sig-name descname">get_file_lines</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.get_file_lines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.get_file_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get lines from a file, which may or may not be compressed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.get_proposed_name">
+<code class="sig-name descname">get_proposed_name</code><span class="sig-paren">(</span><em class="sig-param">dirname</em>, <em class="sig-param">kernel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.get_proposed_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.get_proposed_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a directory name where we have a kernel/initrd pair, try to autoname
+the distribution (and profile) object based on the contents of that path</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.get_repo_mirror_from_apt">
+<code class="sig-name descname">get_repo_mirror_from_apt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.get_repo_mirror_from_apt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.get_repo_mirror_from_apt" title="Permalink to this definition">¶</a></dt>
+<dd><p>This tries to determine the apt mirror/archive to use (when processing repos)
+if the host machine is Debian or Ubuntu.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.get_valid_arches">
+<code class="sig-name descname">get_valid_arches</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.get_valid_arches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.get_valid_arches" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.get_valid_repo_breeds">
+<code class="sig-name descname">get_valid_repo_breeds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.get_valid_repo_breeds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.get_valid_repo_breeds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.learn_arch_from_tree">
+<code class="sig-name descname">learn_arch_from_tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.learn_arch_from_tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.learn_arch_from_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>If a distribution is imported from DVD, there is a good chance the path doesn’t
+contain the arch and we should add it back in so that it’s part of the
+meaningful name … so this code helps figure out the arch name.  This is important
+for producing predictable distro names (and profile names) from differing import sources</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.repo_finder">
+<code class="sig-name descname">repo_finder</code><span class="sig-paren">(</span><em class="sig-param">distros_added</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.repo_finder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.repo_finder" title="Permalink to this definition">¶</a></dt>
+<dd><p>This routine looks through all distributions and tries to find
+any applicable repositories in those distributions for post-install
+usage.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.rhn_repo_adder">
+<code class="sig-name descname">rhn_repo_adder</code><span class="sig-paren">(</span><em class="sig-param">distro</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.rhn_repo_adder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.rhn_repo_adder" title="Permalink to this definition">¶</a></dt>
+<dd><p>not currently used</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.rsync_repo_adder">
+<code class="sig-name descname">rsync_repo_adder</code><span class="sig-paren">(</span><em class="sig-param">distro</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.rsync_repo_adder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.rsync_repo_adder" title="Permalink to this definition">¶</a></dt>
+<dd><p>not currently used</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">name</em>, <em class="sig-param">network_root=None</em>, <em class="sig-param">autoinstall_file=None</em>, <em class="sig-param">arch=None</em>, <em class="sig-param">breed=None</em>, <em class="sig-param">os_version=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>path: the directory we are scanning for files
+name: the base name of the distro
+network_root: the remote path (nfs/http/ftp) for the distro files
+autoinstall_file: user-specified response file, which will override the default
+arch: user-specified architecture
+breed: user-specified breed
+os_version: user-specified OS version</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.scan_signatures">
+<code class="sig-name descname">scan_signatures</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.scan_signatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.scan_signatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>loop through the signatures, looking for a match for both
+the signature directory and the version file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.set_install_tree">
+<code class="sig-name descname">set_install_tree</code><span class="sig-paren">(</span><em class="sig-param">distro</em>, <em class="sig-param">url</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.set_install_tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.set_install_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple helper function to set the tree automated installation metavariable</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.what">
+<code class="sig-name descname">what</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.what"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.what" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.yum_process_comps_file">
+<code class="sig-name descname">yum_process_comps_file</code><span class="sig-paren">(</span><em class="sig-param">comps_path</em>, <em class="sig-param">distro</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.yum_process_comps_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.yum_process_comps_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>When importing Fedora/EL certain parts of the install tree can also be used
+as yum repos containing packages that might not yet be available via updates
+in yum.  This code identifies those areas. Existing repodata will be used as-is,
+but repodate is created for earlier, non-yum based, installers.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.yum_repo_adder">
+<code class="sig-name descname">yum_repo_adder</code><span class="sig-paren">(</span><em class="sig-param">distro</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.yum_repo_adder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.yum_repo_adder" title="Permalink to this definition">¶</a></dt>
+<dd><p>For yum, we recursively scan the rootdir for repos to add</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.import_signatures.ImportSignatureManager.yum_repo_scanner">
+<code class="sig-name descname">yum_repo_scanner</code><span class="sig-paren">(</span><em class="sig-param">distro</em>, <em class="sig-param">dirname</em>, <em class="sig-param">fnames</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#ImportSignatureManager.yum_repo_scanner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.ImportSignatureManager.yum_repo_scanner" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is an import_walker routine that looks for potential yum repositories
+to be added to the configuration for post-install usage.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.import_signatures.get_import_manager">
+<code class="sig-prename descclassname">cobbler.modules.managers.import_signatures.</code><code class="sig-name descname">get_import_manager</code><span class="sig-paren">(</span><em class="sig-param">config</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#get_import_manager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.get_import_manager" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.import_signatures.import_walker">
+<code class="sig-prename descclassname">cobbler.modules.managers.import_signatures.</code><code class="sig-name descname">import_walker</code><span class="sig-paren">(</span><em class="sig-param">top</em>, <em class="sig-param">func</em>, <em class="sig-param">arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#import_walker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.import_walker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Directory tree walk with callback function.
+For each directory in the directory tree rooted at top (including top
+itself, but excluding ‘.’ and ‘..’), call func(arg, dirname, fnames).
+dirname is the name of the directory, and fnames a list of the names of
+the files and subdirectories in dirname (excluding ‘.’ and ‘..’).  func
+may modify the fnames list in-place (e.g. via del or slice assignment),
+and walk will only recurse into the subdirectories whose names remain in
+fnames; this can be used to implement a filter, or to impose a specific
+order of visiting.  No semantics are defined for, or required of, arg,
+beyond that arg is always passed to func.  It can be used, e.g., to pass
+a filename pattern, or a mutable object designed to accumulate
+statistics.  Passing None for arg is common.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.import_signatures.register">
+<code class="sig-prename descclassname">cobbler.modules.managers.import_signatures.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/import_signatures.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.import_signatures.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mandatory cobbler module registration hook.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.modules.managers.in_tftpd">
+<span id="cobbler-modules-managers-in-tftpd-module"></span><h2>cobbler.modules.managers.in_tftpd module<a class="headerlink" href="#module-cobbler.modules.managers.in_tftpd" title="Permalink to this headline">¶</a></h2>
+<p>This is some of the code behind ‘cobbler sync’.</p>
+<dl class="class">
+<dt id="cobbler.modules.managers.in_tftpd.InTftpdManager">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.modules.managers.in_tftpd.</code><code class="sig-name descname">InTftpdManager</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/in_tftpd.html#InTftpdManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.in_tftpd.InTftpdManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.modules.managers.in_tftpd.InTftpdManager.add_single_distro">
+<code class="sig-name descname">add_single_distro</code><span class="sig-paren">(</span><em class="sig-param">distro</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/in_tftpd.html#InTftpdManager.add_single_distro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.in_tftpd.InTftpdManager.add_single_distro" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.in_tftpd.InTftpdManager.add_single_system">
+<code class="sig-name descname">add_single_system</code><span class="sig-paren">(</span><em class="sig-param">system</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/in_tftpd.html#InTftpdManager.add_single_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.in_tftpd.InTftpdManager.add_single_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write out new pxelinux.cfg files to /tftpboot</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.in_tftpd.InTftpdManager.regen_hosts">
+<code class="sig-name descname">regen_hosts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/in_tftpd.html#InTftpdManager.regen_hosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.in_tftpd.InTftpdManager.regen_hosts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.in_tftpd.InTftpdManager.sync">
+<code class="sig-name descname">sync</code><span class="sig-paren">(</span><em class="sig-param">verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/in_tftpd.html#InTftpdManager.sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.in_tftpd.InTftpdManager.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write out all files to /tftpdboot</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.in_tftpd.InTftpdManager.update_netboot">
+<code class="sig-name descname">update_netboot</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/in_tftpd.html#InTftpdManager.update_netboot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.in_tftpd.InTftpdManager.update_netboot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write out new pxelinux.cfg files to /tftpboot</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.in_tftpd.InTftpdManager.what">
+<code class="sig-name descname">what</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/in_tftpd.html#InTftpdManager.what"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.in_tftpd.InTftpdManager.what" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.in_tftpd.InTftpdManager.write_boot_files">
+<code class="sig-name descname">write_boot_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/in_tftpd.html#InTftpdManager.write_boot_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.in_tftpd.InTftpdManager.write_boot_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy files in profile[“boot_files”] into /tftpboot.  Used for vmware
+currently.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.in_tftpd.InTftpdManager.write_boot_files_distro">
+<code class="sig-name descname">write_boot_files_distro</code><span class="sig-paren">(</span><em class="sig-param">distro</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/in_tftpd.html#InTftpdManager.write_boot_files_distro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.in_tftpd.InTftpdManager.write_boot_files_distro" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.in_tftpd.InTftpdManager.write_dns_files">
+<code class="sig-name descname">write_dns_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/in_tftpd.html#InTftpdManager.write_dns_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.in_tftpd.InTftpdManager.write_dns_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.in_tftpd.get_manager">
+<code class="sig-prename descclassname">cobbler.modules.managers.in_tftpd.</code><code class="sig-name descname">get_manager</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/in_tftpd.html#get_manager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.in_tftpd.get_manager" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.in_tftpd.register">
+<code class="sig-prename descclassname">cobbler.modules.managers.in_tftpd.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/in_tftpd.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.in_tftpd.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mandatory cobbler module registration hook.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.modules.managers.isc">
+<span id="cobbler-modules-managers-isc-module"></span><h2>cobbler.modules.managers.isc module<a class="headerlink" href="#module-cobbler.modules.managers.isc" title="Permalink to this headline">¶</a></h2>
+<p>This is some of the code behind ‘cobbler sync’.</p>
+<dl class="class">
+<dt id="cobbler.modules.managers.isc.IscManager">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.modules.managers.isc.</code><code class="sig-name descname">IscManager</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/isc.html#IscManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.isc.IscManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.modules.managers.isc.IscManager.regen_ethers">
+<code class="sig-name descname">regen_ethers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/isc.html#IscManager.regen_ethers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.isc.IscManager.regen_ethers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.isc.IscManager.sync_dhcp">
+<code class="sig-name descname">sync_dhcp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/isc.html#IscManager.sync_dhcp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.isc.IscManager.sync_dhcp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.isc.IscManager.what">
+<code class="sig-name descname">what</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/isc.html#IscManager.what"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.isc.IscManager.what" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.isc.IscManager.write_dhcp_file">
+<code class="sig-name descname">write_dhcp_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/isc.html#IscManager.write_dhcp_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.isc.IscManager.write_dhcp_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>DHCP files are written when manage_dhcp is set in
+/etc/cobbler/settings.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.isc.get_manager">
+<code class="sig-prename descclassname">cobbler.modules.managers.isc.</code><code class="sig-name descname">get_manager</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/isc.html#get_manager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.isc.get_manager" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.isc.register">
+<code class="sig-prename descclassname">cobbler.modules.managers.isc.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/isc.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.isc.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mandatory cobbler module registration hook.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.modules.managers.ndjbdns">
+<span id="cobbler-modules-managers-ndjbdns-module"></span><h2>cobbler.modules.managers.ndjbdns module<a class="headerlink" href="#module-cobbler.modules.managers.ndjbdns" title="Permalink to this headline">¶</a></h2>
+<p>This is some of the code behind ‘cobbler sync’.</p>
+<dl class="class">
+<dt id="cobbler.modules.managers.ndjbdns.NDjbDnsManager">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.modules.managers.ndjbdns.</code><code class="sig-name descname">NDjbDnsManager</code><span class="sig-paren">(</span><em class="sig-param">config</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/ndjbdns.html#NDjbDnsManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.ndjbdns.NDjbDnsManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.modules.managers.ndjbdns.NDjbDnsManager.regen_hosts">
+<code class="sig-name descname">regen_hosts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/ndjbdns.html#NDjbDnsManager.regen_hosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.ndjbdns.NDjbDnsManager.regen_hosts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.ndjbdns.NDjbDnsManager.what">
+<code class="sig-name descname">what</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/ndjbdns.html#NDjbDnsManager.what"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.ndjbdns.NDjbDnsManager.what" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.ndjbdns.NDjbDnsManager.write_dns_files">
+<code class="sig-name descname">write_dns_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/ndjbdns.html#NDjbDnsManager.write_dns_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.ndjbdns.NDjbDnsManager.write_dns_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.ndjbdns.get_manager">
+<code class="sig-prename descclassname">cobbler.modules.managers.ndjbdns.</code><code class="sig-name descname">get_manager</code><span class="sig-paren">(</span><em class="sig-param">config</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/ndjbdns.html#get_manager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.ndjbdns.get_manager" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.ndjbdns.register">
+<code class="sig-prename descclassname">cobbler.modules.managers.ndjbdns.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/ndjbdns.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.ndjbdns.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.modules.managers.tftpd_py">
+<span id="cobbler-modules-managers-tftpd-py-module"></span><h2>cobbler.modules.managers.tftpd_py module<a class="headerlink" href="#module-cobbler.modules.managers.tftpd_py" title="Permalink to this headline">¶</a></h2>
+<p>This is some of the code behind ‘cobbler sync’.</p>
+<dl class="class">
+<dt id="cobbler.modules.managers.tftpd_py.TftpdPyManager">
+<em class="property">class </em><code class="sig-prename descclassname">cobbler.modules.managers.tftpd_py.</code><code class="sig-name descname">TftpdPyManager</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/tftpd_py.html#TftpdPyManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.tftpd_py.TftpdPyManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="cobbler.modules.managers.tftpd_py.TftpdPyManager.add_single_distro">
+<code class="sig-name descname">add_single_distro</code><span class="sig-paren">(</span><em class="sig-param">distro</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/tftpd_py.html#TftpdPyManager.add_single_distro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.tftpd_py.TftpdPyManager.add_single_distro" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.tftpd_py.TftpdPyManager.add_single_system">
+<code class="sig-name descname">add_single_system</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/tftpd_py.html#TftpdPyManager.add_single_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.tftpd_py.TftpdPyManager.add_single_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write out files to /tftpdboot.  Unused for the python server</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.tftpd_py.TftpdPyManager.regen_hosts">
+<code class="sig-name descname">regen_hosts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/tftpd_py.html#TftpdPyManager.regen_hosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.tftpd_py.TftpdPyManager.regen_hosts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.tftpd_py.TftpdPyManager.sync">
+<code class="sig-name descname">sync</code><span class="sig-paren">(</span><em class="sig-param">verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/tftpd_py.html#TftpdPyManager.sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.tftpd_py.TftpdPyManager.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write out files to /tftpdboot.  Mostly unused for the python server</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.tftpd_py.TftpdPyManager.update_netboot">
+<code class="sig-name descname">update_netboot</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/tftpd_py.html#TftpdPyManager.update_netboot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.tftpd_py.TftpdPyManager.update_netboot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write out files to /tftpdboot.  Unused for the python server</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.tftpd_py.TftpdPyManager.what">
+<code class="sig-name descname">what</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/tftpd_py.html#TftpdPyManager.what"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.tftpd_py.TftpdPyManager.what" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.tftpd_py.TftpdPyManager.write_boot_files">
+<code class="sig-name descname">write_boot_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/tftpd_py.html#TftpdPyManager.write_boot_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.tftpd_py.TftpdPyManager.write_boot_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy files in profile[“boot_files”] into /tftpboot.  Used for vmware
+currently.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.tftpd_py.TftpdPyManager.write_boot_files_distro">
+<code class="sig-name descname">write_boot_files_distro</code><span class="sig-paren">(</span><em class="sig-param">distro</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/tftpd_py.html#TftpdPyManager.write_boot_files_distro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.tftpd_py.TftpdPyManager.write_boot_files_distro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy files in profile[“boot_files”] into /tftpboot.  Used for vmware
+currently.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cobbler.modules.managers.tftpd_py.TftpdPyManager.write_dns_files">
+<code class="sig-name descname">write_dns_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/tftpd_py.html#TftpdPyManager.write_dns_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.tftpd_py.TftpdPyManager.write_dns_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.tftpd_py.get_manager">
+<code class="sig-prename descclassname">cobbler.modules.managers.tftpd_py.</code><code class="sig-name descname">get_manager</code><span class="sig-paren">(</span><em class="sig-param">collection_mgr</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/tftpd_py.html#get_manager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.tftpd_py.get_manager" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cobbler.modules.managers.tftpd_py.register">
+<code class="sig-prename descclassname">cobbler.modules.managers.tftpd_py.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobbler/modules/managers/tftpd_py.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cobbler.modules.managers.tftpd_py.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mandatory cobbler module registration hook.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cobbler.modules.managers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cobbler.modules.managers" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

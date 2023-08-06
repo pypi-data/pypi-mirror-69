@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.modules.managers.isc &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.modules.managers.isc</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.modules.managers.isc</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This is some of the code behind &#39;cobbler sync&#39;.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="kn">import</span> <span class="nn">cobbler.templar</span> <span class="k">as</span> <span class="nn">templar</span>
+<span class="kn">import</span> <span class="nn">cobbler.utils</span> <span class="k">as</span> <span class="nn">utils</span>
+
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">CX</span>
+<span class="kn">from</span> <span class="nn">cobbler.utils</span> <span class="k">import</span> <span class="n">_</span>
+
+
+<div class="viewcode-block" id="register"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.isc.register">[docs]</a><span class="k">def</span> <span class="nf">register</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The mandatory cobbler module registration hook.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;manage&quot;</span></div>
+
+
+<div class="viewcode-block" id="IscManager"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.isc.IscManager">[docs]</a><span class="k">class</span> <span class="nc">IscManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="IscManager.what"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.isc.IscManager.what">[docs]</a>    <span class="k">def</span> <span class="nf">what</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;isc&quot;</span></div>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="n">collection_mgr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distros</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">distros</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">profiles</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">systems</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">systems</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repos</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">repos</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">templar</span> <span class="o">=</span> <span class="n">templar</span><span class="o">.</span><span class="n">Templar</span><span class="p">(</span><span class="n">collection_mgr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings_file</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">dhcpconf_location</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IscManager.write_dhcp_file"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.isc.IscManager.write_dhcp_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_dhcp_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        DHCP files are written when manage_dhcp is set in</span>
+<span class="sd">        /etc/cobbler/settings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">template_file</span> <span class="o">=</span> <span class="s2">&quot;/etc/cobbler/dhcp.template&quot;</span>
+        <span class="n">blender_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">f2</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">template_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;error reading template: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">template_file</span><span class="p">)</span>
+        <span class="n">template_data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">template_data</span> <span class="o">=</span> <span class="n">f2</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">f2</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># use a simple counter for generating generic names where a hostname</span>
+        <span class="c1"># is not available</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># we used to just loop through each system, but now we must loop</span>
+        <span class="c1"># through each network interface of each system.</span>
+        <span class="n">dhcp_tags</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+        <span class="n">yaboot</span> <span class="o">=</span> <span class="s2">&quot;/yaboot&quot;</span>
+
+        <span class="c1"># FIXME: ding should evolve into the new dhcp_tags dict</span>
+        <span class="n">ding</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">ignore_macs</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">systems</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">system</span><span class="o">.</span><span class="n">is_management_supported</span><span class="p">(</span><span class="n">cidr_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="n">profile</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+            <span class="n">distro</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+
+            <span class="c1"># if distro is None then the profile is really an image record</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">system_interface</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+
+                <span class="c1"># We make a copy because we may modify it before adding it to the dhcp_tags</span>
+                <span class="c1"># and we don&#39;t want to affect the master copy.</span>
+                <span class="n">interface</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system_interface</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;if_gateway&quot;</span><span class="p">]:</span>
+                    <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;gateway&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;if_gateway&quot;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;gateway&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">gateway</span>
+
+                <span class="n">mac</span> <span class="o">=</span> <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;mac_address&quot;</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;interface_type&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;bond_slave&quot;</span><span class="p">,</span> <span class="s2">&quot;bridge_slave&quot;</span><span class="p">,</span> <span class="s2">&quot;bonded_bridge_slave&quot;</span><span class="p">):</span>
+
+                    <span class="k">if</span> <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;interface_master&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">system</span><span class="o">.</span><span class="n">interfaces</span><span class="p">:</span>
+                        <span class="c1"># Can&#39;t write DHCP entry; master interface does not exist</span>
+                        <span class="k">continue</span>
+
+                    <span class="c1"># We may have multiple bonded interfaces, so we need a composite index into ding.</span>
+                    <span class="n">name_master</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">-</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;interface_master&quot;</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">name_master</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ding</span><span class="p">:</span>
+                        <span class="n">ding</span><span class="p">[</span><span class="n">name_master</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">interface</span><span class="p">[</span><span class="s2">&quot;interface_master&quot;</span><span class="p">]:</span> <span class="p">[]}</span>
+
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ding</span><span class="p">[</span><span class="n">name_master</span><span class="p">][</span><span class="n">interface</span><span class="p">[</span><span class="s2">&quot;interface_master&quot;</span><span class="p">]])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">ding</span><span class="p">[</span><span class="n">name_master</span><span class="p">][</span><span class="n">interface</span><span class="p">[</span><span class="s2">&quot;interface_master&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mac</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">ignore_macs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mac</span><span class="p">)</span>
+
+                    <span class="n">ip</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="n">interface</span><span class="p">[</span><span class="s2">&quot;interface_master&quot;</span><span class="p">]][</span><span class="s2">&quot;ip_address&quot;</span><span class="p">]</span>
+                    <span class="n">netmask</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="n">interface</span><span class="p">[</span><span class="s2">&quot;interface_master&quot;</span><span class="p">]][</span><span class="s2">&quot;netmask&quot;</span><span class="p">]</span>
+                    <span class="n">dhcp_tag</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="n">interface</span><span class="p">[</span><span class="s2">&quot;interface_master&quot;</span><span class="p">]][</span><span class="s2">&quot;dhcp_tag&quot;</span><span class="p">]</span>
+                    <span class="n">host</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="n">interface</span><span class="p">[</span><span class="s2">&quot;interface_master&quot;</span><span class="p">]][</span><span class="s2">&quot;dns_name&quot;</span><span class="p">]</span>
+
+                    <span class="k">if</span> <span class="n">ip</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">ip</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="p">(</span><span class="n">nam2</span><span class="p">,</span> <span class="n">int2</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">nam2</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">interface</span><span class="p">[</span><span class="s2">&quot;interface_master&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">int2</span><span class="p">[</span><span class="s2">&quot;ip_address&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">int2</span><span class="p">[</span><span class="s2">&quot;ip_address&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+                                <span class="n">ip</span> <span class="o">=</span> <span class="n">int2</span><span class="p">[</span><span class="s2">&quot;ip_address&quot;</span><span class="p">]</span>
+                                <span class="k">break</span>
+
+                    <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;ip_address&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ip</span>
+                    <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;netmask&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">netmask</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ip</span> <span class="o">=</span> <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;ip_address&quot;</span><span class="p">]</span>
+                    <span class="n">netmask</span> <span class="o">=</span> <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;netmask&quot;</span><span class="p">]</span>
+                    <span class="n">dhcp_tag</span> <span class="o">=</span> <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;dhcp_tag&quot;</span><span class="p">]</span>
+                    <span class="n">host</span> <span class="o">=</span> <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;dns_name&quot;</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">distro</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;distro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distro</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">mac</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">mac</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="c1"># can&#39;t write a DHCP entry for this system</span>
+                    <span class="k">continue</span>
+
+                <span class="n">counter</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span>
+
+                <span class="c1"># the label the entry after the hostname if possible</span>
+                <span class="k">if</span> <span class="n">host</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">host</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;eth0&quot;</span><span class="p">:</span>
+                        <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">-</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">host</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;generic</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">counter</span>
+
+                <span class="c1"># add references to the system, profile, and distro</span>
+                <span class="c1"># for use in the template</span>
+                <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">blender_cache</span><span class="p">:</span>
+                    <span class="n">blended_system</span> <span class="o">=</span> <span class="n">blender_cache</span><span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">blended_system</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+                    <span class="n">blender_cache</span><span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">blended_system</span>
+
+                <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;next_server&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">blended_system</span><span class="p">[</span><span class="s2">&quot;next_server&quot;</span><span class="p">]</span>
+                <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;netboot_enabled&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">blended_system</span><span class="p">[</span><span class="s2">&quot;netboot_enabled&quot;</span><span class="p">]</span>
+                <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">blended_system</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]</span>
+                <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;owner&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">blended_system</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+                <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;enable_gpxe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">blended_system</span><span class="p">[</span><span class="s2">&quot;enable_gpxe&quot;</span><span class="p">]</span>
+                <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;name_servers&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">blended_system</span><span class="p">[</span><span class="s2">&quot;name_servers&quot;</span><span class="p">]</span>
+                <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;mgmt_parameters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">blended_system</span><span class="p">[</span><span class="s2">&quot;mgmt_parameters&quot;</span><span class="p">]</span>
+
+                <span class="c1"># Explicitly declare filename for other (non x86) archs as in DHCP discover</span>
+                <span class="c1"># package mostly the architecture cannot be differed due to missing bits...</span>
+                <span class="k">if</span> <span class="n">distro</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">interface</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filename&quot;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">distro</span><span class="o">.</span><span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;ppc&quot;</span> <span class="ow">or</span>  <span class="n">distro</span><span class="o">.</span><span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;ppc64&quot;</span><span class="p">:</span>
+                        <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">yaboot</span>
+                    <span class="k">elif</span> <span class="n">distro</span><span class="o">.</span><span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;ppc64le&quot;</span><span class="p">:</span>
+                        <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;grub/grub.ppc64le&quot;</span>
+                    <span class="k">elif</span> <span class="n">distro</span><span class="o">.</span><span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;aarch64&quot;</span><span class="p">:</span>
+                        <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;grub/grubaa64.efi&quot;</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">always_write_dhcp_entries</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">interface</span><span class="p">[</span><span class="s2">&quot;netboot_enabled&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">interface</span><span class="p">[</span><span class="s1">&#39;static&#39;</span><span class="p">]:</span>
+                        <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">dhcp_tag</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">dhcp_tag</span> <span class="o">=</span> <span class="n">blended_system</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dhcp_tag&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">dhcp_tag</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                        <span class="n">dhcp_tag</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
+
+                <span class="k">if</span> <span class="n">dhcp_tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dhcp_tags</span><span class="p">:</span>
+                    <span class="n">dhcp_tags</span><span class="p">[</span><span class="n">dhcp_tag</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="n">mac</span><span class="p">:</span> <span class="n">interface</span>
+                    <span class="p">}</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">dhcp_tags</span><span class="p">[</span><span class="n">dhcp_tag</span><span class="p">][</span><span class="n">mac</span><span class="p">]</span> <span class="o">=</span> <span class="n">interface</span>
+
+        <span class="c1"># remove macs from redundant slave interfaces from dhcp_tags</span>
+        <span class="c1"># otherwise you get duplicate ip&#39;s in the installer</span>
+        <span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dhcp_tags</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dhcp_tags</span><span class="p">[</span><span class="n">dt</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">ignore_macs</span><span class="p">:</span>
+                    <span class="k">del</span> <span class="n">dhcp_tags</span><span class="p">[</span><span class="n">dt</span><span class="p">][</span><span class="n">m</span><span class="p">]</span>
+
+        <span class="c1"># we are now done with the looping through each interface of each system</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">asctime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">()),</span>
+            <span class="s2">&quot;cobbler_server&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">http_port</span><span class="p">),</span>
+            <span class="s2">&quot;next_server&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">next_server</span><span class="p">,</span>
+            <span class="s2">&quot;yaboot&quot;</span><span class="p">:</span> <span class="n">yaboot</span><span class="p">,</span>
+            <span class="s2">&quot;dhcp_tags&quot;</span><span class="p">:</span> <span class="n">dhcp_tags</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;generating </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">templar</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template_data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_file</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IscManager.regen_ethers"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.isc.IscManager.regen_ethers">[docs]</a>    <span class="k">def</span> <span class="nf">regen_ethers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>            <span class="c1"># ISC/BIND do not use this</span></div>
+
+<div class="viewcode-block" id="IscManager.sync_dhcp"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.isc.IscManager.sync_dhcp">[docs]</a>    <span class="k">def</span> <span class="nf">sync_dhcp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">restart_dhcp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">restart_dhcp</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">service_name</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">dhcp_service_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">restart_dhcp</span> <span class="o">!=</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span>
+            <span class="n">rc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;dhcpd -t -q&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;dhcpd -t failed&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+            <span class="n">service_restart</span> <span class="o">=</span> <span class="s2">&quot;service </span><span class="si">%s</span><span class="s2"> restart&quot;</span> <span class="o">%</span> <span class="n">service_name</span>
+            <span class="n">rc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">service_restart</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> failed&quot;</span> <span class="o">%</span> <span class="n">service_name</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="get_manager"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.isc.get_manager">[docs]</a><span class="k">def</span> <span class="nf">get_manager</span><span class="p">(</span><span class="n">collection_mgr</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">IscManager</span><span class="p">(</span><span class="n">collection_mgr</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

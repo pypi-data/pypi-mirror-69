@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to Cobbler’s documentation! &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Quickstart" href="quickstart-guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Welcome to Cobbler’s documentation!</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="welcome-to-cobbler-s-documentation">
+<h1>Welcome to Cobbler’s documentation!<a class="headerlink" href="#welcome-to-cobbler-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>cobbler is a provisioning (installation) and update server.  It supports deployments via PXE (network booting),
+virtualization (Xen, QEMU/KVM, or VMware), and re-installs of existing Linux systems. The latter two features are
+enabled by usage of ‘koan’ on the remote system. Update server features include yum mirroring and integration of those
+mirrors with automated installation files.  Cobbler has a command line interface, Web UI, and extensive Python and
+XMLRPC APIs for integration with external scripts and applications.</p>
+<p>Here you should find a comprehensive overview about the usage of cobbler.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart-guide.html">1. Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart-guide.html#preparing-your-os">1.1. Preparing your OS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart-guide.html#changing-settings">1.2. Changing settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart-guide.html#dhcp-management-and-dhcp-server-template">1.3. DHCP management and DHCP server template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart-guide.html#notes-on-files-and-directories">1.4. Notes on files and directories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart-guide.html#starting-and-enabling-the-cobbler-service">1.5. Starting and enabling the Cobbler service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart-guide.html#checking-for-problems-and-your-first-sync">1.6. Checking for problems and your first sync</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart-guide.html#importing-your-first-distribution">1.7. Importing your first distribution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-guide.html">2. Install Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation-guide.html#prerequisites">2.1. Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-guide.html#installation">2.2. Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-guide.html#rpm">2.3. RPM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-guide.html#deb">2.4. DEB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation-guide.html#relocating-your-installation">2.5. Relocating your installation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler.html">3. Cobbler CLI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#general-principles">3.1. General Principles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#cli-commands">3.2. CLI-Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#exit-status">3.3. EXIT_STATUS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html#additional-help">3.4. Additional Help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cobblerd.html">4. Cobbler Server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cobblerd.html#preamble">4.1. Preamble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobblerd.html#description">4.2. Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobblerd.html#setup">4.3. Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobblerd.html#autoinstallation-autoyast-kickstart">4.4. Autoinstallation (Autoyast/Kickstart)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobblerd.html#options">4.5. Options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler-conf.html">5. Cobbler Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cobbler-conf.html#settings">5.1. settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler-conf.html#modules-conf">5.2. modules.conf</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">6. User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.html#web-user-interface">6.1. Web User Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.html#api">6.2. API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.html#triggers">6.3. Triggers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.html#images">6.4. Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.html#power-management">6.5. Power Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.html#non-import-manual-workflow">6.6. NON-IMPORT (MANUAL) WORKFLOW</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.html#repository-management">6.7. Repository Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.html#virtualization">6.8. Virtualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.html#autoinstallation">6.9. Autoinstallation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.html#network-topics">6.10. Network Topics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.html#boot-cd">6.11. Boot CD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide.html#configuration-management-integration">6.12. Configuration Management Integration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developer-guide.html">7. Developer Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="developer-guide.html#patch-process">7.1. Patch process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer-guide.html#setup">7.2. Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer-guide.html#branches">7.3. Branches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer-guide.html#standards">7.4. Standards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer-guide.html#contributing-to-the-website">7.5. Contributing to the website</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer-guide.html#debugging">7.6. Debugging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#subpackages">8.1. Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#submodules">8.2. Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.api">8.3. cobbler.api module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.autoinstall_manager">8.4. cobbler.autoinstall_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.autoinstallgen">8.5. cobbler.autoinstallgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.cexceptions">8.6. cobbler.cexceptions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.cli">8.7. cobbler.cli module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.clogger">8.8. cobbler.clogger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.cobblerd">8.9. cobbler.cobblerd module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.configgen">8.10. cobbler.configgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.download_manager">8.11. cobbler.download_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.field_info">8.12. cobbler.field_info module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.module_loader">8.13. cobbler.module_loader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.power_manager">8.14. cobbler.power_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.remote">8.15. cobbler.remote module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.resource">8.16. cobbler.resource module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.serializer">8.17. cobbler.serializer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.services">8.18. cobbler.services module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.settings">8.19. cobbler.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.templar">8.20. cobbler.templar module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.template_api">8.21. cobbler.template_api module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.tftpgen">8.22. cobbler.tftpgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.utils">8.23. cobbler.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.validate">8.24. cobbler.validate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler.yumgen">8.25. cobbler.yumgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-autodoc/cobbler.html#module-cobbler">8.26. Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="release-notes.html">9. Release Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="release-notes.html#enhancements">9.1. Enhancements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release-notes.html#bugfixes">9.2. Bugfixes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release-notes.html#upgrade-notes">9.3. Upgrade notes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="quickstart-guide.html" class="btn btn-neutral float-right" title="1. Quickstart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

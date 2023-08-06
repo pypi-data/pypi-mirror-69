@@ -1,0 +1,315 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>7. Developer Guide &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="8. cobbler package" href="code-autodoc/cobbler.html" />
+    <link rel="prev" title="6. User Guide" href="user-guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">7. Developer Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#patch-process">7.1. Patch process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup">7.2. Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#branches">7.3. Branches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#standards">7.4. Standards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing-to-the-website">7.5. Contributing to the website</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#debugging">7.6. Debugging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>7. Developer Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/developer-guide.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="developer-guide">
+<h1>7. Developer Guide<a class="headerlink" href="#developer-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="patch-process">
+<h2>7.1. Patch process<a class="headerlink" href="#patch-process" title="Permalink to this headline">¶</a></h2>
+<p>You’d like to contribute features or fixes to Cobbler? Great! We’d love to have them.</p>
+<p>It is highly recommended that you have a github.com account if you would like to contribute code. Create an account, log
+in, and then go to github.com/cobbler/cobbler to “fork” the project.</p>
+<p>Create a new branch named after the feature you are working on. Do the work on your local machine, please make sure your
+work passes Cobbler’s coding standards by using <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">qa</span></code>. Only then push to your personal Github branch
+(e.g. github.com/yourname/cobbler).</p>
+<p>Then use the “submit pull request” feature of Github to request that the official repo pull in your changes. Be sure to
+include a full description of what your change does in the comments, including what you have tested (and other things
+that you may have not been able to test well and need help with).</p>
+<p>If the patch needs more work, we’ll let you know in the comments.</p>
+<p>Do not mix work on different features in different pull requests/branches if at all possible as this makes it difficult
+to take only some of the work at one time, and to quickly slurp in some changes why others get hammered out.</p>
+<p>Once we merge in your pull request, you can remove the branch from your repo if you like. The AUTHORS file is created
+automatically when we release.</p>
+</div>
+<div class="section" id="setup">
+<h2>7.2. Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>The preferred development platform is the latest openSUSE Leap or Tumbleweed. You’ll also have to disable SELinux to
+get Cobbler up and running.</p>
+<p>For CentOS you will need the EPEL repository:
+<code class="docutils literal notranslate"><span class="pre">http://download.fedoraproject.org/pub/epel/7/x86_64/repoview/epel-release.html</span></code></p>
+<p>Install development dependencies:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># yum install git make openssl python-sphinx python36-coverage python36-devel python36-distro python36-future python36-pyflakes python36-pycodestyle python36-setuptools rpm-build
+</pre></div>
+</div>
+<p>Install runtime dependencies:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># yum install httpd mod_wsgi python36-PyYAML python36-netaddr python36-simplejso m
+# pip3 install Cheetah3
+</pre></div>
+</div>
+<p>Initially, to run Cobbler without using packages:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># git clone https://github.com/&lt;your username&gt;/cobbler.git
+# cd cobbler
+# make install
+</pre></div>
+</div>
+<p>For each successive run, do not run make install again. To avoid blowing away your configuration, run:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># make webtest
+</pre></div>
+</div>
+<p>This will install Cobbler and restart apache/cobblerd, but move your configuration files and settings aside and restore
+them, rather than blindly overwriting them.</p>
+<p>You can now run Cobbler commands and access the web interface.</p>
+</div>
+<div class="section" id="branches">
+<h2>7.3. Branches<a class="headerlink" href="#branches" title="Permalink to this headline">¶</a></h2>
+<p>Cobbler has a development branch called “master” (where the action is), and branches for all releases that are in
+maintaince mode. All work on new features should be done against the master branch. If you want to address bugs then
+please target the latest release branch, the maintainers will then cherry-pick those changes into the master branch.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># git branch -r
+# git checkout &lt;branch&gt;
+# git checkout -b &lt;new branch name&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="standards">
+<h2>7.4. Standards<a class="headerlink" href="#standards" title="Permalink to this headline">¶</a></h2>
+<p>We’re not overly picky, but please follow the python PEP8 standards we want to adhere to (see Makefile).</p>
+<ul class="simple">
+<li><p>Always use under_scores, not camelCase.</p></li>
+<li><p>Always four (4) spaces, not tabs.</p></li>
+<li><p>Avoid one line if statements.</p></li>
+<li><p>Validate your code by using <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">qa</span></code>.</p></li>
+<li><p>Keep things simple, keep in mind that this is a tool for sysadmins and not python developers.</p></li>
+<li><p>Use modules that are easily available (eg. EPEL) but preferrably in the base OS, otherwise they have to be packaged
+with the app, which usually runs afoul of distribution packaging guidelines.</p></li>
+<li><p>Cobbler is since the 3.x.x release Python3 only.</p></li>
+<li><p>Koan has no new release currently but starting with the next we will also only support Pyhton3.</p></li>
+<li><p>Older releases will of course stay with Python2.</p></li>
+</ul>
+<p>You’re also welcome to hang out in #cobbler and #cobbler-devel on irc.freenode.net, as there are folks around to answer
+questions, etc. But it isn’t that active anymore please drop also in our Cobbler Gitter channel there we will probably
+answer faster.</p>
+</div>
+<div class="section" id="contributing-to-the-website">
+<h2>7.5. Contributing to the website<a class="headerlink" href="#contributing-to-the-website" title="Permalink to this headline">¶</a></h2>
+<p>The github-based git repository for the <a class="reference external" href="https://cobbler.github.io">https://cobbler.github.io</a> website itself is at
+<a class="reference external" href="https://github.com/cobbler/cobbler.github.io">https://github.com/cobbler/cobbler.github.io</a>.</p>
+<p>If you want to contribute changes to the website, you will need jekyll (<a class="reference external" href="http://jekyllrb.com">http://jekyllrb.com</a>).</p>
+<p>You will probably want to:</p>
+<ul class="simple">
+<li><p>edit the files as markdown</p></li>
+<li><p>run the docker container</p></li>
+<li><p>check if your changes didn’t break anything</p></li>
+</ul>
+</div>
+<div class="section" id="debugging">
+<h2>7.6. Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
+<p>If you need to debug a remote process, rpdb provides some very nice capabilities beyond the standard python debugger,
+just insert a <cite>import rpdb; rpdb.set_trace()</cite> on the desired line run cobbler and then do a <cite>nc 127.0.0.1 4444</cite>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="code-autodoc/cobbler.html" class="btn btn-neutral float-right" title="8. cobbler package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="user-guide.html" class="btn btn-neutral float-left" title="6. User Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

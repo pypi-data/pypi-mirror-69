@@ -1,0 +1,460 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.settings &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.settings</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.settings</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Cobbler app-wide settings</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">cobbler.utils</span> <span class="k">import</span> <span class="n">_</span>
+
+<span class="n">TESTMODE</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1"># defaults is to be used if the config file doesn&#39;t contain the value we need</span>
+<span class="n">DEFAULTS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;allow_duplicate_hostnames&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;allow_duplicate_ips&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;allow_duplicate_macs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;allow_dynamic_settings&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;always_write_dhcp_entries&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;anamon_enabled&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;auth_token_expiration&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3600</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;authn_pam_service&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;login&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;autoinstall_snippets_dir&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/var/lib/cobbler/snippets&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;autoinstall_templates_dir&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/var/lib/cobbler/templates&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;bind_chroot_path&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;bind_master&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;boot_loader_conf_template_dir&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/etc/cobbler/boot_loader_conf&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;bootloaders_dir&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/var/lib/cobbler/loaders&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;grubconfig_dir&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/var/lib/cobbler/grub_config&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;build_reporting_enabled&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;build_reporting_ignorelist&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;build_reporting_sender&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;build_reporting_smtp_server&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;build_reporting_subject&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;buildisodir&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/var/cache/cobbler/buildiso&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;cheetah_import_whitelist&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="s2">&quot;re&quot;</span><span class="p">,</span> <span class="s2">&quot;random&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;client_use_https&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;client_use_localhost&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;cobbler_master&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;createrepo_flags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;-c cache -s sha&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;default_autoinstall&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/var/lib/cobbler/templates/default.ks&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;default_name_servers&quot;</span><span class="p">:</span> <span class="p">[[],</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;default_name_servers_search&quot;</span><span class="p">:</span> <span class="p">[[],</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;default_ownership&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="s2">&quot;admin&quot;</span><span class="p">],</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;default_password_crypted&quot;</span><span class="p">:</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;\$1\$mF86/UHC\$WvcIcX2t6crBz2onWxyac.&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;default_template_type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;cheetah&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;default_virt_bridge&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;xenbr0&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;default_virt_disk_driver&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;default_virt_file_size&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;default_virt_ram&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">512</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;default_virt_type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;enable_gpxe&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;enable_menu&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;http_port&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;include&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="s2">&quot;/etc/cobbler/settings.d/*.settings&quot;</span><span class="p">],</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;iso_template_dir&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/etc/cobbler/iso&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;kernel_options&quot;</span><span class="p">:</span> <span class="p">[{},</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;ldap_anonymous_bind&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;ldap_base_dn&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;DC=devel,DC=redhat,DC=com&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;ldap_port&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">389</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;ldap_search_bind_dn&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;ldap_search_passwd&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;ldap_search_prefix&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;uid=&#39;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;ldap_server&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;grimlock.devel.redhat.com&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;ldap_tls&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;ldap_tls_cacertfile&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;ldap_tls_certfile&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;ldap_tls_keyfile&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;bind_manage_ipmi&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;manage_dhcp&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;manage_dns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;manage_forward_zones&quot;</span><span class="p">:</span> <span class="p">[[],</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;manage_reverse_zones&quot;</span><span class="p">:</span> <span class="p">[[],</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;manage_genders&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;manage_rsync&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;manage_tftp&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;manage_tftpd&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;mgmt_classes&quot;</span><span class="p">:</span> <span class="p">[[],</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;mgmt_parameters&quot;</span><span class="p">:</span> <span class="p">[{},</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;next_server&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;nsupdate_enabled&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;power_management_default_type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ipmitool&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;power_template_dir&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/etc/cobbler/power&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;proxy_url_ext&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;proxy_url_int&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;puppet_auto_setup&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;puppet_parameterized_classes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;puppet_server&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;puppet&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;puppet_version&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;puppetca_path&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/usr/bin/puppet&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;pxe_just_once&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;nopxe_with_triggers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;redhat_management_permissive&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;redhat_management_server&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;xmlrpc.rhn.redhat.com&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;redhat_management_key&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;register_new_installs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;remove_old_puppet_certs_automatically&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;replicate_repo_rsync_options&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;-avzH&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;replicate_rsync_options&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;-avzH&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;reposync_flags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;-l -m -d&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;restart_dhcp&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;restart_dns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;run_install_triggers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;scm_track_enabled&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;scm_track_mode&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;scm_track_author&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;cobbler &lt;cobbler@localhost&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;scm_push_script&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/bin/true&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;serializer_pretty_json&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;server&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;sign_puppet_certs_automatically&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;signature_path&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/var/lib/cobbler/distro_signatures.json&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;signature_url&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;https://cobbler.github.io/signatures/3.0.x/latest.json&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;tftpboot_location&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/srv/tftpboot&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;virt_auto_boot&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;webdir&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/var/www/cobbler&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;webdir_whitelist&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;.link_cache&quot;</span><span class="p">,</span> <span class="s2">&quot;misc&quot;</span><span class="p">,</span> <span class="s2">&quot;distro_mirror&quot;</span><span class="p">,</span> <span class="s2">&quot;images&quot;</span><span class="p">,</span> <span class="s2">&quot;links&quot;</span><span class="p">,</span> <span class="s2">&quot;localmirror&quot;</span><span class="p">,</span> <span class="s2">&quot;pub&quot;</span><span class="p">,</span> <span class="s2">&quot;rendered&quot;</span><span class="p">,</span> <span class="s2">&quot;repo_mirror&quot;</span><span class="p">,</span> <span class="s2">&quot;repo_profile&quot;</span><span class="p">,</span> <span class="s2">&quot;repo_system&quot;</span><span class="p">,</span> <span class="s2">&quot;svc&quot;</span><span class="p">,</span> <span class="s2">&quot;web&quot;</span><span class="p">,</span> <span class="s2">&quot;webui&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;xmlrpc_port&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">25151</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;yum_distro_priority&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;yum_post_install_mirror&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;yumdownloader_flags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;--resolve&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">FIELDS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: server&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Value&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: 127.0.0.1&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+<span class="p">]</span>
+
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/srv/www/&quot;</span><span class="p">):</span>
+    <span class="n">DEFAULTS</span><span class="p">[</span><span class="s2">&quot;webdir&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;/srv/www/cobbler&quot;</span>
+
+<span class="c1"># Autodetect bind chroot configuration</span>
+<span class="c1"># RHEL/Fedora</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/etc/sysconfig/named&quot;</span><span class="p">):</span>
+    <span class="n">bind_config_filename</span> <span class="o">=</span> <span class="s2">&quot;/etc/sysconfig/named&quot;</span>
+<span class="c1"># Debian</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">bind_config_filename</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">bind_config_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;/etc/default/bind*&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">bind_config_files</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="n">bind_config_filename</span> <span class="o">=</span> <span class="n">filename</span>
+<span class="c1"># Parse the config file</span>
+<span class="k">if</span> <span class="n">bind_config_filename</span><span class="p">:</span>
+    <span class="n">bind_config</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># When running as a webapp we can&#39;t access this, but don&#39;t need it</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">bind_config_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">bind_config_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">IOError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">bind_config_file</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-zA-Z]+=&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+                <span class="n">bind_config</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
+        <span class="c1"># RHEL, SysV Fedora</span>
+        <span class="k">if</span> <span class="s2">&quot;ROOTDIR&quot;</span> <span class="ow">in</span> <span class="n">bind_config</span><span class="p">:</span>
+            <span class="n">DEFAULTS</span><span class="p">[</span><span class="s2">&quot;bind_chroot_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bind_config</span><span class="p">[</span><span class="s2">&quot;ROOTDIR&quot;</span><span class="p">]</span>
+        <span class="c1"># Debian, Systemd Fedora</span>
+        <span class="k">if</span> <span class="s2">&quot;OPTIONS&quot;</span> <span class="ow">in</span> <span class="n">bind_config</span><span class="p">:</span>
+            <span class="n">rootdirmatch</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;-t ([/\w]+)&quot;</span><span class="p">,</span> <span class="n">bind_config</span><span class="p">[</span><span class="s2">&quot;OPTIONS&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">rootdirmatch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">DEFAULTS</span><span class="p">[</span><span class="s2">&quot;bind_chroot_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rootdirmatch</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Settings"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.settings.Settings">[docs]</a><span class="k">class</span> <span class="nc">Settings</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.collection_type"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.settings.Settings.collection_type">[docs]</a>    <span class="k">def</span> <span class="nf">collection_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;settings&quot;</span></div>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clear</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">manage_tftp</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">manage_tftpd</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tftpboot_location</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TFTP directory &#39;</span><span class="si">{}</span><span class="s2">&#39; not found&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tftpboot_location</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">DEFAULTS</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULTS</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Settings.set"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.settings.Settings.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Settings.to_string"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.settings.Settings.to_string">[docs]</a>    <span class="k">def</span> <span class="nf">to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">buf</span> <span class="o">+=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;defaults</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">buf</span> <span class="o">+=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;kernel options  : </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;kernel_options&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">buf</span></div>
+
+<div class="viewcode-block" id="Settings.to_dict"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.settings.Settings.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return an easily serializable representation of the config.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span></div>
+
+<div class="viewcode-block" id="Settings.from_dict"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.settings.Settings.from_dict">[docs]</a>    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Modify this object to load values in dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;warning: not loading empty structure for </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">())</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_dict</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">DEFAULTS</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">DEFAULTS</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;str&quot;</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">DEFAULTS</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;int&quot;</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">DEFAULTS</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;bool&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">elif</span> <span class="n">DEFAULTS</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;float&quot;</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">DEFAULTS</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;list&quot;</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_list</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">DEFAULTS</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;dict&quot;</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_dict</span><span class="p">(</span><span class="n">value</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">utils</span><span class="o">.</span><span class="n">update_settings_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()):</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># FIXME. Not sure why __dict__ is part of name</span>
+            <span class="c1"># workaround applied, ignore exception</span>
+            <span class="c1"># raise AttributeError</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;kernel_options&quot;</span><span class="p">:</span>
+                <span class="c1"># backwards compatibility -- convert possible string value to dict</span>
+                <span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">allow_multiples</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+                <span class="k">return</span> <span class="n">result</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">DEFAULTS</span><span class="p">:</span>
+                <span class="n">lookup</span> <span class="o">=</span> <span class="n">DEFAULTS</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">lookup</span>
+                <span class="k">return</span> <span class="n">lookup</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.template_api &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.template_api</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.template_api</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Cobbler provides builtin methods for use in Cheetah templates. $SNIPPET is one</span>
+<span class="sd">such function and is now used to implement Cobbler&#39;s SNIPPET:: syntax.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">past.builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">import</span> <span class="nn">Cheetah.Template</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">FileNotFoundException</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+
+<span class="n">CHEETAH_MACROS_FILE</span> <span class="o">=</span> <span class="s1">&#39;/etc/cobbler/cheetah_macros&#39;</span>
+<span class="c1">#CHEETAH_MACROS_FILE = &#39;/home/egotthold/Sources/Pycharm Projects/cobbler/config/cheetah/cheetah_macros&#39;</span>
+
+<span class="c1"># This class is defined using the Cheetah language. Using the &#39;compile&#39; function</span>
+<span class="c1"># we can compile the source directly into a python class. This class will allow</span>
+<span class="c1"># us to define the cheetah builtins.</span>
+
+
+<div class="viewcode-block" id="Template"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.template_api.Template">[docs]</a><span class="k">class</span> <span class="nc">Template</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class will allow us to include any pure python builtin functions.</span>
+<span class="sd">    It derives from the cheetah-compiled class above. This way, we can include</span>
+<span class="sd">    both types (cheetah and pure python) of builtins in the same base template.</span>
+<span class="sd">    We don&#39;t need to override __init__</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MacrosTemplate</span> <span class="o">=</span> <span class="n">Cheetah</span><span class="o">.</span><span class="n">Template</span><span class="o">.</span><span class="n">Template</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">CHEETAH_MACROS_FILE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BuiltinTemplate</span> <span class="o">=</span> <span class="n">Cheetah</span><span class="o">.</span><span class="n">Template</span><span class="o">.</span><span class="n">Template</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+
+            <span class="c1"># This part (see &#39;Template&#39; below</span>
+            <span class="c1"># for the other part) handles the actual inclusion of the file contents. We</span>
+            <span class="c1"># still need to make the snippet&#39;s namespace (searchList) available to the</span>
+            <span class="c1"># template calling SNIPPET (done in the other part).</span>
+
+            <span class="c1"># Moved the other functions into /etc/cobbler/cheetah_macros</span>
+            <span class="c1"># Left SNIPPET here since it is very important.</span>
+
+            <span class="c1"># This function can be used in two ways:</span>
+            <span class="c1"># Cheetah syntax:</span>
+            <span class="c1">#</span>
+            <span class="c1"># $SNIPPET(&#39;my_snippet&#39;)</span>
+            <span class="c1">#</span>
+            <span class="c1"># SNIPPET syntax:</span>
+            <span class="c1">#</span>
+            <span class="c1"># SNIPPET::my_snippet</span>
+            <span class="c1">#</span>
+            <span class="c1"># This follows all of the rules of snippets and advanced snippets. First it</span>
+            <span class="c1"># searches for a per-system snippet, then a per-profile snippet, then a</span>
+            <span class="c1"># general snippet. If none is found, a comment explaining the error is</span>
+            <span class="c1"># substituted.</span>
+            <span class="s2">&quot;#def SNIPPET($file)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;#set $snippet = $read_snippet($file)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;#if $snippet&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;#include source=$snippet&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;#else&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;# Error: no snippet data for $file&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;#end if&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;#end def&quot;</span><span class="p">,</span>
+        <span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># OK, so this function gets called by Cheetah.Template.Template.__init__ to</span>
+    <span class="c1"># compile the template into a class. This is probably a kludge, but it</span>
+    <span class="c1"># add a baseclass argument to the standard compile (see Cheetah&#39;s compile</span>
+    <span class="c1"># docstring) and returns the resulting class. This argument, of course,</span>
+    <span class="c1"># points to this class. Now any methods entered here (or in the base class</span>
+    <span class="c1"># above) will be accessible to all cheetah templates compiled by cobbler.</span>
+
+<div class="viewcode-block" id="Template.compile"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.template_api.Template.compile">[docs]</a>    <span class="k">def</span> <span class="nf">compile</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compile a cheetah template with cobbler modifications. Modifications</span>
+<span class="sd">        include SNIPPET:: syntax replacement and inclusion of cobbler builtin</span>
+<span class="sd">        methods.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">replacer</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;$SNIPPET(&#39;</span><span class="si">%s</span><span class="s2">&#39;)&quot;</span> <span class="o">%</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+            <span class="c1"># Normally, the cheetah compiler worries about this, but we need to</span>
+            <span class="c1"># preprocess the actual source</span>
+            <span class="k">if</span> <span class="n">source</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+                        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+                        <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;#errorCatcher Echo</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;# Unable to read </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">file</span>
+                <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;read&#39;</span><span class="p">):</span>
+                    <span class="n">source</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">file</span> <span class="o">=</span> <span class="kc">None</span>     <span class="c1"># Stop Cheetah from throwing a fit.</span>
+
+            <span class="n">rx</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;SNIPPET::([A-Za-z0-9_\-\/\.]+)&#39;</span><span class="p">)</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">rx</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">replacer</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+        <span class="n">preprocessors</span> <span class="o">=</span> <span class="p">[</span><span class="n">preprocess</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;preprocessors&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">preprocessors</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;preprocessors&#39;</span><span class="p">])</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;preprocessors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">preprocessors</span>
+
+        <span class="c1"># Instruct Cheetah to use this class as the base for all cheetah templates</span>
+        <span class="k">if</span> <span class="s1">&#39;baseclass&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;baseclass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Template</span>
+
+        <span class="c1"># Now let Cheetah do the actual compilation</span>
+        <span class="k">return</span> <span class="n">Cheetah</span><span class="o">.</span><span class="n">Template</span><span class="o">.</span><span class="n">Template</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+    <span class="nb">compile</span> <span class="o">=</span> <span class="nb">classmethod</span><span class="p">(</span><span class="nb">compile</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Template.read_snippet"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.template_api.Template.read_snippet">[docs]</a>    <span class="k">def</span> <span class="nf">read_snippet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Locate the appropriate snippet for the current system and profile and</span>
+<span class="sd">        read it&#39;s contents.</span>
+
+<span class="sd">        This file could be located in a remote location.</span>
+
+<span class="sd">        This will first check for a per-system snippet, a per-profile snippet,</span>
+<span class="sd">        a distro snippet, and a general snippet. If no snippet is located, it</span>
+<span class="sd">        returns None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">snipclass</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;system&#39;</span><span class="p">,</span> <span class="s1">&#39;profile&#39;</span><span class="p">,</span> <span class="s1">&#39;distro&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">varExists</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">_name&#39;</span> <span class="o">%</span> <span class="n">snipclass</span><span class="p">):</span>
+                <span class="n">fullpath</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/per_</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getVar</span><span class="p">(</span><span class="s1">&#39;autoinstall_snippets_dir&#39;</span><span class="p">),</span>
+                                                <span class="n">snipclass</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">getVar</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">_name&#39;</span> <span class="o">%</span> <span class="n">snipclass</span><span class="p">))</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">contents</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">read_file_contents</span><span class="p">(</span><span class="n">fullpath</span><span class="p">,</span> <span class="n">fetch_if_remote</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">contents</span>
+                <span class="k">except</span> <span class="n">FileNotFoundException</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;#errorCatcher ListErrors</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">utils</span><span class="o">.</span><span class="n">read_file_contents</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getVar</span><span class="p">(</span><span class="s1">&#39;autoinstall_snippets_dir&#39;</span><span class="p">),</span> <span class="n">file</span><span class="p">),</span> <span class="n">fetch_if_remote</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">FileNotFoundException</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Template.SNIPPET"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.template_api.Template.SNIPPET">[docs]</a>    <span class="k">def</span> <span class="nf">SNIPPET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Include the contents of the named snippet here. This is equivalent to</span>
+<span class="sd">        the #include directive in Cheetah, except that it searches for system</span>
+<span class="sd">        and profile specific snippets, and it includes the snippet&#39;s namespace.</span>
+
+<span class="sd">        This may be a little frobby, but it&#39;s really cool. This is a pure python</span>
+<span class="sd">        portion of SNIPPET that appends the snippet&#39;s searchList to the caller&#39;s</span>
+<span class="sd">        searchList. This makes any #defs within a given snippet available to the</span>
+<span class="sd">        template that included the snippet.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First, do the actual inclusion. Cheetah (when processing #include)</span>
+        <span class="c1"># will track the inclusion in self._CHEETAH__cheetahIncludes</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">BuiltinTemplate</span><span class="o">.</span><span class="n">SNIPPET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+
+        <span class="c1"># Now do our dirty work: locate the new include, and append its</span>
+        <span class="c1"># searchList to ours.</span>
+        <span class="c1"># We have to compute the full path again? Eww.</span>
+
+        <span class="c1"># This weird method is getting even weirder, the cheetah includes keys</span>
+        <span class="c1"># are no longer filenames but actual contents of snippets. Regardless</span>
+        <span class="c1"># this seems to work and hopefully it will be ok.</span>
+
+        <span class="n">snippet_contents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_snippet</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">snippet_contents</span><span class="p">:</span>
+            <span class="c1"># Only include what we don&#39;t already have. Because Cheetah</span>
+            <span class="c1"># passes our searchList into included templates, the snippet&#39;s</span>
+            <span class="c1"># searchList will include this templates searchList. We need to</span>
+            <span class="c1"># avoid duplicating entries.</span>
+            <span class="n">childList</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_CHEETAH__cheetahIncludes</span><span class="p">[</span><span class="n">snippet_contents</span><span class="p">]</span><span class="o">.</span><span class="n">searchList</span><span class="p">()</span>
+            <span class="n">myList</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">searchList</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">childElem</span> <span class="ow">in</span> <span class="n">childList</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">childElem</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">myList</span><span class="p">:</span>
+                    <span class="n">myList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">childElem</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="c1"># This function is used by several cheetah methods in cheetah_macros.</span>
+    <span class="c1"># It can be used by the end user as well.</span>
+    <span class="c1"># Ex: Replace all instances of &#39;/etc/banner&#39; with a value stored in</span>
+    <span class="c1"># $new_banner</span>
+    <span class="c1">#</span>
+    <span class="c1"># sed &#39;s/$sedesc(&quot;/etc/banner&quot;)/$sedesc($new_banner)/&#39;</span>
+    <span class="c1">#</span>
+<div class="viewcode-block" id="Template.sedesc"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.template_api.Template.sedesc">[docs]</a>    <span class="k">def</span> <span class="nf">sedesc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Escape a string for use in sed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">escchar</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="s1">&#39;/^.[]$()|*+?</span><span class="si">{}</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">c</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">c</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">escchar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">value</span><span class="p">])</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

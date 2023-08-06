@@ -1,0 +1,570 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>6. User Guide &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="7. Developer Guide" href="developer-guide.html" />
+    <link rel="prev" title="5. Cobbler Configuration" href="cobbler-conf.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#web-user-interface">6.1. Web User Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api">6.2. API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#triggers">6.3. Triggers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#images">6.4. Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#power-management">6.5. Power Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#non-import-manual-workflow">6.6. NON-IMPORT (MANUAL) WORKFLOW</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#repository-management">6.7. Repository Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#repo-management">6.7.1. REPO MANAGEMENT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#importing-trees">6.7.2. Importing trees</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#repository-mirroring-workflow">6.7.3. Repository mirroring workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#import-workflow">6.7.4. IMPORT WORKFLOW</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#virtualization">6.8. Virtualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#autoinstallation">6.9. Autoinstallation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#automatic-installation-templating">6.9.1. Automatic installation templating</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#automatic-installation-snippets">6.9.2. Automatic installation snippets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kickstart-validation">6.9.3. Kickstart validation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#network-topics">6.10. Network Topics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pxe-menus">6.10.1. PXE Menus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#default-pxe-boot-behavior">6.10.2. Default PXE Boot behavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pxe-boot-loop-prevention">6.10.3. PXE boot loop prevention</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#automatic-installation-tracking">6.10.4. Automatic installation tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#boot-cd">6.11. Boot CD</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dhcp-management">6.11.1. DHCP Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dns-configuration-management">6.11.2. DNS configuration management</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-management-integration">6.12. Configuration Management Integration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>6. User Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/user-guide.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="user-guide">
+<h1>6. User Guide<a class="headerlink" href="#user-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="web-user-interface">
+<h2>6.1. Web User Interface<a class="headerlink" href="#web-user-interface" title="Permalink to this headline">¶</a></h2>
+<p>Most of the day-to-day actions in cobbler’s command line can be performed in Cobbler’s Web UI. To enable and access the
+WebUI, see the following documentation:</p>
+<p><a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Cobbler-web-interface">https://github.com/cobbler/cobbler/wiki/Cobbler-web-interface</a></p>
+</div>
+<div class="section" id="api">
+<h2>6.2. API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<p>Cobbler also makes itself available as an XMLRPC API for use by higher level management software. Learn more at
+<a class="reference external" href="https://cobbler.github.io">https://cobbler.github.io</a></p>
+</div>
+<div class="section" id="triggers">
+<h2>6.3. Triggers<a class="headerlink" href="#triggers" title="Permalink to this headline">¶</a></h2>
+<p>Triggers provide a way to integrate cobbler with arbitrary 3rd party software without modifying cobbler’s code. When
+adding a distro, profile, system, or repo, all scripts in <code class="docutils literal notranslate"><span class="pre">/var/lib/cobbler/triggers/add</span></code> are executed for the
+particular object type. Each particular file must be executable and it is executed with the name of the item being added
+as a parameter. Deletions work similarly – delete triggers live in <code class="docutils literal notranslate"><span class="pre">/var/lib/cobbler/triggers/delete</span></code>. Order of
+execution is arbitrary, and cobbler does not ship with any triggers by default. There are also other kinds of triggers
+– these are described on the Cobbler Wiki. For larger configurations, triggers should be written in Python – in which
+case they are installed differently. This is also documented on the Wiki.</p>
+</div>
+<div class="section" id="images">
+<h2>6.4. Images<a class="headerlink" href="#images" title="Permalink to this headline">¶</a></h2>
+<p>Cobbler can help with booting images physically and virtually, though the usage of these commands varies substantially
+by the type of image. Non-image based deployments are generally easier to work with and lead to more sustaintable
+infrastructure. Some manual use of other commands beyond of what is typically required of cobbler may be needed to
+prepare images for use with this feature.</p>
+</div>
+<div class="section" id="power-management">
+<h2>6.5. Power Management<a class="headerlink" href="#power-management" title="Permalink to this headline">¶</a></h2>
+<p>Cobbler contains a power management feature that allows the user to associate system records in cobbler with the power
+management configuration attached to them.  This can ease installation by making it easy to reassign systems to new
+operating systems and then reboot those systems. Read more about this feature at
+<a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Power-management">https://github.com/cobbler/cobbler/wiki/Power-management</a></p>
+</div>
+<div class="section" id="non-import-manual-workflow">
+<h2>6.6. NON-IMPORT (MANUAL) WORKFLOW<a class="headerlink" href="#non-import-manual-workflow" title="Permalink to this headline">¶</a></h2>
+<p>The following example uses a local kernel and initrd file (already downloaded), and shows how profiles would be created
+using two different automatic installation files – one for a web server configuration and one for a database server.
+Then, a machine is assigned to each profile.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler check
+cobbler distro add --name=rhel4u3 --kernel=/dir1/vmlinuz --initrd=/dir1/initrd.img
+cobbler distro add --name=fc5 --kernel=/dir2/vmlinuz --initrd=/dir2/initrd.img
+cobbler profile add --name=fc5webservers --distro=fc5-i386 --autoinst=/dir4/kick.ks --kopts=&quot;something_to_make_my_gfx_card_work=42 some_other_parameter=foo&quot;
+cobbler profile add --name=rhel4u3dbservers --distro=rhel4u3 --autoinst=/dir5/kick.ks
+cobbler system add --name=AA:BB:CC:DD:EE:FF --profile=fc5-webservers
+cobbler system add --name=AA:BB:CC:DD:EE:FE --profile=rhel4u3-dbservers
+cobbler report
+</pre></div>
+</div>
+</div>
+<div class="section" id="repository-management">
+<h2>6.7. Repository Management<a class="headerlink" href="#repository-management" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="repo-management">
+<h3>6.7.1. REPO MANAGEMENT<a class="headerlink" href="#repo-management" title="Permalink to this headline">¶</a></h3>
+<p>This has already been covered a good bit in the command reference section.</p>
+<p>Yum repository management is an optional feature, and is not required to provision through cobbler. However, if cobbler
+is configured to mirror certain repositories, it can then be used to associate profiles with those repositories. Systems
+installed under those profiles will then be autoconfigured to use these repository mirrors in <code class="docutils literal notranslate"><span class="pre">/etc/yum.repos.d</span></code>, and
+if supported (Fedora Core 6 and later) these repositories can be leveraged even within Anaconda.  This can be useful if
+(A) you have a large install base, (B) you want fast installation and upgrades for your systems, or (C) have some extra
+software not in a standard repository but want provisioned systems to know about that repository.</p>
+<p>Make sure there is plenty of space in cobbler’s webdir, which defaults to <code class="docutils literal notranslate"><span class="pre">/var/www/cobbler</span></code>.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler reposync [--tries=N] [--no-fail]
+</pre></div>
+</div>
+<p>Cobbler reposync is the command to use to update repos as configured with “cobbler repo add”.  Mirroring
+can take a long time, and usage of cobbler reposync prior to usage is needed to ensure provisioned systems have the
+files they need to actually use the mirrored repositories.  If you just add repos and never run “cobbler reposync”, the
+repos will never be mirrored.  This is probably a command you would want to put on a crontab, though the frequency of
+that crontab and where the output goes is left up to the systems administrator.</p>
+<p>For those familiar with yum’s reposync, cobbler’s reposync is (in most uses) a wrapper around the yum command.  Please
+use “cobbler reposync” to update cobbler mirrors, as yum’s reposync does not perform all required steps. Also cobbler
+adds support for rsync and SSH locations, where as yum’s reposync only supports what yum supports (http/ftp).</p>
+<p>If you ever want to update a certain repository you can run:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler reposync --only=&quot;reponame1&quot; ...
+</pre></div>
+</div>
+<p>When updating repos by name, a repo will be updated even if it is set to be not updated during a regular reposync
+operation (ex: cobbler repo edit –name=reponame1 –keep-updated=0).</p>
+<p>Note that if a cobbler import provides enough information to use the boot server as a yum mirror for core packages,
+cobbler can set up automatic installation files to use the cobbler server as a mirror instead of the outside world. If
+this feature is desirable, it can be turned on by setting yum_post_install_mirror to 1 in /etc/settings (and running
+“cobbler sync”).  You should not use this feature if machines are provisioned on a different VLAN/network than
+production, or if you are provisioning laptops that will want to acquire updates on multiple networks.</p>
+<p>The flags <code class="docutils literal notranslate"><span class="pre">--tries=N</span></code> (for example, <code class="docutils literal notranslate"><span class="pre">--tries=3</span></code>) and <code class="docutils literal notranslate"><span class="pre">--no-fail</span></code> should likely be used when putting reposync on a
+crontab. They ensure network glitches in one repo can be retried and also that a failure to synchronize one repo does
+not stop other repositories from being synchronized.</p>
+</div>
+<div class="section" id="importing-trees">
+<h3>6.7.2. Importing trees<a class="headerlink" href="#importing-trees" title="Permalink to this headline">¶</a></h3>
+<p>Cobbler can auto-add distributions and profiles from remote sources, whether this is a filesystem path or an rsync
+mirror. This can save a lot of time when setting up a new provisioning environment. Import is a feature that many users
+will want to take advantage of, and is very simple to use.</p>
+<p>After an import is run, cobbler will try to detect the distribution type and automatically assign automatic installation
+files. By default, it will provision the system by erasing the hard drive, setting up eth0 for dhcp, and using a default
+password of “cobbler”.  If this is undesirable, edit the automatic installation files in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler</span></code> to do
+something else or change the automatic installation setting after cobbler creates the profile.</p>
+<p>Mirrored content is saved automatically in <code class="docutils literal notranslate"><span class="pre">/var/www/cobbler/distro_mirror</span></code>.</p>
+<p>Example 1: <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">import</span> <span class="pre">--path=rsync://mirrorserver.example.com/path/</span> <span class="pre">--name=fedora</span> <span class="pre">--arch=x86</span></code></p>
+<p>Example 2: <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">import</span> <span class="pre">--path=root&#64;192.168.1.10:/stuff</span> <span class="pre">--name=bar</span></code></p>
+<p>Example 3: <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">import</span> <span class="pre">--path=/mnt/dvd</span> <span class="pre">--name=baz</span> <span class="pre">--arch=x86_64</span></code></p>
+<p>Example 4: <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">import</span> <span class="pre">--path=/path/to/stuff</span> <span class="pre">--name=glorp</span></code></p>
+<p>Example 5: <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">import</span> <span class="pre">--path=/path/where/filer/is/mounted</span> <span class="pre">--name=anyname</span> <span class="pre">--available-as=nfs://nfs.example.org:/where/mounted/</span></code></p>
+<p>Once imported, run a <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">report</span></code> to see what you’ve added.</p>
+<p>By default, the rsync operations will exclude content of certain architectures, debug RPMs, and ISO images – to change
+what is excluded during an import, see <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/rsync.exclude</span></code>.</p>
+<p>Note that all of the import commands will mirror install tree content into <code class="docutils literal notranslate"><span class="pre">/var/www/cobbler</span></code> unless a network
+accessible location is given with <code class="docutils literal notranslate"><span class="pre">--available-as</span></code>.  –available-as will be primarily used when importing distros
+stored on an external NAS box, or potentially on another partition on the same machine that is already accessible via
+<code class="docutils literal notranslate"><span class="pre">http://</span></code> or <code class="docutils literal notranslate"><span class="pre">ftp://</span></code>.</p>
+<p>For import methods using rsync, additional flags can be passed to rsync with the option <code class="docutils literal notranslate"><span class="pre">--rsync-flags</span></code>.</p>
+<p>Should you want to force the usage of a specific cobbler automatic installation template for all profiles created by an
+import, you can feed the option <code class="docutils literal notranslate"><span class="pre">--autoinst</span></code> to import, to bypass the built-in automatic installation file
+auto-detection.</p>
+</div>
+<div class="section" id="repository-mirroring-workflow">
+<h3>6.7.3. Repository mirroring workflow<a class="headerlink" href="#repository-mirroring-workflow" title="Permalink to this headline">¶</a></h3>
+<p>The following example shows how to set up a repo mirror for two repositories, and create a profile that will auto
+install those repository configurations on provisioned systems using that profile.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler check
+# set up your cobbler distros here.
+cobbler repo add --mirror=http://mirrors.kernel.org/fedora/core/updates/6/i386/ --name=fc6i386updates
+cobbler repo add --mirror=http://mirrors.kernel.org/fedora/extras/6/i386/ --name=fc6i386extras
+cobbler reposync
+cobbler profile add --name=p1 --distro=existing_distro_name --autoinst=/etc/cobbler/kickstart_fc6.ks --repos=&quot;fc6i386updates fc6i386extras&quot;
+</pre></div>
+</div>
+</div>
+<div class="section" id="import-workflow">
+<h3>6.7.4. IMPORT WORKFLOW<a class="headerlink" href="#import-workflow" title="Permalink to this headline">¶</a></h3>
+<p>Import is a very useful command that makes starting out with cobbler very quick and easy.</p>
+<p>This example shows how to create a provisioning infrastructure from a distribution mirror or DVD ISO. Then a default PXE
+configuration is created, so that by default systems will PXE boot into a fully automated install process for that
+distribution.</p>
+<p>You can use a network rsync mirror, a mounted DVD location, or a tree you have available via a network filesystem.</p>
+<p>Import knows how to autodetect the architecture of what is being imported, though to make sure things are named
+correctly, it’s always a good idea to specify <code class="docutils literal notranslate"><span class="pre">--arch</span></code>. For instance, if you import a distribution named “fedora8”
+from an ISO, and it’s an x86_64 ISO, specify <code class="docutils literal notranslate"><span class="pre">--arch=x86_64</span></code> and the distro will be named “fedora8-x86_64”
+automatically, and the right architecture field will also be set on the distribution object. If you are batch importing
+an entire mirror (containing multiple distributions and arches), you don’t have to do this, as cobbler will set the
+names for things based on the paths it finds.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler check
+cobbler import --path=rsync://yourfavoritemirror.com/rhel/5/os/x86_64 --name=rhel5 --arch=x86_64
+# OR
+cobbler import --path=/mnt/dvd --name=rhel5 --arch=x86_64
+# OR (using an external NAS box without mirroring)
+cobbler import --path=/path/where/filer/is/mounted --name=anyname --available-as=nfs://nfs.example.org:/where/mounted/
+# wait for mirror to rsync...
+cobbler report
+cobbler system add --name=default --profile=name_of_a_profile1
+cobbler system add --name=AA:BB:CC:DD:EE:FF --profile=name_of_a_profile2
+cobbler sync
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="virtualization">
+<h2>6.8. Virtualization<a class="headerlink" href="#virtualization" title="Permalink to this headline">¶</a></h2>
+<p>For Virt, be sure the distro uses the correct kernel (if paravirt) and follow similar steps as above, adding additional
+parameters as desired:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler distro add --name=fc7virt [options...]
+</pre></div>
+</div>
+<p>Specify reasonable values for the Virt image size (in GB) and RAM requirements (in MB):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler profile add --name=virtwebservers --distro=fc7virt --autoinst=path --virt-file-size=10 --virt-ram=512 [...]
+</pre></div>
+</div>
+<p>Define systems if desired.  koan can also provision based on the profile name.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler system add --name=AA:BB:CC:DD:EE:FE --profile=virtwebservers [...]
+</pre></div>
+</div>
+<p>If you have just installed cobbler, be sure that the “cobblerd” service is running and that port 25151 is unblocked.</p>
+<p>See the manpage for koan for the client side steps.</p>
+</div>
+<div class="section" id="autoinstallation">
+<h2>6.9. Autoinstallation<a class="headerlink" href="#autoinstallation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="automatic-installation-templating">
+<h3>6.9.1. Automatic installation templating<a class="headerlink" href="#automatic-installation-templating" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">--autoinstall_meta</span></code> options above require more explanation.</p>
+<p>If and only if <code class="docutils literal notranslate"><span class="pre">--autoinst</span></code> options reference filesystem URLs, <code class="docutils literal notranslate"><span class="pre">--ksmeta</span></code> allows for templating of the automatic
+installation files to achieve advanced functions.  If the <code class="docutils literal notranslate"><span class="pre">--ksmeta</span></code> option for a profile read
+<code class="docutils literal notranslate"><span class="pre">--ksmeta=&quot;foo=7</span> <span class="pre">bar=llama&quot;</span></code>, anywhere in the automatic installation file where the string <code class="docutils literal notranslate"><span class="pre">$bar</span></code> appeared would be
+replaced with the string “llama”.</p>
+<p>To apply these changes, <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">sync</span></code> must be run to generate custom automatic installation files for each
+profile/system.</p>
+<p>For NFS and HTTP automatic installation file URLs, the <code class="docutils literal notranslate"><span class="pre">--autoinstall_meta</span></code> options will have no effect. This is a
+good reason to let cobbler manage your automatic installation files, though the URL functionality is provided for
+integration with legacy infrastructure, possibly including web apps that already generate automatic installation files.</p>
+<p>Templated automatic files are processed by the templating program/package Cheetah, so anything you can do in a Cheetah
+template can be done to an automatic installation template.  Learn more at <a class="reference external" href="http://www.cheetahtemplate.org/learn.html">http://www.cheetahtemplate.org/learn.html</a></p>
+<p>When working with Cheetah, be sure to escape any shell macros that look like <code class="docutils literal notranslate"><span class="pre">$(this)</span></code> with something like <code class="docutils literal notranslate"><span class="pre">\$(this)</span></code> or
+errors may show up during the sync process.</p>
+<p>The Cobbler Wiki also contains numerous Cheetah examples that should prove useful in using this feature.</p>
+</div>
+<div class="section" id="automatic-installation-snippets">
+<h3>6.9.2. Automatic installation snippets<a class="headerlink" href="#automatic-installation-snippets" title="Permalink to this headline">¶</a></h3>
+<p>Anywhere a automatic installation template mentions <code class="docutils literal notranslate"><span class="pre">SNIPPET::snippet_name</span></code>, the file named
+<code class="docutils literal notranslate"><span class="pre">/var/lib/cobbler/snippets/snippet_name</span></code> (if present) will be included automatically in the automatic installation
+template. This serves as a way to recycle frequently used automatic installation snippets without duplication. Snippets
+can contain templating variables, and the variables will be evaluated according to the profile and/or system as one
+would expect.</p>
+<p>Snippets can also be overridden for specific profile names or system names. This is described on the Cobbler Wiki.</p>
+</div>
+<div class="section" id="kickstart-validation">
+<h3>6.9.3. Kickstart validation<a class="headerlink" href="#kickstart-validation" title="Permalink to this headline">¶</a></h3>
+<p>To check for potential errors in kickstarts, prior to installation, use <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">validateks</span></code>. This function will check
+all profile and system kickstarts for detectable errors. Since pykickstart is not future-Anaconda-version aware, there
+may be some false positives. It should be noted that <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">validateks</span></code> runs on the rendered kickstart output, not
+kickstart templates themselves.</p>
+</div>
+</div>
+<div class="section" id="network-topics">
+<h2>6.10. Network Topics<a class="headerlink" href="#network-topics" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pxe-menus">
+<h3>6.10.1. PXE Menus<a class="headerlink" href="#pxe-menus" title="Permalink to this headline">¶</a></h3>
+<p>Cobbler will automatically generate PXE menus for all profiles it has defined. Running <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">sync</span></code> is required to
+generate and update these menus.</p>
+<p>To access the menus, type <code class="docutils literal notranslate"><span class="pre">menu</span></code> at the <code class="docutils literal notranslate"><span class="pre">boot:</span></code> prompt while a system is PXE booting. If nothing is typed, the
+network boot will default to a local boot. If “menu” is typed, the user can then choose and provision any cobbler
+profile the system knows about.</p>
+<p>If the association between a system (MAC address) and a profile is already known, it may be more useful to just use
+<code class="docutils literal notranslate"><span class="pre">system</span> <span class="pre">add</span></code> commands and declare that relationship in cobbler; however many use cases will prefer having a PXE
+system, especially when provisioning is done at the same time as installing new physical machines.</p>
+<p>If this behavior is not desired, run <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">system</span> <span class="pre">add</span> <span class="pre">--name=default</span> <span class="pre">--profile=plugh</span></code> to default all PXE booting
+machines to get a new copy of the profile <code class="docutils literal notranslate"><span class="pre">plugh</span></code>. To go back to the menu system, run
+<code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">system</span> <span class="pre">remove</span> <span class="pre">--name=default</span></code> and then <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">sync</span></code> to regenerate the menus.</p>
+<p>When using PXE menu deployment exclusively, it is not necessary to make cobbler system records, although the two can
+easily be mixed.</p>
+<p>Additionally, note that all files generated for the pxe menu configurations are templatable, so if you wish to change
+the color scheme or equivalent, see the files in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler</span></code>.</p>
+</div>
+<div class="section" id="default-pxe-boot-behavior">
+<h3>6.10.2. Default PXE Boot behavior<a class="headerlink" href="#default-pxe-boot-behavior" title="Permalink to this headline">¶</a></h3>
+<p>What happens when PXE booting a system when cobbler has no record of the system being booted?</p>
+<p>By default, cobbler will configure PXE to boot to the contents of <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/default.pxe</span></code>, which (if unmodified)
+will just fall through to the local boot process. Administrators can modify this file if they like to change that
+behavior.</p>
+<p>An easy way to specify a default cobbler profile to PXE boot is to create a system named <code class="docutils literal notranslate"><span class="pre">default</span></code>. This will cause
+<code class="docutils literal notranslate"><span class="pre">/etc/cobbler/default.pxe</span></code> to be ignored. To restore the previous behavior do a <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">system</span> <span class="pre">remove</span></code> on the
+<code class="docutils literal notranslate"><span class="pre">default</span></code> system.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler system add --name=default --profile=boot_this
+cobbler system remove --name=default
+</pre></div>
+</div>
+<p>As mentioned in earlier sections, it is also possible to control the default behavior for a specific network:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler system add --name=network1 --ip-address=192.168.0.0/24 --profile=boot_this
+</pre></div>
+</div>
+</div>
+<div class="section" id="pxe-boot-loop-prevention">
+<h3>6.10.3. PXE boot loop prevention<a class="headerlink" href="#pxe-boot-loop-prevention" title="Permalink to this headline">¶</a></h3>
+<p>If you have your machines set to PXE first in the boot order (ahead of hard drives), change the <code class="docutils literal notranslate"><span class="pre">pxe_just_once</span></code> flag
+in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/settings</span></code> to 1. This will set the machines to not PXE on successive boots once they complete one
+install. To re-enable PXE for a specific system, run the following command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler system edit --name=name --netboot-enabled=1
+</pre></div>
+</div>
+</div>
+<div class="section" id="automatic-installation-tracking">
+<h3>6.10.4. Automatic installation tracking<a class="headerlink" href="#automatic-installation-tracking" title="Permalink to this headline">¶</a></h3>
+<p>Cobbler knows how to keep track of the status of automatic installation of machines.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cobbler status
+</pre></div>
+</div>
+<p>Using the status command will show when cobbler thinks a machine started automatic installation and when it finished,
+provided the proper snippets are found in the automatic installation template. This is a good way to track machines that
+may have gone interactive (or stalled/crashed) during automatic installation.</p>
+</div>
+</div>
+<div class="section" id="boot-cd">
+<h2>6.11. Boot CD<a class="headerlink" href="#boot-cd" title="Permalink to this headline">¶</a></h2>
+<p>Cobbler can build all of it’s profiles into a bootable CD image using the <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">buildiso</span></code> command. This allows for
+PXE-menu like bringup of bare metal in environments where PXE is not possible. Another more advanced method is described
+in the koan manpage, though this method is easier and sufficient for most applications.</p>
+<div class="section" id="dhcp-management">
+<h3>6.11.1. DHCP Management<a class="headerlink" href="#dhcp-management" title="Permalink to this headline">¶</a></h3>
+<p>Cobbler can optionally help you manage DHCP server. This feature is off by default.</p>
+<p>Choose either <code class="docutils literal notranslate"><span class="pre">management</span> <span class="pre">=</span> <span class="pre">isc_and_bind</span></code> in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/dhcp.template</span></code> or <code class="docutils literal notranslate"><span class="pre">management</span> <span class="pre">=</span> <span class="pre">&quot;dnsmasq&quot;</span></code> in
+<code class="docutils literal notranslate"><span class="pre">/etc/cobbler/modules.conf</span></code>.  Then set <code class="docutils literal notranslate"><span class="pre">manage_dhcp=1</span></code> in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/settings</span></code>.</p>
+<p>This allows DHCP to be managed via “cobbler system add” commands, when you specify the mac address and IP address for
+systems you add into cobbler.</p>
+<p>Depending on your choice, cobbler will use <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/dhcpd.template</span></code> or <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/dnsmasq.template</span></code> as a
+starting point. This file must be user edited for the user’s particular networking environment. Read the file and
+understand how the particular app (ISC dhcpd or dnsmasq) work before proceeding.</p>
+<p>If you already have DHCP configuration data that you would like to preserve (say DHCP was manually configured earlier),
+insert the relevant portions of it into the template file, as running <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">sync</span></code> will overwrite your previous
+configuration.</p>
+<p>By default, the DHCP configuration file will be updated each time <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">sync</span></code> is run, and not until then, so it is
+important to remember to use <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">sync</span></code> when using this feature.</p>
+<p>If omapi_enabled is set to 1 in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/settings</span></code>, the need to sync when adding new system records can be
+eliminated. However, the omapi feature is experimental and is not recommended for most users.</p>
+</div>
+<div class="section" id="dns-configuration-management">
+<h3>6.11.2. DNS configuration management<a class="headerlink" href="#dns-configuration-management" title="Permalink to this headline">¶</a></h3>
+<p>Cobbler can optionally manage DNS configuration using BIND and dnsmasq.</p>
+<p>Choose either <code class="docutils literal notranslate"><span class="pre">management</span> <span class="pre">=</span> <span class="pre">isc_and_bind</span></code> or <code class="docutils literal notranslate"><span class="pre">management</span> <span class="pre">=</span> <span class="pre">dnsmasq</span></code> in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/modules.conf</span></code> and then enable
+<code class="docutils literal notranslate"><span class="pre">manage_dns</span></code> in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/settings</span></code>.</p>
+<p>This feature is off by default. If using BIND, you must define the zones to be managed with the options
+<code class="docutils literal notranslate"><span class="pre">manage_forward_zones</span></code> and <code class="docutils literal notranslate"><span class="pre">manage_reverse_zones</span></code>.  (See the Wiki for more information on this).</p>
+<p>If using BIND, Cobbler will use <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/named.template</span></code> and <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/zone.template</span></code> as a starting point
+for the <code class="docutils literal notranslate"><span class="pre">named.conf</span></code> and individual zone files, respectively. You may drop zone-specific template files in
+<code class="docutils literal notranslate"><span class="pre">/etc/cobbler/zone_templates/name-of-zone</span></code> which will override the default. These files must be user edited for the
+user’s particular networking environment.  Read the file and understand how BIND works before proceeding.</p>
+<p>If using dnsmasq, the template is <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/dnsmasq.template</span></code>. Read this file and understand how dnsmasq works
+before proceeding.</p>
+<p>All managed files (whether zone files and <code class="docutils literal notranslate"><span class="pre">named.conf</span></code> for BIND, or <code class="docutils literal notranslate"><span class="pre">dnsmasq.conf</span></code> for dnsmasq) will be updated each time
+<code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">sync</span></code> is run, and not until then, so it is important to remember to use <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">sync</span></code> when using this
+feature.</p>
+</div>
+</div>
+<div class="section" id="configuration-management-integration">
+<h2>6.12. Configuration Management Integration<a class="headerlink" href="#configuration-management-integration" title="Permalink to this headline">¶</a></h2>
+<p>Cobbler contains features for integrating an installation environment with a configuration management system, which
+handles the configuration of the system after it is installed by allowing changes to configuration files and settings.
+You can read more about this feature at <a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Built-in-configuration-management">https://github.com/cobbler/cobbler/wiki/Built-in-configuration-management</a> and
+<a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Using-cobbler-with-a-configuration-management-system">https://github.com/cobbler/cobbler/wiki/Using-cobbler-with-a-configuration-management-system</a>. Both features may be
+considered experimental as of time of the 1.4 release.</p>
+<p>Resources are the lego blocks of configuration management. Resources are grouped together via Management Classes, which
+are then linked to a system. Cobbler supports two (2) resource types. Resources are configured in the order listed below.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="developer-guide.html" class="btn btn-neutral float-right" title="7. Developer Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cobbler-conf.html" class="btn btn-neutral float-left" title="5. Cobbler Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,546 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.actions.report &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.actions.report</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.actions.report</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Report from a cobbler master.</span>
+<span class="sd">FIXME: reinstante functionality for 2.0</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">past.builtins</span> <span class="k">import</span> <span class="nb">cmp</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">clogger</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+
+
+<div class="viewcode-block" id="Report"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.report.Report">[docs]</a><span class="k">class</span> <span class="nc">Report</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="n">collection_mgr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report_type</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report_what</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report_fields</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report_noheaders</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;([^[]+)\[([^]]+)\]&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span> <span class="o">=</span> <span class="n">clogger</span><span class="o">.</span><span class="n">Logger</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+
+<div class="viewcode-block" id="Report.fielder"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.report.Report.fielder">[docs]</a>    <span class="k">def</span> <span class="nf">fielder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure</span><span class="p">,</span> <span class="n">fields_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return data from a subset of fields of some item</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields_list</span><span class="p">:</span>
+            <span class="n">internal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">array_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+            <span class="c1"># check if field is primary field</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">structure</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">item</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">structure</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+            <span class="c1"># check if subfield in &#39;interfaces&#39; field</span>
+            <span class="k">elif</span> <span class="n">internal</span> <span class="ow">and</span> <span class="n">internal</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">structure</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">outer</span> <span class="o">=</span> <span class="n">internal</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">inner</span> <span class="o">=</span> <span class="n">internal</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">structure</span><span class="p">[</span><span class="n">outer</span><span class="p">],</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">inner</span> <span class="ow">in</span> <span class="n">structure</span><span class="p">[</span><span class="n">outer</span><span class="p">]:</span>
+
+                    <span class="n">item</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">structure</span><span class="p">[</span><span class="n">outer</span><span class="p">][</span><span class="n">inner</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="s2">&quot;interfaces&quot;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">structure</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">structure</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                    <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">structure</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">][</span><span class="n">device</span><span class="p">]:</span>
+                        <span class="n">item</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">device</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> <span class="n">structure</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">][</span><span class="n">device</span><span class="p">][</span><span class="n">field</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">item</span></div>
+
+<div class="viewcode-block" id="Report.reporting_csv"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.report.Report.reporting_csv">[docs]</a>    <span class="k">def</span> <span class="nf">reporting_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">noheaders</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Formats data on &#39;info&#39; for csv output</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">outputheaders</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">outputbody</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span>
+
+        <span class="n">info_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">info</span><span class="p">:</span>
+
+            <span class="n">item_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="n">info_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">outputheaders</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">+</span> <span class="n">sep</span>
+
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                    <span class="n">outputbody</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">+</span> <span class="n">sep</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">outputbody</span> <span class="o">+=</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">sep</span>
+
+                <span class="n">item_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="n">info_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">outputbody</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="n">outputheaders</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="k">if</span> <span class="n">noheaders</span><span class="p">:</span>
+            <span class="n">outputheaders</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="n">outputheaders</span> <span class="o">+</span> <span class="n">outputbody</span></div>
+
+<div class="viewcode-block" id="Report.reporting_trac"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.report.Report.reporting_trac">[docs]</a>    <span class="k">def</span> <span class="nf">reporting_trac</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">noheaders</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Formats data on &#39;info&#39; for trac wiki table output</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">outputheaders</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">outputbody</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39;||&#39;</span>
+
+        <span class="n">info_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">info</span><span class="p">:</span>
+
+            <span class="n">item_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="n">info_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">outputheaders</span> <span class="o">+=</span> <span class="n">sep</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                    <span class="n">outputbody</span> <span class="o">+=</span> <span class="n">sep</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">outputbody</span> <span class="o">+=</span> <span class="n">sep</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span>
+
+                <span class="n">item_count</span> <span class="o">=</span> <span class="n">item_count</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="n">info_count</span> <span class="o">=</span> <span class="n">info_count</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">outputbody</span> <span class="o">+=</span> <span class="s1">&#39;||</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="n">outputheaders</span> <span class="o">+=</span> <span class="s1">&#39;||</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="k">if</span> <span class="n">noheaders</span><span class="p">:</span>
+            <span class="n">outputheaders</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="n">outputheaders</span> <span class="o">+</span> <span class="n">outputbody</span></div>
+
+<div class="viewcode-block" id="Report.reporting_doku"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.report.Report.reporting_doku">[docs]</a>    <span class="k">def</span> <span class="nf">reporting_doku</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">noheaders</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Formats data on &#39;info&#39; for doku wiki table output</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">outputheaders</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">outputbody</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">sep1</span> <span class="o">=</span> <span class="s1">&#39;^&#39;</span>
+        <span class="n">sep2</span> <span class="o">=</span> <span class="s1">&#39;|&#39;</span>
+
+        <span class="n">info_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">info</span><span class="p">:</span>
+
+            <span class="n">item_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="n">info_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">outputheaders</span> <span class="o">+=</span> <span class="n">sep1</span> <span class="o">+</span> <span class="n">key</span>
+
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                    <span class="n">outputbody</span> <span class="o">+=</span> <span class="n">sep2</span> <span class="o">+</span> <span class="n">item</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">outputbody</span> <span class="o">+=</span> <span class="n">sep2</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span>
+
+                <span class="n">item_count</span> <span class="o">=</span> <span class="n">item_count</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="n">info_count</span> <span class="o">=</span> <span class="n">info_count</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">outputbody</span> <span class="o">+=</span> <span class="n">sep2</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="n">outputheaders</span> <span class="o">+=</span> <span class="n">sep1</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="k">if</span> <span class="n">noheaders</span><span class="p">:</span>
+            <span class="n">outputheaders</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="n">outputheaders</span> <span class="o">+</span> <span class="n">outputbody</span></div>
+
+<div class="viewcode-block" id="Report.reporting_mediawiki"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.report.Report.reporting_mediawiki">[docs]</a>    <span class="k">def</span> <span class="nf">reporting_mediawiki</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">noheaders</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Formats data on &#39;info&#39; for mediawiki table output</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">outputheaders</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">outputbody</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">opentable</span> <span class="o">=</span> <span class="s1">&#39;{| border=&quot;1&quot;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">closetable</span> <span class="o">=</span> <span class="s1">&#39;|}</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">sep1</span> <span class="o">=</span> <span class="s1">&#39;||&#39;</span>
+        <span class="n">sep2</span> <span class="o">=</span> <span class="s1">&#39;|&#39;</span>
+        <span class="n">sep3</span> <span class="o">=</span> <span class="s1">&#39;|-&#39;</span>
+
+        <span class="n">info_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">info</span><span class="p">:</span>
+
+            <span class="n">item_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="n">info_count</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">item_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">outputheaders</span> <span class="o">+=</span> <span class="n">sep2</span> <span class="o">+</span> <span class="n">key</span>
+                <span class="k">elif</span> <span class="n">info_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">outputheaders</span> <span class="o">+=</span> <span class="n">sep1</span> <span class="o">+</span> <span class="n">key</span>
+
+                <span class="k">if</span> <span class="n">item_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                        <span class="n">outputbody</span> <span class="o">+=</span> <span class="n">sep2</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">outputbody</span> <span class="o">+=</span> <span class="n">sep2</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                        <span class="n">outputbody</span> <span class="o">+=</span> <span class="n">sep1</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">outputbody</span> <span class="o">+=</span> <span class="n">sep1</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span>
+
+                <span class="n">item_count</span> <span class="o">=</span> <span class="n">item_count</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="n">info_count</span> <span class="o">=</span> <span class="n">info_count</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">outputbody</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">sep3</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="n">outputheaders</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">sep3</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="k">if</span> <span class="n">noheaders</span><span class="p">:</span>
+            <span class="n">outputheaders</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="n">opentable</span> <span class="o">+</span> <span class="n">outputheaders</span> <span class="o">+</span> <span class="n">outputbody</span> <span class="o">+</span> <span class="n">closetable</span></div>
+
+<div class="viewcode-block" id="Report.print_formatted_data"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.report.Report.print_formatted_data">[docs]</a>    <span class="k">def</span> <span class="nf">print_formatted_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">report_type</span><span class="p">,</span> <span class="n">noheaders</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used for picking the correct format to output data as</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">report_type</span> <span class="o">==</span> <span class="s2">&quot;csv&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">flat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reporting_csv</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">noheaders</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">report_type</span> <span class="o">==</span> <span class="s2">&quot;mediawiki&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">flat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reporting_mediawiki</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">noheaders</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">report_type</span> <span class="o">==</span> <span class="s2">&quot;trac&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">flat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reporting_trac</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">noheaders</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">report_type</span> <span class="o">==</span> <span class="s2">&quot;doku&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">flat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reporting_doku</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">noheaders</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Report.reporting_sorter"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.report.Report.reporting_sorter">[docs]</a>    <span class="k">def</span> <span class="nf">reporting_sorter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used for sorting cobbler objects for report commands</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">cmp</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Report.reporting_print_sorted"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.report.Report.reporting_print_sorted">[docs]</a>    <span class="k">def</span> <span class="nf">reporting_print_sorted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints all objects in a collection sorted by name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">collection</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">collection</span><span class="p">]</span>
+        <span class="n">collection</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reporting_sorter</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">collection</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">flat</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Report.reporting_list_names2"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.report.Report.reporting_list_names2">[docs]</a>    <span class="k">def</span> <span class="nf">reporting_list_names2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints a specific object in a collection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">flat</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Report.reporting_print_all_fields"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.report.Report.reporting_print_all_fields">[docs]</a>    <span class="k">def</span> <span class="nf">reporting_print_all_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">report_name</span><span class="p">,</span> <span class="n">report_type</span><span class="p">,</span> <span class="n">report_noheaders</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints all fields in a collection as a table given the report type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># per-item hack</span>
+        <span class="k">if</span> <span class="n">report_name</span><span class="p">:</span>
+            <span class="n">collection</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">report_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">collection</span><span class="p">:</span>
+                <span class="n">collection</span> <span class="o">=</span> <span class="p">[</span><span class="n">collection</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span>
+
+        <span class="n">collection</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">collection</span><span class="p">]</span>
+        <span class="n">collection</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reporting_sorter</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">out_order</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">collection</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ITEM_TYPE</span> <span class="o">==</span> <span class="s2">&quot;settings&quot;</span><span class="p">:</span>
+                <span class="n">structure</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">structure</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">structure</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                <span class="c1"># exception for systems which could have &gt; 1 interface</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;interfaces&quot;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                        <span class="k">for</span> <span class="p">(</span><span class="n">info_header</span><span class="p">,</span> <span class="n">info_value</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                            <span class="n">item</span><span class="p">[</span><span class="n">info_header</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">info_value</span><span class="p">)</span>
+                            <span class="c1"># needs to create order list for print_formatted_fields</span>
+                            <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                                <span class="n">out_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">info_header</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">item</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="c1"># needs to create order list for print_formatted_fields</span>
+                    <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">out_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+            <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_formatted_data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">out_order</span><span class="p">,</span> <span class="n">report_type</span><span class="o">=</span><span class="n">report_type</span><span class="p">,</span> <span class="n">noheaders</span><span class="o">=</span><span class="n">report_noheaders</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Report.reporting_print_x_fields"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.report.Report.reporting_print_x_fields">[docs]</a>    <span class="k">def</span> <span class="nf">reporting_print_x_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">report_name</span><span class="p">,</span> <span class="n">report_type</span><span class="p">,</span> <span class="n">report_fields</span><span class="p">,</span> <span class="n">report_noheaders</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints specific fields in a collection as a table given the report type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># per-item hack</span>
+        <span class="k">if</span> <span class="n">report_name</span><span class="p">:</span>
+            <span class="n">collection</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">report_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">collection</span><span class="p">:</span>
+                <span class="n">collection</span> <span class="o">=</span> <span class="p">[</span><span class="n">collection</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span>
+
+        <span class="n">collection</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">collection</span><span class="p">]</span>
+        <span class="n">collection</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reporting_sorter</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">fields_list</span> <span class="o">=</span> <span class="n">report_fields</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">collection</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ITEM_TYPE</span> <span class="o">==</span> <span class="s2">&quot;settings&quot;</span><span class="p">:</span>
+                <span class="n">structure</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">structure</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fielder</span><span class="p">(</span><span class="n">structure</span><span class="p">,</span> <span class="n">fields_list</span><span class="p">)</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_formatted_data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">fields_list</span><span class="p">,</span> <span class="n">report_type</span><span class="o">=</span><span class="n">report_type</span><span class="p">,</span> <span class="n">noheaders</span><span class="o">=</span><span class="n">report_noheaders</span><span class="p">)</span></div>
+
+    <span class="c1"># -------------------------------------------------------</span>
+
+<div class="viewcode-block" id="Report.run"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.report.Report.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_what</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">report_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">report_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">report_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">report_noheaders</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get remote profiles and distros and sync them locally</span>
+
+<span class="sd">        1. Handles original report output</span>
+<span class="sd">        2. Handles all fields of report outputs as table given a format</span>
+<span class="sd">        3. Handles specific fields of report outputs as table given a format</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">report_type</span> <span class="o">==</span> <span class="s1">&#39;text&#39;</span> <span class="ow">and</span> <span class="n">report_fields</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+
+            <span class="k">for</span> <span class="n">collection_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;distro&quot;</span><span class="p">,</span> <span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;repo&quot;</span><span class="p">,</span> <span class="s2">&quot;network&quot;</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;mgmtclass&quot;</span><span class="p">,</span> <span class="s2">&quot;package&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">report_what</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span> <span class="ow">or</span> <span class="n">report_what</span> <span class="o">==</span> <span class="n">collection_name</span> <span class="ow">or</span> <span class="n">report_what</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">s&quot;</span> <span class="o">%</span> <span class="n">collection_name</span> <span class="ow">or</span> <span class="n">report_what</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">es&quot;</span> <span class="o">%</span> <span class="n">collection_name</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">report_name</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">reporting_list_names2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_items</span><span class="p">(</span><span class="n">collection_name</span><span class="p">),</span> <span class="n">report_name</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">reporting_print_sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_items</span><span class="p">(</span><span class="n">collection_name</span><span class="p">))</span>
+
+        <span class="k">elif</span> <span class="n">report_type</span> <span class="o">==</span> <span class="s1">&#39;text&#39;</span> <span class="ow">and</span> <span class="n">report_fields</span> <span class="o">!=</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;The &#39;text&#39; type can only be used with field set to &#39;all&#39;&quot;</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">report_type</span> <span class="o">!=</span> <span class="s1">&#39;text&#39;</span> <span class="ow">and</span> <span class="n">report_fields</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+
+            <span class="k">for</span> <span class="n">collection_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;distro&quot;</span><span class="p">,</span> <span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;repo&quot;</span><span class="p">,</span> <span class="s2">&quot;network&quot;</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;mgmtclass&quot;</span><span class="p">,</span> <span class="s2">&quot;package&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">report_what</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span> <span class="ow">or</span> <span class="n">report_what</span> <span class="o">==</span> <span class="n">collection_name</span> <span class="ow">or</span> <span class="n">report_what</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">s&quot;</span> <span class="o">%</span> <span class="n">collection_name</span> <span class="ow">or</span> <span class="n">report_what</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">es&quot;</span> <span class="o">%</span> <span class="n">collection_name</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">reporting_print_all_fields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_items</span><span class="p">(</span><span class="n">collection_name</span><span class="p">),</span> <span class="n">report_name</span><span class="p">,</span> <span class="n">report_type</span><span class="p">,</span> <span class="n">report_noheaders</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">for</span> <span class="n">collection_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;distro&quot;</span><span class="p">,</span> <span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;repo&quot;</span><span class="p">,</span> <span class="s2">&quot;network&quot;</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;mgmtclass&quot;</span><span class="p">,</span> <span class="s2">&quot;package&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">report_what</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span> <span class="ow">or</span> <span class="n">report_what</span> <span class="o">==</span> <span class="n">collection_name</span> <span class="ow">or</span> <span class="n">report_what</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">s&quot;</span> <span class="o">%</span> <span class="n">collection_name</span> <span class="ow">or</span> <span class="n">report_what</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">es&quot;</span> <span class="o">%</span> <span class="n">collection_name</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">reporting_print_x_fields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_items</span><span class="p">(</span><span class="n">collection_name</span><span class="p">),</span> <span class="n">report_name</span><span class="p">,</span> <span class="n">report_type</span><span class="p">,</span> <span class="n">report_fields</span><span class="p">,</span> <span class="n">report_noheaders</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

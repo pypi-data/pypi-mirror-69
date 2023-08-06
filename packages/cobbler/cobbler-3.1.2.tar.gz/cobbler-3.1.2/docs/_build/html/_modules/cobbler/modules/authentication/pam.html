@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.modules.authentication.pam &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.modules.authentication.pam</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.modules.authentication.pam</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Authentication module that uses /etc/cobbler/auth.conf</span>
+<span class="sd">Choice of authentication module is in /etc/cobbler/modules.conf</span>
+
+<span class="sd">PAM python code based on the pam_python code created by Chris AtLee:</span>
+<span class="sd">http://atlee.ca/software/pam/</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">range</span>
+<span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">CDLL</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">,</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">CFUNCTYPE</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">sizeof</span>
+<span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">c_void_p</span><span class="p">,</span> <span class="n">c_uint</span><span class="p">,</span> <span class="n">c_char_p</span><span class="p">,</span> <span class="n">c_char</span><span class="p">,</span> <span class="n">c_int</span>
+<span class="kn">from</span> <span class="nn">ctypes.util</span> <span class="k">import</span> <span class="n">find_library</span>
+
+<span class="n">LIBPAM</span> <span class="o">=</span> <span class="n">CDLL</span><span class="p">(</span><span class="n">find_library</span><span class="p">(</span><span class="s2">&quot;pam&quot;</span><span class="p">))</span>
+<span class="n">LIBC</span> <span class="o">=</span> <span class="n">CDLL</span><span class="p">(</span><span class="n">find_library</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">))</span>
+
+<span class="n">CALLOC</span> <span class="o">=</span> <span class="n">LIBC</span><span class="o">.</span><span class="n">calloc</span>
+<span class="n">CALLOC</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_void_p</span>
+<span class="n">CALLOC</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_uint</span><span class="p">,</span> <span class="n">c_uint</span><span class="p">]</span>
+
+<span class="n">STRDUP</span> <span class="o">=</span> <span class="n">LIBC</span><span class="o">.</span><span class="n">strdup</span>
+<span class="n">STRDUP</span><span class="o">.</span><span class="n">argstypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_char_p</span><span class="p">]</span>
+<span class="n">STRDUP</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_char</span><span class="p">)</span>        <span class="c1"># NOT c_char_p !!!!</span>
+
+<span class="c1"># Various constants</span>
+<span class="n">PAM_PROMPT_ECHO_OFF</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">PAM_PROMPT_ECHO_ON</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">PAM_ERROR_MSG</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">PAM_TEXT_INFO</span> <span class="o">=</span> <span class="mi">4</span>
+
+
+<div class="viewcode-block" id="register"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.authentication.html#cobbler.modules.authentication.pam.register">[docs]</a><span class="k">def</span> <span class="nf">register</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The mandatory cobbler module registration hook.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;authn&quot;</span></div>
+
+
+<div class="viewcode-block" id="PamHandle"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.authentication.html#cobbler.modules.authentication.pam.PamHandle">[docs]</a><span class="k">class</span> <span class="nc">PamHandle</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;wrapper class for pam_handle_t&quot;&quot;&quot;</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;handle&quot;</span><span class="p">,</span> <span class="n">c_void_p</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Structure</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="PamMessage"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.authentication.html#cobbler.modules.authentication.pam.PamMessage">[docs]</a><span class="k">class</span> <span class="nc">PamMessage</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;wrapper class for pam_message structure&quot;&quot;&quot;</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;msg_style&quot;</span><span class="p">,</span> <span class="n">c_int</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;msg&quot;</span><span class="p">,</span> <span class="n">c_char_p</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;PamMessage </span><span class="si">%i</span><span class="s2"> &#39;</span><span class="si">%s</span><span class="s2">&#39;&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">msg_style</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PamResponse"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.authentication.html#cobbler.modules.authentication.pam.PamResponse">[docs]</a><span class="k">class</span> <span class="nc">PamResponse</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;wrapper class for pam_response structure&quot;&quot;&quot;</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;resp&quot;</span><span class="p">,</span> <span class="n">c_char_p</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;resp_retcode&quot;</span><span class="p">,</span> <span class="n">c_int</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;PamResponse </span><span class="si">%i</span><span class="s2"> &#39;</span><span class="si">%s</span><span class="s2">&#39;&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resp_retcode</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="p">)</span></div>
+
+
+<span class="n">CONV_FUNC</span> <span class="o">=</span> <span class="n">CFUNCTYPE</span><span class="p">(</span><span class="n">c_int</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">PamMessage</span><span class="p">)),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">PamResponse</span><span class="p">)),</span> <span class="n">c_void_p</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="PamConv"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.authentication.html#cobbler.modules.authentication.pam.PamConv">[docs]</a><span class="k">class</span> <span class="nc">PamConv</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;wrapper class for pam_conv structure&quot;&quot;&quot;</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;conv&quot;</span><span class="p">,</span> <span class="n">CONV_FUNC</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;appdata_ptr&quot;</span><span class="p">,</span> <span class="n">c_void_p</span><span class="p">)]</span></div>
+
+
+<span class="n">PAM_START</span> <span class="o">=</span> <span class="n">LIBPAM</span><span class="o">.</span><span class="n">pam_start</span>
+<span class="n">PAM_START</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_int</span>
+<span class="n">PAM_START</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_char_p</span><span class="p">,</span> <span class="n">c_char_p</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">PamConv</span><span class="p">),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">PamHandle</span><span class="p">)]</span>
+
+<span class="n">PAM_AUTHENTICATE</span> <span class="o">=</span> <span class="n">LIBPAM</span><span class="o">.</span><span class="n">pam_authenticate</span>
+<span class="n">PAM_AUTHENTICATE</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_int</span>
+<span class="n">PAM_AUTHENTICATE</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">PamHandle</span><span class="p">,</span> <span class="n">c_int</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="authenticate"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.authentication.html#cobbler.modules.authentication.pam.authenticate">[docs]</a><span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="n">api_handle</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns True if the given username and password authenticate for the</span>
+<span class="sd">    given service.  Returns False otherwise</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@CONV_FUNC</span>
+    <span class="k">def</span> <span class="nf">my_conv</span><span class="p">(</span><span class="n">n_messages</span><span class="p">,</span> <span class="n">messages</span><span class="p">,</span> <span class="n">p_response</span><span class="p">,</span> <span class="n">app_data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Simple conversation function that responds to any</span>
+<span class="sd">        prompt where the echo is off with the supplied password&quot;&quot;&quot;</span>
+        <span class="c1"># Create an array of n_messages response objects</span>
+        <span class="n">addr</span> <span class="o">=</span> <span class="n">CALLOC</span><span class="p">(</span><span class="n">n_messages</span><span class="p">,</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">PamResponse</span><span class="p">))</span>
+        <span class="n">p_response</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">PamResponse</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_messages</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">messages</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">msg_style</span> <span class="o">==</span> <span class="n">PAM_PROMPT_ECHO_OFF</span><span class="p">:</span>
+                <span class="n">pw_copy</span> <span class="o">=</span> <span class="n">STRDUP</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">password</span><span class="p">))</span>
+                <span class="n">p_response</span><span class="o">.</span><span class="n">contents</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">resp</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">pw_copy</span><span class="p">,</span> <span class="n">c_char_p</span><span class="p">)</span>
+                <span class="n">p_response</span><span class="o">.</span><span class="n">contents</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">resp_retcode</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">service</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">authn_pam_service</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">service</span> <span class="o">=</span> <span class="s1">&#39;login&#39;</span>
+
+    <span class="n">api_handle</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;authn_pam: PAM service is </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">service</span><span class="p">)</span>
+
+    <span class="n">handle</span> <span class="o">=</span> <span class="n">PamHandle</span><span class="p">()</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">PamConv</span><span class="p">(</span><span class="n">my_conv</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">retval</span> <span class="o">=</span> <span class="n">PAM_START</span><span class="p">(</span><span class="n">service</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">pointer</span><span class="p">(</span><span class="n">conv</span><span class="p">),</span> <span class="n">pointer</span><span class="p">(</span><span class="n">handle</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">retval</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># TODO: This is not an authentication error, something</span>
+        <span class="c1"># has gone wrong starting up PAM</span>
+        <span class="n">api_handle</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;authn_pam: error initializing PAM library&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">retval</span> <span class="o">=</span> <span class="n">PAM_AUTHENTICATE</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">retval</span> <span class="o">==</span> <span class="mi">0</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

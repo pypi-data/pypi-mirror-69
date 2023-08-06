@@ -1,0 +1,657 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.items.item &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.items.item</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.items.item</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">import</span> <span class="nn">fnmatch</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">validate</span>
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">CX</span><span class="p">,</span> <span class="n">NotImplementedException</span>
+<span class="kn">from</span> <span class="nn">cobbler.utils</span> <span class="k">import</span> <span class="n">_</span>
+
+<span class="c1"># the fields has controls what data elements are part of each object.  To add a new field, just add a new</span>
+<span class="c1"># entry to the list following some conventions to be described later.  You must also add a method called</span>
+<span class="c1"># set_$fieldname.  Do not write a method called get_$fieldname, that will not be called.</span>
+<span class="c1">#</span>
+<span class="c1"># name | default | subobject default | display name | editable? | tooltip | values ? | type</span>
+<span class="c1">#</span>
+<span class="c1"># name -- what the filed should be called.   For the command line, underscores will be replaced with</span>
+<span class="c1">#         a hyphen programatically, so use underscores to seperate things that are seperate words</span>
+<span class="c1">#</span>
+<span class="c1"># default value -- when a new object is created, what is the default value for this field?</span>
+<span class="c1">#</span>
+<span class="c1"># subobject default -- this applies ONLY to subprofiles, and is most always set to &lt;&lt;inherit&gt;&gt;.  If this</span>
+<span class="c1">#                      is not item_profile.py it does not matter.</span>
+<span class="c1">#</span>
+<span class="c1"># display name -- how the field shows up in the web application and the &quot;cobbler report&quot; command</span>
+<span class="c1">#</span>
+<span class="c1"># editable -- should the field be editable in the CLI and web app?  Almost always yes unless</span>
+<span class="c1">#                it is an internalism.  Fields that are not editable are &quot;hidden&quot;</span>
+<span class="c1">#</span>
+<span class="c1"># tooltip -- the caption to be shown in the web app or in &quot;commandname --help&quot; in the CLI</span>
+<span class="c1">#</span>
+<span class="c1"># values -- for fields that have a limited set of valid options and those options are always fixed</span>
+<span class="c1">#           (such as architecture type), the list of valid options goes in this field.</span>
+<span class="c1">#</span>
+<span class="c1"># type -- the type of the field.  Used to determine which HTML form widget is used in the web interface</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># the order in which the fields appear in the web application (for all non-hidden</span>
+<span class="c1"># fields) is defined in field_ui_info.py. The CLI sorts fields alphabetically.</span>
+<span class="c1">#</span>
+<span class="c1"># field_ui_info.py also contains a set of &quot;Groups&quot; that describe what other fields</span>
+<span class="c1"># are associated with what other fields.  This affects color coding and other</span>
+<span class="c1"># display hints.  If you add a field, please edit field_ui_info.py carefully to match.</span>
+<span class="c1">#</span>
+<span class="c1"># additional:  see field_ui_info.py for some display hints.  By default, in the</span>
+<span class="c1"># web app, all fields are text fields unless field_ui_info.py lists the field in</span>
+<span class="c1"># one of those dictionaries.</span>
+<span class="c1">#</span>
+<span class="c1"># hidden fields should not be added without just cause, explanations about these are:</span>
+<span class="c1">#</span>
+<span class="c1">#   ctime, mtime -- times the object was modified, used internally by cobbler for API purposes</span>
+<span class="c1">#   uid -- also used for some external API purposes</span>
+<span class="c1">#   source_repos -- an artifiact of import, this is too complicated to explain on IRC so we just hide it</span>
+<span class="c1">#                   for RHEL split repos, this is a list of each of them in the install tree, used to generate</span>
+<span class="c1">#                   repo lines in the automatic installation file to allow installation of x&gt;=RHEL5.  Otherwise unimportant.</span>
+<span class="c1">#   depth -- used for &quot;cobbler list&quot; to print the tree, makes it easier to load objects from disk also</span>
+<span class="c1">#   tree_build_time -- loaded from import, this is not useful to many folks so we just hide it.  Avail over API.</span>
+<span class="c1">#</span>
+<span class="c1"># so to add new fields</span>
+<span class="c1">#   (A) understand the above</span>
+<span class="c1">#   (B) add a field below</span>
+<span class="c1">#   (C) add a set_fieldname method</span>
+<span class="c1">#   (D) if field must be viewable/editable via web UI, add a entry in</span>
+<span class="c1">#       corresponding *_UI_FIELDS_MAPPING dictionary in field_ui_info.py.</span>
+<span class="c1">#       If field must not be displayed in a text field in web UI, also add</span>
+<span class="c1">#       an entry in corresponding USES_* list in field_ui_info.py.</span>
+<span class="c1">#</span>
+<span class="c1"># in general the set_field_name method should raise exceptions on invalid fields, always.   There are adtl</span>
+<span class="c1"># validation fields in is_valid to check to see that two seperate fields do not conflict, but in general</span>
+<span class="c1"># design issues that require this should be avoided forever more, and there are few exceptions.  Cobbler</span>
+<span class="c1"># must operate as normal with the default value for all fields and not choke on the default values.</span>
+
+
+<div class="viewcode-block" id="Item"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item">[docs]</a><span class="k">class</span> <span class="nc">Item</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An Item is a serializable thing that can appear in a Collection</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">converted_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="Item.get_from_cache"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.get_from_cache">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_from_cache</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">converted_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Item.set_cache"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_cache">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_cache</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">ref</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">converted_cache</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">converted_cache</span><span class="p">[</span><span class="n">ref</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">converted_cache</span><span class="p">[</span><span class="n">ref</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span><span class="p">][</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="Item.remove_from_cache"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.remove_from_cache">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">remove_from_cache</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">converted_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+    <span class="n">TYPE_NAME</span> <span class="o">=</span> <span class="s2">&quot;generic&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">,</span> <span class="n">is_subobject</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor.  Requires a back reference to the CollectionManager object.</span>
+
+<span class="sd">        NOTE: is_subobject is used for objects that allow inheritance in their trees.  This</span>
+<span class="sd">        inheritance refers to conceptual inheritance, not Python inheritance.  Objects created</span>
+<span class="sd">        with is_subobject need to call their set_parent() method immediately after creation</span>
+<span class="sd">        and pass in a value of an object of the same type.  Currently this is only supported</span>
+<span class="sd">        for profiles.  Subobjects blend their data with their parent objects and only require</span>
+<span class="sd">        a valid parent name and a name for themselves, so other required options can be</span>
+<span class="sd">        gathered from items further up the cobbler tree.</span>
+
+<span class="sd">                           distro</span>
+<span class="sd">                               profile</span>
+<span class="sd">                                    profile  &lt;-- created with is_subobject=True</span>
+<span class="sd">                                         system   &lt;-- created as normal</span>
+
+<span class="sd">        For consistancy, there is some code supporting this in all object types, though it is only usable</span>
+<span class="sd">        (and only should be used) for profiles at this time.  Objects that are children of</span>
+<span class="sd">        objects of the same type (i.e. subprofiles) need to pass this in as True.  Otherwise, just</span>
+<span class="sd">        use False for is_subobject and the parent object will (therefore) have a different type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="n">collection_mgr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">_settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">(</span><span class="n">is_subobject</span><span class="p">)</span>        <span class="c1"># reset behavior differs for inheritance cases</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>                <span class="c1"># all objects by default are not subobjects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">{}</span>              <span class="c1"># caching for performance reasons, not serialized</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">log</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctime</span> <span class="o">=</span> <span class="mi">0</span>                  <span class="c1"># to be filled in by collection class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mtime</span> <span class="o">=</span> <span class="mi">0</span>                  <span class="c1"># to be filled in by collection class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uid</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>                   <span class="c1"># to be filled in by collection class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel_options</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel_options_post</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoinstall_meta</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fetchable_files</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boot_files</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">template_files</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_cached_mtime</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cached_dict</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__find_compare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">from_search</span><span class="p">,</span> <span class="n">from_obj</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">from_obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c1"># FIXME: fnmatch is only used for string to string comparisions</span>
+            <span class="c1"># which should cover most major usage, if not, this deserves fixing</span>
+            <span class="n">from_obj_lower</span> <span class="o">=</span> <span class="n">from_obj</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="n">from_search_lower</span> <span class="o">=</span> <span class="n">from_search</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="c1"># it&#39;s much faster to not use fnmatch if it&#39;s not needed</span>
+            <span class="k">if</span> <span class="s1">&#39;?&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">from_search_lower</span> <span class="ow">and</span> <span class="s1">&#39;*&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">from_search_lower</span> <span class="ow">and</span> <span class="s1">&#39;[&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">from_search_lower</span><span class="p">:</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="n">from_obj_lower</span> <span class="o">==</span> <span class="n">from_search_lower</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="n">from_obj_lower</span><span class="p">,</span> <span class="n">from_search_lower</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">match</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">from_search</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">from_obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">from_search</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_list</span><span class="p">(</span><span class="n">from_search</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">from_search</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">from_obj</span><span class="p">:</span>
+                            <span class="k">return</span> <span class="kc">False</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">from_obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="p">(</span><span class="n">junk</span><span class="p">,</span> <span class="n">from_search</span><span class="p">)</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_dict</span><span class="p">(</span><span class="n">from_search</span><span class="p">,</span> <span class="n">allow_multiples</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">from_search</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">from_search</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">from_obj</span><span class="p">:</span>
+                            <span class="k">return</span> <span class="kc">False</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="n">from_obj</span><span class="p">[</span><span class="n">x</span><span class="p">]):</span>
+                            <span class="k">return</span> <span class="kc">False</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">from_obj</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">from_search</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;true&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">]:</span>
+                        <span class="n">inp</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">inp</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">if</span> <span class="n">inp</span> <span class="o">==</span> <span class="n">from_obj</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="kc">True</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;find cannot compare type: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">from_obj</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Item.get_fields"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.get_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get serializable fields</span>
+<span class="sd">        Must be defined in any subclass</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="n">NotImplementedException</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Item.clear"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_subobject</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reset this object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">clear_from_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fields</span><span class="p">(),</span> <span class="n">is_subobject</span><span class="o">=</span><span class="n">is_subobject</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Item.make_clone"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.make_clone">[docs]</a>    <span class="k">def</span> <span class="nf">make_clone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Must be defined in any subclass</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="n">NotImplementedException</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Item.from_dict"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.from_dict">[docs]</a>    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Modify this object to take on values in seed_data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">from_dict_from_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_dict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fields</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Item.to_dict"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># return utils.to_dict_from_fields(self, self.get_fields())</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_from_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">to_dict_from_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fields</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="Item.to_string"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.to_string">[docs]</a>    <span class="k">def</span> <span class="nf">to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">to_string_from_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fields</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Item.get_setter_methods"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.get_setter_methods">[docs]</a>    <span class="k">def</span> <span class="nf">get_setter_methods</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_setter_methods_from_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fields</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Item.set_uid"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_uid">[docs]</a>    <span class="k">def</span> <span class="nf">set_uid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uid</span> <span class="o">=</span> <span class="n">uid</span></div>
+
+<div class="viewcode-block" id="Item.get_children"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.get_children">[docs]</a>    <span class="k">def</span> <span class="nf">get_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">sorted</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get direct children of this object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="nb">sorted</span><span class="p">:</span>
+            <span class="n">keys</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">results</span></div>
+
+<div class="viewcode-block" id="Item.get_descendants"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.get_descendants">[docs]</a>    <span class="k">def</span> <span class="nf">get_descendants</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get objects that depend on this object, i.e. those that</span>
+<span class="sd">        would be affected by a cascading delete, etc.</span>
+<span class="sd">        With sort=True the list will be a walk of the tree,</span>
+<span class="sd">        e.g., distro -&gt; [profile, sys, sys, profile, sys, sys]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">kids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_children</span><span class="p">(</span><span class="nb">sorted</span><span class="o">=</span><span class="n">sort</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sort</span><span class="p">:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">kids</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">kid</span> <span class="ow">in</span> <span class="n">kids</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kid</span><span class="p">)</span>
+            <span class="n">grandkids</span> <span class="o">=</span> <span class="n">kid</span><span class="o">.</span><span class="n">get_descendants</span><span class="p">(</span><span class="n">sort</span><span class="o">=</span><span class="n">sort</span><span class="p">)</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">grandkids</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">results</span></div>
+
+<div class="viewcode-block" id="Item.get_parent"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.get_parent">[docs]</a>    <span class="k">def</span> <span class="nf">get_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For objects with a tree relationship, what&#39;s the parent object?</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Item.get_conceptual_parent"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.get_conceptual_parent">[docs]</a>    <span class="k">def</span> <span class="nf">get_conceptual_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The parent may just be a superclass for something like a</span>
+<span class="sd">        subprofile.  Get the first parent of a different type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mtype</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parent</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ptype</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mtype</span> <span class="o">!=</span> <span class="n">ptype</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">conceptual_parent</span> <span class="o">=</span> <span class="n">parent</span>
+                <span class="k">return</span> <span class="n">parent</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">get_parent</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Item.set_name"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the objects name.</span>
+
+<span class="sd">        @param: str name (object name string)</span>
+<span class="sd">        @returns: True or CX</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">validate</span><span class="o">.</span><span class="n">object_name</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Item.set_comment"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_comment">[docs]</a>    <span class="k">def</span> <span class="nf">set_comment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">comment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="n">comment</span></div>
+
+<div class="viewcode-block" id="Item.set_owners"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_owners">[docs]</a>    <span class="k">def</span> <span class="nf">set_owners</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The owners field is a comment unless using an authz module that pays attention to it,</span>
+<span class="sd">        like authz_ownership, which ships with Cobbler but is off by default.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">owners</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_list</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Item.set_kernel_options"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_kernel_options">[docs]</a>    <span class="k">def</span> <span class="nf">set_kernel_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Kernel options are a space delimited list,</span>
+<span class="sd">        like &#39;a=b c=d e=f g h i=j&#39; or a dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_dict</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">allow_multiples</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;invalid kernel options&quot;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kernel_options</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="Item.set_kernel_options_post"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_kernel_options_post">[docs]</a>    <span class="k">def</span> <span class="nf">set_kernel_options_post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Post kernel options are a space delimited list,</span>
+<span class="sd">        like &#39;a=b c=d e=f g h i=j&#39; or a dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_dict</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">allow_multiples</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;invalid post kernel options&quot;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kernel_options_post</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="Item.set_autoinstall_meta"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_autoinstall_meta">[docs]</a>    <span class="k">def</span> <span class="nf">set_autoinstall_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A comma delimited list of key value pairs, like &#39;a=b,c=d,e=f&#39; or a dict.</span>
+<span class="sd">        The meta tags are used as input to the templating system</span>
+<span class="sd">        to preprocess automatic installation template files</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_dict</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">allow_multiples</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">autoinstall_meta</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="Item.set_mgmt_classes"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_mgmt_classes">[docs]</a>    <span class="k">def</span> <span class="nf">set_mgmt_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mgmt_classes</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assigns a list of configuration management classes that can be assigned</span>
+<span class="sd">        to any object, such as those used by Puppet&#39;s external_nodes feature.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mgmt_classes_split</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_list</span><span class="p">(</span><span class="n">mgmt_classes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mgmt_classes</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_list</span><span class="p">(</span><span class="n">mgmt_classes_split</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Item.set_mgmt_parameters"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_mgmt_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_mgmt_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mgmt_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A YAML string which can be assigned to any object, this is used by</span>
+<span class="sd">        Puppet&#39;s external_nodes feature.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">mgmt_parameters</span> <span class="o">==</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mgmt_parameters</span> <span class="o">=</span> <span class="n">mgmt_parameters</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">yaml</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">mgmt_parameters</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">dict</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Input YAML in Puppet Parameter field must evaluate to a dictionary.&quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mgmt_parameters</span> <span class="o">=</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="Item.set_template_files"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_template_files">[docs]</a>    <span class="k">def</span> <span class="nf">set_template_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_files</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A comma seperated list of source=destination templates</span>
+<span class="sd">        that should be generated during a sync.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_dict</span><span class="p">(</span><span class="n">template_files</span><span class="p">,</span> <span class="n">allow_multiples</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">template_files</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="Item.set_boot_files"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_boot_files">[docs]</a>    <span class="k">def</span> <span class="nf">set_boot_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boot_files</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A comma seperated list of req_name=source_file_path</span>
+<span class="sd">        that should be fetchable via tftp</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_dict</span><span class="p">(</span><span class="n">boot_files</span><span class="p">,</span> <span class="n">allow_multiples</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">boot_files</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="Item.set_fetchable_files"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_fetchable_files">[docs]</a>    <span class="k">def</span> <span class="nf">set_fetchable_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fetchable_files</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A comma seperated list of virt_name=path_to_template</span>
+<span class="sd">        that should be fetchable via tftp or a webserver</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_dict</span><span class="p">(</span><span class="n">fetchable_files</span><span class="p">,</span> <span class="n">allow_multiples</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fetchable_files</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="Item.sort_key"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.sort_key">[docs]</a>    <span class="k">def</span> <span class="nf">sort_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sort_fields</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sort_fields</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Item.find_match"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.find_match">[docs]</a>    <span class="k">def</span> <span class="nf">find_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">no_errors</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="c1"># used by find() method in collection.py</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="c1"># Allow ~ to negate the compare</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">):</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_match_single_key</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">no_errors</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_match_single_key</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">no_errors</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">res</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Item.find_match_single_key"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.find_match_single_key">[docs]</a>    <span class="k">def</span> <span class="nf">find_match_single_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">no_errors</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="c1"># special case for systems</span>
+        <span class="n">key_found_already</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="s2">&quot;interfaces&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;mac_address&quot;</span><span class="p">,</span> <span class="s2">&quot;ip_address&quot;</span><span class="p">,</span> <span class="s2">&quot;netmask&quot;</span><span class="p">,</span> <span class="s2">&quot;virt_bridge&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;dhcp_tag&quot;</span><span class="p">,</span> <span class="s2">&quot;dns_name&quot;</span><span class="p">,</span> <span class="s2">&quot;static_routes&quot;</span><span class="p">,</span> <span class="s2">&quot;interface_type&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;interface_master&quot;</span><span class="p">,</span> <span class="s2">&quot;bonding_opts&quot;</span><span class="p">,</span> <span class="s2">&quot;bridge_opts&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;interface&quot;</span><span class="p">]:</span>
+                <span class="n">key_found_already</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;interfaces&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                    <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="kc">True</span>
+                    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">interface</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__find_compare</span><span class="p">(</span><span class="n">interface</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">value</span><span class="p">):</span>
+                            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">key_found_already</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">no_errors</span><span class="p">:</span>
+                    <span class="c1"># FIXME: removed for 2.0 code, shouldn&#39;t cause any problems to not have an exception here?</span>
+                    <span class="c1"># raise CX(_(&quot;searching for field that does not exist: %s&quot; % key))</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>       <span class="c1"># FIXME: new?</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__find_compare</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Item.dump_vars"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.dump_vars">[docs]</a>    <span class="k">def</span> <span class="nf">dump_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">format</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">raw</span></div>
+
+<div class="viewcode-block" id="Item.set_depth"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_depth">[docs]</a>    <span class="k">def</span> <span class="nf">set_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">depth</span></div>
+
+<div class="viewcode-block" id="Item.set_ctime"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_ctime">[docs]</a>    <span class="k">def</span> <span class="nf">set_ctime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctime</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctime</span> <span class="o">=</span> <span class="n">ctime</span></div>
+
+<div class="viewcode-block" id="Item.set_mtime"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_mtime">[docs]</a>    <span class="k">def</span> <span class="nf">set_mtime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mtime</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mtime</span> <span class="o">=</span> <span class="n">mtime</span></div>
+
+<div class="viewcode-block" id="Item.set_parent"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.set_parent">[docs]</a>    <span class="k">def</span> <span class="nf">set_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span></div>
+
+<div class="viewcode-block" id="Item.check_if_valid"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.item.Item.check_if_valid">[docs]</a>    <span class="k">def</span> <span class="nf">check_if_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raise exceptions if the object state is inconsistent</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Name is required&quot;</span><span class="p">)</span></div></div>
+
+<span class="c1"># EOF</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

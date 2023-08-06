@@ -1,0 +1,918 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.modules.managers.import_signatures &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.modules.managers.import_signatures</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.modules.managers.import_signatures</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">stat</span>
+
+<span class="c1"># Import aptsources module if available to obtain repo mirror.</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">aptsources</span> <span class="k">import</span> <span class="n">distro</span> <span class="k">as</span> <span class="n">debdistro</span>
+    <span class="kn">from</span> <span class="nn">aptsources</span> <span class="k">import</span> <span class="n">sourceslist</span>
+    <span class="n">apt_available</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">apt_available</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="kn">from</span> <span class="nn">cobbler.items</span> <span class="k">import</span> <span class="n">profile</span><span class="p">,</span> <span class="n">distro</span>
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">CX</span>
+
+<span class="kn">import</span> <span class="nn">cobbler.templar</span> <span class="k">as</span> <span class="nn">templar</span>
+<span class="kn">import</span> <span class="nn">cobbler.utils</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">import</span> <span class="nn">cobbler.items.repo</span> <span class="k">as</span> <span class="nn">item_repo</span>
+
+
+<div class="viewcode-block" id="register"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.register">[docs]</a><span class="k">def</span> <span class="nf">register</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The mandatory cobbler module registration hook.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;manage/import&quot;</span></div>
+
+
+<div class="viewcode-block" id="import_walker"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.import_walker">[docs]</a><span class="k">def</span> <span class="nf">import_walker</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Directory tree walk with callback function.</span>
+<span class="sd">    For each directory in the directory tree rooted at top (including top</span>
+<span class="sd">    itself, but excluding &#39;.&#39; and &#39;..&#39;), call func(arg, dirname, fnames).</span>
+<span class="sd">    dirname is the name of the directory, and fnames a list of the names of</span>
+<span class="sd">    the files and subdirectories in dirname (excluding &#39;.&#39; and &#39;..&#39;).  func</span>
+<span class="sd">    may modify the fnames list in-place (e.g. via del or slice assignment),</span>
+<span class="sd">    and walk will only recurse into the subdirectories whose names remain in</span>
+<span class="sd">    fnames; this can be used to implement a filter, or to impose a specific</span>
+<span class="sd">    order of visiting.  No semantics are defined for, or required of, arg,</span>
+<span class="sd">    beyond that arg is always passed to func.  It can be used, e.g., to pass</span>
+<span class="sd">    a filename pattern, or a mutable object designed to accumulate</span>
+<span class="sd">    statistics.  Passing None for arg is common.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">top</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">os</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">func</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">lstat</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">os</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_ISDIR</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">st_mode</span><span class="p">):</span>
+            <span class="n">import_walker</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ImportSignatureManager"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager">[docs]</a><span class="k">class</span> <span class="nc">ImportSignatureManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="n">collection_mgr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distros</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">distros</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">profiles</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">systems</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">systems</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repos</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">repos</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">templar</span> <span class="o">=</span> <span class="n">templar</span><span class="o">.</span><span class="n">Templar</span><span class="p">(</span><span class="n">collection_mgr</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">signature</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">found_repos</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># required function for import modules</span>
+<div class="viewcode-block" id="ImportSignatureManager.what"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.what">[docs]</a>    <span class="k">def</span> <span class="nf">what</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;import/signatures&quot;</span></div>
+
+<div class="viewcode-block" id="ImportSignatureManager.get_file_lines"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.get_file_lines">[docs]</a>    <span class="k">def</span> <span class="nf">get_file_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get lines from a file, which may or may not be compressed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ftype</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;/usr/bin/file </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ftype</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;gzip&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="kn">import</span> <span class="nn">gzip</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+                <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">ftype</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">lines</span></div>
+
+    <span class="c1"># required function for import modules</span>
+<div class="viewcode-block" id="ImportSignatureManager.run"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">network_root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">autoinstall_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">arch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">breed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">os_version</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        path: the directory we are scanning for files</span>
+<span class="sd">        name: the base name of the distro</span>
+<span class="sd">        network_root: the remote path (nfs/http/ftp) for the distro files</span>
+<span class="sd">        autoinstall_file: user-specified response file, which will override the default</span>
+<span class="sd">        arch: user-specified architecture</span>
+<span class="sd">        breed: user-specified breed</span>
+<span class="sd">        os_version: user-specified OS version</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network_root</span> <span class="o">=</span> <span class="n">network_root</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoinstall_file</span> <span class="o">=</span> <span class="n">autoinstall_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arch</span> <span class="o">=</span> <span class="n">arch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">breed</span> <span class="o">=</span> <span class="n">breed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">os_version</span> <span class="o">=</span> <span class="n">os_version</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rootdir</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pkgdir</span> <span class="o">=</span> <span class="n">path</span>
+
+        <span class="c1"># some fixups for the XMLRPC interface, which does not use &quot;None&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arch</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autoinstall_file</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">autoinstall_file</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">os_version</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">os_version</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_root</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">network_root</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">os_version</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">breed</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;OS version can only be specified when a specific breed is selected&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">signature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_signatures</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">signature</span><span class="p">:</span>
+            <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;No signature matched in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">path</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+
+        <span class="c1"># now walk the filesystem looking for distributions that match certain patterns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Adding distros from path </span><span class="si">%s</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">distros_added</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">import_walker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">distro_adder</span><span class="p">,</span> <span class="n">distros_added</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">distros_added</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No distros imported, bailing out&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># find out if we can auto-create any repository records from the install tree</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;associating repos&quot;</span><span class="p">)</span>
+            <span class="c1"># FIXME: this automagic is not possible (yet) without mirroring</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">repo_finder</span><span class="p">(</span><span class="n">distros_added</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ImportSignatureManager.scan_signatures"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.scan_signatures">[docs]</a>    <span class="k">def</span> <span class="nf">scan_signatures</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        loop through the signatures, looking for a match for both</span>
+<span class="sd">        the signature directory and the version file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sigdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_signatures</span><span class="p">()</span>
+        <span class="c1"># self.logger.debug(&quot;signature cache: %s&quot; % str(sigdata))</span>
+        <span class="k">for</span> <span class="n">breed</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">sigdata</span><span class="p">[</span><span class="s2">&quot;breeds&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">breed</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">breed</span> <span class="o">!=</span> <span class="n">breed</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">sigdata</span><span class="p">[</span><span class="s2">&quot;breeds&quot;</span><span class="p">][</span><span class="n">breed</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">os_version</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">os_version</span> <span class="o">!=</span> <span class="n">version</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">sigdata</span><span class="p">[</span><span class="s2">&quot;breeds&quot;</span><span class="p">][</span><span class="n">breed</span><span class="p">][</span><span class="n">version</span><span class="p">][</span><span class="s2">&quot;signatures&quot;</span><span class="p">]:</span>
+                    <span class="n">pkgdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">sig</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pkgdir</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Found a candidate signature: breed=</span><span class="si">%s</span><span class="s2">, version=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">breed</span><span class="p">,</span> <span class="n">version</span><span class="p">))</span>
+                        <span class="n">f_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">sigdata</span><span class="p">[</span><span class="s2">&quot;breeds&quot;</span><span class="p">][</span><span class="n">breed</span><span class="p">][</span><span class="n">version</span><span class="p">][</span><span class="s2">&quot;version_file&quot;</span><span class="p">])</span>
+                        <span class="k">for</span> <span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">subdir</span><span class="p">,</span> <span class="n">fnames</span><span class="p">)</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">):</span>
+                            <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fnames</span> <span class="o">+</span> <span class="n">subdir</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">f_re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+                                    <span class="c1"># if the version file regex exists, we use it</span>
+                                    <span class="c1"># to scan the contents of the target version file</span>
+                                    <span class="c1"># to ensure it&#39;s the right version</span>
+                                    <span class="k">if</span> <span class="n">sigdata</span><span class="p">[</span><span class="s2">&quot;breeds&quot;</span><span class="p">][</span><span class="n">breed</span><span class="p">][</span><span class="n">version</span><span class="p">][</span><span class="s2">&quot;version_file_regex&quot;</span><span class="p">]:</span>
+                                        <span class="n">vf_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">sigdata</span><span class="p">[</span><span class="s2">&quot;breeds&quot;</span><span class="p">][</span><span class="n">breed</span><span class="p">][</span><span class="n">version</span><span class="p">][</span><span class="s2">&quot;version_file_regex&quot;</span><span class="p">])</span>
+                                        <span class="n">vf_lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_lines</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">fname</span><span class="p">))</span>
+                                        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">vf_lines</span><span class="p">:</span>
+                                            <span class="k">if</span> <span class="n">vf_re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+                                                <span class="k">break</span>
+                                        <span class="k">else</span><span class="p">:</span>
+                                            <span class="k">continue</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Found a matching signature: breed=</span><span class="si">%s</span><span class="s2">, version=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">breed</span><span class="p">,</span> <span class="n">version</span><span class="p">))</span>
+                                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">breed</span><span class="p">:</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">breed</span> <span class="o">=</span> <span class="n">breed</span>
+                                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">os_version</span><span class="p">:</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">os_version</span> <span class="o">=</span> <span class="n">version</span>
+                                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">autoinstall_file</span><span class="p">:</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">autoinstall_file</span> <span class="o">=</span> <span class="n">sigdata</span><span class="p">[</span><span class="s2">&quot;breeds&quot;</span><span class="p">][</span><span class="n">breed</span><span class="p">][</span><span class="n">version</span><span class="p">][</span><span class="s2">&quot;default_autoinstall&quot;</span><span class="p">]</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">pkgdir</span> <span class="o">=</span> <span class="n">pkgdir</span>
+                                    <span class="k">return</span> <span class="n">sigdata</span><span class="p">[</span><span class="s2">&quot;breeds&quot;</span><span class="p">][</span><span class="n">breed</span><span class="p">][</span><span class="n">version</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+    <span class="c1"># required function for import modules</span>
+<div class="viewcode-block" id="ImportSignatureManager.get_valid_arches"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.get_valid_arches">[docs]</a>    <span class="k">def</span> <span class="nf">get_valid_arches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">signature</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">signature</span><span class="p">[</span><span class="s2">&quot;supported_arches&quot;</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="ImportSignatureManager.get_valid_repo_breeds"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.get_valid_repo_breeds">[docs]</a>    <span class="k">def</span> <span class="nf">get_valid_repo_breeds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">signature</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">signature</span><span class="p">[</span><span class="s2">&quot;supported_repo_breeds&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="ImportSignatureManager.distro_adder"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.distro_adder">[docs]</a>    <span class="k">def</span> <span class="nf">distro_adder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distros_added</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">fnames</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This is an import_walker routine that finds distributions in the directory</span>
+<span class="sd">        to be scanned and then creates them.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">re_krn</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">signature</span><span class="p">[</span><span class="s2">&quot;kernel_file&quot;</span><span class="p">])</span>
+        <span class="n">re_img</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">signature</span><span class="p">[</span><span class="s2">&quot;initrd_file&quot;</span><span class="p">])</span>
+
+        <span class="c1"># make sure we don&#39;t mismatch PAE and non-PAE types</span>
+        <span class="n">initrd</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">kernel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">pae_initrd</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">pae_kernel</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fnames</span><span class="p">:</span>
+            <span class="n">adtls</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># most of the time we just want to ignore isolinux</span>
+            <span class="c1"># directories, unless this is one of the oddball</span>
+            <span class="c1"># distros where we do want it</span>
+            <span class="k">if</span> <span class="n">dirname</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;isolinux&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">signature</span><span class="p">[</span><span class="s2">&quot;isolinux_ok&quot;</span><span class="p">]:</span>
+                <span class="k">continue</span>
+
+            <span class="n">fullname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">fullname</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">fullname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">):</span>
+                    <span class="c1"># Prevent infinite loop with Sci Linux 5</span>
+                    <span class="c1"># self.logger.warning(&quot;avoiding symlink loop&quot;)</span>
+                    <span class="k">continue</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;following symlink: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">fullname</span><span class="p">)</span>
+                <span class="n">import_walker</span><span class="p">(</span><span class="n">fullname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">distro_adder</span><span class="p">,</span> <span class="n">distros_added</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">re_img</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;PAE&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">initrd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">pae_initrd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">re_krn</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;PAE&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">kernel</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">pae_kernel</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+            <span class="c1"># if we&#39;ve collected a matching kernel and initrd pair, turn them in and add them to the list</span>
+            <span class="k">if</span> <span class="n">initrd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">kernel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">adtls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">initrd</span><span class="p">))</span>
+                <span class="n">kernel</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">initrd</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">elif</span> <span class="n">pae_initrd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">pae_kernel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">adtls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">pae_kernel</span><span class="p">,</span> <span class="n">pae_initrd</span><span class="p">))</span>
+                <span class="n">pae_kernel</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">pae_initrd</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">for</span> <span class="n">adtl</span> <span class="ow">in</span> <span class="n">adtls</span><span class="p">:</span>
+                <span class="n">distros_added</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">adtl</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ImportSignatureManager.add_entry"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.add_entry">[docs]</a>    <span class="k">def</span> <span class="nf">add_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">initrd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        When we find a directory with a valid kernel/initrd in it, create the distribution objects</span>
+<span class="sd">        as appropriate and save them.  This includes creating xen and rescue distros/profiles</span>
+<span class="sd">        if possible.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># build a proposed name based on the directory structure</span>
+        <span class="n">proposed_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_proposed_name</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+
+        <span class="c1"># build a list of arches found in the packages directory</span>
+        <span class="n">archs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn_arch_from_tree</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">archs</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">:</span>
+            <span class="n">archs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">archs</span><span class="p">:</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">&quot;Given arch (</span><span class="si">%s</span><span class="s2">) not found on imported tree </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">archs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No arch could be detected in </span><span class="si">%s</span><span class="s2">, and none was specified via the --arch option&quot;</span> <span class="o">%</span> <span class="n">dirname</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">archs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;- Warning : Multiple archs found : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">archs</span><span class="p">))</span>
+
+        <span class="n">distros_added</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pxe_arch</span> <span class="ow">in</span> <span class="n">archs</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">proposed_name</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">pxe_arch</span>
+            <span class="n">existing_distro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distros</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">existing_distro</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;skipping import, as distro name already exists: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;creating new distro: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+                <span class="n">new_distro</span> <span class="o">=</span> <span class="n">distro</span><span class="o">.</span><span class="n">Distro</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;-autoboot&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># this is an artifact of some EL-3 imports</span>
+                <span class="k">continue</span>
+
+            <span class="n">new_distro</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">new_distro</span><span class="o">.</span><span class="n">set_kernel</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span>
+            <span class="n">new_distro</span><span class="o">.</span><span class="n">set_initrd</span><span class="p">(</span><span class="n">initrd</span><span class="p">)</span>
+            <span class="n">new_distro</span><span class="o">.</span><span class="n">set_arch</span><span class="p">(</span><span class="n">pxe_arch</span><span class="p">)</span>
+            <span class="n">new_distro</span><span class="o">.</span><span class="n">set_breed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">breed</span><span class="p">)</span>
+            <span class="n">new_distro</span><span class="o">.</span><span class="n">set_os_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">os_version</span><span class="p">)</span>
+            <span class="n">new_distro</span><span class="o">.</span><span class="n">set_kernel_options</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">signature</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+            <span class="n">new_distro</span><span class="o">.</span><span class="n">set_kernel_options_post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">signature</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kernel_options_post&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+            <span class="n">new_distro</span><span class="o">.</span><span class="n">set_template_files</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">signature</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;template_files&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+            <span class="n">supported_distro_boot_loaders</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_supported_distro_boot_loaders</span><span class="p">(</span><span class="n">new_distro</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
+            <span class="n">new_distro</span><span class="o">.</span><span class="n">set_supported_boot_loaders</span><span class="p">(</span><span class="n">supported_distro_boot_loaders</span><span class="p">)</span>
+            <span class="n">new_distro</span><span class="o">.</span><span class="n">set_boot_loader</span><span class="p">(</span><span class="n">supported_distro_boot_loaders</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="n">boot_files</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">for</span> <span class="n">boot_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">signature</span><span class="p">[</span><span class="s2">&quot;boot_files&quot;</span><span class="p">]:</span>
+                <span class="n">boot_files</span> <span class="o">+=</span> <span class="s1">&#39;$local_img_path/</span><span class="si">%s</span><span class="s1">=</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">boot_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">boot_file</span><span class="p">)</span>
+            <span class="n">new_distro</span><span class="o">.</span><span class="n">set_boot_files</span><span class="p">(</span><span class="n">boot_files</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">configure_tree_location</span><span class="p">(</span><span class="n">new_distro</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">distros</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_distro</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">distros_added</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_distro</span><span class="p">)</span>
+
+            <span class="c1"># see if the profile name is already used, if so, skip it and</span>
+            <span class="c1"># do not modify the existing profile</span>
+
+            <span class="n">existing_profile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">existing_profile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;creating new profile: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+                <span class="n">new_profile</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">Profile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;skipping existing profile, name already exists: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">new_profile</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">new_profile</span><span class="o">.</span><span class="n">set_distro</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">new_profile</span><span class="o">.</span><span class="n">set_autoinstall</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">autoinstall_file</span><span class="p">)</span>
+
+            <span class="c1"># depending on the name of the profile we can</span>
+            <span class="c1"># define a good virt-type for usage with koan</span>
+            <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;-xen&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">new_profile</span><span class="o">.</span><span class="n">set_virt_type</span><span class="p">(</span><span class="s2">&quot;xenpv&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;vmware&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">new_profile</span><span class="o">.</span><span class="n">set_virt_type</span><span class="p">(</span><span class="s2">&quot;vmware&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_profile</span><span class="o">.</span><span class="n">set_virt_type</span><span class="p">(</span><span class="s2">&quot;kvm&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_profile</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">distros_added</span></div>
+
+<div class="viewcode-block" id="ImportSignatureManager.learn_arch_from_tree"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.learn_arch_from_tree">[docs]</a>    <span class="k">def</span> <span class="nf">learn_arch_from_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If a distribution is imported from DVD, there is a good chance the path doesn&#39;t</span>
+<span class="sd">        contain the arch and we should add it back in so that it&#39;s part of the</span>
+<span class="sd">        meaningful name ... so this code helps figure out the arch name.  This is important</span>
+<span class="sd">        for producing predictable distro names (and profile names) from differing import sources</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># FIXME : this is called only once, should not be a walk</span>
+        <span class="n">import_walker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch_walker</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;amd64&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;x86_64&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;i686&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;i386&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;i586&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;i386&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;x86&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;i386&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="ImportSignatureManager.arch_walker"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.arch_walker">[docs]</a>    <span class="k">def</span> <span class="nf">arch_walker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">fnames</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function for recursively searching through a directory for</span>
+<span class="sd">        a kernel file matching a given architecture, called by</span>
+<span class="sd">        learn_arch_from_tree()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">re_krn</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">signature</span><span class="p">[</span><span class="s2">&quot;kernel_arch&quot;</span><span class="p">])</span>
+
+        <span class="c1"># try to find a kernel header RPM and then look at it&#39;s arch.</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fnames</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">re_krn</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">signature</span><span class="p">[</span><span class="s2">&quot;kernel_arch_regex&quot;</span><span class="p">]:</span>
+                    <span class="n">re_krn2</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">signature</span><span class="p">[</span><span class="s2">&quot;kernel_arch_regex&quot;</span><span class="p">])</span>
+                    <span class="n">krn_lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_lines</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">krn_lines</span><span class="p">:</span>
+                        <span class="n">m</span> <span class="o">=</span> <span class="n">re_krn2</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">groups</span><span class="p">():</span>
+                                <span class="n">group</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                                <span class="k">if</span> <span class="n">group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_valid_arches</span><span class="p">():</span>
+                                    <span class="n">foo</span><span class="p">[</span><span class="n">group</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">arch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_valid_arches</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">arch</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                            <span class="n">foo</span><span class="p">[</span><span class="n">arch</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                            <span class="k">break</span>
+                    <span class="k">for</span> <span class="n">arch</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;i686&quot;</span><span class="p">,</span> <span class="s2">&quot;amd64&quot;</span><span class="p">]:</span>
+                        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">arch</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                            <span class="n">foo</span><span class="p">[</span><span class="n">arch</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                            <span class="k">break</span></div>
+
+<div class="viewcode-block" id="ImportSignatureManager.get_proposed_name"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.get_proposed_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_proposed_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given a directory name where we have a kernel/initrd pair, try to autoname</span>
+<span class="sd">        the distribution (and profile) object based on the contents of that path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_root</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># remove the part that says /var/www/cobbler/distro_mirror/name</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">5</span><span class="p">:])</span>
+
+        <span class="k">if</span> <span class="n">kernel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kernel</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;PAE&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;PAE&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">+=</span> <span class="s2">&quot;-PAE&quot;</span>
+            <span class="k">if</span> <span class="n">kernel</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;xen&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;xen&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">+=</span> <span class="s2">&quot;-xen&quot;</span>
+
+        <span class="c1"># Clear out some cruft from the proposed name</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;-netboot&quot;</span><span class="p">,</span> <span class="s2">&quot;-ubuntu-installer&quot;</span><span class="p">,</span> <span class="s2">&quot;-amd64&quot;</span><span class="p">,</span> <span class="s2">&quot;-i386&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;-images&quot;</span><span class="p">,</span> <span class="s2">&quot;-pxeboot&quot;</span><span class="p">,</span> <span class="s2">&quot;-install&quot;</span><span class="p">,</span> <span class="s2">&quot;-isolinux&quot;</span><span class="p">,</span> <span class="s2">&quot;-boot&quot;</span><span class="p">,</span> <span class="s2">&quot;-suseboot&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;-loader&quot;</span><span class="p">,</span> <span class="s2">&quot;-os&quot;</span><span class="p">,</span> <span class="s2">&quot;-tree&quot;</span><span class="p">,</span> <span class="s2">&quot;var-www-cobbler-&quot;</span><span class="p">,</span> <span class="s2">&quot;distro_mirror-&quot;</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="c1"># remove any architecture name related string, as real arch will be appended later</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;chrp&quot;</span><span class="p">,</span> <span class="s2">&quot;ppc64&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">separator</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">arch</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;i386&quot;</span><span class="p">,</span> <span class="s2">&quot;x86_64&quot;</span><span class="p">,</span> <span class="s2">&quot;ia64&quot;</span><span class="p">,</span> <span class="s2">&quot;ppc64le&quot;</span><span class="p">,</span> <span class="s2">&quot;ppc64el&quot;</span><span class="p">,</span> <span class="s2">&quot;ppc64&quot;</span><span class="p">,</span> <span class="s2">&quot;ppc32&quot;</span><span class="p">,</span> <span class="s2">&quot;ppc&quot;</span><span class="p">,</span> <span class="s2">&quot;x86&quot;</span><span class="p">,</span> <span class="s2">&quot;s390x&quot;</span><span class="p">,</span> <span class="s2">&quot;s390&quot;</span><span class="p">,</span> <span class="s2">&quot;386&quot;</span><span class="p">,</span> <span class="s2">&quot;amd&quot;</span><span class="p">]:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">separator</span><span class="p">,</span> <span class="n">arch</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">name</span></div>
+
+<div class="viewcode-block" id="ImportSignatureManager.configure_tree_location"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.configure_tree_location">[docs]</a>    <span class="k">def</span> <span class="nf">configure_tree_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distro</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Once a distribution is identified, find the part of the distribution</span>
+<span class="sd">        that has the URL in it that we want to use for automating the Linux</span>
+<span class="sd">        distribution installation, and create a autoinstall_meta variable $tree</span>
+<span class="sd">        that contains this.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rootdir</span>
+
+        <span class="c1"># how we set the tree depends on whether an explicit network_root was specified</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dest_link</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;links&quot;</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="c1"># create the links directory only if we are mirroring because with</span>
+            <span class="c1"># SELinux Apache can&#39;t symlink to NFS (without some doing)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest_link</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;trying symlink: </span><span class="si">%s</span><span class="s2"> -&gt; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">base</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">dest_link</span><span class="p">)))</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">dest_link</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="c1"># this shouldn&#39;t happen but I&#39;ve seen it ... debug ...</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;symlink creation failed: </span><span class="si">%(base)s</span><span class="s2">, </span><span class="si">%(dest)s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">{</span><span class="s2">&quot;base&quot;</span><span class="p">:</span> <span class="n">base</span><span class="p">,</span> <span class="s2">&quot;dest&quot;</span><span class="p">:</span> <span class="n">dest_link</span><span class="p">})</span>
+            <span class="n">tree</span> <span class="o">=</span> <span class="s2">&quot;http://@@http_server@@/cblr/links/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_install_tree</span><span class="p">(</span><span class="n">distro</span><span class="p">,</span> <span class="n">tree</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># where we assign the automated installation file source is relative</span>
+            <span class="c1"># to our current directory and the input start directory in the crawl.</span>
+            <span class="c1"># We find the path segments between and tack them on the network source</span>
+            <span class="c1"># path to find the explicit network path to the distro that Anaconda</span>
+            <span class="c1"># can digest.</span>
+            <span class="n">tail</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">path_tail</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">base</span><span class="p">)</span>
+            <span class="n">tree</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_root</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">tail</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_install_tree</span><span class="p">(</span><span class="n">distro</span><span class="p">,</span> <span class="n">tree</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ImportSignatureManager.set_install_tree"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.set_install_tree">[docs]</a>    <span class="k">def</span> <span class="nf">set_install_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simple helper function to set the tree automated installation metavariable</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">distro</span><span class="o">.</span><span class="n">autoinstall_meta</span><span class="p">[</span><span class="s2">&quot;tree&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">url</span></div>
+
+<span class="c1"># ==========================================================================</span>
+<span class="c1"># Repo Functions</span>
+
+<div class="viewcode-block" id="ImportSignatureManager.repo_finder"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.repo_finder">[docs]</a>    <span class="k">def</span> <span class="nf">repo_finder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distros_added</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This routine looks through all distributions and tries to find</span>
+<span class="sd">        any applicable repositories in those distributions for post-install</span>
+<span class="sd">        usage.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">repo_breed</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_valid_repo_breeds</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;checking for </span><span class="si">%s</span><span class="s2"> repo(s)&quot;</span> <span class="o">%</span> <span class="n">repo_breed</span><span class="p">)</span>
+            <span class="n">repo_adder</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">repo_breed</span> <span class="o">==</span> <span class="s2">&quot;yum&quot;</span><span class="p">:</span>
+                <span class="n">repo_adder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yum_repo_adder</span>
+            <span class="k">elif</span> <span class="n">repo_breed</span> <span class="o">==</span> <span class="s2">&quot;rhn&quot;</span><span class="p">:</span>
+                <span class="n">repo_adder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rhn_repo_adder</span>
+            <span class="k">elif</span> <span class="n">repo_breed</span> <span class="o">==</span> <span class="s2">&quot;rsync&quot;</span><span class="p">:</span>
+                <span class="n">repo_adder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rsync_repo_adder</span>
+            <span class="k">elif</span> <span class="n">repo_breed</span> <span class="o">==</span> <span class="s2">&quot;apt&quot;</span><span class="p">:</span>
+                <span class="n">repo_adder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apt_repo_adder</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;skipping unknown/unsupported repo breed: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">repo_breed</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="k">for</span> <span class="n">distro</span> <span class="ow">in</span> <span class="n">distros_added</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">distro</span><span class="o">.</span><span class="n">kernel</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;distro_mirror&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">repo_adder</span><span class="p">(</span><span class="n">distro</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">distros</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">distro</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_triggers</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;skipping distro </span><span class="si">%s</span><span class="s2"> since it isn&#39;t mirrored locally&quot;</span> <span class="o">%</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+    <span class="c1"># ==========================================================================</span>
+    <span class="c1"># yum-specific</span>
+
+<div class="viewcode-block" id="ImportSignatureManager.yum_repo_adder"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.yum_repo_adder">[docs]</a>    <span class="k">def</span> <span class="nf">yum_repo_adder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distro</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For yum, we recursively scan the rootdir for repos to add</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;starting descent into </span><span class="si">%s</span><span class="s2"> for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rootdir</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        <span class="n">import_walker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rootdir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">yum_repo_scanner</span><span class="p">,</span> <span class="n">distro</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ImportSignatureManager.yum_repo_scanner"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.yum_repo_scanner">[docs]</a>    <span class="k">def</span> <span class="nf">yum_repo_scanner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">fnames</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This is an import_walker routine that looks for potential yum repositories</span>
+<span class="sd">        to be added to the configuration for post-install usage.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">matches</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fnames</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;base&quot;</span> <span class="ow">or</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;repodata&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;processing repo at : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dirname</span><span class="p">)</span>
+                <span class="c1"># only run the repo scanner on directories that contain a comps.xml</span>
+                <span class="n">gloob1</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">/*comps*.xml&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gloob1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">dirname</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;looks like we&#39;ve already scanned here: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dirname</span><span class="p">)</span>
+                        <span class="k">continue</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;need to process repo/comps: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dirname</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">yum_process_comps_file</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">distro</span><span class="p">)</span>
+                    <span class="n">matches</span><span class="p">[</span><span class="n">dirname</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;directory </span><span class="si">%s</span><span class="s2"> is missing xml comps file, skipping&quot;</span> <span class="o">%</span> <span class="n">dirname</span><span class="p">)</span>
+                    <span class="k">continue</span></div>
+
+<div class="viewcode-block" id="ImportSignatureManager.yum_process_comps_file"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.yum_process_comps_file">[docs]</a>    <span class="k">def</span> <span class="nf">yum_process_comps_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comps_path</span><span class="p">,</span> <span class="n">distro</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        When importing Fedora/EL certain parts of the install tree can also be used</span>
+<span class="sd">        as yum repos containing packages that might not yet be available via updates</span>
+<span class="sd">        in yum.  This code identifies those areas. Existing repodata will be used as-is,</span>
+<span class="sd">        but repodate is created for earlier, non-yum based, installers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">comps_path</span><span class="p">,</span> <span class="s2">&quot;repodata&quot;</span><span class="p">)):</span>
+            <span class="n">keeprepodata</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">masterdir</span> <span class="o">=</span> <span class="s2">&quot;repodata&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># older distros...</span>
+            <span class="n">masterdir</span> <span class="o">=</span> <span class="s2">&quot;base&quot;</span>
+            <span class="n">keeprepodata</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># figure out what our comps file is ...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;looking for </span><span class="si">%(p1)s</span><span class="s2">/</span><span class="si">%(p2)s</span><span class="s2">/*comps*.xml&quot;</span> <span class="o">%</span> <span class="p">{</span><span class="s2">&quot;p1&quot;</span><span class="p">:</span> <span class="n">comps_path</span><span class="p">,</span> <span class="s2">&quot;p2&quot;</span><span class="p">:</span> <span class="n">masterdir</span><span class="p">})</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">/*comps*.xml&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">comps_path</span><span class="p">,</span> <span class="n">masterdir</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;no comps found here: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">comps_path</span><span class="p">,</span> <span class="n">masterdir</span><span class="p">))</span>
+            <span class="k">return</span>      <span class="c1"># no comps xml file found</span>
+
+        <span class="c1"># pull the filename from the longer part</span>
+        <span class="n">comps_file</span> <span class="o">=</span> <span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># store the yum configs on the filesystem so we can use them later.</span>
+            <span class="c1"># and configure them in the automated installation file post section,</span>
+            <span class="c1"># etc</span>
+
+            <span class="n">counter</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">source_repos</span><span class="p">)</span>
+
+            <span class="c1"># find path segment for yum_url (changing filesystem path to http:// trailing fragment)</span>
+            <span class="n">seg</span> <span class="o">=</span> <span class="n">comps_path</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;distro_mirror&quot;</span><span class="p">)</span>
+            <span class="n">urlseg</span> <span class="o">=</span> <span class="n">comps_path</span><span class="p">[(</span><span class="n">seg</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="s2">&quot;distro_mirror&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):]</span>
+
+            <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;distro_mirror&quot;</span><span class="p">,</span> <span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">-</span><span class="si">%s</span><span class="s2">.repo&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">counter</span><span class="p">))</span>
+
+            <span class="n">repo_url</span> <span class="o">=</span> <span class="s2">&quot;http://@@http_server@@/cobbler/distro_mirror/config/</span><span class="si">%s</span><span class="s2">-</span><span class="si">%s</span><span class="s2">.repo&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">counter</span><span class="p">)</span>
+            <span class="n">repo_url2</span> <span class="o">=</span> <span class="s2">&quot;http://@@http_server@@/cobbler/distro_mirror/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">urlseg</span><span class="p">)</span>
+
+            <span class="n">distro</span><span class="o">.</span><span class="n">source_repos</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">repo_url</span><span class="p">,</span> <span class="n">repo_url2</span><span class="p">])</span>
+
+            <span class="n">config_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">config_dir</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">config_dir</span><span class="p">)</span>
+
+            <span class="c1"># NOTE: the following file is now a Cheetah template, so it can be remapped</span>
+            <span class="c1"># during sync, that&#39;s why we have the @@http_server@@ left as templating magic.</span>
+            <span class="c1"># repo_url2 is actually no longer used. (?)</span>
+
+            <span class="n">config_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span>
+            <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;[core-</span><span class="si">%s</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">counter</span><span class="p">)</span>
+            <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;name=core-</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">counter</span><span class="p">)</span>
+            <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;baseurl=http://@@http_server@@/cobbler/distro_mirror/</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">urlseg</span><span class="p">))</span>
+            <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;enabled=1</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;gpgcheck=0</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">config_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;priority=$yum_distro_priority</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">config_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="c1"># don&#39;t run creatrepo twice -- this can happen easily for Xen and PXE, when</span>
+            <span class="c1"># they&#39;ll share same repo files.</span>
+            <span class="k">if</span> <span class="n">keeprepodata</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Keeping repodata as-is :</span><span class="si">%s</span><span class="s2">/repodata&quot;</span> <span class="o">%</span> <span class="n">comps_path</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">found_repos</span><span class="p">[</span><span class="n">comps_path</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">elif</span> <span class="n">comps_path</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">found_repos</span><span class="p">:</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">remove_yum_olddata</span><span class="p">(</span><span class="n">comps_path</span><span class="p">)</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;createrepo </span><span class="si">%s</span><span class="s2"> --groupfile </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">createrepo_flags</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">comps_path</span><span class="p">,</span> <span class="n">masterdir</span><span class="p">,</span> <span class="n">comps_file</span><span class="p">),</span> <span class="n">comps_path</span><span class="p">)</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">found_repos</span><span class="p">[</span><span class="n">comps_path</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="c1"># for older distros, if we have a &quot;base&quot; dir parallel with &quot;repodata&quot;, we need to copy comps.xml up one...</span>
+                <span class="n">p1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">comps_path</span><span class="p">,</span> <span class="s2">&quot;repodata&quot;</span><span class="p">,</span> <span class="s2">&quot;comps.xml&quot;</span><span class="p">)</span>
+                <span class="n">p2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">comps_path</span><span class="p">,</span> <span class="s2">&quot;base&quot;</span><span class="p">,</span> <span class="s2">&quot;comps.xml&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">p2</span><span class="p">):</span>
+                    <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">)</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;error launching createrepo (not installed?), ignoring&quot;</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">log_exc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span></div>
+
+    <span class="c1"># ==========================================================================</span>
+    <span class="c1"># apt-specific</span>
+
+<div class="viewcode-block" id="ImportSignatureManager.apt_repo_adder"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.apt_repo_adder">[docs]</a>    <span class="k">def</span> <span class="nf">apt_repo_adder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distro</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;adding apt repo for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="c1"># Obtain repo mirror from APT if available</span>
+        <span class="n">mirror</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">apt_available</span><span class="p">:</span>
+            <span class="c1"># Example returned URL: http://us.archive.ubuntu.com/ubuntu</span>
+            <span class="n">mirror</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_repo_mirror_from_apt</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mirror</span><span class="p">:</span>
+            <span class="n">mirror</span> <span class="o">=</span> <span class="s2">&quot;http://archive.ubuntu.com/ubuntu&quot;</span>
+
+        <span class="n">repo</span> <span class="o">=</span> <span class="n">item_repo</span><span class="o">.</span><span class="n">Repo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="p">)</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">set_breed</span><span class="p">(</span><span class="s2">&quot;apt&quot;</span><span class="p">)</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">set_arch</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">arch</span><span class="p">)</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">set_keep_updated</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">set_apt_components</span><span class="p">(</span><span class="s2">&quot;main universe&quot;</span><span class="p">)</span>        <span class="c1"># TODO: make a setting?</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">set_apt_dists</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">-updates </span><span class="si">%s</span><span class="s2">-security&quot;</span> <span class="o">%</span> <span class="p">((</span><span class="n">distro</span><span class="o">.</span><span class="n">os_version</span><span class="p">,)</span> <span class="o">*</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">set_os_version</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">os_version</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;ubuntu&quot;</span><span class="p">:</span>
+            <span class="n">repo</span><span class="o">.</span><span class="n">set_mirror</span><span class="p">(</span><span class="n">mirror</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># NOTE : The location of the mirror should come from timezone</span>
+            <span class="n">repo</span><span class="o">.</span><span class="n">set_mirror</span><span class="p">(</span><span class="s2">&quot;http://ftp.</span><span class="si">%s</span><span class="s2">.debian.org/debian/dists/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s1">&#39;us&#39;</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">os_version</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Added repos for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">repos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">repos</span><span class="p">()</span>
+        <span class="n">repos</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">repo</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+        <span class="c1"># FIXME:</span>
+        <span class="c1"># Add the found/generated repos to the profiles</span>
+        <span class="c1"># that were created during the import process</span>
+
+<div class="viewcode-block" id="ImportSignatureManager.get_repo_mirror_from_apt"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.get_repo_mirror_from_apt">[docs]</a>    <span class="k">def</span> <span class="nf">get_repo_mirror_from_apt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This tries to determine the apt mirror/archive to use (when processing repos)</span>
+<span class="sd">        if the host machine is Debian or Ubuntu.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sources</span> <span class="o">=</span> <span class="n">sourceslist</span><span class="o">.</span><span class="n">SourcesList</span><span class="p">()</span>
+            <span class="n">release</span> <span class="o">=</span> <span class="n">debdistro</span><span class="o">.</span><span class="n">get_distro</span><span class="p">()</span>
+            <span class="n">release</span><span class="o">.</span><span class="n">get_sources</span><span class="p">(</span><span class="n">sources</span><span class="p">)</span>
+            <span class="n">mirrors</span> <span class="o">=</span> <span class="n">release</span><span class="o">.</span><span class="n">get_server_list</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">mirror</span> <span class="ow">in</span> <span class="n">mirrors</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">mirror</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+                    <span class="n">mirror</span> <span class="o">=</span> <span class="n">mirror</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">break</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="n">mirror</span></div>
+
+    <span class="c1"># ==========================================================================</span>
+    <span class="c1"># rhn-specific</span>
+
+<div class="viewcode-block" id="ImportSignatureManager.rhn_repo_adder"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.rhn_repo_adder">[docs]</a>    <span class="k">def</span> <span class="nf">rhn_repo_adder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distro</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; not currently used &quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+    <span class="c1"># ==========================================================================</span>
+    <span class="c1"># rsync-specific</span>
+
+<div class="viewcode-block" id="ImportSignatureManager.rsync_repo_adder"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.ImportSignatureManager.rsync_repo_adder">[docs]</a>    <span class="k">def</span> <span class="nf">rsync_repo_adder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distro</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; not currently used &quot;&quot;&quot;</span>
+        <span class="k">return</span></div></div>
+
+<span class="c1"># ==========================================================================</span>
+
+
+<div class="viewcode-block" id="get_import_manager"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.managers.html#cobbler.modules.managers.import_signatures.get_import_manager">[docs]</a><span class="k">def</span> <span class="nf">get_import_manager</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ImportSignatureManager</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,364 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.actions.status &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.actions.status</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.actions.status</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Reports on automatic installation activity by examining the logs in</span>
+<span class="sd">/var/log/cobbler.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">from</span> <span class="nn">past.utils</span> <span class="k">import</span> <span class="n">old_div</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">clogger</span>
+
+<span class="c1"># ARRAY INDEXES</span>
+<span class="n">MOST_RECENT_START</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">MOST_RECENT_STOP</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">MOST_RECENT_TARGET</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">SEEN_START</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">SEEN_STOP</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">STATE</span> <span class="o">=</span> <span class="mi">5</span>
+
+
+<div class="viewcode-block" id="CobblerStatusReport"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.status.CobblerStatusReport">[docs]</a><span class="k">class</span> <span class="nc">CobblerStatusReport</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="n">collection_mgr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ip_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+        <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span> <span class="o">=</span> <span class="n">clogger</span><span class="o">.</span><span class="n">Logger</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+
+    <span class="c1"># -------------------------------------------------------</span>
+
+<div class="viewcode-block" id="CobblerStatusReport.scan_logfiles"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.status.CobblerStatusReport.scan_logfiles">[docs]</a>    <span class="k">def</span> <span class="nf">scan_logfiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Scan the install log-files - starting with the oldest file.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">unsorted_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;/var/log/cobbler/install.log*&quot;</span><span class="p">)</span>
+        <span class="n">files_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">log_id_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;install.log.(\d+)&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">unsorted_files</span><span class="p">:</span>
+            <span class="n">id_match</span> <span class="o">=</span> <span class="n">log_id_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">id_match</span><span class="p">:</span>
+                <span class="n">files_dict</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">id_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))]</span> <span class="o">=</span> <span class="n">fname</span>
+
+        <span class="n">files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">sorted_ids</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">files_dict</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">files_dict</span><span class="o">.</span><span class="n">get</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">file_id</span> <span class="ow">in</span> <span class="n">sorted_ids</span><span class="p">:</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">files_dict</span><span class="p">[</span><span class="n">file_id</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s1">&#39;/var/log/cobbler/install.log&#39;</span> <span class="ow">in</span> <span class="n">unsorted_files</span><span class="p">:</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;/var/log/cobbler/install.log&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.gz&#39;</span><span class="p">):</span>
+                <span class="n">fd</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+                <span class="n">tokens</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="p">(</span><span class="n">profile_or_system</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ip</span><span class="p">,</span> <span class="n">start_or_stop</span><span class="p">,</span> <span class="n">ts</span><span class="p">)</span> <span class="o">=</span> <span class="n">tokens</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="p">(</span><span class="n">profile_or_system</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ip</span><span class="p">,</span> <span class="n">start_or_stop</span><span class="p">,</span> <span class="n">ts</span><span class="p">)</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+    <span class="c1"># ------------------------------------------------------</span>
+
+<div class="viewcode-block" id="CobblerStatusReport.catalog"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.status.CobblerStatusReport.catalog">[docs]</a>    <span class="k">def</span> <span class="nf">catalog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">profile_or_system</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ip</span><span class="p">,</span> <span class="n">start_or_stop</span><span class="p">,</span> <span class="n">ts</span><span class="p">):</span>
+        <span class="n">ip_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip_data</span>
+
+        <span class="k">if</span> <span class="n">ip</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ip_data</span><span class="p">:</span>
+            <span class="n">ip_data</span><span class="p">[</span><span class="n">ip</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;?&quot;</span><span class="p">]</span>
+        <span class="n">elem</span> <span class="o">=</span> <span class="n">ip_data</span><span class="p">[</span><span class="n">ip</span><span class="p">]</span>
+
+        <span class="n">ts</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+
+        <span class="n">mrstart</span> <span class="o">=</span> <span class="n">elem</span><span class="p">[</span><span class="n">MOST_RECENT_START</span><span class="p">]</span>
+        <span class="n">mrstop</span> <span class="o">=</span> <span class="n">elem</span><span class="p">[</span><span class="n">MOST_RECENT_STOP</span><span class="p">]</span>
+        <span class="n">mrtarg</span> <span class="o">=</span> <span class="n">elem</span><span class="p">[</span><span class="n">MOST_RECENT_TARGET</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">start_or_stop</span> <span class="o">==</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mrstart</span> <span class="o">&lt;</span> <span class="n">ts</span><span class="p">:</span>
+                <span class="n">mrstart</span> <span class="o">=</span> <span class="n">ts</span>
+                <span class="n">mrtarg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">profile_or_system</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                <span class="n">elem</span><span class="p">[</span><span class="n">SEEN_START</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">start_or_stop</span> <span class="o">==</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mrstop</span> <span class="o">&lt;</span> <span class="n">ts</span><span class="p">:</span>
+                <span class="n">mrstop</span> <span class="o">=</span> <span class="n">ts</span>
+                <span class="n">mrtarg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">profile_or_system</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                <span class="n">elem</span><span class="p">[</span><span class="n">SEEN_STOP</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">elem</span><span class="p">[</span><span class="n">MOST_RECENT_START</span><span class="p">]</span> <span class="o">=</span> <span class="n">mrstart</span>
+        <span class="n">elem</span><span class="p">[</span><span class="n">MOST_RECENT_STOP</span><span class="p">]</span> <span class="o">=</span> <span class="n">mrstop</span>
+        <span class="n">elem</span><span class="p">[</span><span class="n">MOST_RECENT_TARGET</span><span class="p">]</span> <span class="o">=</span> <span class="n">mrtarg</span></div>
+
+    <span class="c1"># -------------------------------------------------------</span>
+
+<div class="viewcode-block" id="CobblerStatusReport.process_results"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.status.CobblerStatusReport.process_results">[docs]</a>    <span class="k">def</span> <span class="nf">process_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># FIXME: this should update the times here</span>
+        <span class="n">tnow</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">ip</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ip_data</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">elem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip_data</span><span class="p">[</span><span class="n">ip</span><span class="p">]</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="n">MOST_RECENT_START</span><span class="p">])</span>
+            <span class="n">stop</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="n">MOST_RECENT_STOP</span><span class="p">])</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">stop</span> <span class="o">&gt;</span> <span class="n">start</span><span class="p">):</span>
+                <span class="n">elem</span><span class="p">[</span><span class="n">STATE</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;finished&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="n">tnow</span> <span class="o">-</span> <span class="n">start</span>
+                <span class="nb">min</span> <span class="o">=</span> <span class="n">old_div</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+                <span class="n">sec</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">%</span> <span class="mi">60</span>
+                <span class="k">if</span> <span class="nb">min</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+                    <span class="n">elem</span><span class="p">[</span><span class="n">STATE</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unknown/stalled&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">elem</span><span class="p">[</span><span class="n">STATE</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;installing (</span><span class="si">%s</span><span class="s2">m </span><span class="si">%s</span><span class="s2">s)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="n">sec</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip_data</span></div>
+
+<div class="viewcode-block" id="CobblerStatusReport.get_printable_results"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.status.CobblerStatusReport.get_printable_results">[docs]</a>    <span class="k">def</span> <span class="nf">get_printable_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%-15s</span><span class="s2">|</span><span class="si">%-20s</span><span class="s2">|</span><span class="si">%-17s</span><span class="s2">|</span><span class="si">%-17s</span><span class="s2">&quot;</span>
+        <span class="n">ip_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip_data</span>
+        <span class="n">ips</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ip_data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">ips</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;ip&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;target&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;start&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;state&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="nb">format</span> <span class="o">%</span> <span class="n">line</span>
+        <span class="k">for</span> <span class="n">ip</span> <span class="ow">in</span> <span class="n">ips</span><span class="p">:</span>
+            <span class="n">elem</span> <span class="o">=</span> <span class="n">ip_data</span><span class="p">[</span><span class="n">ip</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">elem</span><span class="p">[</span><span class="n">MOST_RECENT_START</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="n">MOST_RECENT_START</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="s2">&quot;Unknown&quot;</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">ip</span><span class="p">,</span>
+                <span class="n">elem</span><span class="p">[</span><span class="n">MOST_RECENT_TARGET</span><span class="p">],</span>
+                <span class="n">start</span><span class="p">,</span>
+                <span class="n">elem</span><span class="p">[</span><span class="n">STATE</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">buf</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">format</span> <span class="o">%</span> <span class="n">line</span>
+        <span class="k">return</span> <span class="n">buf</span></div>
+
+    <span class="c1"># -------------------------------------------------------</span>
+
+<div class="viewcode-block" id="CobblerStatusReport.run"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.status.CobblerStatusReport.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate and print a automatic installation status report.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_logfiles</span><span class="p">()</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_results</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_printable_results</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">results</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

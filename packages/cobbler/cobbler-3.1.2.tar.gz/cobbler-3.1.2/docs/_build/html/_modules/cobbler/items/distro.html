@@ -1,0 +1,405 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.items.distro &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.items.distro</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.items.distro</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">cobbler.items</span> <span class="k">import</span> <span class="n">item</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">CX</span>
+<span class="kn">from</span> <span class="nn">cobbler.utils</span> <span class="k">import</span> <span class="n">_</span>
+
+<span class="c1"># this data structure is described in item.py</span>
+<span class="n">FIELDS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># non-editable in UI (internal)</span>
+    <span class="p">[</span><span class="s2">&quot;ctime&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;depth&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Depth&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;mtime&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;source_repos&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Source Repos&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;tree_build_time&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Tree Build Time&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+
+    <span class="c1"># editable in UI</span>
+    <span class="p">[</span><span class="s2">&quot;arch&quot;</span><span class="p">,</span> <span class="s1">&#39;x86_64&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Architecture&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_valid_archs</span><span class="p">(),</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;autoinstall_meta&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Automatic Installation Template Metadata&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: dog=fang agent=86&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;boot_files&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;TFTP Boot Files&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Files copied into tftpboot beyond the kernel/initrd&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;boot_loader&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Boot loader&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Network installation boot loader&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_supported_system_boot_loaders</span><span class="p">(),</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;breed&quot;</span><span class="p">,</span> <span class="s1">&#39;redhat&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Breed&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;What is the type of distribution?&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_valid_breeds</span><span class="p">(),</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Comment&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Free form text description&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;fetchable_files&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Fetchable Files&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Templates for tftp or wget/curl&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;initrd&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Initrd&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Absolute path to kernel on filesystem&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;kernel&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Kernel&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Absolute path to kernel on filesystem&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Kernel Options&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: selinux=permissive&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;kernel_options_post&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Kernel Options (Post Install)&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: clocksource=pit noapic&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;mgmt_classes&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Management Classes&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Management classes for external config management&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: Fedora-11-i386&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;os_version&quot;</span><span class="p">,</span> <span class="s2">&quot;virtio26&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;OS Version&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Needed for some virtualization optimizations&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_valid_os_versions</span><span class="p">(),</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;owners&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:default_ownership&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Owners&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Owners list for authz_ownership (space delimited)&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;redhat_management_key&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Redhat Management Key&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Registration key for RHN, Spacewalk, or Satellite&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;template_files&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Template Files&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;File mappings for built-in config management&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">]</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="Distro"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro">[docs]</a><span class="k">class</span> <span class="nc">Distro</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A cobbler distribution object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">TYPE_NAME</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;distro&quot;</span><span class="p">)</span>
+    <span class="n">COLLECTION_TYPE</span> <span class="o">=</span> <span class="s2">&quot;distro&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Distro</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel_options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel_options_post</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoinstall_meta</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_repos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fetchable_files</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boot_files</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">template_files</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1">#</span>
+    <span class="c1"># override some base class methods first (item.Item)</span>
+    <span class="c1">#</span>
+
+<div class="viewcode-block" id="Distro.make_clone"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.make_clone">[docs]</a>    <span class="k">def</span> <span class="nf">make_clone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">cloned</span> <span class="o">=</span> <span class="n">Distro</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="p">)</span>
+        <span class="n">cloned</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">_dict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cloned</span></div>
+
+<div class="viewcode-block" id="Distro.get_fields"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.get_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the list of fields and their properties</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">FIELDS</span></div>
+
+<div class="viewcode-block" id="Distro.get_parent"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.get_parent">[docs]</a>    <span class="k">def</span> <span class="nf">get_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Distros don&#39;t have parent objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Distro.check_if_valid"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.check_if_valid">[docs]</a>    <span class="k">def</span> <span class="nf">check_if_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;name is required&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Error with distro </span><span class="si">%s</span><span class="s2"> - kernel is required&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">initrd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Error with distro </span><span class="si">%s</span><span class="s2"> - initrd is required&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">utils</span><span class="o">.</span><span class="n">file_is_remote</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">utils</span><span class="o">.</span><span class="n">remote_file_exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Error with distro </span><span class="si">%s</span><span class="s2"> - kernel &#39;</span><span class="si">%s</span><span class="s2">&#39; not found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Error with distro </span><span class="si">%s</span><span class="s2"> - kernel &#39;</span><span class="si">%s</span><span class="s2">&#39; not found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">utils</span><span class="o">.</span><span class="n">file_is_remote</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initrd</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">utils</span><span class="o">.</span><span class="n">remote_file_exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initrd</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Error with distro </span><span class="si">%s</span><span class="s2"> - initrd path &#39;</span><span class="si">%s</span><span class="s2">&#39; not found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">initrd</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initrd</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Error with distro </span><span class="si">%s</span><span class="s2"> - initrd path &#39;</span><span class="si">%s</span><span class="s2">&#39; not found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">initrd</span><span class="p">))</span></div>
+
+    <span class="c1">#</span>
+    <span class="c1"># specific methods for item.Distro</span>
+    <span class="c1">#</span>
+
+<div class="viewcode-block" id="Distro.set_kernel"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.set_kernel">[docs]</a>    <span class="k">def</span> <span class="nf">set_kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kernel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Specifies a kernel.  The kernel parameter is a full path, a filename</span>
+<span class="sd">        in the configured kernel directory (set in /etc/cobbler.conf) or a</span>
+<span class="sd">        directory path that would contain a selectable kernel.  Kernel</span>
+<span class="sd">        naming conventions are checked, see docs in the utils module</span>
+<span class="sd">        for find_kernel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">kernel</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">kernel</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;kernel not specified&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">utils</span><span class="o">.</span><span class="n">find_kernel</span><span class="p">(</span><span class="n">kernel</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span> <span class="o">=</span> <span class="n">kernel</span>
+            <span class="k">return</span>
+        <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;kernel not found: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">kernel</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Distro.set_tree_build_time"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.set_tree_build_time">[docs]</a>    <span class="k">def</span> <span class="nf">set_tree_build_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datestamp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the import time of the distro.</span>
+<span class="sd">        If not imported, this field is not meaningful.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree_build_time</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">datestamp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Distro.set_breed"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.set_breed">[docs]</a>    <span class="k">def</span> <span class="nf">set_breed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">breed</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_breed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">breed</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Distro.set_os_version"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.set_os_version">[docs]</a>    <span class="k">def</span> <span class="nf">set_os_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">os_version</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_os_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">os_version</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Distro.set_initrd"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.set_initrd">[docs]</a>    <span class="k">def</span> <span class="nf">set_initrd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initrd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Specifies an initrd image.  Path search works as in set_kernel.</span>
+<span class="sd">        File must be named appropriately.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">initrd</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">initrd</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;initrd not specified&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">utils</span><span class="o">.</span><span class="n">find_initrd</span><span class="p">(</span><span class="n">initrd</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">initrd</span> <span class="o">=</span> <span class="n">initrd</span>
+            <span class="k">return</span>
+        <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;initrd not found&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Distro.set_source_repos"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.set_source_repos">[docs]</a>    <span class="k">def</span> <span class="nf">set_source_repos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A list of http:// URLs on the cobbler server that point to</span>
+<span class="sd">        yum configuration files that can be used to</span>
+<span class="sd">        install core packages.  Use by cobbler import only.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_repos</span> <span class="o">=</span> <span class="n">repos</span></div>
+
+<div class="viewcode-block" id="Distro.set_arch"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.set_arch">[docs]</a>    <span class="k">def</span> <span class="nf">set_arch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The field is mainly relevant to PXE provisioning.</span>
+
+<span class="sd">        Using an alternative distro type allows for dhcpd.conf templating</span>
+<span class="sd">        to &quot;do the right thing&quot; with those systems -- this also relates to</span>
+<span class="sd">        bootloader configuration files which have different syntax for different</span>
+<span class="sd">        distro types (because of the bootloaders).</span>
+
+<span class="sd">        This field is named &quot;arch&quot; because mainly on Linux, we only care about</span>
+<span class="sd">        the architecture, though if (in the future) new provisioning types</span>
+<span class="sd">        are added, an arch value might be something like &quot;bsd_x86&quot;.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_arch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arch</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Distro.get_arch"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.get_arch">[docs]</a>    <span class="k">def</span> <span class="nf">get_arch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the architecture of the distribution</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arch</span></div>
+
+<div class="viewcode-block" id="Distro.set_supported_boot_loaders"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.set_supported_boot_loaders">[docs]</a>    <span class="k">def</span> <span class="nf">set_supported_boot_loaders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">supported_boot_loaders</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Some distributions, particularly on powerpc, can only be netbooted using</span>
+<span class="sd">        specific bootloaders.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">supported_boot_loaders</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;No valid supported boot loaders specified for distro &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supported_boot_loaders</span> <span class="o">=</span> <span class="n">supported_boot_loaders</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boot_loader</span> <span class="o">=</span> <span class="n">supported_boot_loaders</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Distro.set_boot_loader"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.set_boot_loader">[docs]</a>    <span class="k">def</span> <span class="nf">set_boot_loader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># If we have already loaded the supported boot loaders from</span>
+            <span class="c1"># the signature, use that data</span>
+            <span class="n">supported_distro_boot_loaders</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">supported_boot_loaders</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="c1"># otherwise, refresh from the signatures / defaults</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">supported_boot_loaders</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_supported_distro_boot_loaders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">supported_distro_boot_loaders</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">supported_boot_loaders</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supported_distro_boot_loaders</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Invalid boot loader name: </span><span class="si">%s</span><span class="s2">. Supported boot loaders are: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                       <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">supported_distro_boot_loaders</span><span class="p">))))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boot_loader</span> <span class="o">=</span> <span class="n">name</span></div>
+
+<div class="viewcode-block" id="Distro.set_redhat_management_key"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.set_redhat_management_key">[docs]</a>    <span class="k">def</span> <span class="nf">set_redhat_management_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">management_key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">management_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">redhat_management_key</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">redhat_management_key</span> <span class="o">=</span> <span class="n">management_key</span></div>
+
+<div class="viewcode-block" id="Distro.get_redhat_management_key"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.distro.Distro.get_redhat_management_key">[docs]</a>    <span class="k">def</span> <span class="nf">get_redhat_management_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">redhat_management_key</span></div></div>
+
+<span class="c1"># EOF</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

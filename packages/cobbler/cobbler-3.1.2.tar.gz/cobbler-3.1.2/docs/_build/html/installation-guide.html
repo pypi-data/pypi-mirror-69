@@ -1,0 +1,386 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2. Install Guide &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3. Cobbler CLI" href="cobbler.html" />
+    <link rel="prev" title="1. Quickstart" href="quickstart-guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Install Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">2.1. Prerequisites</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#packages">2.1.1. Packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#source">2.1.2. Source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">2.2. Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">2.2.1. Packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#packages-from-source">2.2.2. Packages from source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rpm">2.3. RPM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deb">2.4. DEB</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">2.4.1. Source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relocating-your-installation">2.5. Relocating your installation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>2. Install Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/installation-guide.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="install-guide">
+<h1>2. Install Guide<a class="headerlink" href="#install-guide" title="Permalink to this headline">¶</a></h1>
+<p>Setting up and running cobblerd is not a easy task. Knowledge in apache configuration (setting up ssl, virtual hosts,
+apache module and wsgi) is needed. Certificates and some server administration knowledge is required too.</p>
+<p>Cobbler is available for installation in several different ways, through packaging systems for each distribution or
+directly from source.</p>
+<p>Cobbler has both definite and optional prerequisites, based on the features you’d like to use. This section documents
+the definite prerequisites for both a basic installation and when building/installing from source.</p>
+<div class="section" id="prerequisites">
+<h2>2.1. Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="packages">
+<h3>2.1.1. Packages<a class="headerlink" href="#packages" title="Permalink to this headline">¶</a></h3>
+<p>Please note that installing any of the packages here via a package manager (such as dnf/yum or apt) can and will require
+a large number of ancilary packages, which we do not document here. The package definition should automatically pull
+these packages in and install them along with Cobbler, however it is always best to verify these requirements have been
+met prior to installing cobbler or any of its components.</p>
+<p>First and foremost, Cobbler requires Python. Any 2.x version should work for 2.8.x releases. Since 3.0.0 you will need
+Python 3. Cobbler also requires the installation of the following packages:</p>
+<ul class="simple">
+<li><p>createrepo</p></li>
+<li><p>httpd / apache2</p></li>
+<li><p>mkisofs / genisoimage</p></li>
+<li><p>mod_wsgi / libapache2-mod-wsgi</p></li>
+<li><p>mod_ssl / libapache2-mod-ssl</p></li>
+<li><p>python-cheetah</p></li>
+<li><p>python-netaddr</p></li>
+<li><p>python-simplejson</p></li>
+<li><p>PyYAML / python-yaml</p></li>
+<li><p>rsync</p></li>
+<li><p>syslinux</p></li>
+<li><p>tftp-server / atftpd</p></li>
+<li><p>yum-utils</p></li>
+</ul>
+<p>Cobbler-web only has one other requirement besides Cobbler itself:</p>
+<ul class="simple">
+<li><p>Django / python-django</p></li>
+</ul>
+<p>Koan can be installed apart from Cobbler, and has only the following requirement (besides python itself of course):</p>
+<ul class="simple">
+<li><p>python-simplejson</p></li>
+</ul>
+</div>
+<div class="section" id="source">
+<h3>2.1.2. Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h3>
+<p>Installation from source requires the following additional software:</p>
+<ul class="simple">
+<li><p>git</p></li>
+<li><p>make</p></li>
+<li><p>python-devel</p></li>
+<li><p>python-cheetah</p></li>
+<li><p>openssl</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="installation">
+<h2>2.2. Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Cobbler is available for installation for many Linux variants through their native packaging systems. However, the
+Cobbler project also provides packages for all supported distributions which is the preferred method of installation.</p>
+<div class="section" id="id1">
+<h3>2.2.1. Packages<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>We leave packaging to downstream; this means you have to check the repositories provided by your distribution vendor.</p>
+</div>
+<div class="section" id="packages-from-source">
+<h3>2.2.2. Packages from source<a class="headerlink" href="#packages-from-source" title="Permalink to this headline">¶</a></h3>
+<p>For some platforms it’s also possible to build packages directly from the source tree.</p>
+</div>
+</div>
+<div class="section" id="rpm">
+<h2>2.3. RPM<a class="headerlink" href="#rpm" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ make rpms
+... (lots of output) ...
+Wrote: /path/to/cobbler/rpm-build/cobbler-3.0.0-1.fc20.src.rpm
+Wrote: /path/to/cobbler/rpm-build/cobbler-3.0.0-1.fc20.noarch.rpm
+Wrote: /path/to/cobbler/rpm-build/koan-3.0.0-1.fc20.noarch.rpm
+Wrote: /path/to/cobbler/rpm-build/cobbler-web-3.0.0-1.fc20.noarch.rpm
+</pre></div>
+</div>
+<p>As you can see, an RPM is output for each component of Cobbler, as well as a source RPM. This command was run on a
+system running Fedora 20, hence the fc20 in the RPM name - this will be different based on the distribution you’re
+running.</p>
+</div>
+<div class="section" id="deb">
+<h2>2.4. DEB<a class="headerlink" href="#deb" title="Permalink to this headline">¶</a></h2>
+<p>To install cobbler from source on Debian Squeeze, the following steps need to be made:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ apt-get install make
+$ apt-get install git
+$ apt-get install python-yaml
+$ apt-get install python-cheetah
+$ apt-get install python-netaddr
+$ apt-get install python-simplejson
+$ apt-get install libapache2-mod-wsgi
+$ apt-get install python-django
+$ apt-get install atftpd
+
+$ a2enmod proxy
+$ a2enmod proxy_http
+$ a2enmod rewrite
+
+$ ln -s /srv/tftp /var/lib/tftpboot
+
+$ chown www-data /var/lib/cobbler/webui_sessions
+</pre></div>
+</div>
+<p>Change all <code class="docutils literal notranslate"><span class="pre">/var/www/cobbler</span></code> in <code class="docutils literal notranslate"><span class="pre">/etc/apache2/conf.d/cobbler.conf</span></code> to <code class="docutils literal notranslate"><span class="pre">/usr/share/cobbler/webroot/</span></code>
+Init script:
+- add Required-Stop line
+- path needs to be <code class="docutils literal notranslate"><span class="pre">/usr/local/...</span></code> or fix the install location</p>
+<div class="section" id="id2">
+<h3>2.4.1. Source<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>The latest source code is available through git:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/cobbler/cobbler.git
+$ cd cobbler
+</pre></div>
+</div>
+<p>The release30 branch corresponds to the official release version for the 3.0.x series. The master branch is the
+development series, and always uses an odd number for the minor version (for example, 3.1.0).</p>
+<p>When building from source, make sure you have the correct prerequisites. Once they are, you can install Cobbler with the
+following command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ make install
+</pre></div>
+</div>
+<p>This command will rewrite all configuration files on your system if you have an existing installation of Cobbler
+(whether it was installed via packages or from an older source tree). To preserve your existing configuration files,
+snippets and automatic installation files, run this command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ make devinstall
+</pre></div>
+</div>
+<p>To install the Cobbler web GUI, use this command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ make webtest
+</pre></div>
+</div>
+<p>This will do a full install, not just the web GUI. <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">webtest</span></code> is a wrapper around <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">devinstall</span></code>, so your
+configuration files will also be saved when running this command.</p>
+</div>
+</div>
+<div class="section" id="relocating-your-installation">
+<span id="id3"></span><h2>2.5. Relocating your installation<a class="headerlink" href="#relocating-your-installation" title="Permalink to this headline">¶</a></h2>
+<p>Often folks don’t have a very large <code class="docutils literal notranslate"><span class="pre">/var</span></code> partition, which is what Cobbler uses by default for mirroring install
+trees and the like.</p>
+<p>You’ll notice you can reconfigure the webdir location just by going into <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/settings</span></code>, but it’s not the
+best way to do things – especially as the packaging process does include some files and directories in the stock path.
+This means that, for upgrades and the like, you’ll be breaking things somewhat. Rather than attempting to reconfigure
+Cobbler, your Apache configuration, your file permissions, and your SELinux rules, the recommended course of action is
+very simple.</p>
+<ol class="arabic simple">
+<li><p>Copy everything you have already in <code class="docutils literal notranslate"><span class="pre">/var/www/cobbler</span></code> to another location – for instance, <code class="docutils literal notranslate"><span class="pre">/opt/cobbler_data</span></code></p></li>
+<li><p>Now just create a symlink or bind mount at <code class="docutils literal notranslate"><span class="pre">/var/www/cobbler</span></code> that points to <code class="docutils literal notranslate"><span class="pre">/opt/cobbler_data</span></code>.</p></li>
+</ol>
+<p>Done. You’re up and running.</p>
+<p>If you decided to access Cobbler’s data store over NFS (not recommended) you really want to mount NFS on
+<code class="docutils literal notranslate"><span class="pre">/var/www/cobbler</span></code> with SELinux context passed in as a parameter to mount versus the symlink. You may also have to
+deal with problems related to rootsquash. However if you are making a mirror of a Cobbler server for a multi-site setup,
+mounting read only is ok there.</p>
+<p>Also Note: <code class="docutils literal notranslate"><span class="pre">/var/lib/cobbler</span></code> can not live on NFS, as this interferes with locking (“flock”) Cobbler does around it’s
+storage files.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cobbler.html" class="btn btn-neutral float-right" title="3. Cobbler CLI" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="quickstart-guide.html" class="btn btn-neutral float-left" title="1. Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

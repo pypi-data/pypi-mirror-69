@@ -1,0 +1,985 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.items.system &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.items.system</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.items.system</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">autoinstall_manager</span>
+<span class="kn">from</span> <span class="nn">cobbler.items</span> <span class="k">import</span> <span class="n">item</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">power_manager</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">validate</span>
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">CX</span>
+<span class="kn">from</span> <span class="nn">cobbler.utils</span> <span class="k">import</span> <span class="n">_</span>
+
+
+<span class="c1"># this data structure is described in item.py</span>
+<span class="n">FIELDS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># non-editable in UI (internal)</span>
+    <span class="p">[</span><span class="s2">&quot;ctime&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;depth&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;ipv6_autoconfiguration&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;IPv6 Autoconfiguration&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;mtime&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;repos_enabled&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Repos Enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;(re)configure local repos on this machine at next config update?&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+
+    <span class="c1"># editable in UI</span>
+    <span class="p">[</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Automatic Installation Template&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Path to automatic installation template&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;autoinstall_meta&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Automatic Installation Template Metadata&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: dog=fang agent=86&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;boot_files&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;TFTP Boot Files&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Files copied into tftpboot beyond the kernel/initrd&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;boot_loader&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Boot loader&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Linux installation boot loader&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_supported_system_boot_loaders</span><span class="p">(),</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Comment&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Free form text description&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;enable_gpxe&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Enable gPXE?&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Use gPXE instead of PXELINUX for advanced booting options&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;fetchable_files&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="s1">&#39;&lt;&lt;inherit&gt;&gt;&#39;</span><span class="p">,</span> <span class="s2">&quot;Fetchable Files&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Templates for tftp or wget/curl&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;gateway&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Gateway&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Hostname&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Image&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Parent image (if not a profile)&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;ipv6_default_device&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;IPv6 Default Device&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Kernel Options&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: selinux=permissive&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;kernel_options_post&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Kernel Options (Post Install)&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: clocksource=pit noapic&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;mgmt_classes&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Management Classes&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;For external config management&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;mgmt_parameters&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Management Parameters&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Parameters which will be handed to your management application (Must be valid YAML dictionary)&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: vanhalen.example.org&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;name_servers&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Name Servers&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;space delimited&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;name_servers_search&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Name Servers Search Path&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;space delimited&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;netboot_enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Netboot Enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;PXE (re)install this machine at next boot?&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;next_server&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Next Server Override&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;See manpage or leave blank&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;owners&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Owners&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Owners list for authz_ownership (space delimited)&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;power_address&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Power Management Address&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: power-device.example.org&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;power_id&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Power Management ID&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Usually a plug number or blade name, if power type requires it&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;power_pass&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Power Management Password&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;power_type&quot;</span><span class="p">,</span> <span class="s2">&quot;SETTINGS:power_management_default_type&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Power Management Type&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Power management script to use&quot;</span><span class="p">,</span> <span class="n">power_manager</span><span class="o">.</span><span class="n">get_power_types</span><span class="p">(),</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;power_user&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Power Management Username&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;power_options&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Power Management Options&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Additional options, to be passed to the fencing agent&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;power_identity_file&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Power Identity File&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Identity file to be passed to the fencing agent (ssh key)&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Profile&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Parent profile&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;proxy&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Internal Proxy&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Internal proxy URL&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;redhat_management_key&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Redhat Management Key&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Registration key for RHN, Spacewalk, or Satellite&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;server&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Server Override&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;See manpage or leave blank&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;production&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Status&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;System status&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;development&quot;</span><span class="p">,</span> <span class="s2">&quot;testing&quot;</span><span class="p">,</span> <span class="s2">&quot;acceptance&quot;</span><span class="p">,</span> <span class="s2">&quot;production&quot;</span><span class="p">],</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;template_files&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Template Files&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;File mappings for built-in configuration management&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_auto_boot&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt Auto Boot&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Auto boot this VM?&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_cpus&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt CPUs&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_disk_driver&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt Disk Driver Type&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;The on-disk format for the virtualization disk&quot;</span><span class="p">,</span> <span class="n">validate</span><span class="o">.</span><span class="n">VIRT_DISK_DRIVERS</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_file_size&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt File Size(GB)&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_path&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt Path&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ex: /directory or VolGroup00&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_pxe_boot&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt PXE Boot&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Use PXE to build this VM?&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_ram&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt RAM (MB)&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_type&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt Type&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Virtualization technology to use&quot;</span><span class="p">,</span> <span class="n">validate</span><span class="o">.</span><span class="n">VIRT_TYPES</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;serial_device&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Serial Device #&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Serial Device Number&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;serial_baud_rate&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Serial Baud Rate&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Serial Baud Rate&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;2400&quot;</span><span class="p">,</span> <span class="s2">&quot;4800&quot;</span><span class="p">,</span> <span class="s2">&quot;9600&quot;</span><span class="p">,</span> <span class="s2">&quot;19200&quot;</span><span class="p">,</span> <span class="s2">&quot;38400&quot;</span><span class="p">,</span> <span class="s2">&quot;57600&quot;</span><span class="p">,</span> <span class="s2">&quot;115200&quot;</span><span class="p">],</span> <span class="s2">&quot;int&quot;</span><span class="p">],</span>
+<span class="p">]</span>
+
+<span class="c1"># network interface fields are in a separate list because a system may contain</span>
+<span class="c1"># several network interfaces and thus several values for each one of those fields</span>
+<span class="c1"># (1-N cardinality), while it may contain only one value for other fields</span>
+<span class="c1"># (1-1 cardinality). This difference requires special handling.</span>
+<span class="n">NETWORK_INTERFACE_FIELDS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">&quot;bonding_opts&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Bonding Opts&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;bridge_opts&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Bridge Opts&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;cnames&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;CNAMES&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Cannonical Name Records, should be used with --interface, In quotes, space delimited&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;connected_mode&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;InfiniBand Connected Mode&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;dhcp_tag&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;DHCP Tag&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;dns_name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;DNS Name&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;if_gateway&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Per-Interface Gateway&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;interface_master&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Master Interface&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;interface_type&quot;</span><span class="p">,</span> <span class="s2">&quot;na&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Interface Type&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;na&quot;</span><span class="p">,</span> <span class="s2">&quot;bond&quot;</span><span class="p">,</span> <span class="s2">&quot;bond_slave&quot;</span><span class="p">,</span> <span class="s2">&quot;bridge&quot;</span><span class="p">,</span> <span class="s2">&quot;bridge_slave&quot;</span><span class="p">,</span> <span class="s2">&quot;bonded_bridge_slave&quot;</span><span class="p">,</span> <span class="s2">&quot;bmc&quot;</span><span class="p">,</span> <span class="s2">&quot;infiniband&quot;</span><span class="p">],</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;ip_address&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;IP Address&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;ipv6_address&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;IPv6 Address&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;ipv6_default_gateway&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;IPv6 Default Gateway&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;ipv6_mtu&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;IPv6 MTU&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;ipv6_prefix&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;IPv6 Prefix&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;ipv6_secondaries&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;IPv6 Secondaries&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Space delimited. Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;ipv6_static_routes&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;IPv6 Static Routes&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;mac_address&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MAC Address&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;(Place </span><span class="se">\&quot;</span><span class="s2">random</span><span class="se">\&quot;</span><span class="s2"> in this field for a random MAC Address.)&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;management&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Management Interface&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Is this the management interface? Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;mtu&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MTU&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;netmask&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Subnet Mask&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;static&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Static&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Is this interface static? Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;static_routes&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Static Routes&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;virt_bridge&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Virt Bridge&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Should be used with --interface&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">],</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="System"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System">[docs]</a><span class="k">class</span> <span class="nc">System</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Cobbler system object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">TYPE_NAME</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;system&quot;</span><span class="p">)</span>
+    <span class="n">COLLECTION_TYPE</span> <span class="o">=</span> <span class="s2">&quot;system&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">System</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel_options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel_options_post</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoinstall_meta</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fetchable_files</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boot_files</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">template_files</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1">#</span>
+    <span class="c1"># override some base class methods first (item.Item)</span>
+    <span class="c1">#</span>
+
+<div class="viewcode-block" id="System.get_fields"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.get_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FIELDS</span></div>
+
+<div class="viewcode-block" id="System.make_clone"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.make_clone">[docs]</a>    <span class="k">def</span> <span class="nf">make_clone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">cloned</span> <span class="o">=</span> <span class="n">System</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="p">)</span>
+        <span class="n">cloned</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">_dict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cloned</span></div>
+
+<div class="viewcode-block" id="System.from_dict"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.from_dict">[docs]</a>    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed_data</span><span class="p">):</span>
+        <span class="c1"># FIXME: most definitely doesn&#39;t grok interfaces yet.</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">from_dict_from_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed_data</span><span class="p">,</span> <span class="n">FIELDS</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.get_parent"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.get_parent">[docs]</a>    <span class="k">def</span> <span class="nf">get_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return object next highest up the tree.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">profiles</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">profile</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">images</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">systems</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.check_if_valid"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.check_if_valid">[docs]</a>    <span class="k">def</span> <span class="nf">check_if_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;name is required&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Error with system </span><span class="si">%s</span><span class="s2"> - profile or image is required&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
+
+    <span class="c1">#</span>
+    <span class="c1"># specific methods for item.System</span>
+    <span class="c1">#</span>
+
+    <span class="k">def</span> <span class="nf">__create_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="n">interface</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">NETWORK_INTERFACE_FIELDS</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="n">interface</span><span class="p">][</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__get_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__create_interface</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+<div class="viewcode-block" id="System.delete_interface"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.delete_interface">[docs]</a>    <span class="k">def</span> <span class="nf">delete_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to remove an interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span><span class="p">:</span>
+                <span class="c1"># no interface here to delete</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;At least one interface needs to be defined.&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="System.rename_interface"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.rename_interface">[docs]</a>    <span class="k">def</span> <span class="nf">rename_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to rename an interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">newname</span><span class="p">)</span> <span class="o">=</span> <span class="n">names</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Interface </span><span class="si">%s</span><span class="s2"> does not exist&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">newname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Interface </span><span class="si">%s</span><span class="s2"> already exists&quot;</span> <span class="o">%</span> <span class="n">newname</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="n">newname</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="System.set_boot_loader"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_boot_loader">[docs]</a>    <span class="k">def</span> <span class="nf">set_boot_loader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_supported_system_boot_loaders</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Invalid boot loader name: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boot_loader</span> <span class="o">=</span> <span class="n">name</span></div>
+
+<div class="viewcode-block" id="System.set_server"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_server">[docs]</a>    <span class="k">def</span> <span class="nf">set_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If a system can&#39;t reach the boot server at the value configured in settings</span>
+<span class="sd">        because it doesn&#39;t have the same name on it&#39;s subnet this is there for an override.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">server</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">server</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">server</span> <span class="o">=</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">server</span></div>
+
+<div class="viewcode-block" id="System.set_next_server"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_next_server">[docs]</a>    <span class="k">def</span> <span class="nf">set_next_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">server</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">server</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">server</span> <span class="o">==</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">next_server</span> <span class="o">=</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">server</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">next_server</span> <span class="o">=</span> <span class="n">validate</span><span class="o">.</span><span class="n">ipv4_address</span><span class="p">(</span><span class="n">server</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_proxy"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_proxy">[docs]</a>    <span class="k">def</span> <span class="nf">set_proxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proxy</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">proxy</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">proxy</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">proxy</span> <span class="o">=</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span> <span class="o">=</span> <span class="n">proxy</span></div>
+
+<div class="viewcode-block" id="System.set_redhat_management_key"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_redhat_management_key">[docs]</a>    <span class="k">def</span> <span class="nf">set_redhat_management_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">management_key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">management_key</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">management_key</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">redhat_management_key</span> <span class="o">=</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">redhat_management_key</span> <span class="o">=</span> <span class="n">management_key</span></div>
+
+<div class="viewcode-block" id="System.get_redhat_management_key"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.get_redhat_management_key">[docs]</a>    <span class="k">def</span> <span class="nf">get_redhat_management_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">redhat_management_key</span></div>
+
+<div class="viewcode-block" id="System.get_mac_address"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.get_mac_address">[docs]</a>    <span class="k">def</span> <span class="nf">get_mac_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the mac address, which may be implicit in the object name or explicit with --mac-address.</span>
+<span class="sd">        Use the explicit location first.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;mac_address&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;mac_address&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="System.get_ip_address"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.get_ip_address">[docs]</a>    <span class="k">def</span> <span class="nf">get_ip_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the IP address for the given interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;ip_address&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;ip_address&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="System.is_management_supported"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.is_management_supported">[docs]</a>    <span class="k">def</span> <span class="nf">is_management_supported</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cidr_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Can only add system PXE records if a MAC or IP address is available, else it&#39;s a koan</span>
+<span class="sd">        only record.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="n">mac</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mac_address&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">ip</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ip_address&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">cidr_ok</span> <span class="ow">and</span> <span class="n">ip</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># ip is in CIDR notation</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">mac</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># has ip and/or mac</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="System.set_dhcp_tag"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_dhcp_tag">[docs]</a>    <span class="k">def</span> <span class="nf">set_dhcp_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dhcp_tag</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;dhcp_tag&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dhcp_tag</span></div>
+
+<div class="viewcode-block" id="System.set_cnames"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_cnames">[docs]</a>    <span class="k">def</span> <span class="nf">set_cnames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cnames</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_list</span><span class="p">(</span><span class="n">cnames</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;cnames&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="System.set_static_routes"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_static_routes">[docs]</a>    <span class="k">def</span> <span class="nf">set_static_routes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">routes</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_list</span><span class="p">(</span><span class="n">routes</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;static_routes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="System.set_status"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_status">[docs]</a>    <span class="k">def</span> <span class="nf">set_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">status</span></div>
+
+<div class="viewcode-block" id="System.set_static"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_static">[docs]</a>    <span class="k">def</span> <span class="nf">set_static</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">truthiness</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;static&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="n">truthiness</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_management"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_management">[docs]</a>    <span class="k">def</span> <span class="nf">set_management</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">truthiness</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;management&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="n">truthiness</span><span class="p">)</span></div>
+
+<span class="c1"># ---</span>
+
+<div class="viewcode-block" id="System.set_dns_name"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_dns_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_dns_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dns_name</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set DNS name for interface.</span>
+
+<span class="sd">        @param: str dns_name (dns name)</span>
+<span class="sd">        @param: str interface (interface name)</span>
+<span class="sd">        @returns: True or CX</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dns_name</span> <span class="o">=</span> <span class="n">validate</span><span class="o">.</span><span class="n">hostname</span><span class="p">(</span><span class="n">dns_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dns_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">allow_duplicate_hostnames</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">matched</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_items</span><span class="p">(</span><span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;dns_name&quot;</span><span class="p">:</span> <span class="n">dns_name</span><span class="p">})</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">matched</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;DNS name duplicated: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dns_name</span><span class="p">)</span>
+
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;dns_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dns_name</span></div>
+
+<div class="viewcode-block" id="System.set_hostname"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_hostname">[docs]</a>    <span class="k">def</span> <span class="nf">set_hostname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hostname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set hostname.</span>
+
+<span class="sd">        @param: str hostname (hostname for system)</span>
+<span class="sd">        @returns: True or CX</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="n">validate</span><span class="o">.</span><span class="n">hostname</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_ip_address"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_ip_address">[docs]</a>    <span class="k">def</span> <span class="nf">set_ip_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set IPv4 address on interface.</span>
+
+<span class="sd">        @param: str address (ip address)</span>
+<span class="sd">        @param: str interface (interface name)</span>
+<span class="sd">        @returns: True or CX</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">address</span> <span class="o">=</span> <span class="n">validate</span><span class="o">.</span><span class="n">ipv4_address</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">address</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">allow_duplicate_ips</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">matched</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_items</span><span class="p">(</span><span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;ip_address&quot;</span><span class="p">:</span> <span class="n">address</span><span class="p">})</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">matched</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;IP address duplicated: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">address</span><span class="p">)</span>
+
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;ip_address&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">address</span></div>
+
+<div class="viewcode-block" id="System.set_mac_address"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_mac_address">[docs]</a>    <span class="k">def</span> <span class="nf">set_mac_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set mac address on interface.</span>
+
+<span class="sd">        @param: str address (mac address)</span>
+<span class="sd">        @param: str interface (interface name)</span>
+<span class="sd">        @returns: True or CX</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">address</span> <span class="o">=</span> <span class="n">validate</span><span class="o">.</span><span class="n">mac_address</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">address</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
+            <span class="n">address</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_random_mac</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">address</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">allow_duplicate_macs</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">matched</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_items</span><span class="p">(</span><span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;mac_address&quot;</span><span class="p">:</span> <span class="n">address</span><span class="p">})</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">matched</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;MAC address duplicated: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">address</span><span class="p">)</span>
+
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;mac_address&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">address</span></div>
+
+<div class="viewcode-block" id="System.set_gateway"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_gateway">[docs]</a>    <span class="k">def</span> <span class="nf">set_gateway</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gateway</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set a gateway IPv4 address.</span>
+
+<span class="sd">        @param: str gateway (ip address)</span>
+<span class="sd">        @returns: True or CX</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gateway</span> <span class="o">=</span> <span class="n">validate</span><span class="o">.</span><span class="n">ipv4_address</span><span class="p">(</span><span class="n">gateway</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_name_servers"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_name_servers">[docs]</a>    <span class="k">def</span> <span class="nf">set_name_servers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the DNS servers.</span>
+
+<span class="sd">        @param: str/list data (string or list of nameservers)</span>
+<span class="sd">        @returns: True or CX</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name_servers</span> <span class="o">=</span> <span class="n">validate</span><span class="o">.</span><span class="n">name_servers</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_name_servers_search"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_name_servers_search">[docs]</a>    <span class="k">def</span> <span class="nf">set_name_servers_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the DNS search paths.</span>
+
+<span class="sd">        @param: str/list data (string or list of search domains)</span>
+<span class="sd">        @returns: True or CX</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name_servers_search</span> <span class="o">=</span> <span class="n">validate</span><span class="o">.</span><span class="n">name_servers_search</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_netmask"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_netmask">[docs]</a>    <span class="k">def</span> <span class="nf">set_netmask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">netmask</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the netmask for given interface.</span>
+
+<span class="sd">        @param: str netmask (netmask)</span>
+<span class="sd">        @param: str interface (interface name)</span>
+<span class="sd">        @returns: True or CX</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;netmask&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">validate</span><span class="o">.</span><span class="n">ipv4_netmask</span><span class="p">(</span><span class="n">netmask</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_if_gateway"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_if_gateway">[docs]</a>    <span class="k">def</span> <span class="nf">set_if_gateway</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gateway</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the per-interface gateway.</span>
+
+<span class="sd">        @param: str gateway (ipv4 address for the gateway)</span>
+<span class="sd">        @param: str interface (interface name)</span>
+<span class="sd">        @returns: True or CX</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;if_gateway&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">validate</span><span class="o">.</span><span class="n">ipv4_address</span><span class="p">(</span><span class="n">gateway</span><span class="p">)</span></div>
+
+<span class="c1"># --</span>
+
+<div class="viewcode-block" id="System.set_virt_bridge"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_virt_bridge">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_bridge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bridge</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">bridge</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">bridge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">default_virt_bridge</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;virt_bridge&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bridge</span></div>
+
+<div class="viewcode-block" id="System.set_interface_type"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_interface_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_interface_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="n">interface_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;bridge&quot;</span><span class="p">,</span> <span class="s2">&quot;bridge_slave&quot;</span><span class="p">,</span> <span class="s2">&quot;bond&quot;</span><span class="p">,</span> <span class="s2">&quot;bond_slave&quot;</span><span class="p">,</span> <span class="s2">&quot;bonded_bridge_slave&quot;</span><span class="p">,</span> <span class="s2">&quot;bmc&quot;</span><span class="p">,</span> <span class="s2">&quot;na&quot;</span><span class="p">,</span> <span class="s2">&quot;infiniband&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">interface_types</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;interface type value must be one of: </span><span class="si">%s</span><span class="s2"> or blank&quot;</span> <span class="o">%</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">interface_types</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;na&quot;</span><span class="p">:</span>
+            <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;interface_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">type</span></div>
+
+<div class="viewcode-block" id="System.set_interface_master"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_interface_master">[docs]</a>    <span class="k">def</span> <span class="nf">set_interface_master</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface_master</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;interface_master&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">interface_master</span></div>
+
+<div class="viewcode-block" id="System.set_bonding_opts"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_bonding_opts">[docs]</a>    <span class="k">def</span> <span class="nf">set_bonding_opts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bonding_opts</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;bonding_opts&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bonding_opts</span></div>
+
+<div class="viewcode-block" id="System.set_bridge_opts"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_bridge_opts">[docs]</a>    <span class="k">def</span> <span class="nf">set_bridge_opts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bridge_opts</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;bridge_opts&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bridge_opts</span></div>
+
+<div class="viewcode-block" id="System.set_ipv6_autoconfiguration"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_ipv6_autoconfiguration">[docs]</a>    <span class="k">def</span> <span class="nf">set_ipv6_autoconfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">truthiness</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ipv6_autoconfiguration</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="n">truthiness</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_ipv6_default_device"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_ipv6_default_device">[docs]</a>    <span class="k">def</span> <span class="nf">set_ipv6_default_device</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface_name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">interface_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">interface_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ipv6_default_device</span> <span class="o">=</span> <span class="n">interface_name</span></div>
+
+<div class="viewcode-block" id="System.set_ipv6_address"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_ipv6_address">[docs]</a>    <span class="k">def</span> <span class="nf">set_ipv6_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set IPv6 address on interface.</span>
+
+<span class="sd">        @param: str address (ip address)</span>
+<span class="sd">        @param: str interface (interface name)</span>
+<span class="sd">        @returns: True or CX</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">address</span> <span class="o">=</span> <span class="n">validate</span><span class="o">.</span><span class="n">ipv6_address</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">address</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">allow_duplicate_ips</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">matched</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_items</span><span class="p">(</span><span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;ipv6_address&quot;</span><span class="p">:</span> <span class="n">address</span><span class="p">})</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">matched</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;IP address duplicated: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">address</span><span class="p">)</span>
+
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;ipv6_address&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">address</span></div>
+
+<div class="viewcode-block" id="System.set_ipv6_prefix"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_ipv6_prefix">[docs]</a>    <span class="k">def</span> <span class="nf">set_ipv6_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assign a IPv6 prefix</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;ipv6_prefix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="System.set_ipv6_secondaries"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_ipv6_secondaries">[docs]</a>    <span class="k">def</span> <span class="nf">set_ipv6_secondaries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addresses</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_list</span><span class="p">(</span><span class="n">addresses</span><span class="p">)</span>
+        <span class="n">secondaries</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">address</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">address</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">utils</span><span class="o">.</span><span class="n">is_ip</span><span class="p">(</span><span class="n">address</span><span class="p">):</span>
+                <span class="n">secondaries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;invalid format for IPv6 IP address (</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">address</span><span class="p">)</span>
+
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;ipv6_secondaries&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">secondaries</span></div>
+
+<div class="viewcode-block" id="System.set_ipv6_default_gateway"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_ipv6_default_gateway">[docs]</a>    <span class="k">def</span> <span class="nf">set_ipv6_default_gateway</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">address</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">utils</span><span class="o">.</span><span class="n">is_ip</span><span class="p">(</span><span class="n">address</span><span class="p">):</span>
+            <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;ipv6_default_gateway&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;invalid format for IPv6 IP address (</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">address</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_ipv6_static_routes"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_ipv6_static_routes">[docs]</a>    <span class="k">def</span> <span class="nf">set_ipv6_static_routes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">routes</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_list</span><span class="p">(</span><span class="n">routes</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;ipv6_static_routes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="System.set_ipv6_mtu"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_ipv6_mtu">[docs]</a>    <span class="k">def</span> <span class="nf">set_ipv6_mtu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mtu</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;ipv6_mtu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mtu</span></div>
+
+<div class="viewcode-block" id="System.set_mtu"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_mtu">[docs]</a>    <span class="k">def</span> <span class="nf">set_mtu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mtu</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;mtu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mtu</span></div>
+
+<div class="viewcode-block" id="System.set_connected_mode"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_connected_mode">[docs]</a>    <span class="k">def</span> <span class="nf">set_connected_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">truthiness</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">intf</span><span class="p">[</span><span class="s2">&quot;connected_mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="n">truthiness</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_enable_gpxe"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_enable_gpxe">[docs]</a>    <span class="k">def</span> <span class="nf">set_enable_gpxe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enable_gpxe</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets whether or not the system will use gPXE for booting.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enable_gpxe</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="n">enable_gpxe</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_profile"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_profile">[docs]</a>    <span class="k">def</span> <span class="nf">set_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">profile_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the system to use a certain named profile. The profile</span>
+<span class="sd">        must have already been loaded into the Profiles collection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">old_parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parent</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">profile_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">profile_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">profile</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">old_parent</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+                <span class="n">old_parent</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>         <span class="c1"># mutual exclusion rule</span>
+
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">profiles</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">profile_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">profile</span> <span class="o">=</span> <span class="n">profile_name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span>            <span class="c1"># subprofiles have varying depths.</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">old_parent</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+                <span class="n">old_parent</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span><span class="p">)</span>
+            <span class="n">new_parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parent</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_parent</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+                <span class="n">new_parent</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>
+            <span class="k">return</span>
+        <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;invalid profile name: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">profile_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_image"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_image">[docs]</a>    <span class="k">def</span> <span class="nf">set_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the system to use a certain named image.  Works like set_profile</span>
+<span class="sd">        but cannot be used at the same time.  It&#39;s one or the other.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">old_parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parent</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">image_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">image_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">old_parent</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+                <span class="n">old_parent</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">profile</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>       <span class="c1"># mutual exclusion rule</span>
+
+        <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="o">.</span><span class="n">images</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">image_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">image_name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">old_parent</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+                <span class="n">old_parent</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span><span class="p">)</span>
+            <span class="n">new_parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parent</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_parent</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+                <span class="n">new_parent</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>
+            <span class="k">return</span>
+        <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;invalid image name (</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">image_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_virt_cpus"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_virt_cpus">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_cpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_cpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_virt_file_size"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_virt_file_size">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_file_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_file_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_virt_disk_driver"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_virt_disk_driver">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_disk_driver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_disk_driver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_virt_auto_boot"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_virt_auto_boot">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_auto_boot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_auto_boot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_virt_pxe_boot"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_virt_pxe_boot">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_pxe_boot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_pxe_boot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_virt_ram"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_virt_ram">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_ram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_ram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_virt_type"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_virt_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vtype</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vtype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_virt_path"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_virt_path">[docs]</a>    <span class="k">def</span> <span class="nf">set_virt_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_virt_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">for_system</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_netboot_enabled"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_netboot_enabled">[docs]</a>    <span class="k">def</span> <span class="nf">set_netboot_enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">netboot_enabled</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If true, allows per-system PXE files to be generated on sync (or add).  If false,</span>
+<span class="sd">        these files are not generated, thus eliminating the potential for an infinite install</span>
+<span class="sd">        loop when systems are set to PXE boot first in the boot order.  In general, users</span>
+<span class="sd">        who are PXE booting first in the boot order won&#39;t create system definitions, so this</span>
+<span class="sd">        feature primarily comes into play for programmatic users of the API, who want to</span>
+<span class="sd">        initially create a system with netboot enabled and then disable it after the system installs,</span>
+<span class="sd">        as triggered by some action in automatic installation file&#39;s  %post section.</span>
+<span class="sd">        For this reason, this option is not urfaced in the CLI, output, or documentation (yet).</span>
+
+<span class="sd">        Use of this option does not affect the ability to use PXE menus.  If an admin has machines</span>
+<span class="sd">        set up to PXE only after local boot fails, this option isn&#39;t even relevant.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">netboot_enabled</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="n">netboot_enabled</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_autoinstall"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_autoinstall">[docs]</a>    <span class="k">def</span> <span class="nf">set_autoinstall</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autoinstall</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the automatic installation template filepath, this must be a local file.</span>
+
+<span class="sd">        @param str local automatic installation template file path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">autoinstall_mgr</span> <span class="o">=</span> <span class="n">autoinstall_manager</span><span class="o">.</span><span class="n">AutoInstallationManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoinstall</span> <span class="o">=</span> <span class="n">autoinstall_mgr</span><span class="o">.</span><span class="n">validate_autoinstall_template_file_path</span><span class="p">(</span><span class="n">autoinstall</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_power_type"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_power_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_power_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power_type</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">power_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">power_type</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">power_manager</span><span class="o">.</span><span class="n">validate_power_type</span><span class="p">(</span><span class="n">power_type</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_type</span> <span class="o">=</span> <span class="n">power_type</span></div>
+
+<div class="viewcode-block" id="System.set_power_identity_file"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_power_identity_file">[docs]</a>    <span class="k">def</span> <span class="nf">set_power_identity_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power_identity_file</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">power_identity_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">power_identity_file</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">safe_filter</span><span class="p">(</span><span class="n">power_identity_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_identity_file</span> <span class="o">=</span> <span class="n">power_identity_file</span></div>
+
+<div class="viewcode-block" id="System.set_power_options"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_power_options">[docs]</a>    <span class="k">def</span> <span class="nf">set_power_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power_options</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">power_options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">power_options</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">safe_filter</span><span class="p">(</span><span class="n">power_options</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_options</span> <span class="o">=</span> <span class="n">power_options</span></div>
+
+<div class="viewcode-block" id="System.set_power_user"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_power_user">[docs]</a>    <span class="k">def</span> <span class="nf">set_power_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power_user</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">power_user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">power_user</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">safe_filter</span><span class="p">(</span><span class="n">power_user</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_user</span> <span class="o">=</span> <span class="n">power_user</span></div>
+
+<div class="viewcode-block" id="System.set_power_pass"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_power_pass">[docs]</a>    <span class="k">def</span> <span class="nf">set_power_pass</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power_pass</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">power_pass</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">power_pass</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">safe_filter</span><span class="p">(</span><span class="n">power_pass</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_pass</span> <span class="o">=</span> <span class="n">power_pass</span></div>
+
+<div class="viewcode-block" id="System.set_power_address"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_power_address">[docs]</a>    <span class="k">def</span> <span class="nf">set_power_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power_address</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">power_address</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">power_address</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">safe_filter</span><span class="p">(</span><span class="n">power_address</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_address</span> <span class="o">=</span> <span class="n">power_address</span></div>
+
+<div class="viewcode-block" id="System.set_power_id"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_power_id">[docs]</a>    <span class="k">def</span> <span class="nf">set_power_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power_id</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">power_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">power_id</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">safe_filter</span><span class="p">(</span><span class="n">power_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_id</span> <span class="o">=</span> <span class="n">power_id</span></div>
+
+<div class="viewcode-block" id="System.modify_interface"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.modify_interface">[docs]</a>    <span class="k">def</span> <span class="nf">modify_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used by the WUI to modify an interface more-efficiently</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;bondingopts&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_bonding_opts</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;bridgeopts&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_bridge_opts</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;connected_mode&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_connected_mode</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;cnames&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_cnames</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;dhcptag&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_dhcp_tag</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;dnsname&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_dns_name</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;ifgateway&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_if_gateway</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;interfacetype&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_interface_type</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;interfacemaster&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_interface_master</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;ipaddress&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_ip_address</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;ipv6address&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_ipv6_address</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;ipv6defaultgateway&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_ipv6_default_gateway</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;ipv6mtu&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_ipv6_mtu</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;ipv6prefix&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_ipv6_prefix</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;ipv6secondaries&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_ipv6_secondaries</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;ipv6staticroutes&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_ipv6_static_routes</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;macaddress&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_mac_address</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;management&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_management</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;mtu&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_mtu</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;netmask&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_netmask</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;static&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_static</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;staticroutes&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_static_routes</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;virtbridge&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_virt_bridge</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_repos_enabled"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_repos_enabled">[docs]</a>    <span class="k">def</span> <span class="nf">set_repos_enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repos_enabled</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repos_enabled</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_boolean</span><span class="p">(</span><span class="n">repos_enabled</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_serial_device"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_serial_device">[docs]</a>    <span class="k">def</span> <span class="nf">set_serial_device</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_number</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_serial_device</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_number</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.set_serial_baud_rate"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.set_serial_baud_rate">[docs]</a>    <span class="k">def</span> <span class="nf">set_serial_baud_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">baud_rate</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">set_serial_baud_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">baud_rate</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System.get_config_filename"><a class="viewcode-back" href="../../../code-autodoc/cobbler.items.html#cobbler.items.system.System.get_config_filename">[docs]</a>    <span class="k">def</span> <span class="nf">get_config_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="p">,</span> <span class="n">loader</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The configuration file for each system pxe uses is either</span>
+<span class="sd">        a form of the MAC address of the hex version of the IP.  If none</span>
+<span class="sd">        of that is available, just use the given name, though the name</span>
+<span class="sd">        given will be unsuitable for PXE configuration (For this, check</span>
+<span class="sd">        system.is_management_supported()). This same file is used to store</span>
+<span class="sd">        system config information in the Apache tree, so it&#39;s still relevant.</span>
+
+<span class="sd">        :param loader: Bootloader type.</span>
+<span class="sd">        :type loader: str</span>
+<span class="sd">        :param interface: Name of the interface.</span>
+<span class="sd">        :type interface: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">loader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boot_loader</span>
+
+        <span class="k">if</span> <span class="n">interface</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaces</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">loader</span> <span class="o">==</span> <span class="s2">&quot;grub&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="s2">&quot;default&quot;</span>
+
+        <span class="n">mac</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mac_address</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="n">ip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ip_address</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mac</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mac</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">loader</span> <span class="o">==</span> <span class="s2">&quot;grub&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">mac</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;01-&quot;</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mac</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">ip</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_host_ip</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div></div>
+
+<span class="c1"># EOF</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

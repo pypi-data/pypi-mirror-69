@@ -1,0 +1,928 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.cli &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.cli</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.cli</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Command line interface for cobbler.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
+<span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">import</span> <span class="nn">optparse</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">xmlrpc.client</span>
+
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">field_info</span>
+<span class="kn">from</span> <span class="nn">cobbler.items</span> <span class="k">import</span> <span class="n">package</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">mgmtclass</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span> <span class="n">file</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">NotImplementedException</span>
+
+
+<span class="n">OBJECT_ACTIONS_MAP</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;distro&quot;</span><span class="p">:</span> <span class="s2">&quot;add copy edit find list remove rename report&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">),</span>
+    <span class="s2">&quot;profile&quot;</span><span class="p">:</span> <span class="s2">&quot;add copy dumpvars edit find get-autoinstall list remove rename report&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">),</span>
+    <span class="s2">&quot;system&quot;</span><span class="p">:</span> <span class="s2">&quot;add copy dumpvars edit find get-autoinstall list remove rename report poweron poweroff powerstatus reboot&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">),</span>
+    <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;add copy edit find list remove rename report&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">),</span>
+    <span class="s2">&quot;repo&quot;</span><span class="p">:</span> <span class="s2">&quot;add copy edit find list remove rename report&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">),</span>
+    <span class="s2">&quot;mgmtclass&quot;</span><span class="p">:</span> <span class="s2">&quot;add copy edit find list remove rename report&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">),</span>
+    <span class="s2">&quot;package&quot;</span><span class="p">:</span> <span class="s2">&quot;add copy edit find list remove rename report&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">),</span>
+    <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;add copy edit find list remove rename report&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">),</span>
+    <span class="s2">&quot;setting&quot;</span><span class="p">:</span> <span class="s2">&quot;edit report&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">),</span>
+    <span class="s2">&quot;signature&quot;</span><span class="p">:</span> <span class="s2">&quot;reload report update&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">OBJECT_TYPES</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">OBJECT_ACTIONS_MAP</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="c1"># would like to use from_iterable here, but have to support python 2.4</span>
+<span class="n">OBJECT_ACTIONS</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">actions</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">OBJECT_ACTIONS_MAP</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+    <span class="n">OBJECT_ACTIONS</span> <span class="o">+=</span> <span class="n">actions</span>
+<span class="n">DIRECT_ACTIONS</span> <span class="o">=</span> <span class="s2">&quot;aclsetup buildiso import list replicate report reposync sync validate-autoinstalls version signature get-loaders hardlink&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+<span class="c1">####################################################</span>
+
+
+<div class="viewcode-block" id="report_items"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.report_items">[docs]</a><span class="k">def</span> <span class="nf">report_items</span><span class="p">(</span><span class="n">remote</span><span class="p">,</span> <span class="n">otype</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">otype</span> <span class="o">==</span> <span class="s2">&quot;setting&quot;</span><span class="p">:</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">remote</span><span class="o">.</span><span class="n">get_settings</span><span class="p">()</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">items</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">keys</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">key</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">items</span><span class="p">[</span><span class="n">key</span><span class="p">]}</span>
+            <span class="n">report_item</span><span class="p">(</span><span class="n">remote</span><span class="p">,</span> <span class="n">otype</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">otype</span> <span class="o">==</span> <span class="s2">&quot;signature&quot;</span><span class="p">:</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">remote</span><span class="o">.</span><span class="n">get_signatures</span><span class="p">()</span>
+        <span class="n">total_breeds</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">total_sigs</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="s2">&quot;breeds&quot;</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Currently loaded signatures:&quot;</span><span class="p">)</span>
+            <span class="n">bkeys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="s2">&quot;breeds&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">bkeys</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+            <span class="n">total_breeds</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bkeys</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">breed</span> <span class="ow">in</span> <span class="n">bkeys</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="n">breed</span><span class="p">)</span>
+                <span class="n">oskeys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="s2">&quot;breeds&quot;</span><span class="p">][</span><span class="n">breed</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                <span class="n">oskeys</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">oskeys</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">total_sigs</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oskeys</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">osversion</span> <span class="ow">in</span> <span class="n">oskeys</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">osversion</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">(none)&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">%d</span><span class="s2"> breeds with </span><span class="si">%d</span><span class="s2"> total signatures loaded&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">total_breeds</span><span class="p">,</span> <span class="n">total_sigs</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No breeds found in the signature, a signature update is recommended&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">remote</span><span class="o">.</span><span class="n">get_items</span><span class="p">(</span><span class="n">otype</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="n">report_item</span><span class="p">(</span><span class="n">remote</span><span class="p">,</span> <span class="n">otype</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="n">x</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="report_item"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.report_item">[docs]</a><span class="k">def</span> <span class="nf">report_item</span><span class="p">(</span><span class="n">remote</span><span class="p">,</span> <span class="n">otype</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">otype</span> <span class="o">==</span> <span class="s2">&quot;setting&quot;</span><span class="p">:</span>
+            <span class="n">cur_settings</span> <span class="o">=</span> <span class="n">remote</span><span class="o">.</span><span class="n">get_settings</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">cur_settings</span><span class="p">[</span><span class="n">name</span><span class="p">]}</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Setting not found: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">otype</span> <span class="o">==</span> <span class="s2">&quot;signature&quot;</span><span class="p">:</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="n">remote</span><span class="o">.</span><span class="n">get_signatures</span><span class="p">()</span>
+            <span class="n">total_sigs</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="s2">&quot;breeds&quot;</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Currently loaded signatures:&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">items</span><span class="p">[</span><span class="s2">&quot;breeds&quot;</span><span class="p">]:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+                    <span class="n">oskeys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="s2">&quot;breeds&quot;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                    <span class="n">oskeys</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">oskeys</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">total_sigs</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oskeys</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">osversion</span> <span class="ow">in</span> <span class="n">oskeys</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">osversion</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">(none)&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Breed &#39;</span><span class="si">%s</span><span class="s2">&#39; has </span><span class="si">%d</span><span class="s2"> total signatures&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">total_sigs</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No breed named &#39;</span><span class="si">%s</span><span class="s2">&#39; found&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No breeds found in the signature, a signature update is recommended&quot;</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">remote</span><span class="o">.</span><span class="n">get_item</span><span class="p">(</span><span class="n">otype</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="s2">&quot;~&quot;</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No </span><span class="si">%s</span><span class="s2"> found: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">otype</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">otype</span> <span class="o">==</span> <span class="s2">&quot;distro&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">to_string_from_fields</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">FIELDS</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">otype</span> <span class="o">==</span> <span class="s2">&quot;profile&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">to_string_from_fields</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">profile</span><span class="o">.</span><span class="n">FIELDS</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">otype</span> <span class="o">==</span> <span class="s2">&quot;system&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">to_string_from_fields</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">FIELDS</span><span class="p">,</span>
+                                           <span class="n">system</span><span class="o">.</span><span class="n">NETWORK_INTERFACE_FIELDS</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">otype</span> <span class="o">==</span> <span class="s2">&quot;repo&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">to_string_from_fields</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">FIELDS</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">otype</span> <span class="o">==</span> <span class="s2">&quot;image&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">to_string_from_fields</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">FIELDS</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">otype</span> <span class="o">==</span> <span class="s2">&quot;mgmtclass&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">to_string_from_fields</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">mgmtclass</span><span class="o">.</span><span class="n">FIELDS</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">otype</span> <span class="o">==</span> <span class="s2">&quot;package&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">to_string_from_fields</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">package</span><span class="o">.</span><span class="n">FIELDS</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">otype</span> <span class="o">==</span> <span class="s2">&quot;file&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">to_string_from_fields</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">FIELDS</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">otype</span> <span class="o">==</span> <span class="s2">&quot;setting&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%-40s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="list_items"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.list_items">[docs]</a><span class="k">def</span> <span class="nf">list_items</span><span class="p">(</span><span class="n">remote</span><span class="p">,</span> <span class="n">otype</span><span class="p">):</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">remote</span><span class="o">.</span><span class="n">get_item_names</span><span class="p">(</span><span class="n">otype</span><span class="p">)</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">x</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="n2s"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.n2s">[docs]</a><span class="k">def</span> <span class="nf">n2s</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return spaces for None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="opt"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.opt">[docs]</a><span class="k">def</span> <span class="nf">opt</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">defval</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns an option from an Optparse values instance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="c1"># FIXME: debug only</span>
+        <span class="c1"># traceback.print_exc()</span>
+        <span class="k">return</span> <span class="n">defval</span>
+    <span class="k">return</span> <span class="n">n2s</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_add_parser_option_from_field</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
+
+    <span class="c1"># extract data from field dictionary</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">default</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">default</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;SETTINGS:&quot;</span><span class="p">):</span>
+        <span class="n">setting_name</span> <span class="o">=</span> <span class="n">default</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;SETTINGS:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="n">setting_name</span><span class="p">]</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">tooltip</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+    <span class="n">choices</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">choices</span> <span class="ow">and</span> <span class="n">default</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">choices</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;field </span><span class="si">%s</span><span class="s2"> default value (</span><span class="si">%s</span><span class="s2">) is not listed in choices (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">choices</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">tooltip</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s2">&quot; (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="n">tooltip</span>
+
+    <span class="c1"># generate option string</span>
+    <span class="n">option_string</span> <span class="o">=</span> <span class="s2">&quot;--</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
+
+    <span class="c1"># generate option aliases</span>
+    <span class="n">aliases</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">deprecated_field</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">field_info</span><span class="o">.</span><span class="n">DEPRECATED_FIELDS</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="n">field_info</span><span class="o">.</span><span class="n">DEPRECATED_FIELDS</span><span class="p">[</span><span class="n">deprecated_field</span><span class="p">]</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">deprecated_field</span><span class="p">)</span>
+
+    <span class="c1"># add option to parser</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">choices</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s2">&quot; (valid options: </span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="n">option_string</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">description</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">choices</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">:</span>
+            <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="n">alias</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">description</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">choices</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="n">option_string</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">description</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">:</span>
+            <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="n">alias</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">description</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="add_options_from_fields"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.add_options_from_fields">[docs]</a><span class="k">def</span> <span class="nf">add_options_from_fields</span><span class="p">(</span><span class="n">object_type</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">network_interface_fields</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">object_action</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">object_action</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="s2">&quot;edit&quot;</span><span class="p">,</span> <span class="s2">&quot;find&quot;</span><span class="p">,</span> <span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="s2">&quot;rename&quot;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
+            <span class="n">_add_parser_option_from_field</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
+
+        <span class="c1"># system object</span>
+        <span class="k">if</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;system&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">network_interface_fields</span><span class="p">:</span>
+                <span class="n">_add_parser_option_from_field</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
+
+            <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--interface&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;interface&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the interface to operate on (can only be specified once per command line)&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">object_action</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="s2">&quot;edit&quot;</span><span class="p">]:</span>
+                <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--delete-interface&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;delete_interface&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+                <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--rename-interface&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;rename_interface&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">object_action</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="s2">&quot;rename&quot;</span><span class="p">]:</span>
+            <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--newname&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;new object name&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">object_action</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;find&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">object_type</span> <span class="o">!=</span> <span class="s2">&quot;setting&quot;</span><span class="p">:</span>
+            <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--in-place&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;in_place&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;edit items in kopts or autoinstall without clearing the other items&quot;</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">object_action</span> <span class="o">==</span> <span class="s2">&quot;remove&quot;</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--name&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> name to remove&quot;</span> <span class="o">%</span> <span class="n">object_type</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--recursive&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;recursive&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;also delete child objects&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># FIXME: not supported in 2.0 ?</span>
+    <span class="c1"># if not object_action in [&quot;dumpvars&quot;,&quot;find&quot;,&quot;remove&quot;,&quot;report&quot;,&quot;list&quot;]:</span>
+    <span class="c1">#    parser.add_option(&quot;--no-sync&quot;,     action=&quot;store_true&quot;, dest=&quot;nosync&quot;, help=&quot;suppress sync for speed&quot;)</span>
+
+
+<div class="viewcode-block" id="CobblerCLI"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.CobblerCLI">[docs]</a><span class="k">class</span> <span class="nc">CobblerCLI</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Load server ip and ports from local config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url_cobbler_api</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">local_get_cobbler_api_url</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url_cobbler_xmlrpc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">local_get_cobbler_xmlrpc_url</span><span class="p">()</span>
+
+        <span class="c1"># FIXME: allow specifying other endpoints, and user+pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parser</span> <span class="o">=</span> <span class="n">optparse</span><span class="o">.</span><span class="n">OptionParser</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remote</span> <span class="o">=</span> <span class="n">xmlrpc</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Server</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_cobbler_api</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shared_secret</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_shared_secret</span><span class="p">()</span>
+
+<div class="viewcode-block" id="CobblerCLI.start_task"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.CobblerCLI.start_task">[docs]</a>    <span class="k">def</span> <span class="nf">start_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">strip_none</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">options</span><span class="p">),</span> <span class="n">omit_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;background_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CobblerCLI.get_object_type"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.CobblerCLI.get_object_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_object_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If this is a CLI command about an object type, e.g. &quot;cobbler distro add&quot;, return the type, like &quot;distro&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">OBJECT_TYPES</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="CobblerCLI.get_object_action"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.CobblerCLI.get_object_action">[docs]</a>    <span class="k">def</span> <span class="nf">get_object_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_type</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If this is a CLI command about an object type, e.g. &quot;cobbler distro add&quot;, return the action, like &quot;add&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">object_type</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">in</span> <span class="n">OBJECT_ACTIONS_MAP</span><span class="p">[</span><span class="n">object_type</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="CobblerCLI.get_direct_action"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.CobblerCLI.get_direct_action">[docs]</a>    <span class="k">def</span> <span class="nf">get_direct_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_type</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If this is a general command, e.g. &quot;cobbler hardlink&quot;, return the action, like &quot;hardlink&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">object_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;--help&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;--version&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;version&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="CobblerCLI.check_setup"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.CobblerCLI.check_setup">[docs]</a>    <span class="k">def</span> <span class="nf">check_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Detect permissions and service accessibility problems and provide</span>
+<span class="sd">        nicer error messages for them.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="n">xmlrpc</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Server</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_cobbler_xmlrpc</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cobblerd does not appear to be running/accessible: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">411</span><span class="p">)</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="n">xmlrpc</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Server</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_cobbler_api</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;httpd does not appear to be running and proxying cobbler, or SELinux is in the way. Original traceback:&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">411</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;/var/lib/cobbler/web.ss&quot;</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Missing login credentials file.  Has cobblerd failed to start?&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">411</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="s2">&quot;/var/lib/cobbler/web.ss&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">R_OK</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;User cannot run command line, need read access to /var/lib/cobbler/web.ss&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">411</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CobblerCLI.run"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.CobblerCLI.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Process the command line and do what the user asks.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shared_secret</span><span class="p">)</span>
+        <span class="n">object_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object_type</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">object_action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object_action</span><span class="p">(</span><span class="n">object_type</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">direct_action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_direct_action</span><span class="p">(</span><span class="n">object_type</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">object_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">object_action</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">object_command</span><span class="p">(</span><span class="n">object_type</span><span class="p">,</span> <span class="n">object_action</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">print_object_help</span><span class="p">(</span><span class="n">object_type</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">direct_action</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">direct_command</span><span class="p">(</span><span class="n">direct_action</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">xmlrpc</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Fault</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">err</span><span class="o">.</span><span class="n">faultString</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;cobbler.cexceptions.CX&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cleanup_fault_string</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">faultString</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;### ERROR ###&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unexpected remote error, check the server side logs for further info&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">faultString</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CobblerCLI.cleanup_fault_string"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.CobblerCLI.cleanup_fault_string">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup_fault_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make a remote exception nicely readable by humans so it&#39;s not evident that is a remote</span>
+<span class="sd">        fault.  Users should not have to understand tracebacks.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;&gt;:&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">rest</span><span class="p">)</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&gt;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rest</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">rest</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&#39;</span><span class="s2">&quot;</span><span class="p">):</span>
+                <span class="n">rest</span> <span class="o">=</span> <span class="n">rest</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="k">if</span> <span class="n">rest</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">rest</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&#39;</span><span class="s2">&quot;</span><span class="p">):</span>
+                <span class="n">rest</span> <span class="o">=</span> <span class="n">rest</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">rest</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="CobblerCLI.get_fields"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.CobblerCLI.get_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For a given name of an object type, return the FIELDS data structure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># FIXME: this should be in utils, or is it already?</span>
+        <span class="k">if</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;distro&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">distro</span><span class="o">.</span><span class="n">FIELDS</span>
+        <span class="k">elif</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;profile&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">profile</span><span class="o">.</span><span class="n">FIELDS</span>
+        <span class="k">elif</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;system&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">system</span><span class="o">.</span><span class="n">FIELDS</span>
+        <span class="k">elif</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;repo&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">repo</span><span class="o">.</span><span class="n">FIELDS</span>
+        <span class="k">elif</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;image&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">image</span><span class="o">.</span><span class="n">FIELDS</span>
+        <span class="k">elif</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;mgmtclass&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mgmtclass</span><span class="o">.</span><span class="n">FIELDS</span>
+        <span class="k">elif</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;package&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">package</span><span class="o">.</span><span class="n">FIELDS</span>
+        <span class="k">elif</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;file&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">file</span><span class="o">.</span><span class="n">FIELDS</span>
+        <span class="k">elif</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;setting&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">settings</span><span class="o">.</span><span class="n">FIELDS</span></div>
+
+<div class="viewcode-block" id="CobblerCLI.object_command"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.CobblerCLI.object_command">[docs]</a>    <span class="k">def</span> <span class="nf">object_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_type</span><span class="p">,</span> <span class="n">object_action</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Process object-based commands such as &quot;distro add&quot; or &quot;profile rename&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">task_id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>        <span class="c1"># if assigned, we must tail the logfile</span>
+        <span class="n">settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">get_settings</span><span class="p">()</span>
+
+        <span class="n">fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fields</span><span class="p">(</span><span class="n">object_type</span><span class="p">)</span>
+        <span class="n">network_interface_fields</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;system&quot;</span><span class="p">:</span>
+            <span class="n">network_interface_fields</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">NETWORK_INTERFACE_FIELDS</span>
+        <span class="k">if</span> <span class="n">object_action</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="s2">&quot;edit&quot;</span><span class="p">,</span> <span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="s2">&quot;rename&quot;</span><span class="p">,</span> <span class="s2">&quot;find&quot;</span><span class="p">,</span> <span class="s2">&quot;remove&quot;</span><span class="p">]:</span>
+            <span class="n">add_options_from_fields</span><span class="p">(</span><span class="n">object_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span>
+                                    <span class="n">network_interface_fields</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">object_action</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">object_action</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;list&quot;</span><span class="p">]:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">object_action</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;reload&quot;</span><span class="p">,</span> <span class="s2">&quot;update&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--name&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;name of object&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">object_action</span> <span class="o">==</span> <span class="s2">&quot;reload&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--filename&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;filename&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;filename to load data from&quot;</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+        <span class="c1"># the first three don&#39;t require a name</span>
+        <span class="k">if</span> <span class="n">object_action</span> <span class="o">==</span> <span class="s2">&quot;report&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">report_item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="n">object_type</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">report_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="n">object_type</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">object_action</span> <span class="o">==</span> <span class="s2">&quot;list&quot;</span><span class="p">:</span>
+            <span class="n">list_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="n">object_type</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">object_action</span> <span class="o">==</span> <span class="s2">&quot;find&quot;</span><span class="p">:</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">find_items</span><span class="p">(</span><span class="n">object_type</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">strip_none</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">options</span><span class="p">),</span> <span class="n">omit_none</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">object_action</span> <span class="ow">in</span> <span class="n">OBJECT_ACTIONS</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">opt</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">object_action</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;reload&quot;</span><span class="p">,</span> <span class="s2">&quot;update&quot;</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--name is required&quot;</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">object_action</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="s2">&quot;edit&quot;</span><span class="p">,</span> <span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="s2">&quot;rename&quot;</span><span class="p">,</span> <span class="s2">&quot;remove&quot;</span><span class="p">]:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;setting&quot;</span><span class="p">:</span>
+                        <span class="n">settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">get_settings</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;You must specify a --value when editing a setting&quot;</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="ow">not</span> <span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;allow_dynamic_settings&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Dynamic settings changes are not enabled. Change the allow_dynamic_settings to 1 and restart cobblerd to enable dynamic settings changes&quot;</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">options</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;allow_dynamic_settings&#39;</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Cannot modify that setting live&quot;</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">modify_setting</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">):</span>
+                            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Changing the setting failed&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">xapi_object_edit</span><span class="p">(</span><span class="n">object_type</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">object_action</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">strip_none</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">options</span><span class="p">),</span> <span class="n">omit_none</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">xmlrpc</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Fault</span> <span class="k">as</span> <span class="n">xxx_todo_changeme</span><span class="p">:</span>
+                    <span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="o">=</span> <span class="n">xxx_todo_changeme</span>
+                    <span class="p">(</span><span class="n">etype</span><span class="p">,</span> <span class="n">emsg</span><span class="p">)</span> <span class="o">=</span> <span class="n">err</span><span class="o">.</span><span class="n">faultString</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exception on server: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">emsg</span><span class="p">)</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">xxx_todo_changeme1</span><span class="p">:</span>
+                    <span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="o">=</span> <span class="n">xxx_todo_changeme1</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">object_action</span> <span class="o">==</span> <span class="s2">&quot;get-autoinstall&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;profile&quot;</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">generate_profile_autoinstall</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;system&quot;</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">generate_system_autoinstall</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">object_action</span> <span class="o">==</span> <span class="s2">&quot;dumpvars&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;profile&quot;</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">get_blended_data</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s2">&quot;system&quot;</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">get_blended_data</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="c1"># FIXME: pretty-printing and sorting here</span>
+                <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                <span class="n">keys</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">x</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">object_action</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;poweron&quot;</span><span class="p">,</span> <span class="s2">&quot;poweroff&quot;</span><span class="p">,</span> <span class="s2">&quot;powerstatus&quot;</span><span class="p">,</span> <span class="s2">&quot;reboot&quot;</span><span class="p">]:</span>
+                <span class="n">power</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">power</span><span class="p">[</span><span class="s2">&quot;power&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">object_action</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;power&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">power</span><span class="p">[</span><span class="s2">&quot;systems&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">options</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">task_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">background_power_system</span><span class="p">(</span><span class="n">power</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">object_action</span> <span class="o">==</span> <span class="s2">&quot;update&quot;</span><span class="p">:</span>
+                <span class="n">task_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">background_signature_update</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">strip_none</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">options</span><span class="p">),</span> <span class="n">omit_none</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">object_action</span> <span class="o">==</span> <span class="s2">&quot;reload&quot;</span><span class="p">:</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">opt</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;filename&quot;</span><span class="p">,</span> <span class="s2">&quot;/var/lib/cobbler/distro_signatures.json&quot;</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">load_signatures</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;There was an error loading the signature data in </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Please check the JSON file or run &#39;cobbler signature update&#39;.&quot;</span><span class="p">)</span>
+                    <span class="k">return</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Signatures were successfully loaded&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">NotImplementedException</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NotImplementedException</span><span class="p">()</span>
+
+        <span class="c1"># FIXME: add tail/polling code here</span>
+        <span class="k">if</span> <span class="n">task_id</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">print_task</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">follow_task</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span></div>
+
+    <span class="c1"># BOOKMARK</span>
+<div class="viewcode-block" id="CobblerCLI.direct_command"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.CobblerCLI.direct_command">[docs]</a>    <span class="k">def</span> <span class="nf">direct_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Process non-object based commands like &quot;sync&quot; and &quot;hardlink&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">task_id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>        <span class="c1"># if assigned, we must tail the logfile</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">set_usage</span><span class="p">(</span><span class="s1">&#39;Usage: </span><span class="si">%%</span><span class="s1">prog </span><span class="si">%s</span><span class="s1"> [options]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">action_name</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;buildiso&quot;</span><span class="p">:</span>
+
+            <span class="n">defaultiso</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;generated.iso&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--iso&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;iso&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">defaultiso</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;(OPTIONAL) output ISO to this file&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--profiles&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;profiles&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;(OPTIONAL) use these profiles only&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--systems&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;systems&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;(OPTIONAL) use these systems only&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--tempdir&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;buildisodir&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;(OPTIONAL) working directory&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--distro&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;distro&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;(OPTIONAL) used with --standalone and --airgapped to create a distro-based ISO including all associated profiles/systems&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--standalone&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;standalone&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;(OPTIONAL) creates a standalone ISO with all required distro files, but without any added repos&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--airgapped&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;airgapped&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;(OPTIONAL) creates a standalone ISO with all distro and repo files for disconnected system installation&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--source&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;(OPTIONAL) used with --standalone to specify a source for the distribution files&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--exclude-dns&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;exclude_dns&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;(OPTIONAL) prevents addition of name server addresses to the kernel boot options&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--mkisofs-opts&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;mkisofs_opts&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;(OPTIONAL) extra options for mkisofs&quot;</span><span class="p">)</span>
+
+            <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+            <span class="n">task_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span><span class="s2">&quot;buildiso&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;replicate&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--master&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Cobbler server to replicate from.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--port&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;port&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Remote port.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--distros&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;distro_patterns&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;patterns of distros to replicate&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--profiles&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;profile_patterns&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;patterns of profiles to replicate&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--systems&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;system_patterns&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;patterns of systems to replicate&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--repos&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;repo_patterns&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;patterns of repos to replicate&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--image&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;image_patterns&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;patterns of images to replicate&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--mgmtclasses&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;mgmtclass_patterns&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;patterns of mgmtclasses to replicate&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--packages&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;package_patterns&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;patterns of packages to replicate&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--files&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;file_patterns&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;patterns of files to replicate&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--omit-data&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;omit_data&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;do not rsync data&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--sync-all&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;sync_all&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;sync all data&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--prune&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;prune&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;remove objects (of all types) not found on the master&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--use-ssl&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;use_ssl&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;use ssl to access the Cobbler master server api&quot;</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+            <span class="n">task_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span><span class="s2">&quot;replicate&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;aclsetup&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--adduser&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;adduser&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;give acls to this user&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--addgroup&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;addgroup&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;give acls to this group&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--removeuser&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;removeuser&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;remove acls from this user&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--removegroup&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;removegroup&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;remove acls from this group&quot;</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+            <span class="n">task_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span><span class="s2">&quot;aclsetup&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;version&quot;</span><span class="p">:</span>
+            <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">extended_version</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cobbler </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">version</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  source: </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">version</span><span class="p">[</span><span class="s2">&quot;gitstamp&quot;</span><span class="p">],</span> <span class="n">version</span><span class="p">[</span><span class="s2">&quot;gitdate&quot;</span><span class="p">]))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  build time: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">version</span><span class="p">[</span><span class="s2">&quot;builddate&quot;</span><span class="p">])</span>
+
+        <span class="k">elif</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;hardlink&quot;</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+            <span class="n">task_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span><span class="s2">&quot;hardlink&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;reserialize&quot;</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+            <span class="n">task_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span><span class="s2">&quot;reserialize&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;status&quot;</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">get_status</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;validate-autoinstalls&quot;</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+            <span class="n">task_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span><span class="s2">&quot;validate_autoinstall_files&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;get-loaders&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;force&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;overwrite any existing content in /var/lib/cobbler/loaders&quot;</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+            <span class="n">task_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span><span class="s2">&quot;dlcontent&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;import&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--arch&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;arch&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;OS architecture being imported&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--breed&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;breed&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the breed being imported&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--os-version&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;os_version&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the version being imported&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--path&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;local path or rsync location&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--name&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;name, ex &#39;RHEL-5&#39;&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--available-as&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;available_as&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;tree is here, don&#39;t mirror&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--autoinstall&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;autoinstall_file&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;assign this autoinstall file&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--rsync-flags&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;rsync_flags&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;pass additional flags to rsync&quot;</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">path</span> <span class="ow">and</span> <span class="s2">&quot;rsync://&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+                <span class="c1"># convert relative path to absolute path</span>
+                <span class="n">options</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+            <span class="n">task_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span><span class="s2">&quot;import&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;reposync&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--only&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;only&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;update only this repository name&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--tries&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;tries&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;try each repo this many times&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--no-fail&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;nofail&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;don&#39;t stop reposyncing if a failure occurs&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+            <span class="n">task_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span><span class="s2">&quot;reposync&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;aclsetup&quot;</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+            <span class="c1"># FIXME: missing options, add them here</span>
+            <span class="n">task_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span><span class="s2">&quot;aclsetup&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;check&quot;</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
+            <span class="n">ct</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The following are potential configuration items that you may want to fix:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                    <span class="n">ct</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ct</span><span class="p">,</span> <span class="n">r</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Restart cobblerd and then run &#39;cobbler sync&#39; to apply changes.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No configuration problems found.  All systems go.&quot;</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;sync&quot;</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;run sync with more output&quot;</span><span class="p">)</span>
+            <span class="n">task_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span><span class="s2">&quot;sync&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;report&quot;</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;distros:</span><span class="se">\n</span><span class="s2">==========&quot;</span><span class="p">)</span>
+            <span class="n">report_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;distro&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">profiles:</span><span class="se">\n</span><span class="s2">==========&quot;</span><span class="p">)</span>
+            <span class="n">report_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;profile&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">systems:</span><span class="se">\n</span><span class="s2">==========&quot;</span><span class="p">)</span>
+            <span class="n">report_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;system&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">repos:</span><span class="se">\n</span><span class="s2">==========&quot;</span><span class="p">)</span>
+            <span class="n">report_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;repo&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">images:</span><span class="se">\n</span><span class="s2">==========&quot;</span><span class="p">)</span>
+            <span class="n">report_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">mgmtclasses:</span><span class="se">\n</span><span class="s2">==========&quot;</span><span class="p">)</span>
+            <span class="n">report_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;mgmtclass&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">packages:</span><span class="se">\n</span><span class="s2">==========&quot;</span><span class="p">)</span>
+            <span class="n">report_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;package&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">files:</span><span class="se">\n</span><span class="s2">==========&quot;</span><span class="p">)</span>
+            <span class="n">report_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">action_name</span> <span class="o">==</span> <span class="s2">&quot;list&quot;</span><span class="p">:</span>
+            <span class="c1"># no tree view like 1.6?  This is more efficient remotely</span>
+            <span class="c1"># for large configs and prevents xfering the whole config</span>
+            <span class="c1"># though we could consider that...</span>
+            <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;distros:&quot;</span><span class="p">)</span>
+            <span class="n">list_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;distro&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">profiles:&quot;</span><span class="p">)</span>
+            <span class="n">list_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;profile&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">systems:&quot;</span><span class="p">)</span>
+            <span class="n">list_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;system&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">repos:&quot;</span><span class="p">)</span>
+            <span class="n">list_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;repo&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">images:&quot;</span><span class="p">)</span>
+            <span class="n">list_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">mgmtclasses:&quot;</span><span class="p">)</span>
+            <span class="n">list_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;mgmtclass&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">packages:&quot;</span><span class="p">)</span>
+            <span class="n">list_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;package&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">files:&quot;</span><span class="p">)</span>
+            <span class="n">list_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No such command: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">action_name</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># FIXME: run here</span>
+
+        <span class="c1"># FIXME: add tail/polling code here</span>
+        <span class="k">if</span> <span class="n">task_id</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">print_task</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">follow_task</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="CobblerCLI.print_task"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.CobblerCLI.print_task">[docs]</a>    <span class="k">def</span> <span class="nf">print_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;task started: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">task_id</span><span class="p">)</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">get_events</span><span class="p">()</span>
+        <span class="p">(</span><span class="n">etime</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">who_viewed</span><span class="p">)</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">task_id</span><span class="p">]</span>
+        <span class="n">atime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">asctime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">localtime</span><span class="p">(</span><span class="n">etime</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;task started (id=</span><span class="si">%s</span><span class="s2">, time=</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">atime</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CobblerCLI.follow_task"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.CobblerCLI.follow_task">[docs]</a>    <span class="k">def</span> <span class="nf">follow_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">):</span>
+        <span class="n">logfile</span> <span class="o">=</span> <span class="s2">&quot;/var/log/cobbler/tasks/</span><span class="si">%s</span><span class="s2">.log&quot;</span> <span class="o">%</span> <span class="n">task_id</span>
+        <span class="c1"># adapted from:  http://code.activestate.com/recipes/157035/</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        <span class="c1"># Find the size of the file and move to the end</span>
+        <span class="c1"># st_results = os.stat(filename)</span>
+        <span class="c1"># st_size = st_results[6]</span>
+        <span class="c1"># file.seek(st_size)</span>
+
+        <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">where</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;### TASK COMPLETE ###&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*** TASK COMPLETE ***&quot;</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;### TASK FAILED ###&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;!!! TASK FAILED !!!&quot;</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot; | &quot;</span><span class="p">):</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; | &quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CobblerCLI.print_object_help"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.CobblerCLI.print_object_help">[docs]</a>    <span class="k">def</span> <span class="nf">print_object_help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints the subcommands for a given object, e.g. &quot;cobbler distro --help&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">commands</span> <span class="o">=</span> <span class="n">OBJECT_ACTIONS_MAP</span><span class="p">[</span><span class="n">object_type</span><span class="p">]</span>
+        <span class="n">commands</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;usage</span><span class="se">\n</span><span class="s2">=====&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cobbler </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">object_type</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CobblerCLI.print_help"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.CobblerCLI.print_help">[docs]</a>    <span class="k">def</span> <span class="nf">print_help</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints general-top level help, e.g. &quot;cobbler --help&quot; or &quot;cobbler&quot; or &quot;cobbler command-does-not-exist&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;usage</span><span class="se">\n</span><span class="s2">=====&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cobbler &lt;distro|profile|system|repo|image|mgmtclass|package|file&gt; ... &quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;        [add|edit|copy|get-autoinstall*|list|remove|rename|report] [options|--help]&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cobbler &lt;</span><span class="si">%s</span><span class="s2">&gt; [options|--help]&quot;</span> <span class="o">%</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DIRECT_ACTIONS</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.cli.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    CLI entry point</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cli</span> <span class="o">=</span> <span class="n">CobblerCLI</span><span class="p">()</span>
+    <span class="n">cli</span><span class="o">.</span><span class="n">check_setup</span><span class="p">()</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rc</span> <span class="ow">or</span> <span class="n">rc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">rc</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">rc</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

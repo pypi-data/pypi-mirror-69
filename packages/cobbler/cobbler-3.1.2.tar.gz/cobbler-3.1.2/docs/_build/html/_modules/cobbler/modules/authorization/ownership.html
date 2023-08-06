@@ -1,0 +1,387 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.modules.authorization.ownership &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.modules.authorization.ownership</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.modules.authorization.ownership</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Authorization module that allow users listed in</span>
+<span class="sd">/etc/cobbler/users.conf to be permitted to access resources, with</span>
+<span class="sd">the further restriction that cobbler objects can be edited to only</span>
+<span class="sd">allow certain users/groups to access those specific objects.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
+<span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">from</span> <span class="nn">configparser</span> <span class="k">import</span> <span class="n">ConfigParser</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">CX</span>
+<span class="kn">from</span> <span class="nn">cobbler.utils</span> <span class="k">import</span> <span class="n">_</span>
+
+
+<div class="viewcode-block" id="register"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.authorization.html#cobbler.modules.authorization.ownership.register">[docs]</a><span class="k">def</span> <span class="nf">register</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The mandatory cobbler module registration hook.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;authz&quot;</span></div>
+
+
+<span class="k">def</span> <span class="nf">__parse_config</span><span class="p">():</span>
+    <span class="n">etcfile</span> <span class="o">=</span> <span class="s1">&#39;/etc/cobbler/users.conf&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">etcfile</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;/etc/cobbler/users.conf does not exist&quot;</span><span class="p">))</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="p">()</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">etcfile</span><span class="p">)</span>
+    <span class="n">alldata</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">sections</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">sections</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">sections</span><span class="p">:</span>
+        <span class="n">alldata</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">g</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">opts</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+            <span class="n">alldata</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">alldata</span>
+
+
+<span class="k">def</span> <span class="nf">__authorize_autoinst</span><span class="p">(</span><span class="n">api_handle</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">autoinst</span><span class="p">):</span>
+    <span class="c1"># the authorization rules for automatic installation file editing are a bit</span>
+    <span class="c1"># of a special case.  Non-admin users can edit a automatic installation file</span>
+    <span class="c1"># only if all objects that depend on that automatic installation file are</span>
+    <span class="c1"># editable by the user in question.</span>
+    <span class="c1">#</span>
+    <span class="c1"># Example:</span>
+    <span class="c1">#   if Pinky owns ProfileA</span>
+    <span class="c1">#   and the Brain owns ProfileB</span>
+    <span class="c1">#   and both profiles use the same automatic installation template</span>
+    <span class="c1">#   and neither Pinky nor the Brain is an admin</span>
+    <span class="c1">#   neither is allowed to edit the automatic installation template</span>
+    <span class="c1">#   because they would make unwanted changes to each other</span>
+    <span class="c1">#</span>
+    <span class="c1"># In the above scenario the UI will explain the problem</span>
+    <span class="c1"># and ask that the user asks the admin to resolve it if required.</span>
+    <span class="c1"># NOTE: this function is only called by authorize so admin users are</span>
+    <span class="c1"># cleared before this function is called.</span>
+
+    <span class="n">lst</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">find_profile</span><span class="p">(</span><span class="n">autoinst</span><span class="o">=</span><span class="n">autoinst</span><span class="p">,</span> <span class="n">return_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">lst</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">api_handle</span><span class="o">.</span><span class="n">find_system</span><span class="p">(</span><span class="n">autoinst</span><span class="o">=</span><span class="n">autoinst</span><span class="p">,</span> <span class="n">return_list</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">__is_user_allowed</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="s2">&quot;write_autoinst&quot;</span><span class="p">,</span> <span class="n">autoinst</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="mi">1</span>
+
+
+<span class="k">def</span> <span class="nf">__authorize_snippet</span><span class="p">(</span><span class="n">api_handle</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">autoinst</span><span class="p">):</span>
+    <span class="c1"># only allow admins to edit snippets -- since we don&#39;t have detection to see</span>
+    <span class="c1"># where each snippet is in use</span>
+    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">group</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;admins&quot;</span><span class="p">,</span> <span class="s2">&quot;admin&quot;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">def</span> <span class="nf">__is_user_allowed</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">resource</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">user</span> <span class="o">==</span> <span class="s2">&quot;&lt;DIRECT&gt;&quot;</span><span class="p">:</span>
+        <span class="c1"># system user, logged in via web.ss</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">group</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;admins&quot;</span><span class="p">,</span> <span class="s2">&quot;admin&quot;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">owners</span> <span class="o">==</span> <span class="p">[]:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">allowed</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">owners</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">user</span> <span class="o">==</span> <span class="n">allowed</span><span class="p">:</span>
+            <span class="c1"># user match</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="c1"># else look for a group match</span>
+    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">group</span> <span class="o">==</span> <span class="n">allowed</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="mi">0</span>
+
+
+<div class="viewcode-block" id="authorize"><a class="viewcode-back" href="../../../../code-autodoc/cobbler.modules.authorization.html#cobbler.modules.authorization.ownership.authorize">[docs]</a><span class="k">def</span> <span class="nf">authorize</span><span class="p">(</span><span class="n">api_handle</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">resource</span><span class="p">,</span> <span class="n">arg1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">arg2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validate a user against a resource.</span>
+<span class="sd">    All users in the file are permitted by this module.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">user</span> <span class="o">==</span> <span class="s2">&quot;&lt;DIRECT&gt;&quot;</span><span class="p">:</span>
+        <span class="c1"># CLI should always be permitted</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># everybody can get read-only access to everything</span>
+    <span class="c1"># if they pass authorization, they don&#39;t have to be in users.conf</span>
+    <span class="k">if</span> <span class="n">resource</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># FIXME: /cobbler/web should not be subject to user check in any case</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;read&quot;</span><span class="p">,</span> <span class="s2">&quot;/cobbler/web&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">resource</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">1</span>        <span class="c1"># read operation is always ok.</span>
+
+    <span class="n">user_groups</span> <span class="o">=</span> <span class="n">__parse_config</span><span class="p">()</span>
+
+    <span class="c1"># classify the type of operation</span>
+    <span class="n">modify_operation</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">criteria</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;save&quot;</span><span class="p">,</span> <span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="s2">&quot;rename&quot;</span><span class="p">,</span> <span class="s2">&quot;remove&quot;</span><span class="p">,</span> <span class="s2">&quot;modify&quot;</span><span class="p">,</span> <span class="s2">&quot;edit&quot;</span><span class="p">,</span> <span class="s2">&quot;xapi&quot;</span><span class="p">,</span> <span class="s2">&quot;background&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">resource</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">criteria</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">modify_operation</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># FIXME: is everyone allowed to copy?  I think so.</span>
+    <span class="c1"># FIXME: deal with the problem of deleted parents and promotion</span>
+
+    <span class="n">found_user</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">found_groups</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">grouplist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">user_groups</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">grouplist</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">user_groups</span><span class="p">[</span><span class="n">g</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">user</span><span class="p">:</span>
+                <span class="n">found_groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+                <span class="n">found_user</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="c1"># if user is in the admin group, always authorize</span>
+                <span class="c1"># regardless of the ownership of the object.</span>
+                <span class="k">if</span> <span class="n">g</span> <span class="o">==</span> <span class="s2">&quot;admins&quot;</span> <span class="ow">or</span> <span class="n">g</span> <span class="o">==</span> <span class="s2">&quot;admin&quot;</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">found_user</span><span class="p">:</span>
+        <span class="c1"># if the user isn&#39;t anywhere in the file, reject regardless</span>
+        <span class="c1"># they can still use read-only XMLRPC</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">modify_operation</span><span class="p">:</span>
+        <span class="c1"># sufficient to allow access for non save/remove ops to all</span>
+        <span class="c1"># users for now, may want to refine later.</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># now we have a modify_operation op, so we must check ownership</span>
+    <span class="c1"># of the object.  remove ops pass in arg1 as a string name,</span>
+    <span class="c1"># saves pass in actual objects, so we must treat them differently.</span>
+    <span class="c1"># automatic installaton files are even more special so we call those</span>
+    <span class="c1"># out to another function, rather than going through the rest of the</span>
+    <span class="c1"># code here.</span>
+
+    <span class="k">if</span> <span class="n">resource</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;write_autoinstall_template&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">__authorize_autoinst</span><span class="p">(</span><span class="n">api_handle</span><span class="p">,</span> <span class="n">found_groups</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">arg1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">resource</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;read_autoinstall_template&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># the API for editing snippets also needs to do something similar.</span>
+    <span class="c1"># as with automatic installation files, though since they are more</span>
+    <span class="c1"># widely used it&#39;s more restrictive</span>
+
+    <span class="k">if</span> <span class="n">resource</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;write_autoinstall_snippet&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">__authorize_snippet</span><span class="p">(</span><span class="n">api_handle</span><span class="p">,</span> <span class="n">found_groups</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">arg1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">resource</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;read_autoinstall_snipppet&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="n">obj</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">resource</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;remove&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resource</span> <span class="o">==</span> <span class="s2">&quot;remove_distro&quot;</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">find_distro</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">resource</span> <span class="o">==</span> <span class="s2">&quot;remove_profile&quot;</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">find_profile</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">resource</span> <span class="o">==</span> <span class="s2">&quot;remove_system&quot;</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">find_system</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">resource</span> <span class="o">==</span> <span class="s2">&quot;remove_repo&quot;</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">find_repo</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">resource</span> <span class="o">==</span> <span class="s2">&quot;remove_image&quot;</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">api_handle</span><span class="o">.</span><span class="n">find_image</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">resource</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;save&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">resource</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;modify&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">arg1</span>
+
+    <span class="c1"># if the object has no ownership data, allow access regardless</span>
+    <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">obj</span><span class="o">.</span><span class="n">owners</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">obj</span><span class="o">.</span><span class="n">owners</span> <span class="o">==</span> <span class="p">[]:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="n">__is_user_allowed</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">found_groups</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">resource</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

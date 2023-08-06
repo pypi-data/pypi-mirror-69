@@ -1,0 +1,544 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.actions.replicate &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.actions.replicate</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.actions.replicate</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Replicate from a cobbler master.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
+<span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">import</span> <span class="nn">fnmatch</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">xmlrpc.client</span>
+
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">clogger</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+
+<span class="n">OBJ_TYPES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;distro&quot;</span><span class="p">,</span> <span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;repo&quot;</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;mgmtclass&quot;</span><span class="p">,</span> <span class="s2">&quot;package&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="Replicate"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.replicate.Replicate">[docs]</a><span class="k">class</span> <span class="nc">Replicate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="n">collection_mgr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remote</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span> <span class="o">=</span> <span class="n">clogger</span><span class="o">.</span><span class="n">Logger</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+
+<div class="viewcode-block" id="Replicate.rsync_it"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.replicate.Replicate.rsync_it">[docs]</a>    <span class="k">def</span> <span class="nf">rsync_it</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">from_path</span><span class="p">,</span> <span class="n">to_path</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">from_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">::</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">master</span><span class="p">,</span> <span class="n">from_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;repo&#39;</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;rsync </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">replicate_repo_rsync_options</span><span class="p">,</span> <span class="n">from_path</span><span class="p">,</span> <span class="n">to_path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;rsync </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">replicate_rsync_options</span><span class="p">,</span> <span class="n">from_path</span><span class="p">,</span> <span class="n">to_path</span><span class="p">)</span>
+
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;rsync failed&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># -------------------------------------------------------</span>
+
+<div class="viewcode-block" id="Replicate.remove_objects_not_on_master"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.replicate.Replicate.remove_objects_not_on_master">[docs]</a>    <span class="k">def</span> <span class="nf">remove_objects_not_on_master</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">):</span>
+        <span class="nb">locals</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">lod_to_dod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_data</span><span class="p">[</span><span class="n">obj_type</span><span class="p">],</span> <span class="s2">&quot;uid&quot;</span><span class="p">)</span>
+        <span class="n">remotes</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">lod_to_dod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote_data</span><span class="p">[</span><span class="n">obj_type</span><span class="p">],</span> <span class="s2">&quot;uid&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">luid</span><span class="p">,</span> <span class="n">ldata</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">locals</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">luid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">remotes</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;removing </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="n">ldata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">remove_item</span><span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="n">ldata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">log_exc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span></div>
+
+    <span class="c1"># -------------------------------------------------------</span>
+
+<div class="viewcode-block" id="Replicate.add_objects_not_on_local"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.replicate.Replicate.add_objects_not_on_local">[docs]</a>    <span class="k">def</span> <span class="nf">add_objects_not_on_local</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">):</span>
+        <span class="nb">locals</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">lod_to_dod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_data</span><span class="p">[</span><span class="n">obj_type</span><span class="p">],</span> <span class="s2">&quot;uid&quot;</span><span class="p">)</span>
+        <span class="n">remotes</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">lod_sort_by_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote_data</span><span class="p">[</span><span class="n">obj_type</span><span class="p">],</span> <span class="s2">&quot;depth&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">rdata</span> <span class="ow">in</span> <span class="n">remotes</span><span class="p">:</span>
+
+            <span class="c1"># do not add the system if it is not on the transfer list</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">rdata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="n">obj_type</span><span class="p">]:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">rdata</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">:</span>
+                <span class="n">creator</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="s2">&quot;new_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">obj_type</span><span class="p">)</span>
+                <span class="n">newobj</span> <span class="o">=</span> <span class="n">creator</span><span class="p">()</span>
+                <span class="n">newobj</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">rdata</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;adding </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="n">rdata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]))</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="n">newobj</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;failed to add </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="n">rdata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]))</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">log_exc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span></div>
+
+    <span class="c1"># -------------------------------------------------------</span>
+
+<div class="viewcode-block" id="Replicate.replace_objects_newer_on_remote"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.replicate.Replicate.replace_objects_newer_on_remote">[docs]</a>    <span class="k">def</span> <span class="nf">replace_objects_newer_on_remote</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">):</span>
+        <span class="nb">locals</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">lod_to_dod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_data</span><span class="p">[</span><span class="n">obj_type</span><span class="p">],</span> <span class="s2">&quot;uid&quot;</span><span class="p">)</span>
+        <span class="n">remotes</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">lod_to_dod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote_data</span><span class="p">[</span><span class="n">obj_type</span><span class="p">],</span> <span class="s2">&quot;uid&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">ruid</span><span class="p">,</span> <span class="n">rdata</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">remotes</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="c1"># do not add the system if it is not on the transfer list</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">rdata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="n">obj_type</span><span class="p">]:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">ruid</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">:</span>
+                <span class="n">ldata</span> <span class="o">=</span> <span class="nb">locals</span><span class="p">[</span><span class="n">ruid</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">ldata</span><span class="p">[</span><span class="s2">&quot;mtime&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">rdata</span><span class="p">[</span><span class="s2">&quot;mtime&quot;</span><span class="p">]:</span>
+
+                    <span class="k">if</span> <span class="n">ldata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">rdata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;removing </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="n">ldata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]))</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">remove_item</span><span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="n">ldata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+                    <span class="n">creator</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="s2">&quot;new_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">obj_type</span><span class="p">)</span>
+                    <span class="n">newobj</span> <span class="o">=</span> <span class="n">creator</span><span class="p">()</span>
+                    <span class="n">newobj</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">rdata</span><span class="p">)</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;updating </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="n">rdata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]))</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="n">newobj</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;failed to update </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="n">rdata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]))</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="n">utils</span><span class="o">.</span><span class="n">log_exc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span></div>
+
+    <span class="c1"># -------------------------------------------------------</span>
+
+<div class="viewcode-block" id="Replicate.replicate_data"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.replicate.Replicate.replicate_data">[docs]</a>    <span class="k">def</span> <span class="nf">replicate_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">local_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remote_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remote_settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">get_settings</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Querying Both Servers&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">what</span> <span class="ow">in</span> <span class="n">OBJ_TYPES</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">remote_data</span><span class="p">[</span><span class="n">what</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">get_items</span><span class="p">(</span><span class="n">what</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">local_data</span><span class="p">[</span><span class="n">what</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local</span><span class="o">.</span><span class="n">get_items</span><span class="p">(</span><span class="n">what</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_include_map</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prune</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Removing Objects Not Stored On Master&quot;</span><span class="p">)</span>
+            <span class="n">obj_types</span> <span class="o">=</span> <span class="n">OBJ_TYPES</span><span class="p">[:]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_patterns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="s2">&quot;system&quot;</span> <span class="ow">in</span> <span class="n">obj_types</span><span class="p">:</span>
+                <span class="n">obj_types</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;system&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">what</span> <span class="ow">in</span> <span class="n">obj_types</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">remove_objects_not_on_master</span><span class="p">(</span><span class="n">what</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;*NOT* Removing Objects Not Stored On Master&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">omit_data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rsyncing distros&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">distro</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="s2">&quot;distro&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="s2">&quot;distro&quot;</span><span class="p">][</span><span class="n">distro</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rsyncing distro </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">distro</span><span class="p">)</span>
+                    <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">get_distro</span><span class="p">(</span><span class="n">distro</span><span class="p">)</span>
+                    <span class="n">target_webdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote_settings</span><span class="p">[</span><span class="s2">&quot;webdir&quot;</span><span class="p">],</span> <span class="s2">&quot;distro_mirror&quot;</span><span class="p">)</span>
+                    <span class="n">tail</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">path_tail</span><span class="p">(</span><span class="n">target_webdir</span><span class="p">,</span> <span class="n">target</span><span class="p">[</span><span class="s2">&quot;kernel&quot;</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">tail</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="c1"># path_tail(a,b) returns something that looks like</span>
+                            <span class="c1"># an absolute path, but it&#39;s really the sub-path</span>
+                            <span class="c1"># from a that is contained in b. That means we want</span>
+                            <span class="c1"># the first element of the path</span>
+                            <span class="n">dest</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;distro_mirror&quot;</span><span class="p">,</span> <span class="n">tail</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">rsync_it</span><span class="p">(</span><span class="s2">&quot;distro-</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">target</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">dest</span><span class="p">)</span>
+                        <span class="k">except</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to rsync distro </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">distro</span><span class="p">)</span>
+                            <span class="k">continue</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Skipping distro </span><span class="si">%s</span><span class="s2">, as it doesn&#39;t appear to live under distro_mirror&quot;</span> <span class="o">%</span> <span class="n">distro</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rsyncing repos&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">repo</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="s2">&quot;repo&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="s2">&quot;repo&quot;</span><span class="p">][</span><span class="n">repo</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">rsync_it</span><span class="p">(</span><span class="s2">&quot;repo-</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">repo</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;repo_mirror&quot;</span><span class="p">,</span> <span class="n">repo</span><span class="p">),</span> <span class="s2">&quot;repo&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rsyncing distro repo configs&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rsync_it</span><span class="p">(</span><span class="s2">&quot;cobbler-distros/config/&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;distro_mirror&quot;</span><span class="p">,</span> <span class="s2">&quot;config&quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rsyncing automatic installation templates &amp; snippets&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rsync_it</span><span class="p">(</span><span class="s2">&quot;cobbler-autoinstalls&quot;</span><span class="p">,</span> <span class="s2">&quot;/var/lib/cobbler/autoinstall_templates&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rsync_it</span><span class="p">(</span><span class="s2">&quot;cobbler-snippets&quot;</span><span class="p">,</span> <span class="s2">&quot;/var/lib/cobbler/autoinstall_snippets&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rsyncing triggers&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rsync_it</span><span class="p">(</span><span class="s2">&quot;cobbler-triggers&quot;</span><span class="p">,</span> <span class="s2">&quot;/var/lib/cobbler/triggers&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rsyncing scripts&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rsync_it</span><span class="p">(</span><span class="s2">&quot;cobbler-scripts&quot;</span><span class="p">,</span> <span class="s2">&quot;/var/lib/cobbler/scripts&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;*NOT* Rsyncing Data&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Removing Objects Not Stored On Local&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">what</span> <span class="ow">in</span> <span class="n">OBJ_TYPES</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_objects_not_on_local</span><span class="p">(</span><span class="n">what</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Updating Objects Newer On Remote&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">what</span> <span class="ow">in</span> <span class="n">OBJ_TYPES</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">replace_objects_newer_on_remote</span><span class="p">(</span><span class="n">what</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Replicate.link_distros"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.replicate.Replicate.link_distros">[docs]</a>    <span class="k">def</span> <span class="nf">link_distros</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">distro</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">distros</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Linking Distro </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">link_distro</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span> <span class="n">distro</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Replicate.generate_include_map"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.replicate.Replicate.generate_include_map">[docs]</a>    <span class="k">def</span> <span class="nf">generate_include_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">remote_names</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remote_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">must_include</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;distro&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;profile&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;system&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;repo&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;mgmtclass&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;package&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">ot</span> <span class="ow">in</span> <span class="n">OBJ_TYPES</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">remote_names</span><span class="p">[</span><span class="n">ot</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">lod_to_dod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote_data</span><span class="p">[</span><span class="n">ot</span><span class="p">],</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">remote_dict</span><span class="p">[</span><span class="n">ot</span><span class="p">]</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">lod_to_dod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote_data</span><span class="p">[</span><span class="n">ot</span><span class="p">],</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sync_all</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">names</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_dict</span><span class="p">[</span><span class="n">ot</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="n">ot</span><span class="p">][</span><span class="n">names</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;remote names struct is </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_names</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">sync_all</span><span class="p">:</span>
+            <span class="c1"># include all profiles that are matched by a pattern</span>
+            <span class="k">for</span> <span class="n">obj_type</span> <span class="ow">in</span> <span class="n">OBJ_TYPES</span><span class="p">:</span>
+                <span class="n">patvar</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_patterns&quot;</span> <span class="o">%</span> <span class="n">obj_type</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;* Finding Explicit </span><span class="si">%s</span><span class="s2"> Matches&quot;</span> <span class="o">%</span> <span class="n">obj_type</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">pat</span> <span class="ow">in</span> <span class="n">patvar</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">remote</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_names</span><span class="p">[</span><span class="n">obj_type</span><span class="p">]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;?: seeing if </span><span class="si">%s</span><span class="s2"> looks like </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">remote</span><span class="p">,</span> <span class="n">pat</span><span class="p">))</span>
+                        <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="n">remote</span><span class="p">,</span> <span class="n">pat</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Adding </span><span class="si">%s</span><span class="s2"> for pattern match </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">remote</span><span class="p">,</span> <span class="n">pat</span><span class="p">))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="n">obj_type</span><span class="p">][</span><span class="n">remote</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="c1"># include all profiles that systems require</span>
+            <span class="c1"># whether they are explicitly included or not</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;* Adding Profiles Required By Systems&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">sys</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="s2">&quot;system&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">pro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_dict</span><span class="p">[</span><span class="s2">&quot;system&quot;</span><span class="p">][</span><span class="n">sys</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;?: system </span><span class="si">%s</span><span class="s2"> requires profile </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="n">pro</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">pro</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Adding profile </span><span class="si">%s</span><span class="s2"> for system </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pro</span><span class="p">,</span> <span class="n">sys</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="s2">&quot;profile&quot;</span><span class="p">][</span><span class="n">pro</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="c1"># include all profiles that subprofiles require</span>
+            <span class="c1"># whether they are explicitly included or not</span>
+            <span class="c1"># very deep nesting is possible</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;* Adding Profiles Required By SubProfiles&quot;</span><span class="p">)</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">loop_exit</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">for</span> <span class="n">pro</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="s2">&quot;profile&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                    <span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_dict</span><span class="p">[</span><span class="s2">&quot;profile&quot;</span><span class="p">][</span><span class="n">pro</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parent&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">parent</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">parent</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="s2">&quot;profile&quot;</span><span class="p">]:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Adding parent profile </span><span class="si">%s</span><span class="s2"> for profile </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">pro</span><span class="p">))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="s2">&quot;profile&quot;</span><span class="p">][</span><span class="n">parent</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                            <span class="n">loop_exit</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">loop_exit</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+            <span class="c1"># require all distros that any profiles in the generated list requires</span>
+            <span class="c1"># whether they are explicitly included or not</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;* Adding Distros Required By Profiles&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="s2">&quot;profile&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">distro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_dict</span><span class="p">[</span><span class="s2">&quot;profile&quot;</span><span class="p">][</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;distro&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">distro</span> <span class="o">==</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">distro</span> <span class="o">==</span> <span class="s2">&quot;~&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Adding distro </span><span class="si">%s</span><span class="s2"> for profile </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">distro</span><span class="p">,</span> <span class="n">p</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="s2">&quot;distro&quot;</span><span class="p">][</span><span class="n">distro</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="c1"># require any repos that any profiles in the generated list requires</span>
+            <span class="c1"># whether they are explicitly included or not</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;* Adding Repos Required By Profiles&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="s2">&quot;profile&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">repos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_dict</span><span class="p">[</span><span class="s2">&quot;profile&quot;</span><span class="p">][</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;repos&quot;</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="k">if</span> <span class="n">repos</span> <span class="o">!=</span> <span class="s2">&quot;&lt;&lt;inherit&gt;&gt;&quot;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">repos</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Adding repo </span><span class="si">%s</span><span class="s2"> for profile </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">p</span><span class="p">))</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="s2">&quot;repo&quot;</span><span class="p">][</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="c1"># include all images that systems require</span>
+            <span class="c1"># whether they are explicitly included or not</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;* Adding Images Required By Systems&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">sys</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="s2">&quot;system&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_dict</span><span class="p">[</span><span class="s2">&quot;system&quot;</span><span class="p">][</span><span class="n">sys</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;?: system </span><span class="si">%s</span><span class="s2"> requires image </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="n">img</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">img</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Adding image </span><span class="si">%s</span><span class="s2"> for system </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">sys</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">][</span><span class="n">img</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># FIXME: remove debug</span>
+        <span class="k">for</span> <span class="n">ot</span> <span class="ow">in</span> <span class="n">OBJ_TYPES</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;transfer list for </span><span class="si">%s</span><span class="s2"> is </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ot</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">must_include</span><span class="p">[</span><span class="n">ot</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span></div>
+
+    <span class="c1"># -------------------------------------------------------</span>
+
+<div class="viewcode-block" id="Replicate.run"><a class="viewcode-back" href="../../../code-autodoc/cobbler.actions.html#cobbler.actions.replicate.Replicate.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cobbler_master</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="s2">&quot;80&quot;</span><span class="p">,</span> <span class="n">distro_patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">profile_patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">system_patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">repo_patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">image_patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">mgmtclass_patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">package_patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prune</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">omit_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sync_all</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_ssl</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get remote profiles and distros and sync them locally</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distro_patterns</span> <span class="o">=</span> <span class="n">distro_patterns</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profile_patterns</span> <span class="o">=</span> <span class="n">profile_patterns</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">system_patterns</span> <span class="o">=</span> <span class="n">system_patterns</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repo_patterns</span> <span class="o">=</span> <span class="n">repo_patterns</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_patterns</span> <span class="o">=</span> <span class="n">image_patterns</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mgmtclass_patterns</span> <span class="o">=</span> <span class="n">mgmtclass_patterns</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">package_patterns</span> <span class="o">=</span> <span class="n">package_patterns</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_patterns</span> <span class="o">=</span> <span class="n">file_patterns</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">omit_data</span> <span class="o">=</span> <span class="n">omit_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prune</span> <span class="o">=</span> <span class="n">prune</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync_all</span> <span class="o">=</span> <span class="n">sync_all</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_ssl</span> <span class="o">=</span> <span class="n">use_ssl</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ssl</span><span class="p">:</span>
+            <span class="n">protocol</span> <span class="o">=</span> <span class="s1">&#39;https&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">protocol</span> <span class="o">=</span> <span class="s1">&#39;http&#39;</span>
+
+        <span class="k">if</span> <span class="n">cobbler_master</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="n">cobbler_master</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">cobbler_master</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">cobbler_master</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s1">&#39;No cobbler master specified, try --master.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">://</span><span class="si">%s</span><span class="s1">:</span><span class="si">%s</span><span class="s1">/cobbler_api&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">protocol</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">master</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;cobbler_master      = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cobbler_master</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;port                = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;distro_patterns     = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">distro_patterns</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;profile_patterns    = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile_patterns</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;system_patterns     = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_patterns</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;repo_patterns       = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo_patterns</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;image_patterns      = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_patterns</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;mgmtclass_patterns  = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">mgmtclass_patterns</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;package_patterns    = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">package_patterns</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;file_patterns       = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_patterns</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;omit_data           = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">omit_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;sync_all            = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">sync_all</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;use_ssl             = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ssl</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;XMLRPC endpoint: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;test ALPHA&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remote</span> <span class="o">=</span> <span class="n">xmlrpc</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Server</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;test BETA&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">local</span> <span class="o">=</span> <span class="n">xmlrpc</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Server</span><span class="p">(</span><span class="s2">&quot;http://127.0.0.1:</span><span class="si">%s</span><span class="s2">/cobbler_api&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">http_port</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">local</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">replicate_data</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">link_distros</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Syncing&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,420 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.templar &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.templar</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.templar</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Cobbler uses Cheetah templates for lots of stuff, but there&#39;s</span>
+<span class="sd">some additional magic around that to deal with snippets/etc.</span>
+<span class="sd">(And it&#39;s not spelled wrong!)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">import</span> <span class="nn">Cheetah</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+<span class="kn">import</span> <span class="nn">string</span>
+
+<span class="n">jinja2_available</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">jinja2</span>
+    <span class="n">jinja2_available</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; FIXME: log a message here &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="kn">from</span> <span class="nn">.cexceptions</span> <span class="k">import</span> <span class="n">CX</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">clogger</span>
+<span class="kn">from</span> <span class="nn">.template_api</span> <span class="k">import</span> <span class="n">Template</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">utils</span>
+
+<span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="p">,</span> <span class="n">release</span> <span class="o">=</span> <span class="n">Cheetah</span><span class="o">.</span><span class="n">Version</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">fix_cheetah_class</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">major</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">minor</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">release</span><span class="p">))</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Templar"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.templar.Templar">[docs]</a><span class="k">class</span> <span class="nc">Templar</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">collection_mgr</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="n">collection_mgr</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_errors</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span> <span class="o">=</span> <span class="n">clogger</span><span class="o">.</span><span class="n">Logger</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+
+<div class="viewcode-block" id="Templar.check_for_invalid_imports"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.templar.Templar.check_for_invalid_imports">[docs]</a>    <span class="k">def</span> <span class="nf">check_for_invalid_imports</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ensure that Cheetah code is not importing Python modules</span>
+<span class="sd">        that may allow for advanced priveledges by ensuring we whitelist</span>
+<span class="sd">        the imports that we allow</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;#import&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">rest</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#import&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="ow">and</span> <span class="n">rest</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">cheetah_import_whitelist</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;potentially insecure import in template: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">rest</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Templar.render"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.templar.Templar.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_input</span><span class="p">,</span> <span class="n">search_table</span><span class="p">,</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">template_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render data_input back into a file.</span>
+<span class="sd">        data_input is either a string or a filename</span>
+<span class="sd">        search_table is a dict of metadata keys and values</span>
+<span class="sd">        out_path if not-none writes the results to a file</span>
+<span class="sd">        (though results are always returned)</span>
+<span class="sd">        subject is a profile or system object, if available (for snippet eval)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_input</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="n">data_input</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="n">data_input</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">template_type</span><span class="p">:</span>
+            <span class="c1"># Assume we&#39;re using the default template type, if set in</span>
+            <span class="c1"># the settinigs file or use cheetah as the last resort</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">default_template_type</span><span class="p">:</span>
+                <span class="n">template_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">default_template_type</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">template_type</span> <span class="o">=</span> <span class="s2">&quot;cheetah&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;#template=&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># pull the template type out of the first line and then drop</span>
+            <span class="c1"># it and rejoin them to pass to the template language</span>
+            <span class="n">template_type</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="k">del</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">template_type</span> <span class="o">==</span> <span class="s2">&quot;cheetah&quot;</span><span class="p">:</span>
+            <span class="n">data_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_cheetah</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">search_table</span><span class="p">,</span> <span class="n">subject</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">template_type</span> <span class="o">==</span> <span class="s2">&quot;jinja2&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">jinja2_available</span><span class="p">:</span>
+                <span class="n">data_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_jinja2</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">search_table</span><span class="p">,</span> <span class="n">subject</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;# ERROR: JINJA2 NOT AVAILABLE. Maybe you need to install python-jinja2?</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;# ERROR: UNSUPPORTED TEMPLATE TYPE (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">template_type</span><span class="p">)</span>
+
+        <span class="c1"># now apply some magic post-filtering that is used by cobbler import and some</span>
+        <span class="c1"># other places.  Forcing folks to double escape things would be very unwelcome.</span>
+        <span class="n">hp</span> <span class="o">=</span> <span class="n">search_table</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;http_port&quot;</span><span class="p">,</span> <span class="s2">&quot;80&quot;</span><span class="p">)</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="n">search_table</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;server&quot;</span><span class="p">,</span> <span class="s2">&quot;server.example.org&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">hp</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="s1">&#39;80&#39;</span><span class="p">):</span>
+            <span class="n">repstr</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">hp</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">repstr</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="n">search_table</span><span class="p">[</span><span class="s2">&quot;http_server&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">repstr</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">search_table</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+                <span class="n">data_out</span> <span class="o">=</span> <span class="n">data_out</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;@@</span><span class="si">%s</span><span class="s2">@@&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">search_table</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)]))</span>
+
+        <span class="c1"># remove leading newlines which apparently breaks AutoYAST ?</span>
+        <span class="k">if</span> <span class="n">data_out</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">data_out</span> <span class="o">=</span> <span class="n">data_out</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
+
+        <span class="c1"># if requested, write the data out to a file</span>
+        <span class="k">if</span> <span class="n">out_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">out_path</span><span class="p">))</span>
+            <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data_out</span><span class="p">)</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">data_out</span></div>
+
+<div class="viewcode-block" id="Templar.render_cheetah"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.templar.Templar.render_cheetah">[docs]</a>    <span class="k">def</span> <span class="nf">render_cheetah</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_data</span><span class="p">,</span> <span class="n">search_table</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render data_input back into a file.</span>
+<span class="sd">        data_input is either a string or a filename</span>
+<span class="sd">        search_table is a dict of metadata keys and values</span>
+<span class="sd">        (though results are always returned)</span>
+<span class="sd">        subject is a profile or system object, if available (for snippet eval)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_for_invalid_imports</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+
+        <span class="c1"># backward support for Cobbler&#39;s legacy (and slightly more readable)</span>
+        <span class="c1"># template syntax.</span>
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;TEMPLATE::&quot;</span><span class="p">,</span> <span class="s2">&quot;$&quot;</span><span class="p">)</span>
+
+        <span class="c1"># HACK:  the autoinstall_meta field may contain nfs://server:/mount in which</span>
+        <span class="c1"># case this is likely WRONG for automated installation files, which needs</span>
+        <span class="c1"># the NFS directive instead.  Do this to make the templates work.</span>
+        <span class="n">newdata</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;tree&quot;</span> <span class="ow">in</span> <span class="n">search_table</span> <span class="ow">and</span> <span class="n">search_table</span><span class="p">[</span><span class="s2">&quot;tree&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;nfs://&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;--url&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;url &quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">rest</span> <span class="o">=</span> <span class="n">search_table</span><span class="p">[</span><span class="s2">&quot;tree&quot;</span><span class="p">][</span><span class="mi">6</span><span class="p">:]</span>        <span class="c1"># strip off &quot;nfs://&quot; part</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span> <span class="o">=</span> <span class="n">rest</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Invalid syntax for NFS path given during import: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">search_table</span><span class="p">[</span><span class="s2">&quot;tree&quot;</span><span class="p">])</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;nfs --server </span><span class="si">%s</span><span class="s2"> --dir </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span>
+                    <span class="c1"># but put the URL part back in so koan can still see</span>
+                    <span class="c1"># what the original value was</span>
+                    <span class="n">line</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;#url --url=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">search_table</span><span class="p">[</span><span class="s2">&quot;tree&quot;</span><span class="p">]</span>
+                <span class="n">newdata</span> <span class="o">+=</span> <span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="n">newdata</span>
+
+        <span class="c1"># tell Cheetah not to blow up if it can&#39;t find a symbol for something</span>
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="s2">&quot;#errorCatcher ListErrors</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">raw_data</span>
+
+        <span class="n">table_copy</span> <span class="o">=</span> <span class="n">search_table</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># for various reasons we may want to call a module inside a template and pass</span>
+        <span class="c1"># it all of the template variables.  The variable &quot;template_universe&quot; serves</span>
+        <span class="c1"># this purpose to make it easier to iterate through all of the variables without</span>
+        <span class="c1"># using internal Cheetah variables</span>
+
+        <span class="n">search_table</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s2">&quot;template_universe&quot;</span><span class="p">:</span> <span class="n">table_copy</span>
+        <span class="p">})</span>
+
+        <span class="c1"># now do full templating scan, where we will also templatify the snippet insertions</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">searchList</span><span class="o">=</span><span class="p">[</span><span class="n">search_table</span><span class="p">],</span> <span class="n">compilerSettings</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;useStackFrame&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+
+        <span class="k">if</span> <span class="n">fix_cheetah_class</span><span class="p">:</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">SNIPPET</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">SNIPPET</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">read_snippet</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">read_snippet</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data_out</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">respond</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_errors</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">errorCatcher</span><span class="p">()</span><span class="o">.</span><span class="n">listErrors</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_errors</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;errors were encountered rendering the template&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_errors</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">cheetah_exc</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;Error templating file, check cobbler.log for more details&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data_out</span></div>
+
+<div class="viewcode-block" id="Templar.render_jinja2"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.templar.Templar.render_jinja2">[docs]</a>    <span class="k">def</span> <span class="nf">render_jinja2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_data</span><span class="p">,</span> <span class="n">search_table</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render data_input back into a file.</span>
+<span class="sd">        data_input is either a string or a filename</span>
+<span class="sd">        search_table is a dict of metadata keys and values</span>
+<span class="sd">        out_path if not-none writes the results to a file</span>
+<span class="sd">        (though results are always returned)</span>
+<span class="sd">        subject is a profile or system object, if available (for snippet eval)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">jinja2_includedir</span><span class="p">:</span>
+                <span class="n">template</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Environment</span><span class="p">(</span><span class="n">loader</span><span class="o">=</span><span class="n">jinja2</span><span class="o">.</span><span class="n">FileSystemLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">jinja2_includedir</span><span class="p">))</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">template</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+            <span class="n">data_out</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">search_table</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;errors were encountered rendering the template&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="fm">__str__</span><span class="p">())</span>
+            <span class="n">data_out</span> <span class="o">=</span> <span class="s2">&quot;# EXCEPTION OCCURRED DURING JINJA2 TEMPLATE PROCESSING</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span> <span class="n">data_out</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

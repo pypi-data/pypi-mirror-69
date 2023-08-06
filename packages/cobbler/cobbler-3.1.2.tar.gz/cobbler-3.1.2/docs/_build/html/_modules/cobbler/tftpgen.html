@@ -1,0 +1,1209 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cobbler.tftpgen &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>cobbler.tftpgen</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cobbler.tftpgen</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Generate files provided by TFTP server based on Cobbler object tree.</span>
+<span class="sd">This is the code behind &#39;cobbler sync&#39;.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">string</span>
+
+<span class="kn">from</span> <span class="nn">cobbler.cexceptions</span> <span class="k">import</span> <span class="n">CX</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">templar</span>
+<span class="kn">from</span> <span class="nn">cobbler</span> <span class="k">import</span> <span class="n">utils</span>
+
+
+<div class="viewcode-block" id="TFTPGen"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.tftpgen.TFTPGen">[docs]</a><span class="k">class</span> <span class="nc">TFTPGen</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate files provided by TFTP server</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_mgr</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_mgr</span> <span class="o">=</span> <span class="n">collection_mgr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">api</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distros</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">distros</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">profiles</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">systems</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">systems</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repos</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">repos</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="o">=</span> <span class="n">collection_mgr</span><span class="o">.</span><span class="n">images</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">templar</span> <span class="o">=</span> <span class="n">templar</span><span class="o">.</span><span class="n">Templar</span><span class="p">(</span><span class="n">collection_mgr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">tftpboot_location</span>
+
+<div class="viewcode-block" id="TFTPGen.copy_bootloaders"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.tftpgen.TFTPGen.copy_bootloaders">[docs]</a>    <span class="k">def</span> <span class="nf">copy_bootloaders</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Copy bootloaders to the configured tftpboot directory</span>
+<span class="sd">        NOTE: we support different arch&#39;s if defined in</span>
+<span class="sd">        /etc/cobbler/settings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">bootloaders_dir</span>
+        <span class="n">dest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span>
+        <span class="c1"># unfortunately using shutils copy_tree the dest directory must not exist,</span>
+        <span class="c1"># but we must not delete an already partly synced /srv/tftp dir here.</span>
+        <span class="c1"># rsync is very convenient here, being very fast on an already copied folder</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;rsync&quot;</span><span class="p">,</span> <span class="s2">&quot;-rpt&quot;</span><span class="p">,</span> <span class="s2">&quot;--copy-links&quot;</span><span class="p">,</span> <span class="s2">&quot;--exclude=.cobbler_postun_cleanup&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{src}</span><span class="s2">/&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="n">src</span><span class="p">),</span> <span class="n">dest</span><span class="p">],</span> <span class="n">shell</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">grubconfig_dir</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">subprocess_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;rsync&quot;</span><span class="p">,</span> <span class="s2">&quot;-rpt&quot;</span><span class="p">,</span> <span class="s2">&quot;--copy-links&quot;</span><span class="p">,</span> <span class="s2">&quot;--exclude=README.grubconfig&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{src}</span><span class="s2">/&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="n">src</span><span class="p">),</span> <span class="n">dest</span><span class="p">],</span> <span class="n">shell</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TFTPGen.copy_images"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.tftpgen.TFTPGen.copy_images">[docs]</a>    <span class="k">def</span> <span class="nf">copy_images</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Like copy_distros except for images.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">copy_single_image_files</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">CX</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
+
+        <span class="c1"># FIXME: using logging module so this ends up in cobbler.log?</span>
+
+<div class="viewcode-block" id="TFTPGen.copy_single_distro_files"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.tftpgen.TFTPGen.copy_single_distro_files">[docs]</a>    <span class="k">def</span> <span class="nf">copy_single_distro_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">dirtree</span><span class="p">,</span> <span class="n">symlink_ok</span><span class="p">):</span>
+        <span class="n">distros</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirtree</span><span class="p">,</span> <span class="s2">&quot;images&quot;</span><span class="p">)</span>
+        <span class="n">distro_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">distros</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">distro_dir</span><span class="p">)</span>
+        <span class="n">kernel</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">find_kernel</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">kernel</span><span class="p">)</span>    <span class="c1"># full path</span>
+        <span class="n">initrd</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">find_initrd</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">initrd</span><span class="p">)</span>    <span class="c1"># full path</span>
+
+        <span class="k">if</span> <span class="n">kernel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;kernel not found: </span><span class="si">%(file)s</span><span class="s2">, distro: </span><span class="si">%(distro)s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">kernel</span><span class="p">,</span> <span class="s2">&quot;distro&quot;</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">})</span>
+
+        <span class="k">if</span> <span class="n">initrd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;initrd not found: </span><span class="si">%(file)s</span><span class="s2">, distro: </span><span class="si">%(distro)s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">initrd</span><span class="p">,</span> <span class="s2">&quot;distro&quot;</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">})</span>
+
+        <span class="c1"># Koan manages remote kernel itself, but for consistent PXE</span>
+        <span class="c1"># configurations the synchronization is still necessary</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">utils</span><span class="o">.</span><span class="n">file_is_remote</span><span class="p">(</span><span class="n">kernel</span><span class="p">):</span>
+            <span class="n">b_kernel</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span>
+            <span class="n">dst1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">distro_dir</span><span class="p">,</span> <span class="n">b_kernel</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">linkfile</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span> <span class="n">dst1</span><span class="p">,</span> <span class="n">symlink_ok</span><span class="o">=</span><span class="n">symlink_ok</span><span class="p">,</span> <span class="n">api</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">b_kernel</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span>
+            <span class="n">dst1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">distro_dir</span><span class="p">,</span> <span class="n">b_kernel</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">copyremotefile</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span> <span class="n">dst1</span><span class="p">,</span> <span class="n">api</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">utils</span><span class="o">.</span><span class="n">file_is_remote</span><span class="p">(</span><span class="n">initrd</span><span class="p">):</span>
+            <span class="n">b_initrd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">initrd</span><span class="p">)</span>
+            <span class="n">dst2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">distro_dir</span><span class="p">,</span> <span class="n">b_initrd</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">linkfile</span><span class="p">(</span><span class="n">initrd</span><span class="p">,</span> <span class="n">dst2</span><span class="p">,</span> <span class="n">symlink_ok</span><span class="o">=</span><span class="n">symlink_ok</span><span class="p">,</span> <span class="n">api</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">b_initrd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">initrd</span><span class="p">)</span>
+            <span class="n">dst1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">distro_dir</span><span class="p">,</span> <span class="n">b_initrd</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">copyremotefile</span><span class="p">(</span><span class="n">initrd</span><span class="p">,</span> <span class="n">dst1</span><span class="p">,</span> <span class="n">api</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TFTPGen.copy_single_image_files"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.tftpgen.TFTPGen.copy_single_image_files">[docs]</a>    <span class="k">def</span> <span class="nf">copy_single_image_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+        <span class="n">images_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;images2&quot;</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">file</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="c1"># likely for virtual usage, cannot use</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">images_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">images_dir</span><span class="p">)</span>
+        <span class="n">newfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">images_dir</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">linkfile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">newfile</span><span class="p">,</span> <span class="n">api</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TFTPGen.write_all_system_files"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.tftpgen.TFTPGen.write_all_system_files">[docs]</a>    <span class="k">def</span> <span class="nf">write_all_system_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">menu_items</span><span class="p">):</span>
+
+        <span class="n">profile</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">profile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;system </span><span class="si">%(system)s</span><span class="s2"> references a missing profile </span><span class="si">%(profile)s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">{</span><span class="s2">&quot;system&quot;</span><span class="p">:</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;profile&quot;</span><span class="p">:</span> <span class="n">system</span><span class="o">.</span><span class="n">profile</span><span class="p">})</span>
+
+        <span class="n">distro</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+        <span class="n">image_based</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">distro</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">profile</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s2">&quot;profile&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;profile </span><span class="si">%(profile)s</span><span class="s2"> references a missing distro </span><span class="si">%(distro)s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">{</span><span class="s2">&quot;profile&quot;</span><span class="p">:</span> <span class="n">system</span><span class="o">.</span><span class="n">profile</span><span class="p">,</span> <span class="s2">&quot;distro&quot;</span><span class="p">:</span> <span class="n">profile</span><span class="o">.</span><span class="n">distro</span><span class="p">})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">image_based</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">image</span> <span class="o">=</span> <span class="n">profile</span>
+
+        <span class="n">pxe_metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;pxe_menu_items&#39;</span><span class="p">:</span> <span class="n">menu_items</span><span class="p">}</span>
+
+        <span class="c1"># hack: s390 generates files per system not per interface</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">image_based</span> <span class="ow">and</span> <span class="n">distro</span><span class="o">.</span><span class="n">arch</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;s390&quot;</span><span class="p">):</span>
+            <span class="n">short_name</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">s390_name</span> <span class="o">=</span> <span class="s1">&#39;linux&#39;</span> <span class="o">+</span> <span class="n">short_name</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Writing s390x pxe config for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">short_name</span><span class="p">)</span>
+            <span class="c1"># Always write a system specific _conf and _parm file</span>
+            <span class="n">pxe_f</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;s390x&quot;</span><span class="p">,</span> <span class="s2">&quot;s_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">s390_name</span><span class="p">)</span>
+            <span class="n">conf_f</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_conf&quot;</span> <span class="o">%</span> <span class="n">pxe_f</span>
+            <span class="n">parm_f</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_parm&quot;</span> <span class="o">%</span> <span class="n">pxe_f</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Files: (conf,param) - (</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">conf_f</span><span class="p">,</span> <span class="n">parm_f</span><span class="p">))</span>
+            <span class="n">blended</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+            <span class="c1"># FIXME: profiles also need this data!</span>
+            <span class="c1"># gather default kernel_options and default kernel_options_s390x</span>
+            <span class="n">kernel_options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_kernel_options</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span>
+                                                       <span class="n">image</span><span class="p">,</span> <span class="s2">&quot;s390x&quot;</span><span class="p">,</span> <span class="n">blended</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+            <span class="n">kopts_aligned</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">column</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">kernel_options</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+                <span class="n">opt_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">option</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">opt_len</span> <span class="o">&gt;</span> <span class="mi">78</span><span class="p">:</span>
+                    <span class="n">kopts_aligned</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">option</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
+                    <span class="n">column</span> <span class="o">=</span> <span class="n">opt_len</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Kernel paramer [</span><span class="si">%s</span><span class="s2">] too long </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">option</span><span class="p">,</span> <span class="n">opt_len</span><span class="p">))</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">column</span> <span class="o">+</span> <span class="n">opt_len</span> <span class="o">&gt;</span> <span class="mi">78</span><span class="p">:</span>
+                    <span class="n">kopts_aligned</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">option</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
+                    <span class="n">column</span> <span class="o">=</span> <span class="n">opt_len</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">kopts_aligned</span> <span class="o">+=</span> <span class="n">option</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
+                    <span class="n">column</span> <span class="o">+=</span> <span class="n">opt_len</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="c1"># Write system specific zPXE file</span>
+            <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">is_management_supported</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">netboot_enabled</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;S390x: netboot_enabled&quot;</span><span class="p">)</span>
+                    <span class="n">kernel_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/images&quot;</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">kernel</span><span class="p">))</span>
+                    <span class="n">initrd_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/images&quot;</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">initrd</span><span class="p">))</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pxe_f</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out</span><span class="p">:</span>
+                        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">kernel_path</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">initrd_path</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">parm_f</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out</span><span class="p">:</span>
+                        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">kopts_aligned</span><span class="p">)</span>
+                    <span class="c1"># Write conf file with one newline in it if netboot is enabled</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">conf_f</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out</span><span class="p">:</span>
+                        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;S390x: netboot_disabled&quot;</span><span class="p">)</span>
+                    <span class="c1"># Write empty conf file if netboot is disabled</span>
+                    <span class="nb">open</span><span class="p">(</span><span class="n">conf_f</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># ensure the files do exist</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;S390x: management not supported&quot;</span><span class="p">)</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">rmfile</span><span class="p">(</span><span class="n">pxe_f</span><span class="p">)</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">rmfile</span><span class="p">(</span><span class="n">conf_f</span><span class="p">)</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">rmfile</span><span class="p">(</span><span class="n">parm_f</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;S390x: pxe: [</span><span class="si">%s</span><span class="s2">], conf: [</span><span class="si">%s</span><span class="s2">], parm: [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pxe_f</span><span class="p">,</span> <span class="n">conf_f</span><span class="p">,</span> <span class="n">parm_f</span><span class="p">))</span>
+
+            <span class="k">return</span>
+
+        <span class="c1"># generate one record for each described NIC ..</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+
+            <span class="n">pxe_name</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">get_config_filename</span><span class="p">(</span><span class="n">interface</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">grub_name</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">get_config_filename</span><span class="p">(</span><span class="n">interface</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">loader</span><span class="o">=</span><span class="s2">&quot;grub&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">pxe_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">pxe_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;pxelinux.cfg&quot;</span><span class="p">,</span> <span class="n">pxe_name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">grub_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">grub_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;grub&quot;</span><span class="p">,</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="n">grub_name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">grub_path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">pxe_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;invalid interface recorded for system (</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">image_based</span><span class="p">:</span>
+                <span class="n">working_arch</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">arch</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">working_arch</span> <span class="o">=</span> <span class="n">distro</span><span class="o">.</span><span class="n">arch</span>
+
+            <span class="k">if</span> <span class="n">working_arch</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;internal error, invalid arch supplied&quot;</span><span class="p">)</span>
+
+            <span class="c1"># for tftp only ...</span>
+            <span class="k">if</span> <span class="n">working_arch</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;i386&quot;</span><span class="p">,</span> <span class="s2">&quot;x86&quot;</span><span class="p">,</span> <span class="s2">&quot;x86_64&quot;</span><span class="p">,</span> <span class="s2">&quot;arm&quot;</span><span class="p">,</span> <span class="s2">&quot;aarch64&quot;</span><span class="p">,</span> <span class="s2">&quot;ppc64le&quot;</span><span class="p">,</span> <span class="s2">&quot;ppc64el&quot;</span><span class="p">,</span> <span class="s2">&quot;standard&quot;</span><span class="p">]:</span>
+                <span class="c1"># ToDo: This is old, move this logic into item_system.get_config_filename()</span>
+                <span class="k">pass</span>
+
+            <span class="k">elif</span> <span class="n">working_arch</span> <span class="o">==</span> <span class="s2">&quot;ppc&quot;</span> <span class="ow">or</span> <span class="n">working_arch</span> <span class="o">==</span> <span class="s2">&quot;ppc64&quot;</span><span class="p">:</span>
+                <span class="c1"># Determine filename for system-specific bootloader config</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">system</span><span class="o">.</span><span class="n">get_config_filename</span><span class="p">(</span><span class="n">interface</span><span class="o">=</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="c1"># to inherit the distro and system&#39;s boot_loader values correctly</span>
+                <span class="n">blended_system</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">blended_system</span><span class="p">[</span><span class="s2">&quot;boot_loader&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;pxelinux&quot;</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">pxe_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;etc&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                    <span class="c1"># Link to the yaboot binary</span>
+                    <span class="n">f3</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;ppc&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">lexists</span><span class="p">(</span><span class="n">f3</span><span class="p">):</span>
+                        <span class="n">utils</span><span class="o">.</span><span class="n">rmfile</span><span class="p">(</span><span class="n">f3</span><span class="p">)</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="s2">&quot;../yaboot&quot;</span><span class="p">,</span> <span class="n">f3</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">is_management_supported</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">image_based</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">pxe_path</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">write_pxe_file</span><span class="p">(</span><span class="n">pxe_path</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span> <span class="n">working_arch</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">pxe_metadata</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">grub_path</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">write_pxe_file</span><span class="p">(</span><span class="n">grub_path</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span> <span class="n">working_arch</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;grub&quot;</span><span class="p">)</span>
+                        <span class="c1"># Generate a link named after system to the mac file for easier lookup</span>
+                        <span class="n">link_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;grub&quot;</span><span class="p">,</span> <span class="s2">&quot;system_link&quot;</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">link_path</span><span class="p">):</span>
+                            <span class="n">utils</span><span class="o">.</span><span class="n">rmfile</span><span class="p">(</span><span class="n">link_path</span><span class="p">)</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="n">grub_name</span><span class="p">),</span> <span class="n">link_path</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">write_pxe_file</span><span class="p">(</span><span class="n">pxe_path</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">working_arch</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">pxe_metadata</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># ensure the file doesn&#39;t exist</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">rmfile</span><span class="p">(</span><span class="n">pxe_path</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">grub_path</span><span class="p">:</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">rmfile</span><span class="p">(</span><span class="n">grub_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TFTPGen.make_pxe_menu"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.tftpgen.TFTPGen.make_pxe_menu">[docs]</a>    <span class="k">def</span> <span class="nf">make_pxe_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates both pxe and grub boot menus.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># only do this if there is NOT a system named default.</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">timeout_action</span> <span class="o">=</span> <span class="s2">&quot;local&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">timeout_action</span> <span class="o">=</span> <span class="n">default</span><span class="o">.</span><span class="n">profile</span>
+
+        <span class="n">menu_items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_menu_items</span><span class="p">()</span>
+
+        <span class="c1"># Write the PXE menu:</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;pxe_menu_items&quot;</span><span class="p">:</span> <span class="n">menu_items</span><span class="p">[</span><span class="s1">&#39;pxe&#39;</span><span class="p">],</span> <span class="s2">&quot;pxe_timeout_profile&quot;</span><span class="p">:</span> <span class="n">timeout_action</span><span class="p">}</span>
+        <span class="n">outfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;pxelinux.cfg&quot;</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
+        <span class="n">template_src</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;pxedefault.template&quot;</span><span class="p">))</span>
+        <span class="n">template_data</span> <span class="o">=</span> <span class="n">template_src</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">templar</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template_data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">template_src</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># Write the grub menu:</span>
+        <span class="k">for</span> <span class="n">arch</span> <span class="ow">in</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_valid_archs</span><span class="p">():</span>
+            <span class="n">arch_menu_items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_menu_items</span><span class="p">(</span><span class="n">arch</span><span class="p">)</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">arch_menu_items</span><span class="p">[</span><span class="s1">&#39;grub&#39;</span><span class="p">]):</span>
+                <span class="n">outfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;grub&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_menu_items.cfg&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arch</span><span class="p">))</span>
+                <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">arch_menu_items</span><span class="p">[</span><span class="s1">&#39;grub&#39;</span><span class="p">])</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TFTPGen.get_menu_items"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.tftpgen.TFTPGen.get_menu_items">[docs]</a>    <span class="k">def</span> <span class="nf">get_menu_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arch</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates menu items for pxe and grub</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># sort the profiles</span>
+        <span class="n">profile_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">profile</span> <span class="k">for</span> <span class="n">profile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span><span class="p">]</span>
+        <span class="n">profile_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">profile_list</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">profile</span><span class="p">:</span> <span class="n">profile</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">profile_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">profile</span> <span class="k">for</span> <span class="n">profile</span> <span class="ow">in</span> <span class="n">profile_list</span> <span class="k">if</span> <span class="n">profile</span><span class="o">.</span><span class="n">get_arch</span><span class="p">()</span> <span class="o">==</span> <span class="n">arch</span><span class="p">]</span>
+
+        <span class="c1"># sort the images</span>
+        <span class="n">image_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">image</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">]</span>
+        <span class="n">image_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">image_list</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">image</span><span class="p">:</span> <span class="n">image</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># Build out menu items and append each to this master list, used for</span>
+        <span class="c1"># the default menus:</span>
+        <span class="n">pxe_menu_items</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">grub_menu_items</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># For now, profiles are the only items we want grub EFI boot menu entries for:</span>
+        <span class="k">for</span> <span class="n">profile</span> <span class="ow">in</span> <span class="n">profile_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">profile</span><span class="o">.</span><span class="n">enable_menu</span><span class="p">:</span>
+                <span class="c1"># This profile has been excluded from the menu</span>
+                <span class="k">continue</span>
+            <span class="n">distro</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+
+            <span class="n">contents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_pxe_file</span><span class="p">(</span>
+                <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">system</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span> <span class="n">distro</span><span class="o">=</span><span class="n">distro</span><span class="p">,</span> <span class="n">arch</span><span class="o">=</span><span class="n">distro</span><span class="o">.</span><span class="n">arch</span><span class="p">,</span>
+                <span class="n">include_header</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">contents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">pxe_menu_items</span> <span class="o">+=</span> <span class="n">contents</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+            <span class="n">grub_contents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_pxe_file</span><span class="p">(</span>
+                <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">system</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span> <span class="n">distro</span><span class="o">=</span><span class="n">distro</span><span class="p">,</span> <span class="n">arch</span><span class="o">=</span><span class="n">distro</span><span class="o">.</span><span class="n">arch</span><span class="p">,</span>
+                <span class="n">include_header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;grub&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">grub_contents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">grub_menu_items</span> <span class="o">+=</span> <span class="n">grub_contents</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="c1"># image names towards the bottom</span>
+        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">image_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">file</span><span class="p">):</span>
+                <span class="n">contents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_pxe_file</span><span class="p">(</span>
+                    <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">system</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">distro</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">arch</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">arch</span><span class="p">,</span>
+                    <span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">contents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">pxe_menu_items</span> <span class="o">+=</span> <span class="n">contents</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;pxe&#39;</span><span class="p">:</span> <span class="n">pxe_menu_items</span><span class="p">,</span> <span class="s1">&#39;grub&#39;</span><span class="p">:</span> <span class="n">grub_menu_items</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="TFTPGen.write_pxe_file"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.tftpgen.TFTPGen.write_pxe_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_pxe_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span> <span class="n">arch</span><span class="p">,</span>
+                       <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pxe&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write a configuration file for the boot loader(s).</span>
+<span class="sd">        More system-specific configuration may come in later, if so</span>
+<span class="sd">        that would appear inside the system object in api.py</span>
+
+<span class="sd">        Can be used for different formats, &quot;pxe&quot; (default) and &quot;grub&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">arch</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;missing arch&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">image</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">file</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>     <span class="c1"># nfs:// URLs or something, can&#39;t use for TFTP</span>
+
+        <span class="k">if</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="p">(</span><span class="n">rval</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">rval</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="c1"># ---</span>
+        <span class="c1"># just some random variables</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># ---</span>
+        <span class="n">autoinstall_path</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">kernel_path</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">initrd_path</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">img_path</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># not image based, it&#39;s something normalish</span>
+
+            <span class="n">img_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/images&quot;</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s1">&#39;http&#39;</span> <span class="ow">in</span> <span class="n">distro</span><span class="o">.</span><span class="n">kernel</span> <span class="ow">and</span> <span class="s1">&#39;http&#39;</span> <span class="ow">in</span> <span class="n">distro</span><span class="o">.</span><span class="n">initrd</span><span class="p">:</span>
+                <span class="n">kernel_path</span> <span class="o">=</span> <span class="n">distro</span><span class="o">.</span><span class="n">kernel</span>
+                <span class="n">initrd_path</span> <span class="o">=</span> <span class="n">distro</span><span class="o">.</span><span class="n">initrd</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">kernel_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/images&quot;</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">kernel</span><span class="p">))</span>
+                <span class="n">initrd_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/images&quot;</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">initrd</span><span class="p">))</span>
+
+            <span class="c1"># Find the automatic installation file if we inherit from another profile</span>
+            <span class="k">if</span> <span class="n">system</span><span class="p">:</span>
+                <span class="n">blended</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">blended</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">profile</span><span class="p">)</span>
+            <span class="n">autoinstall_path</span> <span class="o">=</span> <span class="n">blended</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;autoinstall&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+            <span class="c1"># update metadata with all known information</span>
+            <span class="c1"># this allows for more powerful templating</span>
+            <span class="n">metadata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">blended</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># this is an image we are making available, not kernel+initrd</span>
+            <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">image_type</span> <span class="o">==</span> <span class="s2">&quot;direct&quot;</span><span class="p">:</span>
+                <span class="n">kernel_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/images2&quot;</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">image</span><span class="o">.</span><span class="n">image_type</span> <span class="o">==</span> <span class="s2">&quot;memdisk&quot;</span><span class="p">:</span>
+                <span class="n">kernel_path</span> <span class="o">=</span> <span class="s2">&quot;/memdisk&quot;</span>
+                <span class="n">initrd_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/images2&quot;</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># CD-ROM ISO or virt-clone image? We can&#39;t PXE boot it.</span>
+                <span class="n">kernel_path</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">initrd_path</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">img_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;img_path&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;img_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">img_path</span>
+        <span class="k">if</span> <span class="n">kernel_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;kernel_path&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;kernel_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kernel_path</span>
+        <span class="k">if</span> <span class="n">initrd_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;initrd_path&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;initrd_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">initrd_path</span>
+
+        <span class="c1"># ---</span>
+        <span class="c1"># choose a template</span>
+        <span class="k">if</span> <span class="n">system</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;grub&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">netboot_enabled</span><span class="p">:</span>
+                    <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;grubsystem.template&quot;</span><span class="p">)</span>
+                    <span class="n">buffer</span> <span class="o">+=</span> <span class="s1">&#39;set system=&quot;</span><span class="si">{system}</span><span class="s1">&quot;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">local</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;grublocal.template&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">local</span><span class="p">):</span>
+                        <span class="n">template</span> <span class="o">=</span> <span class="n">local</span>
+            <span class="k">else</span><span class="p">:</span>   <span class="c1"># pxe</span>
+                <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">netboot_enabled</span><span class="p">:</span>
+                    <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;pxesystem.template&quot;</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;ppc&quot;</span> <span class="ow">or</span> <span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;ppc64&quot;</span><span class="p">:</span>
+                        <span class="c1"># to inherit the distro and system&#39;s boot_loader values correctly</span>
+                        <span class="n">blended_system</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">blended_system</span><span class="p">[</span><span class="s2">&quot;boot_loader&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;pxelinux&quot;</span><span class="p">:</span>
+                            <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;pxesystem_ppc.template&quot;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;yaboot_ppc.template&quot;</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">arch</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;arm&quot;</span><span class="p">):</span>
+                        <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;pxesystem_arm.template&quot;</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">distro</span> <span class="ow">and</span> <span class="n">distro</span><span class="o">.</span><span class="n">os_version</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;esxi&quot;</span><span class="p">):</span>
+                        <span class="c1"># ESXi uses a very different pxe method, using more files than</span>
+                        <span class="c1"># a standard automatic installation file and different options -</span>
+                        <span class="c1"># so giving it a dedicated PXE template makes more sense than</span>
+                        <span class="c1"># shoe-horning it into the existing templates</span>
+                        <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;pxesystem_esxi.template&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># local booting on ppc requires removing the system-specific dhcpd.conf filename</span>
+                    <span class="k">if</span> <span class="n">arch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;ppc&quot;</span> <span class="ow">or</span> <span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;ppc64&quot;</span><span class="p">):</span>
+                        <span class="c1"># Disable yaboot network booting for all interfaces on the system</span>
+                        <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+
+                            <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">system</span><span class="o">.</span><span class="n">get_config_filename</span><span class="p">(</span><span class="n">interface</span><span class="o">=</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+                            <span class="c1"># Remove symlink to the yaboot binary</span>
+                            <span class="n">f3</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;ppc&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">lexists</span><span class="p">(</span><span class="n">f3</span><span class="p">):</span>
+                                <span class="n">utils</span><span class="o">.</span><span class="n">rmfile</span><span class="p">(</span><span class="n">f3</span><span class="p">)</span>
+                            <span class="n">f3</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;etc&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">lexists</span><span class="p">(</span><span class="n">f3</span><span class="p">):</span>
+                                <span class="n">utils</span><span class="o">.</span><span class="n">rmfile</span><span class="p">(</span><span class="n">f3</span><span class="p">)</span>
+
+                        <span class="c1"># Yaboot/OF doesn&#39;t support booting locally once you&#39;ve</span>
+                        <span class="c1"># booted off the network, so nothing left to do</span>
+                        <span class="k">return</span> <span class="kc">None</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;pxelocal.template&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># not a system record, so this is a profile record or an image</span>
+            <span class="k">if</span> <span class="n">arch</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;arm&quot;</span><span class="p">):</span>
+                <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;pxeprofile_arm.template&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;grub&quot;</span><span class="p">:</span>
+                <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;grubprofile.template&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">distro</span> <span class="ow">and</span> <span class="n">distro</span><span class="o">.</span><span class="n">os_version</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;esxi&quot;</span><span class="p">):</span>
+                <span class="c1"># ESXi uses a very different pxe method, see comment above in the system section</span>
+                <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;pxeprofile_esxi.template&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;pxeprofile.template&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">kernel_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;kernel_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kernel_path</span>
+        <span class="k">if</span> <span class="n">initrd_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;initrd_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">initrd_path</span>
+
+        <span class="c1"># generate the kernel options and append line:</span>
+        <span class="n">kernel_options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_kernel_options</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span>
+                                                   <span class="n">image</span><span class="p">,</span> <span class="n">arch</span><span class="p">,</span> <span class="n">autoinstall_path</span><span class="p">)</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kernel_options</span>
+
+        <span class="k">if</span> <span class="n">distro</span> <span class="ow">and</span> <span class="n">distro</span><span class="o">.</span><span class="n">os_version</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;esxi&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;BOOTIF=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="s2">&quot;initrd_path&quot;</span> <span class="ow">in</span> <span class="n">metadata</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">arch</span> <span class="ow">or</span> <span class="n">arch</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ppc&quot;</span><span class="p">,</span> <span class="s2">&quot;ppc64&quot;</span><span class="p">,</span> <span class="s2">&quot;arm&quot;</span><span class="p">]):</span>
+            <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;append initrd=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;initrd_path&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;append &quot;</span>
+        <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">append_line</span><span class="p">,</span> <span class="n">kernel_options</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;ppc&quot;</span> <span class="ow">or</span> <span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;ppc64&quot;</span><span class="p">:</span>
+            <span class="c1"># remove the prefix &quot;append&quot;</span>
+            <span class="c1"># TODO: this looks like it&#39;s removing more than append, really</span>
+            <span class="c1"># not sure what&#39;s up here...</span>
+            <span class="n">append_line</span> <span class="o">=</span> <span class="n">append_line</span><span class="p">[</span><span class="mi">7</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="n">distro</span> <span class="ow">and</span> <span class="n">distro</span><span class="o">.</span><span class="n">os_version</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;xenserver620&quot;</span><span class="p">):</span>
+            <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">kernel_options</span><span class="p">)</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;append_line&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">append_line</span>
+
+        <span class="c1"># store variables for templating</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;menu_label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">profile</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">arch</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ppc&quot;</span><span class="p">,</span> <span class="s2">&quot;ppc64&quot;</span><span class="p">]:</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;menu_label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;MENU LABEL </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">profile</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;profile_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">elif</span> <span class="n">image</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;menu_label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;MENU LABEL </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">image</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;profile_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="k">if</span> <span class="n">system</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">serial_device</span> <span class="ow">or</span> <span class="n">system</span><span class="o">.</span><span class="n">serial_baud_rate</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">serial_device</span><span class="p">:</span>
+                    <span class="n">serial_device</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">serial_device</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">serial_device</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">serial_baud_rate</span><span class="p">:</span>
+                    <span class="n">serial_baud_rate</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">serial_baud_rate</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">serial_baud_rate</span> <span class="o">=</span> <span class="mi">115200</span>
+
+                <span class="k">if</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;pxe&quot;</span><span class="p">:</span>
+                    <span class="n">buffer</span> <span class="o">+=</span> <span class="s2">&quot;serial </span><span class="si">%d</span><span class="s2"> </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">serial_device</span><span class="p">,</span> <span class="n">serial_baud_rate</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;grub&quot;</span><span class="p">:</span>
+                    <span class="n">buffer</span> <span class="o">+=</span> <span class="s2">&quot;set serial_console=true</span><span class="se">\n</span><span class="s2">set serial_baud=</span><span class="si">{baud}</span><span class="se">\n</span><span class="s2">set serial_line=</span><span class="si">{device}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">baud</span><span class="o">=</span><span class="n">serial_baud_rate</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">serial_device</span><span class="p">)</span>
+
+        <span class="c1"># get the template</span>
+        <span class="k">if</span> <span class="n">kernel_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">template_fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+            <span class="n">template_data</span> <span class="o">=</span> <span class="n">template_fh</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">template_fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># this is something we can&#39;t PXE boot</span>
+            <span class="n">template_data</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="c1"># save file and/or return results, depending on how called.</span>
+        <span class="n">buffer</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">templar</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template_data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;generating: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
+            <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">buffer</span></div>
+
+<div class="viewcode-block" id="TFTPGen.build_kernel_options"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.tftpgen.TFTPGen.build_kernel_options">[docs]</a>    <span class="k">def</span> <span class="nf">build_kernel_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">arch</span><span class="p">,</span>
+                             <span class="n">autoinstall_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Builds the full kernel options line.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">management_interface</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">system</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">blended</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+            <span class="c1"># find the first management interface</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">intf</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                    <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="n">intf</span><span class="p">][</span><span class="s2">&quot;management&quot;</span><span class="p">]:</span>
+                        <span class="n">management_interface</span> <span class="o">=</span> <span class="n">intf</span>
+                        <span class="k">break</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="c1"># just skip this then</span>
+                <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">profile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">blended</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">profile</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">blended</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
+
+        <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">kopts</span> <span class="o">=</span> <span class="n">blended</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kernel_options&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">())</span>
+        <span class="n">kopts</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">revert_strip_none</span><span class="p">(</span><span class="n">kopts</span><span class="p">)</span>
+
+        <span class="c1"># SUSE and other distro specific kernel additions or modificatins</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">kopts_overwrite</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span> <span class="n">kopts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+
+        <span class="c1"># since network needs to be configured again (it was already in netboot) when kernel boots</span>
+        <span class="c1"># and we choose to do it dinamically, we need to set &#39;ksdevice&#39; to one of</span>
+        <span class="c1"># the interfaces&#39; MAC addresses in ppc systems.</span>
+        <span class="c1"># ksdevice=bootif is not useful in yaboot, as the &quot;ipappend&quot; line is a pxe feature.</span>
+        <span class="k">if</span> <span class="n">system</span> <span class="ow">and</span> <span class="n">arch</span> <span class="ow">and</span> <span class="p">(</span><span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;ppc&quot;</span> <span class="ow">or</span> <span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;ppc64&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">intf</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="c1"># use first interface with defined IP and MAC, since these are required</span>
+                <span class="c1"># fields in a DHCP entry</span>
+                <span class="n">mac_address</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="n">intf</span><span class="p">][</span><span class="s1">&#39;mac_address&#39;</span><span class="p">]</span>
+                <span class="n">ip_address</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="n">intf</span><span class="p">][</span><span class="s1">&#39;ip_address&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">mac_address</span> <span class="ow">and</span> <span class="n">ip_address</span><span class="p">:</span>
+                    <span class="n">kopts</span><span class="p">[</span><span class="s1">&#39;BOOTIF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;01-&#39;</span> <span class="o">+</span> <span class="n">mac_address</span>
+                    <span class="n">kopts</span><span class="p">[</span><span class="s1">&#39;ksdevice&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mac_address</span>
+                    <span class="k">break</span>
+
+        <span class="c1"># support additional initrd= entries in kernel options.</span>
+        <span class="k">if</span> <span class="s2">&quot;initrd&quot;</span> <span class="ow">in</span> <span class="n">kopts</span><span class="p">:</span>
+            <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;,</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">kopts</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;initrd&quot;</span><span class="p">)</span>
+        <span class="n">hkopts</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">dict_to_string</span><span class="p">(</span><span class="n">kopts</span><span class="p">)</span>
+        <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">append_line</span><span class="p">,</span> <span class="n">hkopts</span><span class="p">)</span>
+
+        <span class="c1"># automatic installation file path rewriting (get URLs for local files)</span>
+        <span class="k">if</span> <span class="n">autoinstall_path</span><span class="p">:</span>
+
+            <span class="c1"># FIXME: need to make shorter rewrite rules for these URLs</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">ipaddress</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname_ex</span><span class="p">(</span><span class="n">blended</span><span class="p">[</span><span class="s2">&quot;http_server&quot;</span><span class="p">])[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">gaierror</span><span class="p">:</span>
+                <span class="n">ipaddress</span> <span class="o">=</span> <span class="n">blended</span><span class="p">[</span><span class="s2">&quot;http_server&quot;</span><span class="p">]</span>
+            <span class="n">URL_REGEX</span> <span class="o">=</span> <span class="s2">&quot;[a-zA-Z]*://.*&quot;</span>
+            <span class="n">local_autoinstall_file</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">URL_REGEX</span><span class="p">,</span> <span class="n">autoinstall_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">local_autoinstall_file</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">system</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">autoinstall_path</span> <span class="o">=</span> <span class="s2">&quot;http://</span><span class="si">%s</span><span class="s2">/cblr/svc/op/autoinstall/system/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ipaddress</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">autoinstall_path</span> <span class="o">=</span> <span class="s2">&quot;http://</span><span class="si">%s</span><span class="s2">/cblr/svc/op/autoinstall/profile/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ipaddress</span><span class="p">,</span> <span class="n">profile</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;redhat&quot;</span><span class="p">:</span>
+
+                <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; kssendmac&quot;</span>
+                <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> ks=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">append_line</span><span class="p">,</span> <span class="n">autoinstall_path</span><span class="p">)</span>
+                <span class="n">gpxe</span> <span class="o">=</span> <span class="n">blended</span><span class="p">[</span><span class="s2">&quot;enable_gpxe&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">gpxe</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">=</span> <span class="n">append_line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;ksdevice=bootif&#39;</span><span class="p">,</span> <span class="s1">&#39;ksdevice=${net0/mac}&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;suse&quot;</span><span class="p">:</span>
+                <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> autoyast=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">append_line</span><span class="p">,</span> <span class="n">autoinstall_path</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">management_interface</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot;netdevice=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">management_interface</span>
+            <span class="k">elif</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;debian&quot;</span> <span class="ow">or</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;ubuntu&quot;</span><span class="p">:</span>
+                <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> auto-install/enable=true priority=critical netcfg/choose_interface=auto url=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">append_line</span><span class="p">,</span> <span class="n">autoinstall_path</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">management_interface</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; netcfg/choose_interface=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">management_interface</span>
+            <span class="k">elif</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;freebsd&quot;</span><span class="p">:</span>
+                <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> ks=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">append_line</span><span class="p">,</span> <span class="n">autoinstall_path</span><span class="p">)</span>
+
+                <span class="c1"># rework kernel options for debian distros</span>
+                <span class="n">translations</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ksdevice&#39;</span><span class="p">:</span> <span class="s2">&quot;interface&quot;</span><span class="p">,</span> <span class="s1">&#39;lang&#39;</span><span class="p">:</span> <span class="s2">&quot;locale&quot;</span><span class="p">}</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">translations</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                    <span class="n">append_line</span> <span class="o">=</span> <span class="n">append_line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">=&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">=&quot;</span> <span class="o">%</span> <span class="n">v</span><span class="p">)</span>
+
+                <span class="c1"># interface=bootif causes a failure</span>
+                <span class="n">append_line</span> <span class="o">=</span> <span class="n">append_line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;interface=bootif&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;vmware&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">distro</span><span class="o">.</span><span class="n">os_version</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;esxi&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="c1"># ESXi is very picky, it&#39;s easier just to redo the</span>
+                    <span class="c1"># entire append line here since</span>
+                    <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot; ks=</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">autoinstall_path</span><span class="p">,</span> <span class="n">hkopts</span><span class="p">)</span>
+                    <span class="c1"># ESXi likes even fewer options, so we remove them too</span>
+                    <span class="n">append_line</span> <span class="o">=</span> <span class="n">append_line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;kssendmac&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> vmkopts=debugLogToSerial:1 mem=512M ks=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> \
+                        <span class="p">(</span><span class="n">append_line</span><span class="p">,</span> <span class="n">autoinstall_path</span><span class="p">)</span>
+                <span class="c1"># interface=bootif causes a failure</span>
+                <span class="n">append_line</span> <span class="o">=</span> <span class="n">append_line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;ksdevice=bootif&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;xen&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">distro</span><span class="o">.</span><span class="n">os_version</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;xenserver620&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">img_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/images&quot;</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;append </span><span class="si">%s</span><span class="s2">/xen.gz dom0_max_vcpus=2 dom0_mem=752M com1=115200,8n1 console=com1,vga --- </span><span class="si">%s</span><span class="s2">/vmlinuz xencons=hvc console=hvc0 console=tty0 install answerfile=</span><span class="si">%s</span><span class="s2"> --- </span><span class="si">%s</span><span class="s2">/install.img&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">img_path</span><span class="p">,</span> <span class="n">autoinstall_path</span><span class="p">,</span> <span class="n">img_path</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">append_line</span>
+            <span class="k">elif</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s2">&quot;powerkvm&quot;</span><span class="p">:</span>
+                <span class="n">append_line</span> <span class="o">+=</span> <span class="s2">&quot; kssendmac&quot;</span>
+                <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> kvmp.inst.auto=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">append_line</span><span class="p">,</span> <span class="n">autoinstall_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">distro</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;debian&quot;</span><span class="p">,</span> <span class="s2">&quot;ubuntu&quot;</span><span class="p">]):</span>
+            <span class="c1"># Hostname is required as a parameter, the one in the preseed is</span>
+            <span class="c1"># not respected, so calculate if we have one here.</span>
+            <span class="c1"># We&#39;re trying: first part of FQDN in hostname field, then system</span>
+            <span class="c1"># name, then profile name.</span>
+            <span class="c1"># In Ubuntu, this is at least used for the volume group name when</span>
+            <span class="c1"># using LVM.</span>
+            <span class="n">domain</span> <span class="o">=</span> <span class="s2">&quot;local.lan&quot;</span>
+            <span class="k">if</span> <span class="n">system</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">hostname</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">system</span><span class="o">.</span><span class="n">hostname</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="c1"># If this is a FQDN, grab the first bit</span>
+                    <span class="n">hostname</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">hostname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">_domain</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">hostname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+                    <span class="k">if</span> <span class="n">_domain</span><span class="p">:</span>
+                        <span class="n">domain</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_domain</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">hostname</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># ubuntu at the very least does not like having underscores</span>
+                <span class="c1"># in the hostname.</span>
+                <span class="c1"># FIXME: Really this should remove all characters that are</span>
+                <span class="c1"># forbidden in hostnames</span>
+                <span class="n">hostname</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+            <span class="c1"># At least for debian deployments configured for DHCP networking</span>
+            <span class="c1"># this values are not used, but specifying here avoids questions</span>
+            <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> hostname=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">append_line</span><span class="p">,</span> <span class="n">hostname</span><span class="p">)</span>
+            <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> domain=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">append_line</span><span class="p">,</span> <span class="n">domain</span><span class="p">)</span>
+
+            <span class="c1"># A similar issue exists with suite name, as installer requires</span>
+            <span class="c1"># the existence of &quot;stable&quot; in the dists directory</span>
+            <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> suite=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">append_line</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">os_version</span><span class="p">)</span>
+
+        <span class="c1"># append necessary kernel args for arm architectures</span>
+        <span class="k">if</span> <span class="n">arch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">arch</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;arm&quot;</span><span class="p">):</span>
+            <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> fixrtc vram=48M omapfb.vram=0:24M&quot;</span> <span class="o">%</span> <span class="n">append_line</span>
+
+        <span class="c1"># do variable substitution on the append line</span>
+        <span class="c1"># promote all of the autoinstall_meta variables</span>
+        <span class="k">if</span> <span class="s2">&quot;autoinstall_meta&quot;</span> <span class="ow">in</span> <span class="n">blended</span><span class="p">:</span>
+            <span class="n">blended</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">blended</span><span class="p">[</span><span class="s2">&quot;autoinstall_meta&quot;</span><span class="p">])</span>
+        <span class="n">append_line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">templar</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">append_line</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">blended</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># For now console=ttySx,BAUDRATE are only set for systems</span>
+        <span class="c1"># This could get enhanced for profile/distro via utils.blender (inheritance)</span>
+        <span class="c1"># This also is architecture specific. E.g: Some ARM consoles need: console=ttyAMAx,BAUDRATE</span>
+        <span class="c1"># I guess we need a serial_kernel_dev = param, that can be set to &quot;ttyAMA&quot; if needed.</span>
+        <span class="k">if</span> <span class="n">system</span> <span class="ow">and</span> <span class="n">arch</span> <span class="o">==</span> <span class="s2">&quot;x86_64&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">serial_device</span> <span class="ow">or</span> <span class="n">system</span><span class="o">.</span><span class="n">serial_baud_rate</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">serial_device</span><span class="p">:</span>
+                    <span class="n">serial_device</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">serial_device</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">serial_device</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">serial_baud_rate</span><span class="p">:</span>
+                    <span class="n">serial_baud_rate</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">serial_baud_rate</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">serial_baud_rate</span> <span class="o">=</span> <span class="mi">115200</span>
+
+                <span class="n">append_line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> console=ttyS</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">append_line</span><span class="p">,</span> <span class="n">serial_device</span><span class="p">,</span> <span class="n">serial_baud_rate</span><span class="p">)</span>
+
+        <span class="c1"># FIXME - the append_line length limit is architecture specific</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">append_line</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1023</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;warning: kernel option length exceeds 1023&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">append_line</span></div>
+
+<div class="viewcode-block" id="TFTPGen.write_templates"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.tftpgen.TFTPGen.write_templates">[docs]</a>    <span class="k">def</span> <span class="nf">write_templates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">write_file</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A semi-generic function that will take an object</span>
+<span class="sd">        with a template_files dict {source:destiation}, and</span>
+<span class="sd">        generate a rendered file.  The write_file option</span>
+<span class="sd">        allows for generating of the rendered output without</span>
+<span class="sd">        actually creating any files.</span>
+
+<span class="sd">        The return value is a dict of the destination file</span>
+<span class="sd">        names (after variable substitution is done) and the</span>
+<span class="sd">        data in the file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Writing template files for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">templates</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">template_files</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">results</span>
+
+        <span class="n">blended</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">COLLECTION_TYPE</span> <span class="o">==</span> <span class="s2">&quot;distro&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;esxi[56]&quot;</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">os_version</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">realbootcfg</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">kernel</span><span class="p">),</span> <span class="s1">&#39;boot.cfg&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">bootmodules</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;modules=(.*)&#39;</span><span class="p">,</span> <span class="n">realbootcfg</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">modules</span> <span class="ow">in</span> <span class="n">bootmodules</span><span class="p">:</span>
+                    <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;esx_modules&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">modules</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="n">autoinstall_meta</span> <span class="o">=</span> <span class="n">blended</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;autoinstall_meta&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">blended</span><span class="p">[</span><span class="s2">&quot;autoinstall_meta&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">blended</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">autoinstall_meta</span><span class="p">)</span>          <span class="c1"># make available at top level</span>
+
+        <span class="n">templates</span> <span class="o">=</span> <span class="n">blended</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;template_files&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">blended</span><span class="p">[</span><span class="s2">&quot;template_files&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">blended</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">templates</span><span class="p">)</span>       <span class="c1"># make available at top level</span>
+
+        <span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">templates</span><span class="p">)</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">input_string_or_dict</span><span class="p">(</span><span class="n">templates</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">results</span>
+
+        <span class="c1"># FIXME: img_path and local_img_path should probably be moved</span>
+        <span class="c1">#        up into the blender function to ensure they&#39;re consistently</span>
+        <span class="c1">#        available to templates across the board</span>
+        <span class="k">if</span> <span class="n">blended</span><span class="p">[</span><span class="s2">&quot;distro_name&quot;</span><span class="p">]:</span>
+            <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;img_path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/images&quot;</span><span class="p">,</span> <span class="n">blended</span><span class="p">[</span><span class="s2">&quot;distro_name&quot;</span><span class="p">])</span>
+            <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;local_img_path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span><span class="p">,</span> <span class="s2">&quot;images&quot;</span><span class="p">,</span> <span class="n">blended</span><span class="p">[</span><span class="s2">&quot;distro_name&quot;</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">template</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">templates</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">dest</span> <span class="o">=</span> <span class="n">templates</span><span class="p">[</span><span class="n">template</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">dest</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Run the source and destination files through</span>
+            <span class="c1"># templar first to allow for variables in the path</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">templar</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">blended</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">dest</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">templar</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="n">blended</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="c1"># Get the path for the destination output</span>
+            <span class="n">dest_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">dest</span><span class="p">))</span>
+
+            <span class="c1"># If we&#39;re looking for a single template, skip if this ones</span>
+            <span class="c1"># destination is not it.</span>
+            <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">path</span> <span class="o">!=</span> <span class="n">dest</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># If we are writing output to a file, we allow files tobe</span>
+            <span class="c1"># written into the tftpboot directory, otherwise force all</span>
+            <span class="c1"># templated configs into the rendered directory to ensure that</span>
+            <span class="c1"># a user granted cobbler privileges via sudo can&#39;t overwrite</span>
+            <span class="c1"># arbitrary system files (This also makes cleanup easier).</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">dest_dir</span><span class="p">)</span> <span class="ow">and</span> <span class="n">write_file</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">dest_dir</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot; warning: template destination (</span><span class="si">%s</span><span class="s2">) is outside </span><span class="si">%s</span><span class="s2">, skipping.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dest_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bootloc</span><span class="p">))</span>
+                    <span class="k">continue</span>
+            <span class="k">elif</span> <span class="n">write_file</span><span class="p">:</span>
+                <span class="n">dest_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">webdir</span><span class="p">,</span> <span class="s2">&quot;rendered&quot;</span><span class="p">,</span> <span class="n">dest_dir</span><span class="p">)</span>
+                <span class="n">dest</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dest_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">dest</span><span class="p">))</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest_dir</span><span class="p">):</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">dest_dir</span><span class="p">)</span>
+
+            <span class="c1"># Check for problems</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">template</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;template source </span><span class="si">%s</span><span class="s2"> does not exist&quot;</span> <span class="o">%</span> <span class="n">template</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="k">elif</span> <span class="n">write_file</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">dest_dir</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;template destination (</span><span class="si">%s</span><span class="s2">) is invalid&quot;</span> <span class="o">%</span> <span class="n">dest_dir</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="k">elif</span> <span class="n">write_file</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;template destination (</span><span class="si">%s</span><span class="s2">) already exists&quot;</span> <span class="o">%</span> <span class="n">dest</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="k">elif</span> <span class="n">write_file</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">dest</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;template destination (</span><span class="si">%s</span><span class="s2">) is a directory&quot;</span> <span class="o">%</span> <span class="n">dest</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="k">elif</span> <span class="n">template</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">dest</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CX</span><span class="p">(</span><span class="s2">&quot;either the template source or destination was blank (unknown variable used?)&quot;</span> <span class="o">%</span> <span class="n">dest</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">template_fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+            <span class="n">template_data</span> <span class="o">=</span> <span class="n">template_fh</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">template_fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="n">buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">templar</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template_data</span><span class="p">,</span> <span class="n">blended</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">results</span><span class="p">[</span><span class="n">dest</span><span class="p">]</span> <span class="o">=</span> <span class="n">buffer</span>
+
+            <span class="k">if</span> <span class="n">write_file</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;generating: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dest</span><span class="p">)</span>
+                <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">results</span></div>
+
+<div class="viewcode-block" id="TFTPGen.generate_gpxe"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.tftpgen.TFTPGen.generate_gpxe">[docs]</a>    <span class="k">def</span> <span class="nf">generate_gpxe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">what</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">what</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="s2">&quot;system&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;# gpxe is only valid for profiles and systems&quot;</span>
+
+        <span class="n">distro</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">what</span> <span class="o">==</span> <span class="s2">&quot;profile&quot;</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_profile</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">distro</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_system</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">distro</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+            <span class="n">netboot_enabled</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">netboot_enabled</span>
+
+        <span class="c1"># For multi-arch distros, the distro name in distro_mirror</span>
+        <span class="c1"># may not contain the arch string, so we need to figure out</span>
+        <span class="c1"># the path based on where the kernel is stored. We do this</span>
+        <span class="c1"># because some distros base future downloads on the initial</span>
+        <span class="c1"># URL passed in, so all of the files need to be at this location</span>
+        <span class="c1"># (which is why we can&#39;t use the images link, which just contains</span>
+        <span class="c1"># the kernel and initrd).</span>
+        <span class="n">distro_mirror_name</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">kernel</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="n">blended</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+
+        <span class="n">autoinstall_meta</span> <span class="o">=</span> <span class="n">blended</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;autoinstall_meta&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">blended</span><span class="p">[</span><span class="s2">&quot;autoinstall_meta&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">blended</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">autoinstall_meta</span><span class="p">)</span>      <span class="c1"># make available at top level</span>
+
+        <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;distro&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;distro_mirror_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distro_mirror_name</span>
+        <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;kernel_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">kernel</span><span class="p">)</span>
+        <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;initrd_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">initrd</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">what</span> <span class="o">==</span> <span class="s2">&quot;profile&quot;</span><span class="p">:</span>
+            <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;append_line&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_kernel_options</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;autoinstall&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;append_line&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_kernel_options</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">distro</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;autoinstall&#39;</span><span class="p">])</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;redhat&#39;</span><span class="p">,</span> <span class="s1">&#39;debian&#39;</span><span class="p">,</span> <span class="s1">&#39;ubuntu&#39;</span><span class="p">,</span> <span class="s1">&#39;suse&#39;</span><span class="p">]:</span>
+            <span class="c1"># all of these use a standard kernel/initrd setup so</span>
+            <span class="c1"># they all use the same gPXE template</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;gpxe_</span><span class="si">%s</span><span class="s2">_linux.template&quot;</span> <span class="o">%</span> <span class="n">what</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s1">&#39;vmware&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">distro</span><span class="o">.</span><span class="n">os_version</span> <span class="o">==</span> <span class="s1">&#39;esx4&#39;</span><span class="p">:</span>
+                <span class="c1"># older ESX is pretty much RHEL, so it uses the standard kernel/initrd setup</span>
+                <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;gpxe_</span><span class="si">%s</span><span class="s2">_linux.template&quot;</span> <span class="o">%</span> <span class="n">what</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+            <span class="k">elif</span> <span class="n">distro</span><span class="o">.</span><span class="n">os_version</span> <span class="o">==</span> <span class="s1">&#39;esxi4&#39;</span><span class="p">:</span>
+                <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;gpxe_</span><span class="si">%s</span><span class="s2">_esxi4.template&quot;</span> <span class="o">%</span> <span class="n">what</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+            <span class="k">elif</span> <span class="n">distro</span><span class="o">.</span><span class="n">os_version</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;esxi5&#39;</span><span class="p">):</span>
+                <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;gpxe_</span><span class="si">%s</span><span class="s2">_esxi5.template&quot;</span> <span class="o">%</span> <span class="n">what</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+            <span class="k">elif</span> <span class="n">distro</span><span class="o">.</span><span class="n">os_version</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;esxi6&#39;</span><span class="p">):</span>
+                <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;gpxe_</span><span class="si">%s</span><span class="s2">_esxi6.template&quot;</span> <span class="o">%</span> <span class="n">what</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s1">&#39;freebsd&#39;</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;gpxe_</span><span class="si">%s</span><span class="s2">_freebsd.template&quot;</span> <span class="o">%</span> <span class="n">what</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="n">distro</span><span class="o">.</span><span class="n">breed</span> <span class="o">==</span> <span class="s1">&#39;windows&#39;</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;gpxe_</span><span class="si">%s</span><span class="s2">_windows.template&quot;</span> <span class="o">%</span> <span class="n">what</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">what</span> <span class="o">==</span> <span class="s2">&quot;system&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">netboot_enabled</span><span class="p">:</span>
+                <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;gpxe_</span><span class="si">%s</span><span class="s2">_local.template&quot;</span> <span class="o">%</span> <span class="n">what</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">template</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;# unsupported breed/os version&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">template</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;# gpxe template not found for the </span><span class="si">%s</span><span class="s2"> named </span><span class="si">%s</span><span class="s2"> (filename=</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">what</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
+
+        <span class="n">template_fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+        <span class="n">template_data</span> <span class="o">=</span> <span class="n">template_fh</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">template_fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">templar</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template_data</span><span class="p">,</span> <span class="n">blended</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TFTPGen.generate_bootcfg"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.tftpgen.TFTPGen.generate_bootcfg">[docs]</a>    <span class="k">def</span> <span class="nf">generate_bootcfg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">what</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">what</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="s2">&quot;system&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;# bootcfg is only valid for profiles and systems&quot;</span>
+
+        <span class="n">distro</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">what</span> <span class="o">==</span> <span class="s2">&quot;profile&quot;</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_profile</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">distro</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_system</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">distro</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+
+        <span class="c1"># For multi-arch distros, the distro name in distro_mirror</span>
+        <span class="c1"># may not contain the arch string, so we need to figure out</span>
+        <span class="c1"># the path based on where the kernel is stored. We do this</span>
+        <span class="c1"># because some distros base future downloads on the initial</span>
+        <span class="c1"># URL passed in, so all of the files need to be at this location</span>
+        <span class="c1"># (which is why we can&#39;t use the images link, which just contains</span>
+        <span class="c1"># the kernel and initrd).</span>
+        <span class="n">distro_mirror_name</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">distro</span><span class="o">.</span><span class="n">kernel</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="n">blended</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+
+        <span class="n">autoinstall_meta</span> <span class="o">=</span> <span class="n">blended</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;autoinstall_meta&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">blended</span><span class="p">[</span><span class="s2">&quot;autoinstall_meta&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">blended</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">autoinstall_meta</span><span class="p">)</span>          <span class="c1"># make available at top level</span>
+
+        <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;distro&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distro_mirror_name</span>
+
+        <span class="c1"># FIXME: img_path should probably be moved up into the</span>
+        <span class="c1">#        blender function to ensure they&#39;re consistently</span>
+        <span class="c1">#        available to templates across the board</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">enable_gpxe</span><span class="p">:</span>
+            <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;img_path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;http://</span><span class="si">%s</span><span class="s1">:</span><span class="si">%s</span><span class="s1">/cobbler/links/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">http_port</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;img_path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/images&quot;</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">boot_loader_conf_template_dir</span><span class="p">,</span> <span class="s2">&quot;bootcfg_</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">.template&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">what</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">distro</span><span class="o">.</span><span class="n">os_version</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">template</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;# boot.cfg template not found for the </span><span class="si">%s</span><span class="s2"> named </span><span class="si">%s</span><span class="s2"> (filename=</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">what</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
+
+        <span class="n">template_fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+        <span class="n">template_data</span> <span class="o">=</span> <span class="n">template_fh</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">template_fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">templar</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template_data</span><span class="p">,</span> <span class="n">blended</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TFTPGen.generate_script"><a class="viewcode-back" href="../../code-autodoc/cobbler.html#cobbler.tftpgen.TFTPGen.generate_script">[docs]</a>    <span class="k">def</span> <span class="nf">generate_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">what</span><span class="p">,</span> <span class="n">objname</span><span class="p">,</span> <span class="n">script_name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">what</span> <span class="o">==</span> <span class="s2">&quot;profile&quot;</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_profile</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">objname</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_system</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">objname</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">obj</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;# </span><span class="si">%s</span><span class="s2"> named </span><span class="si">%s</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">what</span><span class="p">,</span> <span class="n">objname</span><span class="p">)</span>
+
+        <span class="n">distro</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">distro</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">():</span>
+            <span class="n">distro</span> <span class="o">=</span> <span class="n">distro</span><span class="o">.</span><span class="n">get_conceptual_parent</span><span class="p">()</span>
+
+        <span class="n">blended</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">blender</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+
+        <span class="n">autoinstall_meta</span> <span class="o">=</span> <span class="n">blended</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;autoinstall_meta&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">blended</span><span class="p">[</span><span class="s2">&quot;autoinstall_meta&quot;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">blended</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">autoinstall_meta</span><span class="p">)</span>      <span class="c1"># make available at top level</span>
+
+        <span class="c1"># FIXME: img_path should probably be moved up into the</span>
+        <span class="c1">#        blender function to ensure they&#39;re consistently</span>
+        <span class="c1">#        available to templates across the board</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">enable_gpxe</span><span class="p">:</span>
+            <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;img_path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;http://</span><span class="si">%s</span><span class="s1">:</span><span class="si">%s</span><span class="s1">/cobbler/links/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">http_port</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">blended</span><span class="p">[</span><span class="s1">&#39;img_path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/images&quot;</span><span class="p">,</span> <span class="n">distro</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/var/lib/cobbler/autoinstall_scripts&quot;</span><span class="p">,</span> <span class="n">script_name</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">template</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;# script template </span><span class="si">%s</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">script_name</span>
+
+        <span class="n">template_fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+        <span class="n">template_data</span> <span class="o">=</span> <span class="n">template_fh</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">template_fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">templar</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template_data</span><span class="p">,</span> <span class="n">blended</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

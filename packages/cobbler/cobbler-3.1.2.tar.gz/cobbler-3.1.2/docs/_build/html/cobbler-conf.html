@@ -1,0 +1,956 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>5. Cobbler Configuration &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="6. User Guide" href="user-guide.html" />
+    <link rel="prev" title="4. Cobblerd" href="cobblerd.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart-guide.html">1. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Cobbler Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#settings">5.1. settings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#allow-duplicate-hostnames">5.1.1. allow_duplicate_hostnames</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#allow-duplicate-ips">5.1.2. allow_duplicate_ips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#allow-duplicate-macs">5.1.3. allow_duplicate_macs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#allow-dynamic-settings">5.1.4. allow_dynamic_settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#anamon-enabled">5.1.5. anamon_enabled</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#authn-pam-service">5.1.6. authn_pam_service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#auth-token-expiration">5.1.7. auth_token_expiration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#autoinstall-snippets-dir">5.1.8. autoinstall_snippets_dir</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#autoinstall-templates-dir">5.1.9. autoinstall_templates_dir</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boot-loader-conf-template-dir">5.1.10. boot_loader_conf_template_dir</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-reporting">5.1.11. build_reporting_*</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cheetah-import-whitelist">5.1.12. cheetah_import_whitelist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#createrepo-flags">5.1.13. createrepo_flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#default-autoinstall">5.1.14. default_autoinstall</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#default-name">5.1.15. default_name_*</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#default-ownership">5.1.16. default_ownership</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#default-password-crypted">5.1.17. default_password_crypted</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#default-template-type">5.1.18. default_template_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#default-virt-bridge">5.1.19. default_virt_bridge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#default-virt-file-size">5.1.20. default_virt_file_size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#default-virt-ram">5.1.21. default_virt_ram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#default-virt-type">5.1.22. default_virt_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enable-gpxe">5.1.23. enable_gpxe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enable-menu">5.1.24. enable_menu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#http-port">5.1.25. http_port</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kernel-options">5.1.26. kernel_options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ldap">5.1.27. ldap_*</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mgmt">5.1.28. mgmt_*</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#puppet-auto-setup">5.1.29. puppet_auto_setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sign-puppet-certs-automatically">5.1.30. sign_puppet_certs_automatically</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#puppetca-path">5.1.31. puppetca_path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#remove-old-puppet-certs-automatically">5.1.32. remove_old_puppet_certs_automatically</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#puppet-server">5.1.33. puppet_server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#puppet-version">5.1.34. puppet_version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#puppet-parameterized-classes">5.1.35. puppet_parameterized_classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manage-dhcp">5.1.36. manage_dhcp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manage-dns">5.1.37. manage_dns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bind-chroot-path">5.1.38. bind_chroot_path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bind-master">5.1.39. bind_master</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manage-tftpd">5.1.40. manage_tftpd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tftpboot-location">5.1.41. tftpboot_location</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manage-rsync">5.1.42. manage_rsync</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manage">5.1.43. manage_*</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#next-server">5.1.44. next_server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#power-management-default-type">5.1.45. power_management_default_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#power-template-dir">5.1.46. power_template_dir</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pxe-just-once">5.1.47. pxe_just_once</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nopxe-with-triggers">5.1.48. nopxe_with_triggers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#redhat-management-server">5.1.49. redhat_management_server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#redhat-management-permissive">5.1.50. redhat_management_permissive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#redhat-management-key">5.1.51. redhat_management_key</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#register-new-installs">5.1.52. register_new_installs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reposync-flags">5.1.53. reposync_flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#restart">5.1.54. restart_*</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-install-triggers">5.1.55. run_install_triggers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scm-track">5.1.56. scm_track_*</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#server">5.1.57. server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#client-use-localhost">5.1.58. client_use_localhost</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#client-use-https">5.1.59. client_use_https</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#virt-auto-boot">5.1.60. virt_auto_boot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#webdir">5.1.61. webdir</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#webdir-whitelist">5.1.62. webdir_whitelist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xmlrpc-port">5.1.63. xmlrpc_port</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yum-post-install-mirror">5.1.64. yum_post_install_mirror</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yum-distro-priority">5.1.65. yum_distro_priority</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yumdownloader-flags">5.1.66. yumdownloader_flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#serializer-pretty-json">5.1.67. serializer_pretty_json</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replicate-rsync-options">5.1.68. replicate_rsync_options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replicate-repo-rsync-options">5.1.69. replicate_repo_rsync_options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#always-write-dhcp-entries">5.1.70. always_write_dhcp_entries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proxy-url-ext">5.1.71. proxy_url_ext:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proxy-url-int">5.1.72. proxy_url_int</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jinja2-includedir">5.1.73. jinja2_includedir</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#include">5.1.74. include</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#modules-conf">5.2. modules.conf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#authentication">5.2.1. authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#authorization">5.2.2. authorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dns">5.2.3. dns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dhcp">5.2.4. dhcp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tftpd">5.2.5. tftpd</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>5. Cobbler Configuration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cobbler-conf.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cobbler-configuration">
+<h1>5. Cobbler Configuration<a class="headerlink" href="#cobbler-configuration" title="Permalink to this headline">¶</a></h1>
+<p>There are two main settings files: settings and modules.conf. Both files can be found under <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/</span></code> and both are
+written in YAML.</p>
+<div class="section" id="settings">
+<h2>5.1. settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="allow-duplicate-hostnames">
+<h3>5.1.1. allow_duplicate_hostnames<a class="headerlink" href="#allow-duplicate-hostnames" title="Permalink to this headline">¶</a></h3>
+<p>if 1, cobbler will allow insertions of system records that duplicate the <code class="docutils literal notranslate"><span class="pre">--dns-name</span></code> information of other system records.
+In general, this is undesirable and should be left 0.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="allow-duplicate-ips">
+<h3>5.1.2. allow_duplicate_ips<a class="headerlink" href="#allow-duplicate-ips" title="Permalink to this headline">¶</a></h3>
+<p>if 1, cobbler will allow insertions of system records that duplicate the ip address information of other system records.
+In general, this is undesirable and should be left 0.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="allow-duplicate-macs">
+<h3>5.1.3. allow_duplicate_macs<a class="headerlink" href="#allow-duplicate-macs" title="Permalink to this headline">¶</a></h3>
+<p>If 1, cobbler will allow insertions of system records that duplicate the mac address information of other system
+records. In general, this is undesirable.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="allow-dynamic-settings">
+<h3>5.1.4. allow_dynamic_settings<a class="headerlink" href="#allow-dynamic-settings" title="Permalink to this headline">¶</a></h3>
+<p>If 1, cobbler will allow settings to be changed dynamically without a restart of the cobblerd daemon. You can only
+change this variable by manually editing the settings file, and you MUST restart cobblerd after changing it.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="anamon-enabled">
+<h3>5.1.5. anamon_enabled<a class="headerlink" href="#anamon-enabled" title="Permalink to this headline">¶</a></h3>
+<p>By default, installs are <em>not</em> set to send installation logs to the cobbler server. With <code class="docutils literal notranslate"><span class="pre">anamon_enabled</span></code>, automatic
+installation templates may use the <code class="docutils literal notranslate"><span class="pre">pre_anamon</span></code> snippet to allow remote live monitoring of their installations from
+the cobbler server. Installation logs will be stored under <code class="docutils literal notranslate"><span class="pre">/var/log/cobbler/anamon/</span></code>.</p>
+<p><strong>Note</strong>: This does allow an xmlrpc call to send logs to this directory, without authentication, so enable only if you
+are ok with this limitation.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="authn-pam-service">
+<h3>5.1.6. authn_pam_service<a class="headerlink" href="#authn-pam-service" title="Permalink to this headline">¶</a></h3>
+<p>If using authn_pam in the <code class="docutils literal notranslate"><span class="pre">modules.conf</span></code>, this can be configured to change the PAM service authentication will be
+tested against.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&quot;login&quot;</span></code></p>
+</div>
+<div class="section" id="auth-token-expiration">
+<h3>5.1.7. auth_token_expiration<a class="headerlink" href="#auth-token-expiration" title="Permalink to this headline">¶</a></h3>
+<p>How long the authentication token is valid for, in seconds.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">3600</span></code></p>
+</div>
+<div class="section" id="autoinstall-snippets-dir">
+<h3>5.1.8. autoinstall_snippets_dir<a class="headerlink" href="#autoinstall-snippets-dir" title="Permalink to this headline">¶</a></h3>
+<p>This is a directory of files that cobbler uses to make templating easier. See the Wiki for more information. Changing
+this directory should not be required.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">/var/lib/cobbler/snippets</span></code></p>
+</div>
+<div class="section" id="autoinstall-templates-dir">
+<h3>5.1.9. autoinstall_templates_dir<a class="headerlink" href="#autoinstall-templates-dir" title="Permalink to this headline">¶</a></h3>
+<p>This is a directory of files that cobbler uses to make templating easier. See the Wiki for more information. Changing
+this directory should not be required.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">/var/lib/cobbler/templates</span></code></p>
+</div>
+<div class="section" id="boot-loader-conf-template-dir">
+<h3>5.1.10. boot_loader_conf_template_dir<a class="headerlink" href="#boot-loader-conf-template-dir" title="Permalink to this headline">¶</a></h3>
+<p>Location of templates used for boot loader config generation.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&quot;/etc/cobbler/boot_loader_conf&quot;</span></code></p>
+</div>
+<div class="section" id="build-reporting">
+<h3>5.1.11. build_reporting_*<a class="headerlink" href="#build-reporting" title="Permalink to this headline">¶</a></h3>
+<p>Email out a report when cobbler finishes installing a system.</p>
+<ul class="simple">
+<li><p>enabled: set to 1 to turn this feature on</p></li>
+<li><p>sender: optional</p></li>
+<li><p>email: which addresses to email</p></li>
+<li><p>smtp_server: used to specify another server for an MTA</p></li>
+<li><p>subject: use the default subject unless overridden</p></li>
+</ul>
+<p>defaults:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>build_reporting_enabled: 0
+build_reporting_sender: &quot;&quot;
+build_reporting_email: [ &#39;root@localhost&#39; ]
+build_reporting_smtp_server: &quot;localhost&quot;
+build_reporting_subject: &quot;&quot;
+build_reporting_ignorelist: [ &quot;&quot; ]
+</pre></div>
+</div>
+</div>
+<div class="section" id="cheetah-import-whitelist">
+<h3>5.1.12. cheetah_import_whitelist<a class="headerlink" href="#cheetah-import-whitelist" title="Permalink to this headline">¶</a></h3>
+<p>Cheetah-language autoinstall templates can import Python modules. while this is a useful feature, it is not safe to
+allow them to import anything they want. This whitelists which modules can be imported through Cheetah. Users can expand
+this as needed but should never allow modules such as subprocess or those that allow access to the filesystem as Cheetah
+templates are evaluated by cobblerd as code.</p>
+<dl class="simple">
+<dt>default:</dt><dd><ul class="simple">
+<li><p>“random”</p></li>
+<li><p>“re”</p></li>
+<li><p>“time”</p></li>
+<li><p>“netaddr”</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="createrepo-flags">
+<h3>5.1.13. createrepo_flags<a class="headerlink" href="#createrepo-flags" title="Permalink to this headline">¶</a></h3>
+<p>Default createrepo_flags to use for new repositories. If you have <code class="docutils literal notranslate"><span class="pre">createrepo</span> <span class="pre">&gt;=</span> <span class="pre">0.4.10</span></code>, consider
+<code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">cache</span> <span class="pre">--update</span> <span class="pre">-C</span></code>, which can dramatically improve your <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">reposync</span></code> time. <code class="docutils literal notranslate"><span class="pre">-s</span> <span class="pre">sha</span></code> enables working with
+Fedora repos from F11/F12 from EL-4 or EL-5 without python-hashlib installed (which is not available on EL-4)</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&quot;-c</span> <span class="pre">cache</span> <span class="pre">-s</span> <span class="pre">sha&quot;</span></code></p>
+</div>
+<div class="section" id="default-autoinstall">
+<h3>5.1.14. default_autoinstall<a class="headerlink" href="#default-autoinstall" title="Permalink to this headline">¶</a></h3>
+<p>If no autoinstall template is specified to profile add, use this template.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">/var/lib/cobbler/autoinstall_templates/default.ks</span></code></p>
+</div>
+<div class="section" id="default-name">
+<h3>5.1.15. default_name_*<a class="headerlink" href="#default-name" title="Permalink to this headline">¶</a></h3>
+<p>Configure all installed systems to use these nameservers by default unless defined differently in the profile. For DHCP
+configurations you probably do /not/ want to supply this.</p>
+<p>defaults:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>default_name_servers: []
+default_name_servers_search: []
+</pre></div>
+</div>
+</div>
+<div class="section" id="default-ownership">
+<h3>5.1.16. default_ownership<a class="headerlink" href="#default-ownership" title="Permalink to this headline">¶</a></h3>
+<p>if using the <code class="docutils literal notranslate"><span class="pre">authz_ownership</span></code> module (see the Wiki), objects created without specifying an owner are assigned to this
+owner and/or group. Can be a comma seperated list.</p>
+<dl class="simple">
+<dt>default:</dt><dd><ul class="simple">
+<li><p>“admin”</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="default-password-crypted">
+<h3>5.1.17. default_password_crypted<a class="headerlink" href="#default-password-crypted" title="Permalink to this headline">¶</a></h3>
+<p>Cobbler has various sample automatic installation templates stored in <code class="docutils literal notranslate"><span class="pre">/var/lib/cobbler/autoinstall_templates/</span></code>. This
+controls what install (root) password is set up for those systems that reference this variable. The factory default is
+“cobbler” and cobbler check will warn if this is not changed. The simplest way to change the password is to run
+<code class="docutils literal notranslate"><span class="pre">openssl</span> <span class="pre">passwd</span> <span class="pre">-1</span></code> and put the output between the <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&quot;$1$mF86/UHC$WvcIcX2t6crBz2onWxyac.&quot;</span></code></p>
+</div>
+<div class="section" id="default-template-type">
+<h3>5.1.18. default_template_type<a class="headerlink" href="#default-template-type" title="Permalink to this headline">¶</a></h3>
+<p>The default template type to use in the absence of any other detected template. If you do not specify the template
+with <code class="docutils literal notranslate"><span class="pre">#template=&lt;template_type&gt;</span></code> on the first line of your templates/snippets, cobbler will assume try to use the
+following template engine to parse the templates.</p>
+<p>Current valid values are: cheetah, jinja2</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&quot;cheetah&quot;</span></code></p>
+</div>
+<div class="section" id="default-virt-bridge">
+<h3>5.1.19. default_virt_bridge<a class="headerlink" href="#default-virt-bridge" title="Permalink to this headline">¶</a></h3>
+<p>For libvirt based installs in koan, if no virt-bridge is specified, which bridge do we try? For EL 4/5 hosts this should
+be <code class="docutils literal notranslate"><span class="pre">xenbr0</span></code>, for all versions of Fedora, try <code class="docutils literal notranslate"><span class="pre">virbr0</span></code>. This can be overriden on a per-profile basis or at the koan
+command line though this saves typing to just set it here to the most common option.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">xenbr0</span></code></p>
+</div>
+<div class="section" id="default-virt-file-size">
+<h3>5.1.20. default_virt_file_size<a class="headerlink" href="#default-virt-file-size" title="Permalink to this headline">¶</a></h3>
+<p>Use this as the default disk size for virt guests (GB).</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">5</span></code></p>
+</div>
+<div class="section" id="default-virt-ram">
+<h3>5.1.21. default_virt_ram<a class="headerlink" href="#default-virt-ram" title="Permalink to this headline">¶</a></h3>
+<p>Use this as the default memory size for virt guests (MB).</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">512</span></code></p>
+</div>
+<div class="section" id="default-virt-type">
+<h3>5.1.22. default_virt_type<a class="headerlink" href="#default-virt-type" title="Permalink to this headline">¶</a></h3>
+<p>If koan is invoked without <code class="docutils literal notranslate"><span class="pre">--virt-type</span></code> and no virt-type is set on the profile/system, what virtualization type
+should be assumed?</p>
+<p>Current valid values are: xenpv, xenfv, qemu, vmware</p>
+<p><strong>NOTE</strong>: this does not change what <code class="docutils literal notranslate"><span class="pre">virt_type</span></code> is chosen by import.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">xenpv</span></code></p>
+</div>
+<div class="section" id="enable-gpxe">
+<h3>5.1.23. enable_gpxe<a class="headerlink" href="#enable-gpxe" title="Permalink to this headline">¶</a></h3>
+<p>Enable gPXE booting? Enabling this option will cause cobbler to copy the <code class="docutils literal notranslate"><span class="pre">undionly.kpxe</span></code> file to the tftp root
+directory, and if a profile/system is configured to boot via gpxe it will chain load off <code class="docutils literal notranslate"><span class="pre">pxelinux.0</span></code>.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="enable-menu">
+<h3>5.1.24. enable_menu<a class="headerlink" href="#enable-menu" title="Permalink to this headline">¶</a></h3>
+<p>Controls whether cobbler will add each new profile entry to the default PXE boot menu. This can be over-ridden on a
+per-profile basis when adding/editing profiles with <code class="docutils literal notranslate"><span class="pre">--enable-menu=0/1</span></code>. Users should ordinarily leave this setting
+enabled unless they are concerned with accidental reinstalls from users who select an entry at the PXE boot menu. Adding
+a password to the boot menus templates may also be a good solution to prevent unwanted reinstallations</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</div>
+<div class="section" id="http-port">
+<h3>5.1.25. http_port<a class="headerlink" href="#http-port" title="Permalink to this headline">¶</a></h3>
+<p>Change this port if Apache is not running plaintext on port 80. Most people can leave this alone.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">80</span></code></p>
+</div>
+<div class="section" id="kernel-options">
+<h3>5.1.26. kernel_options<a class="headerlink" href="#kernel-options" title="Permalink to this headline">¶</a></h3>
+<p>Kernel options that should be present in every cobbler installation. Kernel options can also be applied at the
+distro/profile/system level.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">{}</span></code></p>
+</div>
+<div class="section" id="ldap">
+<h3>5.1.27. ldap_*<a class="headerlink" href="#ldap" title="Permalink to this headline">¶</a></h3>
+<p>Configuration options if using the authn_ldap module. See the the Wiki for details. This can be ignored if you are not
+using LDAP for WebUI/XMLRPC authentication.</p>
+<p>defaults:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ldap_server: &quot;ldap.example.com&quot;
+ldap_base_dn: &quot;DC=example,DC=com&quot;
+ldap_port: 389
+ldap_tls: 1
+ldap_anonymous_bind: 1
+ldap_search_bind_dn: &#39;&#39;
+ldap_search_passwd: &#39;&#39;
+ldap_search_prefix: &#39;uid=&#39;
+ldap_tls_cacertfile: &#39;&#39;
+ldap_tls_keyfile: &#39;&#39;
+ldap_tls_certfile: &#39;&#39;
+</pre></div>
+</div>
+</div>
+<div class="section" id="mgmt">
+<h3>5.1.28. mgmt_*<a class="headerlink" href="#mgmt" title="Permalink to this headline">¶</a></h3>
+<p>Cobbler has a feature that allows for integration with config management systems such as Puppet. The following
+parameters work in conjunction with <code class="docutils literal notranslate"><span class="pre">--mgmt-classes</span></code> and are described in further detail at:
+<a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Using-cobbler-with-a-configuration-management-system">https://github.com/cobbler/cobbler/wiki/Using-cobbler-with-a-configuration-management-system</a></p>
+<div class="highlight-Yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">mgmt_classes</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+<span class="nt">mgmt_parameters</span><span class="p">:</span>
+    <span class="nt">from_cobbler</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="puppet-auto-setup">
+<h3>5.1.29. puppet_auto_setup<a class="headerlink" href="#puppet-auto-setup" title="Permalink to this headline">¶</a></h3>
+<p>If enabled, this setting ensures that puppet is installed during machine provision, a client certificate is generated
+and a certificate signing request is made with the puppet master server.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="sign-puppet-certs-automatically">
+<h3>5.1.30. sign_puppet_certs_automatically<a class="headerlink" href="#sign-puppet-certs-automatically" title="Permalink to this headline">¶</a></h3>
+<p>When puppet starts on a system after installation it needs to have its certificate signed by the puppet master server.
+Enabling the following feature will ensure that the puppet server signs the certificate after installation if the puppet
+master server is running on the same machine as cobbler. This requires <code class="docutils literal notranslate"><span class="pre">puppet_auto_setup</span></code> above to be enabled.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="puppetca-path">
+<h3>5.1.31. puppetca_path<a class="headerlink" href="#puppetca-path" title="Permalink to this headline">¶</a></h3>
+<p>Location of the puppet executable, used for revoking certificates.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&quot;/usr/bin/puppet&quot;</span></code></p>
+</div>
+<div class="section" id="remove-old-puppet-certs-automatically">
+<h3>5.1.32. remove_old_puppet_certs_automatically<a class="headerlink" href="#remove-old-puppet-certs-automatically" title="Permalink to this headline">¶</a></h3>
+<p>When a puppet managed machine is reinstalled it is necessary to remove the puppet certificate from the puppet master
+server before a new certificate is signed (see above). Enabling the following feature will ensure that the certificate
+for the machine to be installed is removed from the puppet master server if the puppet master server is running on the
+same machine as cobbler. This requires <code class="docutils literal notranslate"><span class="pre">puppet_auto_setup</span></code> above to be enabled</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="puppet-server">
+<h3>5.1.33. puppet_server<a class="headerlink" href="#puppet-server" title="Permalink to this headline">¶</a></h3>
+<p>Choose a <code class="docutils literal notranslate"><span class="pre">--server</span></code> argument when running puppetd/puppet agent during autoinstall. This one is commented out by
+default.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">'puppet'</span></code></p>
+</div>
+<div class="section" id="puppet-version">
+<h3>5.1.34. puppet_version<a class="headerlink" href="#puppet-version" title="Permalink to this headline">¶</a></h3>
+<p>Let cobbler know that you’re using a newer version of puppet. Choose version 3 to use: ‘puppet agent’; version 2 uses
+status quo: ‘puppetd’. This one is commented out by default.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">2</span></code></p>
+</div>
+<div class="section" id="puppet-parameterized-classes">
+<h3>5.1.35. puppet_parameterized_classes<a class="headerlink" href="#puppet-parameterized-classes" title="Permalink to this headline">¶</a></h3>
+<p>Choose whether to enable puppet parameterized classes or not. Puppet versions prior to 2.6.5 do not support parameters.
+This one is commented out by default.</p>
+<p>default: 1</p>
+</div>
+<div class="section" id="manage-dhcp">
+<h3>5.1.36. manage_dhcp<a class="headerlink" href="#manage-dhcp" title="Permalink to this headline">¶</a></h3>
+<p>Set to 1 to enable Cobbler’s DHCP management features. The choice of DHCP management engine is in
+<code class="docutils literal notranslate"><span class="pre">/etc/cobbler/modules.conf</span></code></p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="manage-dns">
+<h3>5.1.37. manage_dns<a class="headerlink" href="#manage-dns" title="Permalink to this headline">¶</a></h3>
+<p>Set to 1 to enable Cobbler’s DNS management features. The choice of DNS mangement engine is in
+<code class="docutils literal notranslate"><span class="pre">/etc/cobbler/modules.conf</span></code></p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="bind-chroot-path">
+<h3>5.1.38. bind_chroot_path<a class="headerlink" href="#bind-chroot-path" title="Permalink to this headline">¶</a></h3>
+<p>Set to path of bind chroot to create bind-chroot compatible bind configuration files. This should be automatically
+detected.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
+</div>
+<div class="section" id="bind-master">
+<h3>5.1.39. bind_master<a class="headerlink" href="#bind-master" title="Permalink to this headline">¶</a></h3>
+<p>Set to the ip address of the master bind DNS server for creating secondary bind configuration files.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code></p>
+</div>
+<div class="section" id="manage-tftpd">
+<h3>5.1.40. manage_tftpd<a class="headerlink" href="#manage-tftpd" title="Permalink to this headline">¶</a></h3>
+<p>Set to 1 to enable Cobbler’s TFTP management features. the choice of TFTP mangement engine is in
+<code class="docutils literal notranslate"><span class="pre">/etc/cobbler/modules.conf</span></code></p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</div>
+<div class="section" id="tftpboot-location">
+<h3>5.1.41. tftpboot_location<a class="headerlink" href="#tftpboot-location" title="Permalink to this headline">¶</a></h3>
+<p>This variable contains the location of the tftpboot directory. If this directory is not present cobbler does not start.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">/srv/tftpboot</span></code></p>
+</div>
+<div class="section" id="manage-rsync">
+<h3>5.1.42. manage_rsync<a class="headerlink" href="#manage-rsync" title="Permalink to this headline">¶</a></h3>
+<p>Set to 1 to enable Cobbler’s RSYNC management features.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="manage">
+<h3>5.1.43. manage_*<a class="headerlink" href="#manage" title="Permalink to this headline">¶</a></h3>
+<p>If using BIND (named) for DNS management in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/modules.conf</span></code> and manage_dns is enabled (above), this lists
+which zones are managed. See the Wiki (<a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Dns-management">https://github.com/cobbler/cobbler/wiki/Dns-management</a>) for more info</p>
+<p>defaults:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>manage_forward_zones: []
+manage_reverse_zones: []
+</pre></div>
+</div>
+</div>
+<div class="section" id="next-server">
+<h3>5.1.44. next_server<a class="headerlink" href="#next-server" title="Permalink to this headline">¶</a></h3>
+<p>If using cobbler with <code class="docutils literal notranslate"><span class="pre">manage_dhcp</span></code>, put the IP address of the cobbler server here so that PXE booting guests can find
+it. If you do not set this correctly, this will be manifested in TFTP open timeouts.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code></p>
+</div>
+<div class="section" id="power-management-default-type">
+<h3>5.1.45. power_management_default_type<a class="headerlink" href="#power-management-default-type" title="Permalink to this headline">¶</a></h3>
+<p>Settings for power management features. These settings are optional. See
+<a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Power-management">https://github.com/cobbler/cobbler/wiki/Power-management</a> to learn more.</p>
+<p>Choices (refer to codes.py):</p>
+<ul class="simple">
+<li><p>apc_snmp</p></li>
+<li><p>bladecenter</p></li>
+<li><p>bullpap</p></li>
+<li><p>drac</p></li>
+<li><p>ether_wake</p></li>
+<li><p>ilo</p></li>
+<li><p>integrity</p></li>
+<li><p>ipmilan</p></li>
+<li><p>ipmitool</p></li>
+<li><p>lpar</p></li>
+<li><p>rsa</p></li>
+<li><p>virsh</p></li>
+<li><p>wti</p></li>
+</ul>
+<p>default: <code class="docutils literal notranslate"><span class="pre">ipmitool</span></code></p>
+</div>
+<div class="section" id="power-template-dir">
+<h3>5.1.46. power_template_dir<a class="headerlink" href="#power-template-dir" title="Permalink to this headline">¶</a></h3>
+<p>The commands used by the power management module are sourced from what directory?</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&quot;/etc/cobbler/power&quot;</span></code></p>
+</div>
+<div class="section" id="pxe-just-once">
+<h3>5.1.47. pxe_just_once<a class="headerlink" href="#pxe-just-once" title="Permalink to this headline">¶</a></h3>
+<p>If this setting is set to 1, cobbler systems that pxe boot will request at the end of their installation to toggle the
+<code class="docutils literal notranslate"><span class="pre">--netboot-enabled</span></code> record in the cobbler system record. This eliminates the potential for a PXE boot loop if the
+system is set to PXE first in it’s BIOS order. Enable this if PXE is first in your BIOS boot order, otherwise leave this
+disabled. See the manpage for <code class="docutils literal notranslate"><span class="pre">--netboot-enabled</span></code>.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</div>
+<div class="section" id="nopxe-with-triggers">
+<h3>5.1.48. nopxe_with_triggers<a class="headerlink" href="#nopxe-with-triggers" title="Permalink to this headline">¶</a></h3>
+<p>If this setting is set to one, triggers will be executed when systems will request to toggle the <code class="docutils literal notranslate"><span class="pre">--netboot-enabled</span></code>
+record at the end of their installation.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</div>
+<div class="section" id="redhat-management-server">
+<h3>5.1.49. redhat_management_server<a class="headerlink" href="#redhat-management-server" title="Permalink to this headline">¶</a></h3>
+<p>This setting is only used by the code that supports using Spacewalk/Satellite authentication within Cobbler Web and
+Cobbler XMLRPC.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&quot;xmlrpc.rhn.redhat.com&quot;</span></code></p>
+</div>
+<div class="section" id="redhat-management-permissive">
+<h3>5.1.50. redhat_management_permissive<a class="headerlink" href="#redhat-management-permissive" title="Permalink to this headline">¶</a></h3>
+<p>If using <code class="docutils literal notranslate"><span class="pre">authn_spacewalk</span></code> in <code class="docutils literal notranslate"><span class="pre">modules.conf</span></code> to let cobbler authenticate against Satellite/Spacewalk’s auth system,
+by default it will not allow per user access into Cobbler Web and Cobbler XMLRPC. In order to permit this, the following
+setting must be enabled HOWEVER doing so will permit all Spacewalk/Satellite users of certain types to edit all of
+cobbler’s configuration. these roles are: <code class="docutils literal notranslate"><span class="pre">config_admin</span></code> and <code class="docutils literal notranslate"><span class="pre">org_admin</span></code>. Users should turn this on only if they
+want this behavior and do not have a cross-multi-org seperation concern. If you have a single org in your satellite,
+it’s probably safe to turn this on and then you can use CobblerWeb alongside a Satellite install.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="redhat-management-key">
+<h3>5.1.51. redhat_management_key<a class="headerlink" href="#redhat-management-key" title="Permalink to this headline">¶</a></h3>
+<p>Specify the default Red Hat authorization key to use to register system. If left blank, no registration will be
+attempted. Similarly you can set the <code class="docutils literal notranslate"><span class="pre">--redhat-management-key</span></code> to blank on any system to keep it from trying to
+register.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
+</div>
+<div class="section" id="register-new-installs">
+<h3>5.1.52. register_new_installs<a class="headerlink" href="#register-new-installs" title="Permalink to this headline">¶</a></h3>
+<p>If set to <code class="docutils literal notranslate"><span class="pre">1</span></code>, allows <code class="docutils literal notranslate"><span class="pre">/usr/bin/cobbler-register</span></code> (part of the koan package) to be used to remotely add new cobbler
+system records to cobbler. This effectively allows for registration of new hardware from system records.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="reposync-flags">
+<h3>5.1.53. reposync_flags<a class="headerlink" href="#reposync-flags" title="Permalink to this headline">¶</a></h3>
+<p>Flags to use for yum’s reposync. If your version of yum reposync does not support <code class="docutils literal notranslate"><span class="pre">-l</span></code>, you may need to remove that
+option.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&quot;-l</span> <span class="pre">-n</span> <span class="pre">-d&quot;</span></code></p>
+</div>
+<div class="section" id="restart">
+<h3>5.1.54. restart_*<a class="headerlink" href="#restart" title="Permalink to this headline">¶</a></h3>
+<p>When DHCP and DNS management are enabled, <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">sync</span></code> can automatically restart those services to apply changes.
+The exception for this is if using ISC for DHCP, then omapi eliminates the need for a restart. <code class="docutils literal notranslate"><span class="pre">omapi</span></code>, however, is
+experimental and not recommended for most configurations. If DHCP and DNS are going to be managed, but hosted on a box
+that is not on this server, disable restarts here and write some other script to ensure that the config files get
+copied/rsynced to the destination box. This can be done by modifying the restart services trigger. Note that if
+<code class="docutils literal notranslate"><span class="pre">manage_dhcp</span></code> and <code class="docutils literal notranslate"><span class="pre">manage_dns</span></code> are disabled, the respective parameter will have no effect. Most users should not
+need to change this.</p>
+<p>defaults:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>restart_dns: 1
+restart_dhcp: 1
+</pre></div>
+</div>
+</div>
+<div class="section" id="run-install-triggers">
+<h3>5.1.55. run_install_triggers<a class="headerlink" href="#run-install-triggers" title="Permalink to this headline">¶</a></h3>
+<p>Install triggers are scripts in <code class="docutils literal notranslate"><span class="pre">/var/lib/cobbler/triggers/install</span></code> that are triggered in autoinstall pre and post
+sections. Any executable script in those directories is run. They can be used to send email or perform other actions.
+They are currently run as root so if you do not need this functionality you can disable it, though this will also
+disable <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">status</span></code> which uses a logging trigger to audit install progress.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</div>
+<div class="section" id="scm-track">
+<h3>5.1.56. scm_track_*<a class="headerlink" href="#scm-track" title="Permalink to this headline">¶</a></h3>
+<p>enables a trigger which version controls all changes to <code class="docutils literal notranslate"><span class="pre">/var/lib/cobbler</span></code> when add, edit, or sync events are
+performed. This can be used to revert to previous database versions, generate RSS feeds, or for other auditing or backup
+purposes. Git and Mercurial are currently supported, but Git is the recommend SCM for use with this feature.</p>
+<p>default:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>scm_track_enabled: 0
+scm_track_mode: &quot;git&quot;
+scm_track_author: &quot;cobbler &lt;cobbler@localhost&gt;&quot;
+scm_push_script: &quot;/bin/true&quot;
+</pre></div>
+</div>
+</div>
+<div class="section" id="server">
+<h3>5.1.57. server<a class="headerlink" href="#server" title="Permalink to this headline">¶</a></h3>
+<p>This is the address of the cobbler server – as it is used by systems during the install process, it must be the address
+or hostname of the system as those systems can see the server. if you have a server that appears differently to
+different subnets (dual homed, etc), you need to read the <code class="docutils literal notranslate"><span class="pre">--server-override</span></code> section of the manpage for how that
+works.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code></p>
+</div>
+<div class="section" id="client-use-localhost">
+<h3>5.1.58. client_use_localhost<a class="headerlink" href="#client-use-localhost" title="Permalink to this headline">¶</a></h3>
+<p>If set to 1, all commands will be forced to use the localhost address instead of using the above value which can force
+commands like cobbler sync to open a connection to a remote address if one is in the configuration and would traceback.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="client-use-https">
+<h3>5.1.59. client_use_https<a class="headerlink" href="#client-use-https" title="Permalink to this headline">¶</a></h3>
+<p>If set to 1, all commands to the API (not directly to the XMLRPC server) will go over HTTPS instead of plaintext. Be
+sure to change the <code class="docutils literal notranslate"><span class="pre">http_port</span></code> setting to the correct value for the web server.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="virt-auto-boot">
+<h3>5.1.60. virt_auto_boot<a class="headerlink" href="#virt-auto-boot" title="Permalink to this headline">¶</a></h3>
+<p>Should new profiles for virtual machines default to auto booting with the physical host when the physical host reboots?
+This can be overridden on each profile or system object.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</div>
+<div class="section" id="webdir">
+<h3>5.1.61. webdir<a class="headerlink" href="#webdir" title="Permalink to this headline">¶</a></h3>
+<p>Cobbler’s web directory.  Don’t change this setting – see the Wiki on “relocating your cobbler install” if your /var partition
+is not large enough.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&#64;&#64;webroot&#64;&#64;/cobbler</span></code></p>
+</div>
+<div class="section" id="webdir-whitelist">
+<h3>5.1.62. webdir_whitelist<a class="headerlink" href="#webdir-whitelist" title="Permalink to this headline">¶</a></h3>
+<p>Directories that will not get wiped and recreated on a <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">sync</span></code>.</p>
+<p>default:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>webdir_whitelist:
+  - misc
+  - web
+  - webui
+  - localmirror
+  - repo_mirror
+  - distro_mirror
+  - images
+  - links
+  - pub
+  - repo_profile
+  - repo_system
+  - svc
+  - rendered
+  - .link_cache
+</pre></div>
+</div>
+</div>
+<div class="section" id="xmlrpc-port">
+<h3>5.1.63. xmlrpc_port<a class="headerlink" href="#xmlrpc-port" title="Permalink to this headline">¶</a></h3>
+<p>Cobbler’s public XMLRPC listens on this port. Change this only if absolutely needed, as you’ll have to start supplying
+a new port option to koan if it is not the default.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">25151</span></code></p>
+</div>
+<div class="section" id="yum-post-install-mirror">
+<h3>5.1.64. yum_post_install_mirror<a class="headerlink" href="#yum-post-install-mirror" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">repo</span> <span class="pre">add</span></code> commands set cobbler up with repository information that can be used during autoinstall and is
+automatically set up in the cobbler autoinstall templates. By default, these are only available at install time. To
+make these repositories usable on installed systems (since cobbler makes a very convenient mirror) set this to 1. Most
+users can safely set this to 1. Users who have a dual homed cobbler server, or are installing laptops that will not
+always have access to the cobbler server may wish to leave this as 0. In that case, the cobbler mirrored yum repos are
+still accessible at <code class="docutils literal notranslate"><span class="pre">http://cobbler.example.org/cblr/repo_mirror</span></code> and yum configuration can still be done manually.
+This is just a shortcut.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</div>
+<div class="section" id="yum-distro-priority">
+<h3>5.1.65. yum_distro_priority<a class="headerlink" href="#yum-distro-priority" title="Permalink to this headline">¶</a></h3>
+<p>The default yum priority for all the distros. This is only used if yum-priorities plugin is used. 1 is the maximum
+value. Tweak with caution.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</div>
+<div class="section" id="yumdownloader-flags">
+<h3>5.1.66. yumdownloader_flags<a class="headerlink" href="#yumdownloader-flags" title="Permalink to this headline">¶</a></h3>
+<p>Flags to use for yumdownloader. Not all versions may support <code class="docutils literal notranslate"><span class="pre">--resolve</span></code>.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&quot;--resolve&quot;</span></code></p>
+</div>
+<div class="section" id="serializer-pretty-json">
+<h3>5.1.67. serializer_pretty_json<a class="headerlink" href="#serializer-pretty-json" title="Permalink to this headline">¶</a></h3>
+<p>Sort and indent JSON output to make it more human-readable.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="replicate-rsync-options">
+<h3>5.1.68. replicate_rsync_options<a class="headerlink" href="#replicate-rsync-options" title="Permalink to this headline">¶</a></h3>
+<p>replication rsync options for distros, autoinstalls, snippets set to override default value of <code class="docutils literal notranslate"><span class="pre">-avzH</span></code></p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&quot;-avzH&quot;</span></code></p>
+</div>
+<div class="section" id="replicate-repo-rsync-options">
+<h3>5.1.69. replicate_repo_rsync_options<a class="headerlink" href="#replicate-repo-rsync-options" title="Permalink to this headline">¶</a></h3>
+<p>Replication rsync options for repos set to override default value of <code class="docutils literal notranslate"><span class="pre">-avzH</span></code></p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&quot;-avzH&quot;</span></code></p>
+</div>
+<div class="section" id="always-write-dhcp-entries">
+<h3>5.1.70. always_write_dhcp_entries<a class="headerlink" href="#always-write-dhcp-entries" title="Permalink to this headline">¶</a></h3>
+<p>Always write DHCP entries, regardless if netboot is enabled.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</div>
+<div class="section" id="proxy-url-ext">
+<h3>5.1.71. proxy_url_ext:<a class="headerlink" href="#proxy-url-ext" title="Permalink to this headline">¶</a></h3>
+<p>External proxy - used by: get-loaders, reposync, signature update. Per default commented out.</p>
+<p>defaults:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>http: http://192.168.1.1:8080
+https: https://192.168.1.1:8443
+</pre></div>
+</div>
+</div>
+<div class="section" id="proxy-url-int">
+<h3>5.1.72. proxy_url_int<a class="headerlink" href="#proxy-url-int" title="Permalink to this headline">¶</a></h3>
+<p>Internal proxy - used by systems to reach cobbler for kickstarts.</p>
+<p>E.g.: proxy_url_int: <code class="docutils literal notranslate"><span class="pre">http://10.0.0.1:8080</span></code></p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
+</div>
+<div class="section" id="jinja2-includedir">
+<h3>5.1.73. jinja2_includedir<a class="headerlink" href="#jinja2-includedir" title="Permalink to this headline">¶</a></h3>
+<p>This is a directory of files that cobbler uses to include files into Jinja2 templates. Per default this settings is
+commented out.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">/var/lib/cobbler/jinja2</span></code></p>
+</div>
+<div class="section" id="include">
+<h3>5.1.74. include<a class="headerlink" href="#include" title="Permalink to this headline">¶</a></h3>
+<p>Include other configuration snippets with this regular expresion.</p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">&quot;/etc/cobbler/settings.d/*.settings&quot;</span> <span class="pre">]</span></code></p>
+</div>
+</div>
+<div class="section" id="modules-conf">
+<h2>5.2. modules.conf<a class="headerlink" href="#modules-conf" title="Permalink to this headline">¶</a></h2>
+<p>If you have own custom modules which are not shipped with Cobbler directly you may have additional sections here.</p>
+<div class="section" id="authentication">
+<h3>5.2.1. authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h3>
+<p>What users can log into the WebUI and Read-Write XMLRPC?</p>
+<p>Choices:</p>
+<ul class="simple">
+<li><p>authn_denyall    – no one (default)</p></li>
+<li><p>authn_configfile – use /etc/cobbler/users.digest (for basic setups)</p></li>
+<li><p>authn_passthru   – ask Apache to handle it (used for kerberos)</p></li>
+<li><p>authn_ldap       – authenticate against LDAP</p></li>
+<li><p>authn_spacewalk  – ask Spacewalk/Satellite (experimental)</p></li>
+<li><p>authn_pam        – use PAM facilities</p></li>
+<li><p>authn_testing    – username/password is always testing/testing (debug)</p></li>
+<li><p>(user supplied)  – you may write your own module</p></li>
+</ul>
+<p>WARNING: this is a security setting, do not choose an option blindly.</p>
+<p>For more information:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Cobbler-web-interface">https://github.com/cobbler/cobbler/wiki/Cobbler-web-interface</a></p></li>
+<li><p><a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Security-overview">https://github.com/cobbler/cobbler/wiki/Security-overview</a></p></li>
+<li><p><a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Kerberos">https://github.com/cobbler/cobbler/wiki/Kerberos</a></p></li>
+<li><p><a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Ldap">https://github.com/cobbler/cobbler/wiki/Ldap</a></p></li>
+</ul>
+<p>default: <code class="docutils literal notranslate"><span class="pre">authn_configfile</span></code></p>
+</div>
+<div class="section" id="authorization">
+<h3>5.2.2. authorization<a class="headerlink" href="#authorization" title="Permalink to this headline">¶</a></h3>
+<p>Once a user has been cleared by the WebUI/XMLRPC, what can they do?</p>
+<p>Choices:</p>
+<ul class="simple">
+<li><p>authz_allowall   – full access for all authneticated users (default)</p></li>
+<li><p>authz_ownership  – use users.conf, but add object ownership semantics</p></li>
+<li><p>(user supplied)  – you may write your own module</p></li>
+</ul>
+<p><strong>WARNING</strong>: this is a security setting, do not choose an option blindly.
+If you want to further restrict cobbler with ACLs for various groups,
+pick authz_ownership.  authz_allowall does not support ACLs.  configfile
+does but does not support object ownership which is useful as an additional
+layer of control.</p>
+<p>For more information:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Cobbler-web-interface">https://github.com/cobbler/cobbler/wiki/Cobbler-web-interface</a></p></li>
+<li><p><a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Security-overview">https://github.com/cobbler/cobbler/wiki/Security-overview</a></p></li>
+<li><p><a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Web-authorization">https://github.com/cobbler/cobbler/wiki/Web-authorization</a></p></li>
+</ul>
+<p>default: <code class="docutils literal notranslate"><span class="pre">authz_allowall</span></code></p>
+</div>
+<div class="section" id="dns">
+<h3>5.2.3. dns<a class="headerlink" href="#dns" title="Permalink to this headline">¶</a></h3>
+<p>Chooses the DNS management engine if manage_dns is enabled in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/settings</span></code>, which is off by default.</p>
+<p>Choices:</p>
+<ul class="simple">
+<li><p>manage_bind    – default, uses BIND/named</p></li>
+<li><p>manage_dnsmasq – uses dnsmasq, also must select dnsmasq for dhcp below</p></li>
+<li><p>manage_ndjbdns – uses ndjbdns</p></li>
+</ul>
+<p><strong>NOTE</strong>: More configuration is still required in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler</span></code></p>
+<p>For more information: <a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Dns-management">https://github.com/cobbler/cobbler/wiki/Dns-management</a></p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">manage_bind</span></code></p>
+</div>
+<div class="section" id="dhcp">
+<h3>5.2.4. dhcp<a class="headerlink" href="#dhcp" title="Permalink to this headline">¶</a></h3>
+<p>Chooses the DHCP management engine if <code class="docutils literal notranslate"><span class="pre">manage_dhcp</span></code> is enabled in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/settings</span></code>, which is off by default.</p>
+<p>Choices:</p>
+<ul class="simple">
+<li><p>manage_isc     – default, uses ISC dhcpd</p></li>
+<li><p>manage_dnsmasq – uses dnsmasq, also must select dnsmasq for dns above</p></li>
+</ul>
+<p><strong>NOTE</strong>: More configuration is still required in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler</span></code></p>
+<p>For more information: <a class="reference external" href="https://github.com/cobbler/cobbler/wiki/Dhcp-management">https://github.com/cobbler/cobbler/wiki/Dhcp-management</a></p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">manage_isc</span></code></p>
+</div>
+<div class="section" id="tftpd">
+<h3>5.2.5. tftpd<a class="headerlink" href="#tftpd" title="Permalink to this headline">¶</a></h3>
+<p>Chooses the TFTP management engine if manage_tftp is enabled in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/settings</span></code>, which is ON by default.</p>
+<p>Choices:</p>
+<ul class="simple">
+<li><p>manage_in_tftpd – default, uses the system’s tftp server</p></li>
+<li><p>manage_tftpd_py – uses cobbler’s tftp server</p></li>
+</ul>
+<p>default: <code class="docutils literal notranslate"><span class="pre">manage_in_tftpd</span></code></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="user-guide.html" class="btn btn-neutral float-right" title="6. User Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cobblerd.html" class="btn btn-neutral float-left" title="4. Cobblerd" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

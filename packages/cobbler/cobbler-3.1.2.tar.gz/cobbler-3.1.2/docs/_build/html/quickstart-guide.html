@@ -1,0 +1,541 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>1. Quickstart &mdash; Cobbler 3.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2. Install Guide" href="installation-guide.html" />
+    <link rel="prev" title="Welcome to Cobbler’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Cobbler
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#preparing-your-os">1.1. Preparing your OS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#selinux">1.1.1. SELinux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#firewall">1.1.2. Firewall</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#changing-settings">1.2. Changing settings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#default-encrypted-password">1.2.1. Default encrypted password</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#server-and-next-server">1.2.2. Server and next_server</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dhcp-management-and-dhcp-server-template">1.3. DHCP management and DHCP server template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#notes-on-files-and-directories">1.4. Notes on files and directories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#starting-and-enabling-the-cobbler-service">1.5. Starting and enabling the Cobbler service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checking-for-problems-and-your-first-sync">1.6. Checking for problems and your first sync</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#importing-your-first-distribution">1.7. Importing your first distribution</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#download-an-iso-image">1.7.1. Download an ISO image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-the-import">1.7.2. Run the import</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#listing-objects">1.7.2.1. Listing objects</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#object-details">1.7.2.2. Object details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#creating-a-system">1.7.2.3. Creating a system</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation-guide.html">2. Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler.html">3. Cobbler CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobblerd.html">4. Cobbler Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobbler-conf.html">5. Cobbler Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">6. User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer-guide.html">7. Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-autodoc/cobbler.html">8. Cobbler-Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release-notes.html">9. Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Cobbler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>1. Quickstart</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/quickstart-guide.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quickstart">
+<h1>1. Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
+<p>Cobbler can be a somewhat complex system to get started with, due to the wide variety of technologies it is designed to
+manage, but it does support a great deal of functionality immediately after installation with little to no customization
+needed. Before getting started with Cobbler, you should have a good working knowledge of PXE as well as the automated
+installation methodology of your chosen distribution(s).</p>
+<p>We will assume you have successfully installed Cobbler, please refer to the
+<a class="reference internal" href="installation-guide.html"><span class="doc">Installation Guide</span></a> for instructions for your specific operating system. Finally, this part
+guide will focus only on the CLI application.</p>
+<div class="section" id="preparing-your-os">
+<h2>1.1. Preparing your OS<a class="headerlink" href="#preparing-your-os" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="selinux">
+<h3>1.1.1. SELinux<a class="headerlink" href="#selinux" title="Permalink to this headline">¶</a></h3>
+<p>Before getting started with Cobbler, it may be convenient to either disable SELinux or set it to “permissive” mode,
+especially if you are unfamiliar with SELinux troubleshooting or modifying SELinux policy. Cobbler constantly evolves to
+assist in managing new system technologies, and the policy that ships with your OS can sometimes lag behind the
+feature-set we provide, resulting in AVC denials that break Cobbler’s functionality.</p>
+</div>
+<div class="section" id="firewall">
+<h3>1.1.2. Firewall<a class="headerlink" href="#firewall" title="Permalink to this headline">¶</a></h3>
+<p>TBD</p>
+</div>
+</div>
+<div class="section" id="changing-settings">
+<h2>1.2. Changing settings<a class="headerlink" href="#changing-settings" title="Permalink to this headline">¶</a></h2>
+<p>Before starting the cobblerd service, there are a few things you should modify.</p>
+<p>Settings are stored in <code class="docutils literal notranslate"><span class="pre">/etc/cobbler/settings</span></code>. This file is a YAML formatted data file, so be sure to take care when
+editing this file as an incorrectly formatted file will prevent cobblerd from running.</p>
+<div class="section" id="default-encrypted-password">
+<h3>1.2.1. Default encrypted password<a class="headerlink" href="#default-encrypted-password" title="Permalink to this headline">¶</a></h3>
+<p>This setting controls the root password that is set for new systems during the handsoff installation.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>default_password_crypted: &quot;$1$bfI7WLZz$PxXetL97LkScqJFxnW7KS1&quot;
+</pre></div>
+</div>
+<p>You should modify this by running the following command and inserting the output into the above string (be sure to save
+the quote marks):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ openssl passwd -1
+</pre></div>
+</div>
+</div>
+<div class="section" id="server-and-next-server">
+<h3>1.2.2. Server and next_server<a class="headerlink" href="#server-and-next-server" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">server</span></code> option sets the IP that will be used for the address of the cobbler server. <strong>DO NOT</strong> use 0.0.0.0, as it
+is not the listening address. This should be set to the IP you want hosts that are being built to contact the Cobbler
+server on for such protocols as HTTP and TFTP.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>server: 127.0.0.1
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">next_server</span></code> option is used for DHCP/PXE as the IP of the TFTP server from which network boot files are
+downloaded. Usually, this will be the same IP as the server setting.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>next_server: 127.0.0.1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="dhcp-management-and-dhcp-server-template">
+<h2>1.3. DHCP management and DHCP server template<a class="headerlink" href="#dhcp-management-and-dhcp-server-template" title="Permalink to this headline">¶</a></h2>
+<p>In order to PXE boot, you need a DHCP server to hand out addresses and direct the booting system to the TFTP server
+where it can download the network boot files. Cobbler can manage this for you, via the <code class="docutils literal notranslate"><span class="pre">manage_dhcp</span></code> setting:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>manage_dhcp: 0
+</pre></div>
+</div>
+<p>Change that setting to 1 so Cobbler will generate the <code class="docutils literal notranslate"><span class="pre">dhcpd.conf</span></code> file based on the <code class="docutils literal notranslate"><span class="pre">dhcp.template</span></code> that is
+included with Cobbler. This template will most likely need to be modified as well, based on your network settings:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ vi /etc/cobbler/dhcp.template
+</pre></div>
+</div>
+<p>For most uses, you’ll only need to modify this block:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>subnet 192.168.1.0 netmask 255.255.255.0 {
+    option routers             192.168.1.1;
+    option domain-name-servers 192.168.1.210,192.168.1.211;
+    option subnet-mask         255.255.255.0;
+    filename                   &quot;/pxelinux.0&quot;;
+    default-lease-time         21600;
+    max-lease-time             43200;
+    next-server                $next_server;
+}
+</pre></div>
+</div>
+<p>No matter what, make sure you do not modify the <code class="docutils literal notranslate"><span class="pre">next-server</span> <span class="pre">$next_server;</span></code> line, as that is how the next_server
+setting is pulled into the configuration. This file is a cheetah template, so be sure not to modify anything starting
+after this line:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#for dhcp_tag in $dhcp_tags.keys():
+</pre></div>
+</div>
+<p>Completely going through the <code class="docutils literal notranslate"><span class="pre">dhcpd.conf</span></code> configuration syntax is beyond the scope of this document, but for more
+information see the man page for more details:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ man dhcpd.conf
+</pre></div>
+</div>
+</div>
+<div class="section" id="notes-on-files-and-directories">
+<h2>1.4. Notes on files and directories<a class="headerlink" href="#notes-on-files-and-directories" title="Permalink to this headline">¶</a></h2>
+<p>Cobbler makes heavy use of the <code class="docutils literal notranslate"><span class="pre">/var</span></code> directory. The <code class="docutils literal notranslate"><span class="pre">/var/www/cobbler/distro_mirror</span></code> directory is where all of the
+distrubtion and repository files are copied, so you will need 5-10GB of free space per distribution you wish to import.</p>
+<p>If you have installed Cobbler onto a system that has very little free space in the partition containing <code class="docutils literal notranslate"><span class="pre">/var</span></code>, please
+read the <a class="reference internal" href="installation-guide.html#relocating-your-installation"><span class="std std-ref">Relocating your installation</span></a> section of the Installation Guide to learn how you can relocate your
+installation properly.</p>
+</div>
+<div class="section" id="starting-and-enabling-the-cobbler-service">
+<h2>1.5. Starting and enabling the Cobbler service<a class="headerlink" href="#starting-and-enabling-the-cobbler-service" title="Permalink to this headline">¶</a></h2>
+<p>Once you have updated your settings, you’re ready to start the service:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ systemctl start cobblerd.service
+$ systemctl <span class="nb">enable</span> cobblerd.service
+$ systemctl status cobblerd.service
+</pre></div>
+</div>
+<p>If everything has gone well, you should see output from the status command like this:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>cobblerd.service - Cobbler Helper Daemon
+    Loaded: loaded <span class="o">(</span>/lib/systemd/system/cobblerd.service<span class="p">;</span> enabled<span class="o">)</span>
+      Active: active <span class="o">(</span>running<span class="o">)</span> since Sun, <span class="m">17</span> Jun <span class="m">2012</span> <span class="m">13</span>:01:28 -0500<span class="p">;</span> 1min 44s ago
+    Main PID: <span class="m">1234</span> <span class="o">(</span>cobblerd<span class="o">)</span>
+      CGroup: <span class="nv">name</span><span class="o">=</span>systemd:/system/cobblerd.service
+              └ <span class="m">1234</span> /usr/bin/python /usr/bin/cobblerd -F
+</pre></div>
+</div>
+</div>
+<div class="section" id="checking-for-problems-and-your-first-sync">
+<h2>1.6. Checking for problems and your first sync<a class="headerlink" href="#checking-for-problems-and-your-first-sync" title="Permalink to this headline">¶</a></h2>
+<p>Now that the cobblerd service is up and running, it’s time to check for problems. Cobbler’s check command will make some
+suggestions, but it is important to remember that these are mainly only suggestions and probably aren’t critical for
+basic functionality. If you are running iptables or SELinux, it is important to review any messages concering those that
+check may report.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cobbler check
+The following are potential configuration items that you may want to fix:
+
+1. ....
+2. ....
+</pre></div>
+</div>
+<p>Restart cobblerd and then run <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">sync</span></code> to apply changes.</p>
+<p>If you decide to follow any of the suggestions, such as installing extra packages, making configuration changes, etc.,
+be sure to restart the cobblerd service as it suggests so the changes are applied.</p>
+<p>Once you are done reviewing the output of <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">check</span></code>, it is time to synchronize things for the first time. This
+is not critical, but a failure to properly sync at this point can reveal a configuration problem.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cobbler sync
+task started: 2012-06-24_224243_sync
+task started (id=Sync, time=Sun Jun 24 22:42:43 2012)
+running pre-sync triggers
+...
+rendering DHCP files
+generating /etc/dhcp/dhcpd.conf
+cleaning link caches
+running: find /var/lib/tftpboot/images/.link_cache -maxdepth 1 -type f -links 1 -exec rm -f &#39;{}&#39; &#39;;&#39;
+received on stdout:
+received on stderr:
+running post-sync triggers
+running python triggers from /var/lib/cobbler/triggers/sync/post/*
+running python trigger cobbler.modules.sync_post_restart_services
+running: dhcpd -t -q
+received on stdout:
+received on stderr:
+running: service dhcpd restart
+received on stdout:
+received on stderr:
+running shell triggers from /var/lib/cobbler/triggers/sync/post/*
+running python triggers from /var/lib/cobbler/triggers/change/*
+running python trigger cobbler.modules.scm_track
+running shell triggers from /var/lib/cobbler/triggers/change/*
+*** TASK COMPLETE ***
+</pre></div>
+</div>
+<p>Assuming all went well and no errors were reported, you are ready to move on to the next step.</p>
+</div>
+<div class="section" id="importing-your-first-distribution">
+<h2>1.7. Importing your first distribution<a class="headerlink" href="#importing-your-first-distribution" title="Permalink to this headline">¶</a></h2>
+<p>Cobbler automates adding distributions and profiles via the <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">import</span></code> command. This command can (usually)
+automatically detect the type and version of the distribution your importing and create (one or more) profiles with the
+correct settings for you.</p>
+<div class="section" id="download-an-iso-image">
+<h3>1.7.1. Download an ISO image<a class="headerlink" href="#download-an-iso-image" title="Permalink to this headline">¶</a></h3>
+<p>In order to import a distribution, you will need a DVD ISO for your distribution.</p>
+<p><strong>NOTE:</strong> You must use a full DVD, and not a “Live CD” ISO. For this example, we’ll be using the Fedora 17 x86_64 ISO.</p>
+<p>Once this file is downloaded, mount it somewhere:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ mount -t iso9660 -o loop,ro /path/to/isos/Fedora-17-x86_64-DVD.iso /mnt
+</pre></div>
+</div>
+</div>
+<div class="section" id="run-the-import">
+<h3>1.7.2. Run the import<a class="headerlink" href="#run-the-import" title="Permalink to this headline">¶</a></h3>
+<p>You are now ready to import the distribution. The name and path arguments are the only required options for import:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cobbler import --name=fedora17 --arch=x86_64 --path=/mnt
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">--arch</span></code> option need not be specified, as it will normally be auto-detected. We’re doing so in this example in
+order to prevent multiple architectures from being found.</p>
+<div class="section" id="listing-objects">
+<h4>1.7.2.1. Listing objects<a class="headerlink" href="#listing-objects" title="Permalink to this headline">¶</a></h4>
+<p>If no errors were reported during the import, you can view details about the distros and profiles that were created
+during the import.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cobbler distro list
+$ cobbler profile list
+</pre></div>
+</div>
+<p>The import command will typically create at least one distro/profile pair, which will have the same name as shown above.
+In some cases (for instance when a xen-based kernel is found), more than one distro/profile pair will be created.</p>
+</div>
+<div class="section" id="object-details">
+<h4>1.7.2.2. Object details<a class="headerlink" href="#object-details" title="Permalink to this headline">¶</a></h4>
+<p>The report command shows the details of objects in cobbler:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cobbler distro report --name=fedora17-x86_64
+Name                            : fedora17-x86_64
+Architecture                    : x86_64
+TFTP Boot Files                 : {}
+Breed                           : redhat
+Comment                         :
+Fetchable Files                 : {}
+Initrd                          : /var/www/cobbler/distro_mirror/fedora17-x86_64/images/pxeboot/initrd.img
+Kernel                          : /var/www/cobbler/distro_mirror/fedora17-x86_64/images/pxeboot/vmlinuz
+Kernel Options                  : {}
+Kernel Options (Post Install)   : {}
+Automatic Installation Template Metadata : {&#39;tree&#39;: &#39;http://@@http_server@@/cblr/links/fedora17-x86_64&#39;}
+Management Classes              : []
+OS Version                      : fedora17
+Owners                          : [&#39;admin&#39;]
+Red Hat Management Key          : &lt;&lt;inherit&gt;&gt;
+Red Hat Management Server       : &lt;&lt;inherit&gt;&gt;
+Template Files                  : {}
+</pre></div>
+</div>
+<p>As you can see above, the import command filled out quite a few fields automatically, such as the breed, OS version, and
+initrd/kernel file locations. The “Automatic Installation Template Metadata” field (<code class="docutils literal notranslate"><span class="pre">--autoinstall_meta</span></code> internally)
+is used for miscellaneous variables, and contains the critical “tree” variable. This is used in the automated
+installation templates to specify the URL where the installation files can be found.</p>
+<p>Something else to note: some fields are set to <code class="docutils literal notranslate"><span class="pre">&lt;&lt;inherit&gt;&gt;</span></code>. This means they will use either the default setting
+(found in the settings file), or (in the case of profiles, sub-profiles, and systems) will use whatever is set in the
+parent object.</p>
+</div>
+<div class="section" id="creating-a-system">
+<h4>1.7.2.3. Creating a system<a class="headerlink" href="#creating-a-system" title="Permalink to this headline">¶</a></h4>
+<p>Now that you have a distro and profile, you can create a system. Profiles can be used to PXE boot, but most of the
+features in cobbler revolve around system objects. The more information you give about a system, the more cobbler will
+do automatically for you.</p>
+<p>First, we’ll create a system object based on the profile that was created during the import. When creating a system, the
+name and profile are the only two required fields:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cobbler system add --name=test --profile=fedora17-x86_64
+$ cobbler system list
+test
+$ cobbler system report --name=test
+Name                           : test
+TFTP Boot Files                : {}
+Comment                        :
+Enable gPXE?                   : 0
+Fetchable Files                : {}
+Gateway                        :
+Hostname                       :
+Image                          :
+IPv6 Autoconfiguration         : False
+IPv6 Default Device            :
+Kernel Options                 : {}
+Kernel Options (Post Install)  : {}
+Automatic Installation Template: &lt;&lt;inherit&gt;&gt;
+Automatic Installation Template Metadata: {}
+Management Classes             : []
+Management Parameters          : &lt;&lt;inherit&gt;&gt;
+Name Servers                   : []
+Name Servers Search Path       : []
+Netboot Enabled                : True
+Owners                         : [&#39;admin&#39;]
+Power Management Address       :
+Power Management ID            :
+Power Management Password      :
+Power Management Type          : ipmitool
+Power Management Username      :
+Profile                        : fedora17-x86_64
+Proxy                          : &lt;&lt;inherit&gt;&gt;
+Red Hat Management Key         : &lt;&lt;inherit&gt;&gt;
+Red Hat Management Server      : &lt;&lt;inherit&gt;&gt;
+Repos Enabled                  : False
+Server Override                : &lt;&lt;inherit&gt;&gt;
+Status                         : production
+Template Files                 : {}
+Virt Auto Boot                 : &lt;&lt;inherit&gt;&gt;
+Virt CPUs                      : &lt;&lt;inherit&gt;&gt;
+Virt Disk Driver Type          : &lt;&lt;inherit&gt;&gt;
+Virt File Size(GB)             : &lt;&lt;inherit&gt;&gt;
+Virt Path                      : &lt;&lt;inherit&gt;&gt;
+Virt RAM (MB)                  : &lt;&lt;inherit&gt;&gt;
+Virt Type                      : &lt;&lt;inherit&gt;&gt;
+</pre></div>
+</div>
+<p>The primary reason for creating a system object is network configuration. When using profiles, you’re limited to DHCP
+interfaces, but with systems you can specify many more network configuration options.</p>
+<p>So now we’ll setup a single, simple interface in the <code class="docutils literal notranslate"><span class="pre">192.168.1/24</span></code> network:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cobbler system edit --name=test --interface=eth0 --mac=00:11:22:AA:BB:CC --ip-address=192.168.1.100 --netmask=255.255.255.0 --static=1 --dns-name=test.mydomain.com
+</pre></div>
+</div>
+<p>The default gateway isn’t specified per-NIC, so just add that separately (along with the hostname):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cobbler system edit --name=test --gateway=192.168.1.1 --hostname=test.mydomain.com
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">--hostname</span></code> field corresponds to the local system name and is returned by the <code class="docutils literal notranslate"><span class="pre">hostname</span></code> command. The
+<code class="docutils literal notranslate"><span class="pre">--dns-name</span></code> (which can be set per-NIC) should correspond to a DNS A-record tied to the IP of that interface.
+Neither are required, but it is a good practice to specify both. Some advanced features (like configuration management)
+rely on the <code class="docutils literal notranslate"><span class="pre">--dns-name</span></code> field for system record look-ups.</p>
+<p>Whenever a system is edited, cobbler executes what is known as a “lite sync”, which regenerates critical files like the
+PXE boot file in the TFTP root directory. One thing it will <strong>NOT</strong> do is execute service management actions, like
+regenerating the <code class="docutils literal notranslate"><span class="pre">dhcpd.conf</span></code> and restarting the DHCP service. After adding a system with a static interface it is a
+good idea to execute a full <code class="docutils literal notranslate"><span class="pre">cobbler</span> <span class="pre">sync</span></code> to ensure the dhcpd.conf file is rewritten with the correct static lease
+and the service is bounced.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="installation-guide.html" class="btn btn-neutral float-right" title="2. Install Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Cobbler’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Enno Gotthold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
