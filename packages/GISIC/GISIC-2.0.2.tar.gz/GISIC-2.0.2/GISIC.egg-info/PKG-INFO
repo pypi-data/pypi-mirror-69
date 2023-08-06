@@ -1,0 +1,55 @@
+Metadata-Version: 1.0
+Name: GISIC
+Version: 2.0.2
+Summary: Gaussian Inflection Spline Interpolation Continuum
+Home-page: UNKNOWN
+Author: Devin D. Whitten
+Author-email: dwhitten@nd.edu
+License: ND
+Description: 
+        Gaussian Inflection Spline Interpolation Continuum (GISIC)
+        ==========================================================
+        
+        GISIC is a python package for normalization of astronomical spectra.
+        It is designed to accommodate spectra with heavy molecular features due to high
+        elemental abundance enhancements.
+        GISIC performs a gaussian smoothing of the flux array, and identifies molecular bands based on a numerical gradient. Continuum points are then interpolated with a cubic spline.
+        
+        
+        Look how easy it is to use:
+        
+        .. code:: python
+        
+            import GISIC
+        
+            wave, norm_flux, continuum = GISIC.normalize(wave, flux, sigma=30)
+        
+        
+        Features
+        --------
+        
+        - accomodates wide range of spectral resolutions via kernel width parameter
+        
+        Installation
+        ------------
+        
+          pip install GISIC
+        
+        
+        Contribute
+        ----------
+        
+        - Source Code: github.com/DevinWhitten/GISIC
+        
+        Support
+        -------
+        
+        If you are having issues, please let us know.
+        We have a mailing list located at: devin.d.whitten@gmail.com
+        
+        License
+        -------
+        
+        The project is licensed under the MIT license.
+        
+Platform: UNKNOWN
