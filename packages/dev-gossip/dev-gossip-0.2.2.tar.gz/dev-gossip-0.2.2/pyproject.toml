@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "dev-gossip"
+version = "0.2.2"
+description = ""
+authors = ["shols232"]
+packages = [
+    {include = './clint'},
+    {include = './functions.py'},
+    {include = './core.py'},
+    {include = './README.md'},
+
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+
+[tool.poetry.scripts]
+gossip = 'core:app'
