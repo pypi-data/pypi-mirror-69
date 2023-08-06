@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>Saving and restoring an entire session (save, restore)</title>
+</head>
+<body>
+<h1>Saving and restoring an entire session (save, restore)</h1>
+<h2>Synopsis</h2>
+<p>save <em>filename</em></p>
+<p>restore <em>filename</em></p>
+
+<h2>Description</h2>
+<p>
+The <em>save</em> command saves the entire session: variables, methods
+and blocks - including every row and variables set specifically for
+the block.
+</p>
+
+<p>
+To restore a session, use the <em>restore</em> command
+</p>
+
+<p>
+The <em>save</em> command cannot save tower objects. Towers will therefore
+need to be redeclared after a <em>restore</em>. One way of doing so is
+to create a script to run <em>restore</em>, followed by the tower
+declarations and then running <em>input</em> on the script.
+</p>
+
+</body>
+</html>
