@@ -1,0 +1,58 @@
+Metadata-Version: 2.1
+Name: uptrace
+Version: 0.1.0b2
+Summary: Uptrace exporter for OpenTelemetry
+Home-page: https://uptrace.dev
+Author: Uptrace.dev
+Author-email: support@uptrace.dev
+License: BSD
+Description: # Uptrace Python exporter for OpenTelemetry
+        
+        ## Introduction
+        
+        uptrace-python is an exporter for [OpenTelemetry](https://opentelemetry.io/) that sends your traces and metrics to [Uptrace.dev](https://uptrace.dev).
+        
+        ## Installation
+        
+        ```bash
+        pip install uptrace
+        ```
+        
+        ## Trace exporter
+        
+        Trace exporter can be configured with the following code:
+        
+        ```python
+        from opentelemetry import trace
+        from opentelemetry.sdk.trace import TracerProvider
+        from opentelemetry.sdk.trace.export import BatchExportSpanProcessor
+        import uptrace
+        
+        # The preferred tracer implementation must be set, as the opentelemetry-api
+        # defines the interface with a no-op implementation.
+        trace.set_tracer_provider(TracerProvider())
+        
+        # Exporter receives the spans and sends them to Uptrace.dev.
+        exporter = uptrace.trace.Exporter(
+            dsn="" # copy your project DSN here or use UPTRACE_DSN env var
+        )
+        
+        span_processor = BatchExportSpanProcessor(
+            exporter, max_queue_size=10000, max_export_batch_size=10000
+        )
+        trace.get_tracer_provider().add_span_processor(span_processor)
+        ```
+        
+Platform: any
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Requires-Python: >=3.4
+Description-Content-Type: text/markdown
