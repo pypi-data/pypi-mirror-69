@@ -1,0 +1,34 @@
+Metadata-Version: 2.1
+Name: gosmscz
+Version: 0.1.7
+Summary: Go SMS API client library
+Home-page: https://gitlab.com/creatiweb-sro/gosmscz
+Author: Creatiweb s.r.o.
+Author-email: vitek@creatiweb.cz
+License: UNKNOWN
+Platform: UNKNOWN
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: requests
+
+Send SMS messages through GoSMS API.
+
+# Installation
+
+    pip install gosmscz
+
+# Usage
+
+```
+from gosmscz import send_batch_sms
+
+send_batch_sms(
+    client_id: 'vaseId',
+    client_secret: 'vasSecret',
+    message: 'Sms zprava k odeslani',
+    recipients: ['+420777000111', '+420777222333']
+)
+```
+
+
+
