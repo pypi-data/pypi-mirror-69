@@ -1,0 +1,89 @@
+Metadata-Version: 2.1
+Name: waybackmachine
+Version: 0.0.1
+Summary: Envelope for archive.org API.
+Home-page: https://github.com/martinbenes1996/waybackmachine
+Author: Martin Beneš
+Author-email: martinbenes1996@gmail.com
+License: MPL
+Download-URL: https://github.com/martinbenes1996/waybackmachine/archive/0.0.1.tar.gz
+Keywords: waybackmachine,archive,web,html,webscraping
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Other Audience
+Classifier: Environment :: Web Environment
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Utilities
+Classifier: License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Description-Content-Type: text/markdown
+
+
+# Wayback Machine
+
+This project is an envelope for simple fetching of historical versions of page from archive.org API.
+
+The page can be used for subsequent webscraping
+
+## Setup and usage
+
+Install from [pip](https://pypi.org/project/waybackmachine/) with
+
+```python
+pip install waybackmachine
+```
+
+Simple usage of the `WaybackMachine` class is as
+
+```python
+from waybackmachine import WaybackMachine
+
+url = "https://www.folkhalsomyndigheten.se/smittskydd-beredskap/utbrott/aktuella-utbrott/covid-19/bekraftade-fall-i-sverige/"
+for response in WaybackMachine(url):
+    # process response
+    pass
+```
+
+In the code the requests are being done from the newest (to the url itself) and then back in history to older and older versions saved on archive.
+
+Parameterization will be later broaden to be more general. Currently the project is used for fetching COVID-19 data.
+
+```bash
+pip install --upgrade waybackmachine
+```
+
+## Parametrization
+
+### date
+
+By default the start date is `today`. End date is currently set to `2020-03-01`.
+
+Date will be more general in the future.
+
+```python
+from waybackmachine import WaybackMachine
+
+url = "https://www.folkhalsomyndigheten.se/smittskydd-beredskap/utbrott/aktuella-utbrott/covid-19/bekraftade-fall-i-sverige/"
+
+for response in WaybackMachine(url, "2020-04-01"): # start from 1st April 2020 and go back
+    # process response
+    pass
+```
+
+## Contribution
+
+Developed by [Martin Benes](https://github.com/martinbenes1996).
+
+Join on [GitHub](https://github.com/martinbenes1996/waybackmachine).
+
+
+
+
+
