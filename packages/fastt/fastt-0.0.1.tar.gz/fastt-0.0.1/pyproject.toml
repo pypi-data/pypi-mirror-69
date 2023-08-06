@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "fastt"
+version = "0.0.1"
+description = "Fast and Simple Translation Tool"
+authors = ["Leandro E. Colombo Viña <lecovi@ac.python.org.ar>"]
+license = "GPL-3.0"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+polib = "^1.1.0"
+click = "^7.1.2"
+google-cloud-translate = "2.0.1"
+python-dotenv = "^0.13.0"
+
+[tool.poetry.dev-dependencies]
+pylint = "^2.5.2"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+[tool.poetry.scripts]
+fastt = 'fastt:translation'
