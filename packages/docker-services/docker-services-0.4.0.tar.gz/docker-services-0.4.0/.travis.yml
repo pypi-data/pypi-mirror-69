@@ -1,0 +1,28 @@
+sudo: required
+
+services:
+  - docker
+
+language: python
+
+# all python versions
+python:
+  - "2.7"
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "3.8"
+  - "nightly"
+
+matrix:
+  allow_failures:
+  - python: nightly
+  - python: 3.8
+
+# prepare environment
+install:
+  - pip install -e .
+
+# The test command(s)
+script:
+  - pytest -vv
