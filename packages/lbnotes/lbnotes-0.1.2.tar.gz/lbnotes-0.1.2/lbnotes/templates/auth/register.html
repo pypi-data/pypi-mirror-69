@@ -1,0 +1,28 @@
+{% extends "auth/auth_base.html" %}
+
+{% block title %}register{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth/register.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form class="form-signup" method="post">
+            {{ form.csrf_token }}
+            <h1 class="h3 mb-3 font-weight-normal text-center">register new user</h1>
+            {{ form.username.label(class="sr-only") }}
+            {{ form.username(class="form-control", placeholder="username...", autofocus="") }}
+            {{ form.password_1.label(class="sr-only") }}
+            {{ form.password_1(class="form-control", placeholder="password...") }}
+            {{ form.password_2.label(class="sr-only") }}
+            {{ form.password_2(class="form-control", placeholder="retype password...") }}
+            <input class="btn btn-primary btn-block" type="submit" value="register">
+        </form>
+        {% block info %}
+            {% include 'auth/snippets/info.html' %}
+            {% include 'auth/snippets/form_errors.html' %}
+        {% endblock %}
+    </div>
+{% endblock %}
