@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>lexnlp.tests package &#8212; LexNLP 1.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="lexnlp-tests-package">
+<h1>lexnlp.tests package<a class="headerlink" href="#lexnlp-tests-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-lexnlp.tests.dictionary_comparer">
+<span id="lexnlp-tests-dictionary-comparer-module"></span><h2>lexnlp.tests.dictionary_comparer module<a class="headerlink" href="#module-lexnlp.tests.dictionary_comparer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.tests.dictionary_comparer.DictionaryComparer">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.tests.dictionary_comparer.</code><code class="sig-name descname">DictionaryComparer</code><span class="sig-paren">(</span><em class="sig-param">check_order: bool = True</em>, <em class="sig-param">allow_extra_key: bool = False</em>, <em class="sig-param">number_precision_percent: float = 0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.dictionary_comparer.DictionaryComparer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="lexnlp.tests.dictionary_comparer.DictionaryComparer.check_dicts_equal">
+<code class="sig-name descname">check_dicts_equal</code><span class="sig-paren">(</span><em class="sig-param">expected: dict</em>, <em class="sig-param">actual: dict</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.tests.dictionary_comparer.DictionaryComparer.check_dicts_equal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.tests.dictionary_comparer.DictionaryComparer.compare_list_of_dicts">
+<code class="sig-name descname">compare_list_of_dicts</code><span class="sig-paren">(</span><em class="sig-param">expected: List[dict], actual: List[dict]</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.tests.dictionary_comparer.DictionaryComparer.compare_list_of_dicts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.tests.lexnlp_tests">
+<span id="lexnlp-tests-lexnlp-tests-module"></span><h2>lexnlp.tests.lexnlp_tests module<a class="headerlink" href="#module-lexnlp.tests.lexnlp_tests" title="Permalink to this headline">¶</a></h2>
+<p>Common routines for testing NLP functions against test data stored
+separately in CSV files.</p>
+<dl class="function">
+<dt id="lexnlp.tests.lexnlp_tests.assert_in">
+<code class="sig-prename descclassname">lexnlp.tests.lexnlp_tests.</code><code class="sig-name descname">assert_in</code><span class="sig-paren">(</span><em class="sig-param">function_name: str</em>, <em class="sig-param">text: str</em>, <em class="sig-param">expected_in</em>, <em class="sig-param">actual_results: Set</em>, <em class="sig-param">problems_file: str = '/home/alex/dev/michael/contraxsuite/lexpredict-lexnlp/benchmarks/problems_hr.txt'</em>, <em class="sig-param">do_raise: bool = True</em>, <em class="sig-param">do_write_to_file: bool = True</em>, <em class="sig-param">test_data_file: str = None</em><span class="sig-paren">)</span> &#x2192; Optional[str]<a class="headerlink" href="#lexnlp.tests.lexnlp_tests.assert_in" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.lexnlp_tests.assert_set_equal">
+<code class="sig-prename descclassname">lexnlp.tests.lexnlp_tests.</code><code class="sig-name descname">assert_set_equal</code><span class="sig-paren">(</span><em class="sig-param">function_name: str</em>, <em class="sig-param">text: str</em>, <em class="sig-param">actual_results: Set</em>, <em class="sig-param">expected_results: Set</em>, <em class="sig-param">problems_file: str = '/home/alex/dev/michael/contraxsuite/lexpredict-lexnlp/benchmarks/problems_hr.txt'</em>, <em class="sig-param">do_raise: bool = True</em>, <em class="sig-param">do_write_to_file: bool = True</em>, <em class="sig-param">debug_print: bool = True</em>, <em class="sig-param">test_data_file: str = None</em><span class="sig-paren">)</span> &#x2192; Optional[str]<a class="headerlink" href="#lexnlp.tests.lexnlp_tests.assert_set_equal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.lexnlp_tests.benchmark">
+<code class="sig-prename descclassname">lexnlp.tests.lexnlp_tests.</code><code class="sig-name descname">benchmark</code><span class="sig-paren">(</span><em class="sig-param">benchmark_name: str</em>, <em class="sig-param">func: Callable</em>, <em class="sig-param">*args</em>, <em class="sig-param">benchmark_file: str = '/home/alex/dev/michael/contraxsuite/lexpredict-lexnlp/benchmarks/benchmarks.csv'</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.lexnlp_tests.benchmark" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.lexnlp_tests.benchmark_decorator">
+<code class="sig-prename descclassname">lexnlp.tests.lexnlp_tests.</code><code class="sig-name descname">benchmark_decorator</code><span class="sig-paren">(</span><em class="sig-param">function</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.lexnlp_tests.benchmark_decorator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.lexnlp_tests.benchmark_extraction_func">
+<code class="sig-prename descclassname">lexnlp.tests.lexnlp_tests.</code><code class="sig-name descname">benchmark_extraction_func</code><span class="sig-paren">(</span><em class="sig-param">func: Callable</em>, <em class="sig-param">text</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.lexnlp_tests.benchmark_extraction_func" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.lexnlp_tests.build_extraction_func_name">
+<code class="sig-prename descclassname">lexnlp.tests.lexnlp_tests.</code><code class="sig-name descname">build_extraction_func_name</code><span class="sig-paren">(</span><em class="sig-param">func: Callable</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.lexnlp_tests.build_extraction_func_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.lexnlp_tests.fmt_results">
+<code class="sig-prename descclassname">lexnlp.tests.lexnlp_tests.</code><code class="sig-name descname">fmt_results</code><span class="sig-paren">(</span><em class="sig-param">results: Union[Set, List, Tuple]</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.lexnlp_tests.fmt_results" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.lexnlp_tests.fmt_short_text">
+<code class="sig-prename descclassname">lexnlp.tests.lexnlp_tests.</code><code class="sig-name descname">fmt_short_text</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">max_len: int = 40</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.lexnlp_tests.fmt_short_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.lexnlp_tests.iter_test_data_text_and_tuple">
+<code class="sig-prename descclassname">lexnlp.tests.lexnlp_tests.</code><code class="sig-name descname">iter_test_data_text_and_tuple</code><span class="sig-paren">(</span><em class="sig-param">file_name: str = None</em>, <em class="sig-param">call_stack_offset: int = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.lexnlp_tests.iter_test_data_text_and_tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads test data from external file and iterates through pairs of text -&gt; expected value.
+Types of values are lost during write-read to csv operations and they all are returned as strings.
+:param file_name: Optional parameter - to read data from the specified file
+:param call_stack_offset: Optional parameter to allow proper calculation of test data file name when
+this function is called not straight from the test method but from a stack of other methods.
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.lexnlp_tests.test_extraction_func">
+<code class="sig-prename descclassname">lexnlp.tests.lexnlp_tests.</code><code class="sig-name descname">test_extraction_func</code><span class="sig-paren">(</span><em class="sig-param">expected</em>, <em class="sig-param">func: Callable</em>, <em class="sig-param">text</em>, <em class="sig-param">benchmark_name: str = None</em>, <em class="sig-param">test_data_file: str = None</em>, <em class="sig-param">expected_data_converter: Callable = None</em>, <em class="sig-param">actual_data_converter: Callable = None</em>, <em class="sig-param">do_raise: bool = True</em>, <em class="sig-param">debug_print: bool = False</em>, <em class="sig-param">test_only_expected_in: bool = False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.lexnlp_tests.test_extraction_func" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.lexnlp_tests.test_extraction_func_on_test_data">
+<code class="sig-prename descclassname">lexnlp.tests.lexnlp_tests.</code><code class="sig-name descname">test_extraction_func_on_test_data</code><span class="sig-paren">(</span><em class="sig-param">func: Callable</em>, <em class="sig-param">benchmark_name: str = None</em>, <em class="sig-param">expected_data_converter: Callable = None</em>, <em class="sig-param">actual_data_converter: Callable = None</em>, <em class="sig-param">test_only_expected_in: bool = False</em>, <em class="sig-param">debug_print: bool = False</em>, <em class="sig-param">start_from_csv_line: int = None</em>, <em class="sig-param">test_data_path: str = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.lexnlp_tests.test_extraction_func_on_test_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the provided function against the test data loaded from external file.
+The provided function is expected to extract a tuple of some objects from string text.
+Format of the extracted tuple should match the format in test data.
+Test data is expected to be in the file name calculated by this_test_data_path(..) method.
+For each “text -&gt; expected tuple” entry from test data file the result of the provided function is calculated
+and compared against the expected one as lists using “assert_list_equal”</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.lexnlp_tests.this_test_data_path">
+<code class="sig-prename descclassname">lexnlp.tests.lexnlp_tests.</code><code class="sig-name descname">this_test_data_path</code><span class="sig-paren">(</span><em class="sig-param">create_dirs: bool = False</em>, <em class="sig-param">caller_stack_offset: int = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.lexnlp_tests.this_test_data_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate test data file path for the test function which called this one.
+The path/name are calculated using python execution stack trace routines.
+Template: test_data/pack/a/ge/test_file_name/test_function_name.csv
+:param create_dirs: If set to true then all the folders required to writing the test data file will be created.
+:param caller_stack_offset: Offset of the test function in this function’s call stack. Should be 1 if this function
+is called straight from the test function. Plus 1 for each next intermediate function call.
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.lexnlp_tests.write_test_data_text_and_tuple">
+<code class="sig-prename descclassname">lexnlp.tests.lexnlp_tests.</code><code class="sig-name descname">write_test_data_text_and_tuple</code><span class="sig-paren">(</span><em class="sig-param">texts: tuple</em>, <em class="sig-param">values: tuple</em>, <em class="sig-param">column_names: tuple</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.lexnlp_tests.write_test_data_text_and_tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes test data to external file for further using in tests.
+File name is calculated by this_test_data_path(..) function (test_data/pack/a/ge/test_file_name/test_method_name).
+Test data is written in CSV format with the special rules to allow multiple expected value tuples per single text.
+Header: Text,Component 1 Title,…,Component N Title</p>
+<blockquote>
+<div><p>Text 1,Value Component 1.1 of Text 1,…,Value Component 1.N of Text 1
+,Value Component 2.1 of Text 1,…,Value Component 2.N of Text 1
+…
+,Value Component M.1 of Text 1,…,Value Component M.N of Text 1
+Text 2,Value Component 1.1 of Text 2,…,Value Component 1.N of Text 2
+,Value Component 2.1 of Text 2,…,Value Component 2.N of Text 2
+…
+,Value Component K.1 of Text 2,…,Value Component K.N of Text 2
+…</p>
+</div></blockquote>
+<p>So if there is no text in the first column in a row - this means to match the values to the last filled text above.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>texts</strong> – Tuple of text stirngs (“texts” column).</p></li>
+<li><p><strong>values</strong> – Tuple of expected values matching texts on the same index (expected values column(s))</p></li>
+<li><p><strong>column_names</strong> – Names of the columns. Should be: Text, Name of First Entry in Values, Name of Second Entry…</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.tests.typed_annotations_tests">
+<span id="lexnlp-tests-typed-annotations-tests-module"></span><h2>lexnlp.tests.typed_annotations_tests module<a class="headerlink" href="#module-lexnlp.tests.typed_annotations_tests" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.tests.typed_annotations_tests.ParsingError">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.tests.typed_annotations_tests.</code><code class="sig-name descname">ParsingError</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.ParsingError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.tests.typed_annotations_tests.</code><code class="sig-name descname">TypedAnnotationsTester</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester.check_case_annotations">
+<code class="sig-name descname">check_case_annotations</code><span class="sig-paren">(</span><em class="sig-param">ants: List[lexnlp.extract.common.annotations.text_annotation.TextAnnotation], case: lexnlp.tests.typed_annotations_tests.TypedAntTestCase, case_index: int</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester.check_case_annotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester.process_cases">
+<code class="sig-name descname">process_cases</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Tuple[int, int]<a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester.process_cases" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester.process_file">
+<code class="sig-name descname">process_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester.process_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester.process_one_check">
+<code class="sig-name descname">process_one_check</code><span class="sig-paren">(</span><em class="sig-param">ant: lexnlp.extract.common.annotations.text_annotation.TextAnnotation</em>, <em class="sig-param">check: lexnlp.tests.typed_annotations_tests.TypedFieldCheck</em>, <em class="sig-param">case_index: int</em>, <em class="sig-param">check_index: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester.process_one_check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester.read_cases">
+<code class="sig-name descname">read_cases</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester.read_cases" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Sample file contains:</p>
+</div></blockquote>
+<p>1.11.SCADA System means a supervisory control and data acquisition system such
+as the S/3 Software or Licensee’s OASyS(R) product.
+——–
+total=1
+0)locale=”en”
+0)trademark=”OASyS (R)”</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester.test_and_raise_errors">
+<code class="sig-name descname">test_and_raise_errors</code><span class="sig-paren">(</span><em class="sig-param">parsing_method: Callable</em>, <em class="sig-param">file_name: str</em>, <em class="sig-param">entity_type: Type</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester.test_and_raise_errors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester.test_parser">
+<code class="sig-name descname">test_parser</code><span class="sig-paren">(</span><em class="sig-param">parsing_method: Callable</em>, <em class="sig-param">file_name: str</em>, <em class="sig-param">entity_type: Type</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedAnnotationsTester.test_parser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedAntTestCase">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.tests.typed_annotations_tests.</code><code class="sig-name descname">TypedAntTestCase</code><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedAntTestCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedAntTestCase.is_completed">
+<em class="property">property </em><code class="sig-name descname">is_completed</code><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedAntTestCase.is_completed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedFieldCheck">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.tests.typed_annotations_tests.</code><code class="sig-name descname">TypedFieldCheck</code><span class="sig-paren">(</span><em class="sig-param">index: int = 0</em>, <em class="sig-param">path: List[str] = None</em>, <em class="sig-param">value: str = ''</em>, <em class="sig-param">comparison: str = '='</em>, <em class="sig-param">check_all: bool = False</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedFieldCheck" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class is used to check one annotation’s attribute against provided value
+E.g., “0)date.month&lt;6” means:</p>
+<blockquote>
+<div><blockquote>
+<div><ul class="simple">
+<li><p>check first annotation within the sample</p></li>
+<li><p>check that annotation’s month value strictly less than 6</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>or “..)coords.1&gt;0” means:</dt><dd><ul class="simple">
+<li><p>check that coords[1] &gt; 0 for all (..) annotations in this sample</p></li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="method">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedFieldCheck.compare_values">
+<code class="sig-name descname">compare_values</code><span class="sig-paren">(</span><em class="sig-param">val: Any</em><span class="sig-paren">)</span> &#x2192; Tuple[bool, bool]<a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedFieldCheck.compare_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedFieldCheck.comparison_name">
+<code class="sig-name descname">comparison_name</code><em class="property"> = {'!=': 'not equal to', '&lt;': 'less than', '&lt;=': 'less or equal to', '=': 'equal to', '&gt;': 'greater than', '&gt;=': 'greater or equal to'}</em><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedFieldCheck.comparison_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedFieldCheck.comparison_string">
+<em class="property">property </em><code class="sig-name descname">comparison_string</code><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedFieldCheck.comparison_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedFieldCheck.date_formats">
+<code class="sig-name descname">date_formats</code><em class="property"> = ['%Y.%m.%d', '%Y-%m-%d']</em><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedFieldCheck.date_formats" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedFieldCheck.datetime_formats">
+<code class="sig-name descname">datetime_formats</code><em class="property"> = ['%Y.%m.%d %H:%M:%S', '%Y-%m-%d %H:%M:%S', '%Y.%m.%d %H:%M', '%Y-%m-%d %H:%M']</em><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedFieldCheck.datetime_formats" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedFieldCheck.get_ant_field_value">
+<code class="sig-name descname">get_ant_field_value</code><span class="sig-paren">(</span><em class="sig-param">ant: lexnlp.extract.common.annotations.text_annotation.TextAnnotation</em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedFieldCheck.get_ant_field_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedFieldCheck.parse">
+<em class="property">static </em><code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">line: str</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedFieldCheck.parse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedFieldCheck.parse_date">
+<code class="sig-name descname">parse_date</code><span class="sig-paren">(</span><em class="sig-param">val_type: Type</em><span class="sig-paren">)</span> &#x2192; datetime.date<a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedFieldCheck.parse_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedFieldCheck.path_string">
+<em class="property">property </em><code class="sig-name descname">path_string</code><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedFieldCheck.path_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.tests.typed_annotations_tests.TypedFieldCheck.reg_compare_split">
+<code class="sig-name descname">reg_compare_split</code><em class="property"> = regex.Regex('!=|&lt;=|&gt;=|=|&lt;|&gt;', flags=regex.V0)</em><a class="headerlink" href="#lexnlp.tests.typed_annotations_tests.TypedFieldCheck.reg_compare_split" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.tests.upload_benchmarks">
+<span id="lexnlp-tests-upload-benchmarks-module"></span><h2>lexnlp.tests.upload_benchmarks module<a class="headerlink" href="#module-lexnlp.tests.upload_benchmarks" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="lexnlp.tests.upload_benchmarks.build_index_name">
+<code class="sig-prename descclassname">lexnlp.tests.upload_benchmarks.</code><code class="sig-name descname">build_index_name</code><span class="sig-paren">(</span><em class="sig-param">index_prefix: str</em>, <em class="sig-param">d: None.datetime.date</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#lexnlp.tests.upload_benchmarks.build_index_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.upload_benchmarks.parse_args">
+<code class="sig-prename descclassname">lexnlp.tests.upload_benchmarks.</code><code class="sig-name descname">parse_args</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.upload_benchmarks.parse_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.upload_benchmarks.process_data">
+<code class="sig-prename descclassname">lexnlp.tests.upload_benchmarks.</code><code class="sig-name descname">process_data</code><span class="sig-paren">(</span><em class="sig-param">csv_file_name: str, index: str, process_func: Callable[List[Dict], int]</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.upload_benchmarks.process_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.upload_benchmarks.safe">
+<code class="sig-prename descclassname">lexnlp.tests.upload_benchmarks.</code><code class="sig-name descname">safe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.upload_benchmarks.safe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.upload_benchmarks.safe_float">
+<code class="sig-prename descclassname">lexnlp.tests.upload_benchmarks.</code><code class="sig-name descname">safe_float</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.upload_benchmarks.safe_float" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.upload_benchmarks.safe_int">
+<code class="sig-prename descclassname">lexnlp.tests.upload_benchmarks.</code><code class="sig-name descname">safe_int</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.tests.upload_benchmarks.safe_int" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.tests.utility_for_testing">
+<span id="lexnlp-tests-utility-for-testing-module"></span><h2>lexnlp.tests.utility_for_testing module<a class="headerlink" href="#module-lexnlp.tests.utility_for_testing" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="lexnlp.tests.utility_for_testing.annotate_text">
+<code class="sig-prename descclassname">lexnlp.tests.utility_for_testing.</code><code class="sig-name descname">annotate_text</code><span class="sig-paren">(</span><em class="sig-param">text: str, annotations: List[lexnlp.extract.common.annotations.text_annotation.TextAnnotation]</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#lexnlp.tests.utility_for_testing.annotate_text" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> – source text</p></li>
+<li><p><strong>annotations</strong> – text annotations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>html, where annotations are replaced by HREFs + annotations’ list in the end of the document</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.utility_for_testing.load_resource_document">
+<code class="sig-prename descclassname">lexnlp.tests.utility_for_testing.</code><code class="sig-name descname">load_resource_document</code><span class="sig-paren">(</span><em class="sig-param">doc_path: str</em>, <em class="sig-param">encoding: str = 'ascii'</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#lexnlp.tests.utility_for_testing.load_resource_document" title="Permalink to this definition">¶</a></dt>
+<dd><p>load file as string from test_data folder</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.tests.utility_for_testing.save_test_document">
+<code class="sig-prename descclassname">lexnlp.tests.utility_for_testing.</code><code class="sig-name descname">save_test_document</code><span class="sig-paren">(</span><em class="sig-param">doc_path: str</em>, <em class="sig-param">text: str</em>, <em class="sig-param">encoding: str = 'utf-8'</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#lexnlp.tests.utility_for_testing.save_test_document" title="Permalink to this definition">¶</a></dt>
+<dd><p>saves text as a file in test_data folder</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.tests.values_comparer">
+<span id="lexnlp-tests-values-comparer-module"></span><h2>lexnlp.tests.values_comparer module<a class="headerlink" href="#module-lexnlp.tests.values_comparer" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="lexnlp.tests.values_comparer.values_look_equal">
+<code class="sig-prename descclassname">lexnlp.tests.values_comparer.</code><code class="sig-name descname">values_look_equal</code><span class="sig-paren">(</span><em class="sig-param">a</em>, <em class="sig-param">b</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#lexnlp.tests.values_comparer.values_look_equal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.tests">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lexnlp.tests" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">LexNLP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About LexNLP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lexnlp.html">LexNLP package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2020, ContraxSuite, LLC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/lexnlp.tests.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

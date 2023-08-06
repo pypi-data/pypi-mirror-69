@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>lexnlp.extract.common.copyrights package &#8212; LexNLP 1.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="lexnlp-extract-common-copyrights-package">
+<h1>lexnlp.extract.common.copyrights package<a class="headerlink" href="#lexnlp-extract-common-copyrights-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-lexnlp.extract.common.copyrights.copyright_en_style_parser">
+<span id="lexnlp-extract-common-copyrights-copyright-en-style-parser-module"></span><h2>lexnlp.extract.common.copyrights.copyright_en_style_parser module<a class="headerlink" href="#module-lexnlp.extract.common.copyrights.copyright_en_style_parser" title="Permalink to this headline">¶</a></h2>
+<p>Copyright extraction for English using NLTK and NLTK pre-trained maximum entropy classifier.</p>
+<p>This module implements basic Copyright extraction functionality in English relying on the pre-trained
+NLTK functionality, including POS tagger and NE (fuzzy) chunkers.</p>
+<dl class="class">
+<dt id="lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.copyrights.copyright_en_style_parser.</code><code class="sig-name descname">CopyrightEnStyleParser</code><a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.copyright_dates_re">
+<code class="sig-name descname">copyright_dates_re</code><em class="property"> = regex.Regex('\\d{2,}', flags=regex.V0)</em><a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.copyright_dates_re" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.copyright_ptn">
+<code class="sig-name descname">copyright_ptn</code><em class="property"> = '((Copyright\\W\\s*|\\(\\s*[Cc]\\s*\\)\\s*|©)+\\s*(\\d{4}(?:\\s*[-,–]\\s*\\d{4})?)?\\s*(.+))'</em><a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.copyright_ptn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.copyright_ptn_re">
+<code class="sig-name descname">copyright_ptn_re</code><em class="property"> = regex.Regex('((Copyright\\W\\s*|\\(\\s*[Cc]\\s*\\)\\s*|©)+\\s*(\\d{4}(?:\\s*[-,–]\\s*\\d{4})?)?\\s*(.+))', flags=regex.V0)</em><a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.copyright_ptn_re" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.derive_company_name">
+<em class="property">classmethod </em><code class="sig-name descname">derive_company_name</code><span class="sig-paren">(</span><em class="sig-param">ant: lexnlp.extract.common.annotations.copyright_annotation.CopyrightAnnotation</em>, <em class="sig-param">phrase: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.derive_company_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.extract_phrases_with_coords">
+<em class="property">classmethod </em><code class="sig-name descname">extract_phrases_with_coords</code><span class="sig-paren">(</span><em class="sig-param">sentence: str</em><span class="sig-paren">)</span> &#x2192; List[Tuple[str, int, int]]<a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.extract_phrases_with_coords" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.get_copyright">
+<em class="property">static </em><code class="sig-name descname">get_copyright</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">return_sources=False</em><span class="sig-paren">)</span> &#x2192; Generator[[lexnlp.extract.common.annotations.copyright_annotation.CopyrightAnnotation, None], None]<a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.get_copyright" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.get_copyright_annotations">
+<em class="property">classmethod </em><code class="sig-name descname">get_copyright_annotations</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">return_sources=False</em><span class="sig-paren">)</span> &#x2192; Generator[[lexnlp.extract.common.annotations.copyright_annotation.CopyrightAnnotation, None], None]<a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.get_copyright_annotations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find copyright in text.
+:param text:
+:param return_sources:
+:return:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.reg_company_name">
+<code class="sig-name descname">reg_company_name</code><em class="property"> = regex.Regex('[\\p{Lu}]+[\\p{L}\\s]*', flags=regex.V0)</em><a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.reg_company_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.reg_valid_company_name">
+<code class="sig-name descname">reg_valid_company_name</code><em class="property"> = regex.Regex('\\p{L}[\\p{L}\\s,]+', flags=regex.V0)</em><a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.reg_valid_company_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.split_copyright_date">
+<em class="property">classmethod </em><code class="sig-name descname">split_copyright_date</code><span class="sig-paren">(</span><em class="sig-param">ant: lexnlp.extract.common.annotations.copyright_annotation.CopyrightAnnotation</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.split_copyright_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.take_best_company_name">
+<em class="property">classmethod </em><code class="sig-name descname">take_best_company_name</code><span class="sig-paren">(</span><em class="sig-param">names: List[str]</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.take_best_company_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.year_ptn">
+<code class="sig-name descname">year_ptn</code><em class="property"> = '(\\d{4}(?:\\s*[-,–]\\s*\\d{4})?)'</em><a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.year_ptn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.year_ptn_re">
+<code class="sig-name descname">year_ptn_re</code><em class="property"> = regex.Regex('(\\d{4}(?:\\s*[-,–]\\s*\\d{4})?)$', flags=regex.V0)</em><a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser.year_ptn_re" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.copyrights.copyright_parser">
+<span id="lexnlp-extract-common-copyrights-copyright-parser-module"></span><h2>lexnlp.extract.common.copyrights.copyright_parser module<a class="headerlink" href="#module-lexnlp.extract.common.copyrights.copyright_parser" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.copyrights.copyright_parser.CopyrightParser">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.copyrights.copyright_parser.</code><code class="sig-name descname">CopyrightParser</code><span class="sig-paren">(</span><em class="sig-param">parsing_functions: List[Callable[str, List[lexnlp.extract.common.pattern_found.PatternFound]]], split_params: lexnlp.utils.lines_processing.line_processor.LineSplitParams</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_parser.CopyrightParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="lexnlp.extract.common.html#lexnlp.extract.common.text_pattern_collector.TextPatternCollector" title="lexnlp.extract.common.text_pattern_collector.TextPatternCollector"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.text_pattern_collector.TextPatternCollector</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_parser.CopyrightParser.get_annotations_as_dictionaries">
+<code class="sig-name descname">get_annotations_as_dictionaries</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[dict]<a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_parser.CopyrightParser.get_annotations_as_dictionaries" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_parser.CopyrightParser.make_annotation_from_pattrn">
+<code class="sig-name descname">make_annotation_from_pattrn</code><span class="sig-paren">(</span><em class="sig-param">locale: str</em>, <em class="sig-param">ptrn: lexnlp.extract.common.pattern_found.PatternFound</em>, <em class="sig-param">phrase: lexnlp.utils.lines_processing.line_processor.LineOrPhrase</em><span class="sig-paren">)</span> &#x2192; lexnlp.extract.common.annotations.text_annotation.TextAnnotation<a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_parser.CopyrightParser.make_annotation_from_pattrn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.copyrights.copyright_parsing_methods">
+<span id="lexnlp-extract-common-copyrights-copyright-parsing-methods-module"></span><h2>lexnlp.extract.common.copyrights.copyright_parsing_methods module<a class="headerlink" href="#module-lexnlp.extract.common.copyrights.copyright_parsing_methods" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.copyrights.copyright_parsing_methods.CopyrightParsingMethods">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.copyrights.copyright_parsing_methods.</code><code class="sig-name descname">CopyrightParsingMethods</code><a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_parsing_methods.CopyrightParsingMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_parsing_methods.CopyrightParsingMethods.get_company_name_from_match">
+<code class="sig-name descname">get_company_name_from_match</code><span class="sig-paren">(</span><em class="sig-param">text: str, company_search_options: str, years: List[Tuple[int, int, int]]</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_parsing_methods.CopyrightParsingMethods.get_company_name_from_match" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_parsing_methods.CopyrightParsingMethods.init_regexes">
+<code class="sig-name descname">init_regexes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_parsing_methods.CopyrightParsingMethods.init_regexes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_parsing_methods.CopyrightParsingMethods.init_trigger_words">
+<code class="sig-name descname">init_trigger_words</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_parsing_methods.CopyrightParsingMethods.init_trigger_words" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_parsing_methods.CopyrightParsingMethods.match_c_years_word">
+<code class="sig-name descname">match_c_years_word</code><span class="sig-paren">(</span><em class="sig-param">phrase: str</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.pattern_found.PatternFound]<a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_parsing_methods.CopyrightParsingMethods.match_c_years_word" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>phrase</strong> – Copyright 1996 – 2019, Siemens</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>{name: ‘1996 – 2019, Siemens’, probability: 100, …}</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_parsing_methods.CopyrightParsingMethods.match_word_c_years">
+<code class="sig-name descname">match_word_c_years</code><span class="sig-paren">(</span><em class="sig-param">phrase: str</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.pattern_found.PatternFound]<a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_parsing_methods.CopyrightParsingMethods.match_word_c_years" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>phrase</strong> – © Siemens 1996 – 2019</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>{name: ‘© Siemens 1996 – 2019’, probability: 100, …}</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_parsing_methods.CopyrightParsingMethods.pre_process_found_matches">
+<code class="sig-name descname">pre_process_found_matches</code><span class="sig-paren">(</span><em class="sig-param">matches: List[lexnlp.extract.common.pattern_found.PatternFound], company_search_options: str</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.copyrights.copyright_pattern_found.CopyrightPatternFound]<a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_parsing_methods.CopyrightParsingMethods.pre_process_found_matches" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.copyrights.copyright_pattern_found">
+<span id="lexnlp-extract-common-copyrights-copyright-pattern-found-module"></span><h2>lexnlp.extract.common.copyrights.copyright_pattern_found module<a class="headerlink" href="#module-lexnlp.extract.common.copyrights.copyright_pattern_found" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.copyrights.copyright_pattern_found.CopyrightPatternFound">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.copyrights.copyright_pattern_found.</code><code class="sig-name descname">CopyrightPatternFound</code><span class="sig-paren">(</span><em class="sig-param">ptrn: lexnlp.extract.common.pattern_found.PatternFound = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_pattern_found.CopyrightPatternFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="lexnlp.extract.common.html#lexnlp.extract.common.pattern_found.PatternFound" title="lexnlp.extract.common.pattern_found.PatternFound"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.pattern_found.PatternFound</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_pattern_found.CopyrightPatternFound.get_detalization_level">
+<code class="sig-name descname">get_detalization_level</code><span class="sig-paren">(</span><em class="sig-param">text: str</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_pattern_found.CopyrightPatternFound.get_detalization_level" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_pattern_found.CopyrightPatternFound.get_length">
+<code class="sig-name descname">get_length</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_pattern_found.CopyrightPatternFound.get_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.copyrights.copyright_pattern_found.CopyrightPatternFound.pattern_worse_than_target">
+<code class="sig-name descname">pattern_worse_than_target</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">text: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_pattern_found.CopyrightPatternFound.pattern_worse_than_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>check what pattern is better then 2 patterns are considered duplicated
+“text” may be used in derived classes</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.copyrights.copyright_pattern_found.CopyrightPatternFound.reg_uppercase">
+<code class="sig-name descname">reg_uppercase</code><em class="property"> = regex.Regex('[\\p{Lu}]+', flags=regex.V0)</em><a class="headerlink" href="#lexnlp.extract.common.copyrights.copyright_pattern_found.CopyrightPatternFound.reg_uppercase" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.copyrights">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lexnlp.extract.common.copyrights" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">LexNLP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About LexNLP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lexnlp.html">LexNLP package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2020, ContraxSuite, LLC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/lexnlp.extract.common.copyrights.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

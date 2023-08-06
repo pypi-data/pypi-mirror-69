@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>lexnlp.extract.es package &#8212; LexNLP 1.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="lexnlp-extract-es-package">
+<h1>lexnlp.extract.es package<a class="headerlink" href="#lexnlp-extract-es-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="lexnlp.extract.es.tests.html">lexnlp.extract.es.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.es.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.es.tests.html#module-lexnlp.extract.es.tests.test_copyrights">lexnlp.extract.es.tests.test_copyrights module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.es.tests.html#module-lexnlp.extract.es.tests.test_courts">lexnlp.extract.es.tests.test_courts module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.es.tests.html#module-lexnlp.extract.es.tests.test_dates">lexnlp.extract.es.tests.test_dates module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.es.tests.html#module-lexnlp.extract.es.tests.test_definitions">lexnlp.extract.es.tests.test_definitions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.es.tests.html#module-lexnlp.extract.es.tests.test_regulations">lexnlp.extract.es.tests.test_regulations module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.es.tests.html#module-lexnlp.extract.es.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-lexnlp.extract.es.copyrights">
+<span id="lexnlp-extract-es-copyrights-module"></span><h2>lexnlp.extract.es.copyrights module<a class="headerlink" href="#module-lexnlp.extract.es.copyrights" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.es.copyrights.CopyrightEsParser">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.es.copyrights.</code><code class="sig-name descname">CopyrightEsParser</code><a class="headerlink" href="#lexnlp.extract.es.copyrights.CopyrightEsParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="lexnlp.extract.common.copyrights.html#lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser" title="lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.copyrights.copyright_en_style_parser.CopyrightEnStyleParser</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.es.copyrights.CopyrightEsParser.extract_phrases_with_coords">
+<em class="property">classmethod </em><code class="sig-name descname">extract_phrases_with_coords</code><span class="sig-paren">(</span><em class="sig-param">sentence: str</em><span class="sig-paren">)</span> &#x2192; List[Tuple[str, int, int]]<a class="headerlink" href="#lexnlp.extract.es.copyrights.CopyrightEsParser.extract_phrases_with_coords" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.es.copyrights.CopyrightEsParser.init_parser">
+<em class="property">static </em><code class="sig-name descname">init_parser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.es.copyrights.CopyrightEsParser.init_parser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.es.copyrights.CopyrightEsParser.line_processor">
+<code class="sig-name descname">line_processor</code><em class="property"> = &lt;lexnlp.utils.lines_processing.line_processor.LineProcessor object&gt;</em><a class="headerlink" href="#lexnlp.extract.es.copyrights.CopyrightEsParser.line_processor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.es.copyrights.get_copyright_annotations">
+<code class="sig-prename descclassname">lexnlp.extract.es.copyrights.</code><code class="sig-name descname">get_copyright_annotations</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">return_sources=False</em><span class="sig-paren">)</span> &#x2192; Generator[[lexnlp.extract.common.annotations.copyright_annotation.CopyrightAnnotation, None], None]<a class="headerlink" href="#lexnlp.extract.es.copyrights.get_copyright_annotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.es.copyrights.get_copyright_list">
+<code class="sig-prename descclassname">lexnlp.extract.es.copyrights.</code><code class="sig-name descname">get_copyright_list</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">return_sources=False</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.annotations.copyright_annotation.CopyrightAnnotation]<a class="headerlink" href="#lexnlp.extract.es.copyrights.get_copyright_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.es.copyrights.get_copyrights">
+<code class="sig-prename descclassname">lexnlp.extract.es.copyrights.</code><code class="sig-name descname">get_copyrights</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">return_sources=False</em><span class="sig-paren">)</span> &#x2192; Generator[[dict, None], None]<a class="headerlink" href="#lexnlp.extract.es.copyrights.get_copyrights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.es.courts">
+<span id="lexnlp-extract-es-courts-module"></span><h2>lexnlp.extract.es.courts module<a class="headerlink" href="#module-lexnlp.extract.es.courts" title="Permalink to this headline">¶</a></h2>
+<p>Court extraction for Spanish.</p>
+<p>This module implements extraction functionality for courts in Spain, including formal names, abbreviations,
+and aliases.</p>
+<dl class="function">
+<dt id="lexnlp.extract.es.courts.get_court_annotations">
+<code class="sig-prename descclassname">lexnlp.extract.es.courts.</code><code class="sig-name descname">get_court_annotations</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">language: str = None</em><span class="sig-paren">)</span> &#x2192; Generator[[dict, None], None]<a class="headerlink" href="#lexnlp.extract.es.courts.get_court_annotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.es.courts.get_courts">
+<code class="sig-prename descclassname">lexnlp.extract.es.courts.</code><code class="sig-name descname">get_courts</code><span class="sig-paren">(</span><em class="sig-param">text: str, court_config_list: List[Tuple[int, str, int, List[Tuple[str, str, bool, int]]]], priority: bool = False, text_languages: List[str] = None</em><span class="sig-paren">)</span> &#x2192; Generator[[Tuple[Tuple, Tuple], Any], Any]<a class="headerlink" href="#lexnlp.extract.es.courts.get_courts" title="Permalink to this definition">¶</a></dt>
+<dd><p>See lexnlp/extract/en/tests/test_courts.py</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.es.courts.setup_es_parser">
+<code class="sig-prename descclassname">lexnlp.extract.es.courts.</code><code class="sig-name descname">setup_es_parser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.es.courts.setup_es_parser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.es.dates">
+<span id="lexnlp-extract-es-dates-module"></span><h2>lexnlp.extract.es.dates module<a class="headerlink" href="#module-lexnlp.extract.es.dates" title="Permalink to this headline">¶</a></h2>
+<p>Date extraction for Spanish.
+Dates parser based on dateparser package</p>
+<dl class="class">
+<dt id="lexnlp.extract.es.dates.ESDateParser">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.es.dates.</code><code class="sig-name descname">ESDateParser</code><span class="sig-paren">(</span><em class="sig-param">text=None</em>, <em class="sig-param">language='en'</em>, <em class="sig-param">dateparser_settings=None</em>, <em class="sig-param">enable_classifier_check=None</em>, <em class="sig-param">classifier_model=None</em>, <em class="sig-param">classifier_threshold=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.es.dates.ESDateParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="lexnlp.extract.common.html#lexnlp.extract.common.dates.DateParser" title="lexnlp.extract.common.dates.DateParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.dates.DateParser</span></code></a></p>
+<dl class="attribute">
+<dt id="lexnlp.extract.es.dates.ESDateParser.DATEPARSER_SETTINGS">
+<code class="sig-name descname">DATEPARSER_SETTINGS</code><em class="property"> = {'DATE_ORDER': 'DMY', 'PREFER_DAY_OF_MONTH': 'first', 'STRICT_PARSING': False}</em><a class="headerlink" href="#lexnlp.extract.es.dates.ESDateParser.DATEPARSER_SETTINGS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.es.dates.ESDateParser.ENABLE_CLASSIFIER_CHECK">
+<code class="sig-name descname">ENABLE_CLASSIFIER_CHECK</code><em class="property"> = False</em><a class="headerlink" href="#lexnlp.extract.es.dates.ESDateParser.ENABLE_CLASSIFIER_CHECK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.es.dates.ESDateParser.SEQUENTIAL_DATES_RE">
+<code class="sig-name descname">SEQUENTIAL_DATES_RE</code><em class="property"> = regex.Regex('(?P&lt;text&gt;(?P&lt;day&gt;\\d{1,2}) de (?P&lt;month&gt;septiembre|diciembre|noviembre|setiembre|febrero|octubre|agosto|abril|enero|julio|junio|marzo|mayo|sept|abr|ago|dic|ene|feb|jul|jun|mar|may|nov|oct|sep|set)(?:, | y | de (?P&lt;year&gt;\\d{4})))', flags=regex.I | regex.M | regex.V0)</em><a class="headerlink" href="#lexnlp.extract.es.dates.ESDateParser.SEQUENTIAL_DATES_RE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.es.dates.ESDateParser.WEIRD_DATES_NORM">
+<code class="sig-name descname">WEIRD_DATES_NORM</code><em class="property"> = [(regex.Regex('(\\d+º\\s?de (?:septiembre|diciembre|noviembre|setiembre|febrero|octubre|agosto|abril|enero|julio|junio|marzo|mayo|sept|abr|ago|dic|ene|feb|jul|jun|mar|may|nov|oct|sep|set)(?: de \\d{4})?)', flags=regex.I | regex.M | regex.V0), &lt;function ESDateParser.&lt;lambda&gt;&gt;)]</em><a class="headerlink" href="#lexnlp.extract.es.dates.ESDateParser.WEIRD_DATES_NORM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.es.dates.ESDateParser.get_extra_dates">
+<code class="sig-name descname">get_extra_dates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.es.dates.ESDateParser.get_extra_dates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add custom search logic; use self.TEXT, self.LANGUAGE, self.DATES; update self.DATES
+:return: None</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.es.definitions">
+<span id="lexnlp-extract-es-definitions-module"></span><h2>lexnlp.extract.es.definitions module<a class="headerlink" href="#module-lexnlp.extract.es.definitions" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.es.definitions.SpanishParsingMethods">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.es.definitions.</code><code class="sig-name descname">SpanishParsingMethods</code><a class="headerlink" href="#lexnlp.extract.es.definitions.SpanishParsingMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="simple">
+<dt>the class contains methods with the same signature:</dt><dd><p>def method_name(phrase: str) -&gt; List[DefinitionMatch]:</p>
+</dd>
+</dl>
+<p>the methods are used for finding definition “candidates”</p>
+<dl class="method">
+<dt id="lexnlp.extract.es.definitions.SpanishParsingMethods.match_es_def_by_hereafter">
+<em class="property">static </em><code class="sig-name descname">match_es_def_by_hereafter</code><span class="sig-paren">(</span><em class="sig-param">phrase: str</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.pattern_found.PatternFound]<a class="headerlink" href="#lexnlp.extract.es.definitions.SpanishParsingMethods.match_es_def_by_hereafter" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>phrase</strong> – las instrucciones de uso o instalación del software o todas las descripciones
+de uso del mismo (de aquí en adelante, la “Documentación”);</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>{name: ‘Documentación’, probability: 100, …}</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.es.definitions.SpanishParsingMethods.match_es_def_by_reffered">
+<em class="property">static </em><code class="sig-name descname">match_es_def_by_reffered</code><span class="sig-paren">(</span><em class="sig-param">phrase: str</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.pattern_found.PatternFound]<a class="headerlink" href="#lexnlp.extract.es.definitions.SpanishParsingMethods.match_es_def_by_reffered" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>phrase</strong> – En este acuerdo, el término “Software” se refiere a: (i) el programa informático
+que acompaña a este Acuerdo y todos sus componentes;</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>definitions (objects)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.es.definitions.SpanishParsingMethods.match_first_word_is">
+<em class="property">static </em><code class="sig-name descname">match_first_word_is</code><span class="sig-paren">(</span><em class="sig-param">phrase: str</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.pattern_found.PatternFound]<a class="headerlink" href="#lexnlp.extract.es.definitions.SpanishParsingMethods.match_first_word_is" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>phrase</strong> – El tabaquismo es la adicción al tabaco, provocada principalmente.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>definitions (objects)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.es.definitions.SpanishParsingMethods.reg_first_word_is">
+<code class="sig-name descname">reg_first_word_is</code><em class="property"> = re.compile('^.+?(?=es\\s+\\w+\\W+\\w+|está\\s+\\w+\\W+\\w+)')</em><a class="headerlink" href="#lexnlp.extract.es.definitions.SpanishParsingMethods.reg_first_word_is" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.es.definitions.SpanishParsingMethods.reg_hereafter">
+<code class="sig-name descname">reg_hereafter</code><em class="property"> = re.compile('(?&lt;=(en adelante[,\\s]))[\\w\\s*\\&quot;*]+')</em><a class="headerlink" href="#lexnlp.extract.es.definitions.SpanishParsingMethods.reg_hereafter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.es.definitions.SpanishParsingMethods.reg_reffered">
+<code class="sig-name descname">reg_reffered</code><em class="property"> = re.compile('^.+(?=se refiere)')</em><a class="headerlink" href="#lexnlp.extract.es.definitions.SpanishParsingMethods.reg_reffered" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.es.definitions.get_definition_annotations">
+<code class="sig-prename descclassname">lexnlp.extract.es.definitions.</code><code class="sig-name descname">get_definition_annotations</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">language=None</em><span class="sig-paren">)</span> &#x2192; Generator[[lexnlp.extract.common.annotations.definition_annotation.DefinitionAnnotation, None], None]<a class="headerlink" href="#lexnlp.extract.es.definitions.get_definition_annotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.es.definitions.get_definition_list">
+<code class="sig-prename descclassname">lexnlp.extract.es.definitions.</code><code class="sig-name descname">get_definition_list</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">language=None</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.annotations.definition_annotation.DefinitionAnnotation]<a class="headerlink" href="#lexnlp.extract.es.definitions.get_definition_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.es.definitions.get_definitions">
+<code class="sig-prename descclassname">lexnlp.extract.es.definitions.</code><code class="sig-name descname">get_definitions</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">language=None</em><span class="sig-paren">)</span> &#x2192; Generator[[dict, None], None]<a class="headerlink" href="#lexnlp.extract.es.definitions.get_definitions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.es.definitions.make_es_definitions_parser">
+<code class="sig-prename descclassname">lexnlp.extract.es.definitions.</code><code class="sig-name descname">make_es_definitions_parser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.es.definitions.make_es_definitions_parser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.es.language_tokens">
+<span id="lexnlp-extract-es-language-tokens-module"></span><h2>lexnlp.extract.es.language_tokens module<a class="headerlink" href="#module-lexnlp.extract.es.language_tokens" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.es.language_tokens.EsLanguageTokens">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.es.language_tokens.</code><code class="sig-name descname">EsLanguageTokens</code><a class="headerlink" href="#lexnlp.extract.es.language_tokens.EsLanguageTokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Spanish parts of speech, used in a number of parsing methods</p>
+<dl class="attribute">
+<dt id="lexnlp.extract.es.language_tokens.EsLanguageTokens.abbreviations">
+<code class="sig-name descname">abbreviations</code><em class="property"> = {'abs.', 'act.', 'inc.', 'no.', 'nr.', 'p.'}</em><a class="headerlink" href="#lexnlp.extract.es.language_tokens.EsLanguageTokens.abbreviations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.es.language_tokens.EsLanguageTokens.articles">
+<code class="sig-name descname">articles</code><em class="property"> = ['el', 'la', 'los', 'las']</em><a class="headerlink" href="#lexnlp.extract.es.language_tokens.EsLanguageTokens.articles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.es.language_tokens.EsLanguageTokens.conjunctions">
+<code class="sig-name descname">conjunctions</code><em class="property"> = ['und', 'oder']</em><a class="headerlink" href="#lexnlp.extract.es.language_tokens.EsLanguageTokens.conjunctions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.es.regulations">
+<span id="lexnlp-extract-es-regulations-module"></span><h2>lexnlp.extract.es.regulations module<a class="headerlink" href="#module-lexnlp.extract.es.regulations" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.es.regulations.RegulationsParser">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.es.regulations.</code><code class="sig-name descname">RegulationsParser</code><span class="sig-paren">(</span><em class="sig-param">regulations_dataframe: pandas.core.frame.DataFrame = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.es.regulations.RegulationsParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parses Spanish regulations (acts, institutions and so on):
+- “la emisión de instrumentos inscritos en el Registro Nacional de Valores, colocados”</p>
+<blockquote>
+<div><p>boils down to ‘Registro Nacional de Valores’</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>expects words like ‘registro’, ‘comisión’, ‘comision’, ‘ley del’
+that open the following phrase</p></li>
+</ul>
+<dl class="method">
+<dt id="lexnlp.extract.es.regulations.RegulationsParser.get_annotations_as_dictionaries">
+<code class="sig-name descname">get_annotations_as_dictionaries</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<a class="headerlink" href="#lexnlp.extract.es.regulations.RegulationsParser.get_annotations_as_dictionaries" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.es.regulations.RegulationsParser.load_trigger_words">
+<code class="sig-name descname">load_trigger_words</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#lexnlp.extract.es.regulations.RegulationsParser.load_trigger_words" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.es.regulations.RegulationsParser.match_start_trigger">
+<code class="sig-name descname">match_start_trigger</code><span class="sig-paren">(</span><em class="sig-param">phrase: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#lexnlp.extract.es.regulations.RegulationsParser.match_start_trigger" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>phrase</strong> – mediante la emisión de instrumentos inscritos en el Registro Nacional de Valores, colocados</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>{name: ‘Registro Nacional de Valores’, probability: 100, …}</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.es.regulations.RegulationsParser.parse">
+<code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">locale: str = None</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.annotations.regulation_annotation.RegulationAnnotation]<a class="headerlink" href="#lexnlp.extract.es.regulations.RegulationsParser.parse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.es.regulations.RegulationsParser.setup_regexes">
+<code class="sig-name descname">setup_regexes</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#lexnlp.extract.es.regulations.RegulationsParser.setup_regexes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.es.regulations.RegulationsParser.trim_annotations">
+<code class="sig-name descname">trim_annotations</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#lexnlp.extract.es.regulations.RegulationsParser.trim_annotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.es.regulations.get_regulation_annotations">
+<code class="sig-prename descclassname">lexnlp.extract.es.regulations.</code><code class="sig-name descname">get_regulation_annotations</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">language: str = None</em><span class="sig-paren">)</span> &#x2192; Generator[[lexnlp.extract.common.annotations.regulation_annotation.RegulationAnnotation, None], None]<a class="headerlink" href="#lexnlp.extract.es.regulations.get_regulation_annotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.es.regulations.get_regulation_list">
+<code class="sig-prename descclassname">lexnlp.extract.es.regulations.</code><code class="sig-name descname">get_regulation_list</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">language: str = None</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.annotations.regulation_annotation.RegulationAnnotation]<a class="headerlink" href="#lexnlp.extract.es.regulations.get_regulation_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.es.regulations.get_regulations">
+<code class="sig-prename descclassname">lexnlp.extract.es.regulations.</code><code class="sig-name descname">get_regulations</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">language: str = None</em><span class="sig-paren">)</span> &#x2192; Generator[[dict, None], None]<a class="headerlink" href="#lexnlp.extract.es.regulations.get_regulations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.es.regulations.make_de_regulations_parser">
+<code class="sig-prename descclassname">lexnlp.extract.es.regulations.</code><code class="sig-name descname">make_de_regulations_parser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.es.regulations.make_de_regulations_parser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.es">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lexnlp.extract.es" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">LexNLP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About LexNLP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lexnlp.html">LexNLP package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2020, ContraxSuite, LLC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/lexnlp.extract.es.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

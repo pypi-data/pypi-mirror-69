@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>lexnlp.extract.common.definitions package &#8212; LexNLP 1.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="lexnlp-extract-common-definitions-package">
+<h1>lexnlp.extract.common.definitions package<a class="headerlink" href="#lexnlp-extract-common-definitions-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-lexnlp.extract.common.definitions.common_definition_patterns">
+<span id="lexnlp-extract-common-definitions-common-definition-patterns-module"></span><h2>lexnlp.extract.common.definitions.common_definition_patterns module<a class="headerlink" href="#module-lexnlp.extract.common.definitions.common_definition_patterns" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.definitions.common_definition_patterns.</code><code class="sig-name descname">CommonDefinitionPatterns</code><a class="headerlink" href="#lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.collect_regex_matches">
+<em class="property">static </em><code class="sig-name descname">collect_regex_matches</code><span class="sig-paren">(</span><em class="sig-param">phrase: str, reg: &lt;module 'regex' from '/home/alex/dev/michael/contraxsuite/core-ve/lib/python3.6/site-packages/regex.py'&gt;, prob: int, def_start: Callable[[str, Match[~AnyStr]], int], def_end: Callable[[str, Match[~AnyStr]], int]</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.pattern_found.PatternFound]<a class="headerlink" href="#lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.collect_regex_matches" title="Permalink to this definition">¶</a></dt>
+<dd><p>find all matches by ‘reg’ ptr
+:param quoted_def_start: (phrase, match, quoted_match) -&gt; definition’s start
+:param quoted_def_end: (phrase, match, quoted_match) -&gt; definition’s end
+:param def_start: (phrase, match) -&gt; definition’s start
+:param def_end: (phrase, match) -&gt; definition’s end
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.collect_regex_matches_with_quoted_chunks">
+<em class="property">static </em><code class="sig-name descname">collect_regex_matches_with_quoted_chunks</code><span class="sig-paren">(</span><em class="sig-param">phrase: str, reg: &lt;module 'regex' from '/home/alex/dev/michael/contraxsuite/core-ve/lib/python3.6/site-packages/regex.py'&gt;, prob: int, quoted_def_start: Callable[[str, Match[~AnyStr], Match[~AnyStr]], int], quoted_def_end: Callable[[str, Match[~AnyStr], Match[~AnyStr]], int], def_start: Callable[[str, Match[~AnyStr]], int], def_end: Callable[[str, Match[~AnyStr]], int]</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.pattern_found.PatternFound]<a class="headerlink" href="#lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.collect_regex_matches_with_quoted_chunks" title="Permalink to this definition">¶</a></dt>
+<dd><p>First, find all matches by ‘reg’ ptr
+Second, go through matches
+For each match try to find a set of quoted words
+If found, use them as matches
+Or use the whole match
+:param quoted_def_start: (phrase, match, quoted_match) -&gt; definition’s start
+:param quoted_def_end: (phrase, match, quoted_match) -&gt; definition’s end
+:param def_start: (phrase, match) -&gt; definition’s start
+:param def_end: (phrase, match) -&gt; definition’s end
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.get_acronym_words_start">
+<em class="property">static </em><code class="sig-name descname">get_acronym_words_start</code><span class="sig-paren">(</span><em class="sig-param">phrase: str, match: Match[~AnyStr]</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.get_acronym_words_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>each acronym match should be preceded by capitalized words that start from the same letters
+:param phrase: “rompió el silencio tras ser despedido del Canal del Fútbol (CDF). ”
+:param match: “(CDF)” Match object for this example
+:return: start letter (42 for this case) index or -1</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.match_acronyms">
+<em class="property">static </em><code class="sig-name descname">match_acronyms</code><span class="sig-paren">(</span><em class="sig-param">phrase: str</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.pattern_found.PatternFound]<a class="headerlink" href="#lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.match_acronyms" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>phrase</strong> – rompió el silencio tras ser despedido del Canal del Fútbol (CDF).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>{name: ‘CDF’, probability: 100, …}</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.match_es_def_by_semicolon">
+<em class="property">static </em><code class="sig-name descname">match_es_def_by_semicolon</code><span class="sig-paren">(</span><em class="sig-param">phrase: str</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.pattern_found.PatternFound]<a class="headerlink" href="#lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.match_es_def_by_semicolon" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>phrase</strong> – “Modern anatomy human”: a human of modern anatomy.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>{name: ‘Modern anatomy human’, probability: 100, …}</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.peek_quoted_part">
+<em class="property">static </em><code class="sig-name descname">peek_quoted_part</code><span class="sig-paren">(</span><em class="sig-param">phrase: str, match: Match[~AnyStr], start_func: Callable[[str, Match[~AnyStr], Match[~AnyStr]], int], end_func: Callable[[str, Match[~AnyStr], Match[~AnyStr]], int], match_prob: int</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.pattern_found.PatternFound]<a class="headerlink" href="#lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.peek_quoted_part" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phrase</strong> – the whole text, may be used for getting the definition’s text length</p></li>
+<li><p><strong>match</strong> – the matched part of the phrase that may contain several quote-packed definitions</p></li>
+<li><p><strong>start_func</strong> – (phrase, match, quoted_match) -&gt; definition’s start</p></li>
+<li><p><strong>end_func</strong> – (phrase, match, quoted_match) -&gt; definition’s end</p></li>
+<li><p><strong>match_prob</strong> – definition’s probability</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of definitions found or an empty list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.reg_acronyms">
+<code class="sig-name descname">reg_acronyms</code><em class="property"> = regex.Regex('\\(\\p{Lu}\\p{L}*\\p{Lu}\\)', flags=regex.V0)</em><a class="headerlink" href="#lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.reg_acronyms" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.reg_quoted">
+<code class="sig-name descname">reg_quoted</code><em class="property"> = regex.Regex('([&quot;\'“„])(?:(?=(\\\\?))\\2.)*?\\1', flags=regex.I | regex.V0)</em><a class="headerlink" href="#lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.reg_quoted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.reg_semicolon">
+<code class="sig-name descname">reg_semicolon</code><em class="property"> = regex.Regex('([&quot;\'“„])(?:(?=(\\\\?))\\2.)*?\\1(?=:)', flags=regex.I | regex.V0)</em><a class="headerlink" href="#lexnlp.extract.common.definitions.common_definition_patterns.CommonDefinitionPatterns.reg_semicolon" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.definitions.definition_match">
+<span id="lexnlp-extract-common-definitions-definition-match-module"></span><h2>lexnlp.extract.common.definitions.definition_match module<a class="headerlink" href="#module-lexnlp.extract.common.definitions.definition_match" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.definitions.definition_match.DefinitionMatch">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.definitions.definition_match.</code><code class="sig-name descname">DefinitionMatch</code><a class="headerlink" href="#lexnlp.extract.common.definitions.definition_match.DefinitionMatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>used inside EsDefinitionsParser and SpanishParsingMethods
+to store intermediate parsing results</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.definitions.universal_definition_parser">
+<span id="lexnlp-extract-common-definitions-universal-definition-parser-module"></span><h2>lexnlp.extract.common.definitions.universal_definition_parser module<a class="headerlink" href="#module-lexnlp.extract.common.definitions.universal_definition_parser" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.definitions.universal_definition_parser.UniversalDefinitionsParser">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.definitions.universal_definition_parser.</code><code class="sig-name descname">UniversalDefinitionsParser</code><span class="sig-paren">(</span><em class="sig-param">parsing_functions: List[Callable[str, List[lexnlp.extract.common.pattern_found.PatternFound]]], split_params: lexnlp.utils.lines_processing.line_processor.LineSplitParams</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.definitions.universal_definition_parser.UniversalDefinitionsParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="lexnlp.extract.common.html#lexnlp.extract.common.text_pattern_collector.TextPatternCollector" title="lexnlp.extract.common.text_pattern_collector.TextPatternCollector"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.text_pattern_collector.TextPatternCollector</span></code></a></p>
+<p>EsDefinitionsParser searches for definitions in text according to the
+rules of Spanish. See the “parse” method</p>
+<dl class="method">
+<dt id="lexnlp.extract.common.definitions.universal_definition_parser.UniversalDefinitionsParser.get_definition_dictionaries">
+<code class="sig-name descname">get_definition_dictionaries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.definitions.universal_definition_parser.UniversalDefinitionsParser.get_definition_dictionaries" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.definitions.universal_definition_parser.UniversalDefinitionsParser.make_annotation_from_pattrn">
+<code class="sig-name descname">make_annotation_from_pattrn</code><span class="sig-paren">(</span><em class="sig-param">locale: str</em>, <em class="sig-param">ptrn: lexnlp.extract.common.pattern_found.PatternFound</em>, <em class="sig-param">phrase: lexnlp.utils.lines_processing.line_processor.LineOrPhrase</em><span class="sig-paren">)</span> &#x2192; lexnlp.extract.common.annotations.text_annotation.TextAnnotation<a class="headerlink" href="#lexnlp.extract.common.definitions.universal_definition_parser.UniversalDefinitionsParser.make_annotation_from_pattrn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.definitions">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lexnlp.extract.common.definitions" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">LexNLP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About LexNLP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lexnlp.html">LexNLP package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2020, ContraxSuite, LLC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/lexnlp.extract.common.definitions.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

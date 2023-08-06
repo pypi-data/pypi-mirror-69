@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>lexnlp.extract.en.entities package &#8212; LexNLP 1.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="lexnlp-extract-en-entities-package">
+<h1>lexnlp.extract.en.entities package<a class="headerlink" href="#lexnlp-extract-en-entities-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="lexnlp.extract.en.entities.tests.html">lexnlp.extract.en.entities.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.en.entities.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.en.entities.tests.html#module-lexnlp.extract.en.entities.tests.test_get_companies">lexnlp.extract.en.entities.tests.test_get_companies module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.en.entities.tests.html#module-lexnlp.extract.en.entities.tests.test_nltk_maxent">lexnlp.extract.en.entities.tests.test_nltk_maxent module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.en.entities.tests.html#module-lexnlp.extract.en.entities.tests.test_nltk_re">lexnlp.extract.en.entities.tests.test_nltk_re module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.en.entities.tests.html#module-lexnlp.extract.en.entities.tests.test_stanford_ner">lexnlp.extract.en.entities.tests.test_stanford_ner module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.en.entities.tests.html#module-lexnlp.extract.en.entities.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-lexnlp.extract.en.entities.nltk_maxent">
+<span id="lexnlp-extract-en-entities-nltk-maxent-module"></span><h2>lexnlp.extract.en.entities.nltk_maxent module<a class="headerlink" href="#module-lexnlp.extract.en.entities.nltk_maxent" title="Permalink to this headline">¶</a></h2>
+<p>Entity extraction for English using NLTK and NLTK pre-trained maximum entropy classifier.</p>
+<p>This module implements basic entity extraction functionality in English relying on the pre-trained
+NLTK functionality, including POS tagger and NE (fuzzy) chunkers.</p>
+<dl class="simple">
+<dt>Todo:</dt><dd><ul class="simple">
+<li><p>Better define interface for sentences vs. raw text</p></li>
+<li><p>Standardize generator vs list</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="class">
+<dt id="lexnlp.extract.en.entities.nltk_maxent.CompanyNPExtractor">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.en.entities.nltk_maxent.</code><code class="sig-name descname">CompanyNPExtractor</code><span class="sig-paren">(</span><em class="sig-param">grammar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.en.entities.nltk_maxent.CompanyNPExtractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="lexnlp.extract.en.utils.NPExtractor.html#lexnlp.extract.en.utils.NPExtractor" title="lexnlp.extract.en.utils.NPExtractor"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.en.utils.NPExtractor</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.en.entities.nltk_maxent.CompanyNPExtractor.cleanup_leaves">
+<code class="sig-name descname">cleanup_leaves</code><span class="sig-paren">(</span><em class="sig-param">leaves</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.en.entities.nltk_maxent.CompanyNPExtractor.cleanup_leaves" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.en.entities.nltk_maxent.CompanyNPExtractor.get_tokenizer">
+<code class="sig-name descname">get_tokenizer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.en.entities.nltk_maxent.CompanyNPExtractor.get_tokenizer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.en.entities.nltk_maxent.CompanyNPExtractor.strip_np">
+<em class="property">static </em><code class="sig-name descname">strip_np</code><span class="sig-paren">(</span><em class="sig-param">np</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.en.entities.nltk_maxent.CompanyNPExtractor.strip_np" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.nltk_maxent.contains_companies">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.nltk_maxent.</code><code class="sig-name descname">contains_companies</code><span class="sig-paren">(</span><em class="sig-param">person: str</em>, <em class="sig-param">companies</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#lexnlp.extract.en.entities.nltk_maxent.contains_companies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.nltk_maxent.get_companies">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.nltk_maxent.</code><code class="sig-name descname">get_companies</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">strict: bool = False</em>, <em class="sig-param">use_gnp: bool = False</em>, <em class="sig-param">detail_type: bool = False</em>, <em class="sig-param">count_unique: bool = False</em>, <em class="sig-param">name_upper: bool = False</em>, <em class="sig-param">parse_name_abbr: bool = False</em>, <em class="sig-param">return_source: bool = False</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.en.entities.nltk_maxent.get_companies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find company names in text, optionally using the stricter article/prefix expression.
+:param text:
+:param strict:
+:param use_gnp: use get_noun_phrases or NPExtractor
+:param detail_type: return detailed type (type, unified type, label) vs type only
+:param name_upper: return company name in upper case.
+:param count_unique: return only unique companies - case insensitive.
+:param parse_name_abbr: return company abbreviated name if exists.
+:param return_source:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.nltk_maxent.get_company_annotations">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.nltk_maxent.</code><code class="sig-name descname">get_company_annotations</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">strict: bool = False</em>, <em class="sig-param">use_gnp: bool = False</em>, <em class="sig-param">count_unique: bool = False</em>, <em class="sig-param">name_upper: bool = False</em><span class="sig-paren">)</span> &#x2192; Generator[[lexnlp.extract.common.annotations.company_annotation.CompanyAnnotation, None], None]<a class="headerlink" href="#lexnlp.extract.en.entities.nltk_maxent.get_company_annotations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find company names in text, optionally using the stricter article/prefix expression.
+:param parse_name_abbr:
+:param text:
+:param strict:
+:param use_gnp: use get_noun_phrases or NPExtractor
+:param name_upper: return company name in upper case.
+:param count_unique: return only unique companies - case insensitive.
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.nltk_maxent.get_geopolitical">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.nltk_maxent.</code><code class="sig-name descname">get_geopolitical</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">strict=False</em>, <em class="sig-param">return_source=False</em>, <em class="sig-param">window=2</em><span class="sig-paren">)</span> &#x2192; Generator<a class="headerlink" href="#lexnlp.extract.en.entities.nltk_maxent.get_geopolitical" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get GPEs from text.
+:param window:
+:param return_source:
+:param strict:
+:param text:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.nltk_maxent.get_noun_phrases">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.nltk_maxent.</code><code class="sig-name descname">get_noun_phrases</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">strict=False</em>, <em class="sig-param">return_source=False</em>, <em class="sig-param">window=3</em>, <em class="sig-param">valid_punctuation=None</em><span class="sig-paren">)</span> &#x2192; Generator<a class="headerlink" href="#lexnlp.extract.en.entities.nltk_maxent.get_noun_phrases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get NNP phrases from text.
+:param window:
+:param return_source:
+:param strict:
+:param text:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.nltk_maxent.get_persons">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.nltk_maxent.</code><code class="sig-name descname">get_persons</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">strict=False</em>, <em class="sig-param">return_source=False</em>, <em class="sig-param">window=2</em><span class="sig-paren">)</span> &#x2192; Generator<a class="headerlink" href="#lexnlp.extract.en.entities.nltk_maxent.get_persons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get names from text.
+:param window:
+:param return_source:
+:param strict:
+:param text:
+:return:</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.en.entities.nltk_re">
+<span id="lexnlp-extract-en-entities-nltk-re-module"></span><h2>lexnlp.extract.en.entities.nltk_re module<a class="headerlink" href="#module-lexnlp.extract.en.entities.nltk_re" title="Permalink to this headline">¶</a></h2>
+<p>Entity extraction for English using NLTK and basic regular expressions with
+master data.</p>
+<p>This module implements basic entity extraction functionality in English, but does NOT
+rely on the pre-trained NLTK maximum entropy classifier.  Instead, it uses the NLTK English
+grammar in combination with regular expressions and tested master data re: company types and
+abbreviations (e.g., LLC).</p>
+<dl class="simple">
+<dt>Todo:</dt><dd><ul class="simple">
+<li><p>Better define interface for sentences vs. raw text</p></li>
+<li><p>Standardize generator vs list</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.nltk_re.check_backtrack_catastrophy">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.nltk_re.</code><code class="sig-name descname">check_backtrack_catastrophy</code><span class="sig-paren">(</span><em class="sig-param">text: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#lexnlp.extract.en.entities.nltk_re.check_backtrack_catastrophy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.nltk_re.create_company_pattern">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.nltk_re.</code><code class="sig-name descname">create_company_pattern</code><span class="sig-paren">(</span><em class="sig-param">company_pattern_template=None</em>, <em class="sig-param">company_name_pattern=None</em>, <em class="sig-param">company_type_list=None</em>, <em class="sig-param">company_description_list=None</em>, <em class="sig-param">article_pattern=''</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.en.entities.nltk_re.create_company_pattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a company pattern for regular expression.
+:param company_pattern_template:
+:param company_name_pattern:
+:param article_pattern:
+:param company_type_list:
+:param company_description_list:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.nltk_re.get_companies">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.nltk_re.</code><code class="sig-name descname">get_companies</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">use_article: bool = False</em>, <em class="sig-param">use_sentence_splitter: bool = True</em><span class="sig-paren">)</span> &#x2192; Generator[[lexnlp.extract.common.annotations.company_annotation.CompanyAnnotation, None], None]<a class="headerlink" href="#lexnlp.extract.en.entities.nltk_re.get_companies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find company names in text, optionally using the stricter article/prefix expression.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.nltk_re.get_company_description_pipe">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.nltk_re.</code><code class="sig-name descname">get_company_description_pipe</code><span class="sig-paren">(</span><em class="sig-param">company_description_list=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.en.entities.nltk_re.get_company_description_pipe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.nltk_re.get_company_type_pipe">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.nltk_re.</code><code class="sig-name descname">get_company_type_pipe</code><span class="sig-paren">(</span><em class="sig-param">company_type_list=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.en.entities.nltk_re.get_company_type_pipe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.nltk_re.get_parties_as">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.nltk_re.</code><code class="sig-name descname">get_parties_as</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">detail_type=False</em><span class="sig-paren">)</span> &#x2192; Generator[[Tuple[str, str, str, str], None], None]<a class="headerlink" href="#lexnlp.extract.en.entities.nltk_re.get_parties_as" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> – source text to search for companies</p></li>
+<li><p><strong>detail_type</strong> – obsolete</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>parties: [(name, company type, company description, party type), …]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.en.entities.nltk_tokenizer">
+<span id="lexnlp-extract-en-entities-nltk-tokenizer-module"></span><h2>lexnlp.extract.en.entities.nltk_tokenizer module<a class="headerlink" href="#module-lexnlp.extract.en.entities.nltk_tokenizer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.en.entities.nltk_tokenizer.NltkTokenizer">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.en.entities.nltk_tokenizer.</code><code class="sig-name descname">NltkTokenizer</code><span class="sig-paren">(</span><em class="sig-param">punctuation: Optional[List[Any]] = None</em>, <em class="sig-param">starting_quotes: Optional[Any] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.en.entities.nltk_tokenizer.NltkTokenizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nltk.tokenize.treebank.TreebankWordTokenizer</span></code></p>
+<p>It’s almost a copy of TreebankWordTokenizer, but
+NltkTokenizer allows changing punctuation and starting_quotes
+settings</p>
+<dl class="method">
+<dt id="lexnlp.extract.en.entities.nltk_tokenizer.NltkTokenizer.tokenize">
+<code class="sig-name descname">tokenize</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">convert_parentheses=False</em>, <em class="sig-param">return_str=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.en.entities.nltk_tokenizer.NltkTokenizer.tokenize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a tokenized copy of <em>s</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.en.entities.stanford_ner">
+<span id="lexnlp-extract-en-entities-stanford-ner-module"></span><h2>lexnlp.extract.en.entities.stanford_ner module<a class="headerlink" href="#module-lexnlp.extract.en.entities.stanford_ner" title="Permalink to this headline">¶</a></h2>
+<p>Entity extraction for English using Stanford Named Entity Recognition (NER).</p>
+<p>This module implements basic entity extraction functionality in English relying on the
+pre-trained Stanford NLP NER classifiers.</p>
+<dl class="simple">
+<dt>Todo:</dt><dd><ul class="simple">
+<li><p>Better define interface for sentences vs. raw text</p></li>
+<li><p>Standardize generator vs list</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.stanford_ner.get_locations">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.stanford_ner.</code><code class="sig-name descname">get_locations</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">strict=False</em>, <em class="sig-param">return_source=False</em>, <em class="sig-param">window=2</em><span class="sig-paren">)</span> &#x2192; Generator<a class="headerlink" href="#lexnlp.extract.en.entities.stanford_ner.get_locations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get locations from text using Stanford libraries.
+:param window:
+:param return_source:
+:param strict:
+:param text:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.stanford_ner.get_model_file">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.stanford_ner.</code><code class="sig-name descname">get_model_file</code><span class="sig-paren">(</span><em class="sig-param">language</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.en.entities.stanford_ner.get_model_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the appropriate model file for each language.
+:param language:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.stanford_ner.get_organizations">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.stanford_ner.</code><code class="sig-name descname">get_organizations</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">strict=False</em>, <em class="sig-param">return_source=False</em>, <em class="sig-param">window=2</em><span class="sig-paren">)</span> &#x2192; Generator<a class="headerlink" href="#lexnlp.extract.en.entities.stanford_ner.get_organizations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get organizations from text using Stanford libraries.
+:param window:
+:param return_source:
+:param strict:
+:param text:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.extract.en.entities.stanford_ner.get_persons">
+<code class="sig-prename descclassname">lexnlp.extract.en.entities.stanford_ner.</code><code class="sig-name descname">get_persons</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">strict=False</em>, <em class="sig-param">return_source=False</em>, <em class="sig-param">window=2</em><span class="sig-paren">)</span> &#x2192; Generator<a class="headerlink" href="#lexnlp.extract.en.entities.stanford_ner.get_persons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get persons from text using Stanford libraries.
+:param window:
+:param return_source:
+:param strict:
+:param text:
+:return:</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.en.entities">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lexnlp.extract.en.entities" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">LexNLP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About LexNLP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lexnlp.html">LexNLP package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2020, ContraxSuite, LLC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/lexnlp.extract.en.entities.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,454 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>lexnlp.utils.lines_processing package &#8212; LexNLP 1.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="lexnlp-utils-lines-processing-package">
+<h1>lexnlp.utils.lines_processing package<a class="headerlink" href="#lexnlp-utils-lines-processing-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-lexnlp.utils.lines_processing.line_processor">
+<span id="lexnlp-utils-lines-processing-line-processor-module"></span><h2>lexnlp.utils.lines_processing.line_processor module<a class="headerlink" href="#module-lexnlp.utils.lines_processing.line_processor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineOrPhrase">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.utils.lines_processing.line_processor.</code><code class="sig-name descname">LineOrPhrase</code><span class="sig-paren">(</span><em class="sig-param">text=''</em>, <em class="sig-param">start=0</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineOrPhrase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineOrPhrase.get_end">
+<code class="sig-name descname">get_end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineOrPhrase.get_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineProcessor">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.utils.lines_processing.line_processor.</code><code class="sig-name descname">LineProcessor</code><span class="sig-paren">(</span><em class="sig-param">allow_breaks_in_phrase: bool = True</em>, <em class="sig-param">line_split_params: lexnlp.utils.lines_processing.line_processor.LineSplitParams = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineProcessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineProcessor.check_phrase_starts_with_phrase">
+<code class="sig-name descname">check_phrase_starts_with_phrase</code><span class="sig-paren">(</span><em class="sig-param">src_phrase: List[lexnlp.utils.lines_processing.line_processor.SingleWord], check_start: int, checking_phrases</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineProcessor.check_phrase_starts_with_phrase" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineProcessor.default_length">
+<code class="sig-name descname">default_length</code><em class="property"> = 95</em><a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineProcessor.default_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineProcessor.default_split_params">
+<code class="sig-name descname">default_split_params</code><em class="property"> = &lt;lexnlp.utils.lines_processing.line_processor.LineSplitParams object&gt;</em><a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineProcessor.default_split_params" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineProcessor.determine_line_length">
+<code class="sig-name descname">determine_line_length</code><span class="sig-paren">(</span><em class="sig-param">text: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineProcessor.determine_line_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineProcessor.get_abbreviations_in_text">
+<code class="sig-name descname">get_abbreviations_in_text</code><span class="sig-paren">(</span><em class="sig-param">text: str</em><span class="sig-paren">)</span> &#x2192; List[Tuple[int, int]]<a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineProcessor.get_abbreviations_in_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineProcessor.line_tail_percent">
+<code class="sig-name descname">line_tail_percent</code><em class="property"> = 60</em><a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineProcessor.line_tail_percent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineProcessor.max_possible_length">
+<code class="sig-name descname">max_possible_length</code><em class="property"> = 200</em><a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineProcessor.max_possible_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineProcessor.min_possible_length">
+<code class="sig-name descname">min_possible_length</code><em class="property"> = 50</em><a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineProcessor.min_possible_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineProcessor.split_text_on_line_with_endings">
+<code class="sig-name descname">split_text_on_line_with_endings</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">line_split_ptrs: lexnlp.utils.lines_processing.line_processor.LineSplitParams = None</em><span class="sig-paren">)</span> &#x2192; Generator[[lexnlp.utils.lines_processing.line_processor.LineOrPhrase, None], None]<a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineProcessor.split_text_on_line_with_endings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineProcessor.split_text_on_words">
+<code class="sig-name descname">split_text_on_words</code><span class="sig-paren">(</span><em class="sig-param">text: str</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.utils.lines_processing.line_processor.SingleWord]<a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineProcessor.split_text_on_words" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineProcessor.word_separator_pattern">
+<code class="sig-name descname">word_separator_pattern</code><em class="property"> = regex.Regex('[\\w]+[\\w-]*', flags=regex.V0)</em><a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineProcessor.word_separator_pattern" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineProcessor.words_to_lowercase">
+<code class="sig-name descname">words_to_lowercase</code><span class="sig-paren">(</span><em class="sig-param">words: List[lexnlp.utils.lines_processing.line_processor.SingleWord]</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineProcessor.words_to_lowercase" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="lexnlp.utils.lines_processing.line_processor.LineSplitParams">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.utils.lines_processing.line_processor.</code><code class="sig-name descname">LineSplitParams</code><a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.LineSplitParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lexnlp.utils.lines_processing.line_processor.SingleWord">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.utils.lines_processing.line_processor.</code><code class="sig-name descname">SingleWord</code><span class="sig-paren">(</span><em class="sig-param">text: str = ''</em>, <em class="sig-param">start: int = 0</em>, <em class="sig-param">is_separator: bool = False</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.SingleWord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.line_processor.SingleWord.get_end">
+<code class="sig-name descname">get_end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.lines_processing.line_processor.SingleWord.get_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.utils.lines_processing.parsed_text_corrector">
+<span id="lexnlp-utils-lines-processing-parsed-text-corrector-module"></span><h2>lexnlp.utils.lines_processing.parsed_text_corrector module<a class="headerlink" href="#module-lexnlp.utils.lines_processing.parsed_text_corrector" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.utils.lines_processing.parsed_text_corrector.ParsedTextCorrector">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.utils.lines_processing.parsed_text_corrector.</code><code class="sig-name descname">ParsedTextCorrector</code><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_corrector.ParsedTextCorrector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<blockquote>
+<div><p>Class “corrects” the text given if the ParsedTextQualityEstimator class’ instance
+points to one of possible violation types.</p>
+<p>For now the only possible “violation” is a number of “unnecessary” line breaks (</p>
+</div></blockquote>
+<p>)</p>
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.parsed_text_corrector.ParsedTextCorrector.correct_if_corrupted">
+<code class="sig-name descname">correct_if_corrupted</code><span class="sig-paren">(</span><em class="sig-param">text: str</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_corrector.ParsedTextCorrector.correct_if_corrupted" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Checks the text and correct if corrupted.
+Let’s assume the text is:</p>
+<blockquote>
+<div><p>1.1 Etymology</p>
+<p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical
+Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at</p>
+<p>Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a
+Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered</p>
+<p>the undoubtable source.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">param text</dt>
+<dd class="field-odd"><p>a text containing a number of</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl>
+<dt>sequences, see above</dt><dd><dl class="field-list">
+<dt class="field-odd">return</dt>
+<dd class="field-odd"><p>the same text without 2 double line breaks:
+1.1 Etymology</p>
+<p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical
+Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at
+Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a
+Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered
+the undoubtable source.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.parsed_text_corrector.ParsedTextCorrector.correct_line_breaks">
+<code class="sig-name descname">correct_line_breaks</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">estimator: lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator = None</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_corrector.ParsedTextCorrector.correct_line_breaks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.parsed_text_corrector.ParsedTextCorrector.normalize_line_ending">
+<code class="sig-name descname">normalize_line_ending</code><span class="sig-paren">(</span><em class="sig-param">line: lexnlp.utils.lines_processing.line_processor.LineOrPhrase</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_corrector.ParsedTextCorrector.normalize_line_ending" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.utils.lines_processing.parsed_text_quality_estimator">
+<span id="lexnlp-utils-lines-processing-parsed-text-quality-estimator-module"></span><h2>lexnlp.utils.lines_processing.parsed_text_quality_estimator module<a class="headerlink" href="#module-lexnlp.utils.lines_processing.parsed_text_quality_estimator" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.LineType">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.utils.lines_processing.parsed_text_quality_estimator.</code><code class="sig-name descname">LineType</code><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.LineType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.LineType.header">
+<code class="sig-name descname">header</code><em class="property"> = 2</em><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.LineType.header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.LineType.paragraph_start">
+<code class="sig-name descname">paragraph_start</code><em class="property"> = 3</em><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.LineType.paragraph_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.LineType.regular">
+<code class="sig-name descname">regular</code><em class="property"> = 1</em><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.LineType.regular" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimate">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.utils.lines_processing.parsed_text_quality_estimator.</code><code class="sig-name descname">ParsedTextQualityEstimate</code><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<blockquote>
+<div><p>A complex estimate for a text fragment
+- corrupted_prob: the probability of the text being “corrupted”.</p>
+<blockquote>
+<div><p>Currently equals to extra_line_breaks_prob.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>extra_line_breaks_prob: the probability (0..100) of the text containing unnecessary
+line breaks (</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>).</dt><dd><ul class="simple">
+<li><p>an average line length withing the text (in characters).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.utils.lines_processing.parsed_text_quality_estimator.</code><code class="sig-name descname">ParsedTextQualityEstimator</code><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Estimates the probability of the text passed being somewhat corrupted</p>
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.check_line_followed_by_unnecessary_break">
+<code class="sig-name descname">check_line_followed_by_unnecessary_break</code><span class="sig-paren">(</span><em class="sig-param">line_index: int</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.check_line_followed_by_unnecessary_break" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.determine_line_type">
+<code class="sig-name descname">determine_line_type</code><span class="sig-paren">(</span><em class="sig-param">line: lexnlp.utils.lines_processing.parsed_text_quality_estimator.TypedLineOrPhrase</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.determine_line_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.estimate_extra_line_breaks">
+<code class="sig-name descname">estimate_extra_line_breaks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.estimate_extra_line_breaks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.estimate_line_is_header_prob">
+<code class="sig-name descname">estimate_line_is_header_prob</code><span class="sig-paren">(</span><em class="sig-param">line: str</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.estimate_line_is_header_prob" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.estimate_line_is_paragraph_start_prob">
+<code class="sig-name descname">estimate_line_is_paragraph_start_prob</code><span class="sig-paren">(</span><em class="sig-param">line: str</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.estimate_line_is_paragraph_start_prob" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.estimate_text">
+<code class="sig-name descname">estimate_text</code><span class="sig-paren">(</span><em class="sig-param">text: str</em><span class="sig-paren">)</span> &#x2192; lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimate<a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.estimate_text" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><dl>
+<dt>Let’s assume the text is:</dt><dd><p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical
+Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at</p>
+<p>Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a
+Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered</p>
+<p>the undoubtable source.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param text</dt>
+<dd class="field-odd"><p>a text containing a number of</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="simple">
+<dt>sequences, see above</dt><dd><dl class="field-list simple">
+<dt class="field-odd">return</dt>
+<dd class="field-odd"><p>ParsedTextQualityEstimate: {‘avg_line_length’: 103, ‘extra_line_breaks_prob’: 66, ‘corrupted_prob’: 66}</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.minimal_paragraph_line_length">
+<code class="sig-name descname">minimal_paragraph_line_length</code><em class="property"> = 250</em><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.minimal_paragraph_line_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.reg_numered_header">
+<code class="sig-name descname">reg_numered_header</code><em class="property"> = re.compile('(^[\\s]*\\(?[a-zA-Z]\\)?\\s)|(^[\\s]*[0-9\\.]+[\\)]?\\s)')</em><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.reg_numered_header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.reg_paragraph_start">
+<code class="sig-name descname">reg_paragraph_start</code><em class="property"> = re.compile('(^\\s{2})|(^\\t)')</em><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.reg_paragraph_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.sentence_break_chars">
+<code class="sig-name descname">sentence_break_chars</code><em class="property"> = {'!', ',', '.', ';', '?'}</em><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.sentence_break_chars" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.split_text_on_lines">
+<code class="sig-name descname">split_text_on_lines</code><span class="sig-paren">(</span><em class="sig-param">text: str</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.ParsedTextQualityEstimator.split_text_on_lines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.TypedLineOrPhrase">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.utils.lines_processing.parsed_text_quality_estimator.</code><code class="sig-name descname">TypedLineOrPhrase</code><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.TypedLineOrPhrase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.utils.lines_processing.line_processor.LineOrPhrase" title="lexnlp.utils.lines_processing.line_processor.LineOrPhrase"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.utils.lines_processing.line_processor.LineOrPhrase</span></code></a></p>
+<p>Extends the LineOrPhrase class (text - ending - position)
+Adds LineType attribute specifying the line’s “role” within the text</p>
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.parsed_text_quality_estimator.TypedLineOrPhrase.wrap_line">
+<em class="property">static </em><code class="sig-name descname">wrap_line</code><span class="sig-paren">(</span><em class="sig-param">l: lexnlp.utils.lines_processing.line_processor.LineOrPhrase</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.lines_processing.parsed_text_quality_estimator.TypedLineOrPhrase.wrap_line" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.utils.lines_processing.phrase_finder">
+<span id="lexnlp-utils-lines-processing-phrase-finder-module"></span><h2>lexnlp.utils.lines_processing.phrase_finder module<a class="headerlink" href="#module-lexnlp.utils.lines_processing.phrase_finder" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.utils.lines_processing.phrase_finder.PhraseFinder">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.utils.lines_processing.phrase_finder.</code><code class="sig-name descname">PhraseFinder</code><span class="sig-paren">(</span><em class="sig-param">phrase_set: List[str], extra_format_function=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.lines_processing.phrase_finder.PhraseFinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The class contains a collection of short string (usually 1 or 2 or 3 words)
+PhraseFinder searches for these strings (phrases) in the text given, either
+ignoring or regarding the case</p>
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.phrase_finder.PhraseFinder.find_word">
+<code class="sig-name descname">find_word</code><span class="sig-paren">(</span><em class="sig-param">phrase: str</em>, <em class="sig-param">ignore_case: bool = True</em><span class="sig-paren">)</span> &#x2192; List[Tuple[str, int, int]]<a class="headerlink" href="#lexnlp.utils.lines_processing.phrase_finder.PhraseFinder.find_word" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phrase</strong> – “Tis better using France than trusting France: let us be back’d with God and with the seas”</p></li>
+<li><p><strong>ignore_case</strong> – True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[ (‘better’, 4, 9), (‘ let us ‘, 46, 52) ]</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>PhraseFinder instance had been initialized like</dt><dd><p>PhraseFinder([‘ let us ‘, ‘better’, ‘the sea’])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.lines_processing.phrase_finder.PhraseFinder.word_to_regex">
+<code class="sig-name descname">word_to_regex</code><span class="sig-paren">(</span><em class="sig-param">word: str</em>, <em class="sig-param">ignore_case: bool</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#lexnlp.utils.lines_processing.phrase_finder.PhraseFinder.word_to_regex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.utils.lines_processing">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lexnlp.utils.lines_processing" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">LexNLP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About LexNLP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lexnlp.html">LexNLP package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2020, ContraxSuite, LLC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/lexnlp.utils.lines_processing.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

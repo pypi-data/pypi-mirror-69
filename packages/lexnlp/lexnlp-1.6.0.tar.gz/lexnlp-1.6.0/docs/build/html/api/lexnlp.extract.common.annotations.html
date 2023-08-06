@@ -1,0 +1,859 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>lexnlp.extract.common.annotations package &#8212; LexNLP 1.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="lexnlp-extract-common-annotations-package">
+<h1>lexnlp.extract.common.annotations package<a class="headerlink" href="#lexnlp-extract-common-annotations-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.act_annotation">
+<span id="lexnlp-extract-common-annotations-act-annotation-module"></span><h2>lexnlp.extract.common.annotations.act_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.act_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.act_annotation.ActAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.act_annotation.</code><code class="sig-name descname">ActAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', act_name: str = '', section: str = '', year: int = None, ambiguous: bool = False, text: str = ''</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.act_annotation.ActAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.act_annotation.ActAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.act_annotation.ActAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.act_annotation.ActAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.act_annotation.ActAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.act_annotation.ActAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'act'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.act_annotation.ActAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of ActAnnotation like
+cp = ActAnnotation(name=’name’, coords=(0, 100), text=’text text’)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.act_annotation.ActAnnotation.to_dictionary_legacy">
+<code class="sig-name descname">to_dictionary_legacy</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.act_annotation.ActAnnotation.to_dictionary_legacy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.amount_annotation">
+<span id="lexnlp-extract-common-annotations-amount-annotation-module"></span><h2>lexnlp.extract.common.annotations.amount_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.amount_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.amount_annotation.AmountAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.amount_annotation.</code><code class="sig-name descname">AmountAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', value: float = 0, text: str = ''</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.amount_annotation.AmountAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.amount_annotation.AmountAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.amount_annotation.AmountAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.amount_annotation.AmountAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.amount_annotation.AmountAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.amount_annotation.AmountAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'amount'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.amount_annotation.AmountAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of AmountAnnotation like
+cp = AmountAnnotation(name=’name’, coords=(0, 100), text=’text text’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.citation_annotation">
+<span id="lexnlp-extract-common-annotations-citation-annotation-module"></span><h2>lexnlp.extract.common.annotations.citation_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.citation_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.citation_annotation.CitationAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.citation_annotation.</code><code class="sig-name descname">CitationAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', text: str = '', volume: int = None, volume_str: str = None, year: int = None, reporter: str = None, reporter_full_name: str = None, page: int = None, page_range: str = None, court: str = None, source: str = None, article: int = None, paragraph: str = None, subparagraph: str = None, letter: str = None, sentence: int = None, date: str = None, part: str = None, year_str: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.citation_annotation.CitationAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.citation_annotation.CitationAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.citation_annotation.CitationAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.citation_annotation.CitationAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.citation_annotation.CitationAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.citation_annotation.CitationAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'citation'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.citation_annotation.CitationAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of CitationAnnotation like
+cp = CitationAnnotation(name=’name’, coords=(0, 100), text=’text text’)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.citation_annotation.CitationAnnotation.to_dictionary_legacy">
+<code class="sig-name descname">to_dictionary_legacy</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Dict[str, Any]<a class="headerlink" href="#lexnlp.extract.common.annotations.citation_annotation.CitationAnnotation.to_dictionary_legacy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.company_annotation">
+<span id="lexnlp-extract-common-annotations-company-annotation-module"></span><h2>lexnlp.extract.common.annotations.company_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.company_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.company_annotation.CompanyAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.company_annotation.</code><code class="sig-name descname">CompanyAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', name: Optional[str] = None, name_abbr: Optional[str] = None, company_type_full: Optional[str] = None, company_type_abbr: Optional[str] = None, company_type_label: Optional[str] = None, description: Optional[str] = None, text: Optional[str] = None, counter: int = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.company_annotation.CompanyAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.company_annotation.CompanyAnnotation.company_type">
+<em class="property">property </em><code class="sig-name descname">company_type</code><a class="headerlink" href="#lexnlp.extract.common.annotations.company_annotation.CompanyAnnotation.company_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.company_annotation.CompanyAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.company_annotation.CompanyAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.company_annotation.CompanyAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.company_annotation.CompanyAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.company_annotation.CompanyAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'company'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.company_annotation.CompanyAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of CompanyAnnotation like
+cp = CompanyAnnotation(name=’name’, coords=(0, 100), text=’text text’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.condition_annotation">
+<span id="lexnlp-extract-common-annotations-condition-annotation-module"></span><h2>lexnlp.extract.common.annotations.condition_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.condition_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.condition_annotation.ConditionAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.condition_annotation.</code><code class="sig-name descname">ConditionAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', text: str = None, condition: str = None, pre: str = None, post: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.condition_annotation.ConditionAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.condition_annotation.ConditionAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.condition_annotation.ConditionAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.condition_annotation.ConditionAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.condition_annotation.ConditionAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.condition_annotation.ConditionAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'condition'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.condition_annotation.ConditionAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of ConditionAnnotation like
+cp = ConditionAnnotation(name=’name’, coords=(0, 100), text=’text text’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.constraint_annotation">
+<span id="lexnlp-extract-common-annotations-constraint-annotation-module"></span><h2>lexnlp.extract.common.annotations.constraint_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.constraint_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.constraint_annotation.ConstraintAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.constraint_annotation.</code><code class="sig-name descname">ConstraintAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', constraint: str = None, pre: str = None, post: str = None, text: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.constraint_annotation.ConstraintAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.constraint_annotation.ConstraintAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.constraint_annotation.ConstraintAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.constraint_annotation.ConstraintAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.constraint_annotation.ConstraintAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.constraint_annotation.ConstraintAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'constraint'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.constraint_annotation.ConstraintAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of ConstraintAnnotation like
+cp = ConstraintAnnotation(name=’name’, coords=(0, 100), text=’text text’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.copyright_annotation">
+<span id="lexnlp-extract-common-annotations-copyright-annotation-module"></span><h2>lexnlp.extract.common.annotations.copyright_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.copyright_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.copyright_annotation.CopyrightAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.copyright_annotation.</code><code class="sig-name descname">CopyrightAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', name: str = '', sign: str = '', company: str = '', text: str = '', date: str = '', year_start: Union[int, str] = '', year_end: Union[str, int] = ''</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.copyright_annotation.CopyrightAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.copyright_annotation.CopyrightAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.copyright_annotation.CopyrightAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.copyright_annotation.CopyrightAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.copyright_annotation.CopyrightAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.copyright_annotation.CopyrightAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'copyright'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.copyright_annotation.CopyrightAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of CopyrightAnnotation like
+cp = CopyrightAnnotation(name=’name’, coords=(0, 100), text=’text text’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.court_annotation">
+<span id="lexnlp-extract-common-annotations-court-annotation-module"></span><h2>lexnlp.extract.common.annotations.court_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.court_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.court_annotation.CourtAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.court_annotation.</code><code class="sig-name descname">CourtAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', name: str = '', text: str = '', jurisdiction: str = '', court_type: str = ''</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.court_annotation.CourtAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.court_annotation.CourtAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.court_annotation.CourtAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.court_annotation.CourtAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.court_annotation.CourtAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.court_annotation.CourtAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'court'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.court_annotation.CourtAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of CourtAnnotation like
+cp = CourtAnnotation(name=’name’, coords=(0, 100), text=’text text’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.court_citation_annotation">
+<span id="lexnlp-extract-common-annotations-court-citation-annotation-module"></span><h2>lexnlp.extract.common.annotations.court_citation_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.court_citation_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.court_citation_annotation.CourtCitationAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.court_citation_annotation.</code><code class="sig-name descname">CourtCitationAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', name: str = '', short_name: str = None, text: str = None, translated_name: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.court_citation_annotation.CourtCitationAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.court_citation_annotation.CourtCitationAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.court_citation_annotation.CourtCitationAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.court_citation_annotation.CourtCitationAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.court_citation_annotation.CourtCitationAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.court_citation_annotation.CourtCitationAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'court citation'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.court_citation_annotation.CourtCitationAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of CourtCitationAnnotation like
+cp = CourtCitationAnnotation(name=’name’, coords=(0, 100), text=’text text’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.cusip_annotation">
+<span id="lexnlp-extract-common-annotations-cusip-annotation-module"></span><h2>lexnlp.extract.common.annotations.cusip_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.cusip_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.cusip_annotation.CusipAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.cusip_annotation.</code><code class="sig-name descname">CusipAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', name: str = '', text: str = None, code: str = None, internal: bool = None, ppn: str = None, tba: dict = None, checksum: str = None, issue_id: str = None, issuer_id: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.cusip_annotation.CusipAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.cusip_annotation.CusipAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.cusip_annotation.CusipAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.cusip_annotation.CusipAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.cusip_annotation.CusipAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.cusip_annotation.CusipAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'cusip'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.cusip_annotation.CusipAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of CusipAnnotation like
+cp = CusipAnnotation(coords=(0, 100))</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.cusip_annotation.CusipAnnotation.to_dictionary_legacy">
+<code class="sig-name descname">to_dictionary_legacy</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Dict[str, Any]<a class="headerlink" href="#lexnlp.extract.common.annotations.cusip_annotation.CusipAnnotation.to_dictionary_legacy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.date_annotation">
+<span id="lexnlp-extract-common-annotations-date-annotation-module"></span><h2>lexnlp.extract.common.annotations.date_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.date_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.date_annotation.DateAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.date_annotation.</code><code class="sig-name descname">DateAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', text: str = None, date: datetime.date = None, score: float = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.date_annotation.DateAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.date_annotation.DateAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.date_annotation.DateAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.date_annotation.DateAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.date_annotation.DateAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.date_annotation.DateAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'date'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.date_annotation.DateAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of ActAnnotation like
+cp = ActAnnotation(name=’name’, coords=(0, 100), text=’text text’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.definition_annotation">
+<span id="lexnlp-extract-common-annotations-definition-annotation-module"></span><h2>lexnlp.extract.common.annotations.definition_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.definition_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.definition_annotation.DefinitionAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.definition_annotation.</code><code class="sig-name descname">DefinitionAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', name: str = '', text: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.definition_annotation.DefinitionAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.definition_annotation.DefinitionAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.definition_annotation.DefinitionAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.definition_annotation.DefinitionAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.definition_annotation.DefinitionAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.definition_annotation.DefinitionAnnotation.get_extracted_text">
+<code class="sig-name descname">get_extracted_text</code><span class="sig-paren">(</span><em class="sig-param">full_text: str</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#lexnlp.extract.common.annotations.definition_annotation.DefinitionAnnotation.get_extracted_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.definition_annotation.DefinitionAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'definition'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.definition_annotation.DefinitionAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of DefinitionAnnotation like
+cp = DefinitionAnnotation(name=’name’, coords=(0, 100), text=’text text’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.distance_annotation">
+<span id="lexnlp-extract-common-annotations-distance-annotation-module"></span><h2>lexnlp.extract.common.annotations.distance_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.distance_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.distance_annotation.DistanceAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.distance_annotation.</code><code class="sig-name descname">DistanceAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', text: str = None, amount: float = None, distance_type: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.distance_annotation.DistanceAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.distance_annotation.DistanceAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.distance_annotation.DistanceAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.distance_annotation.DistanceAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.distance_annotation.DistanceAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.distance_annotation.DistanceAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'distance'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.distance_annotation.DistanceAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of DistanceAnnotation like
+cp = DistanceAnnotation(coords=(0, 100), value=‘101 km’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.duration_annotation">
+<span id="lexnlp-extract-common-annotations-duration-annotation-module"></span><h2>lexnlp.extract.common.annotations.duration_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.duration_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.duration_annotation.DurationAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.duration_annotation.</code><code class="sig-name descname">DurationAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', text: str = None, amount: float = None, prefix: str = None, duration_days: float = None, duration_type: str = None, duration_type_en: str = None, is_complex: bool = False</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.duration_annotation.DurationAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.duration_annotation.DurationAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.duration_annotation.DurationAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.duration_annotation.DurationAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.duration_annotation.DurationAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.duration_annotation.DurationAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'duration'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.duration_annotation.DurationAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of DurationAnnotation like
+cp = DurationAnnotation(coords=(0, 100), value=‘101 ms’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.geo_annotation">
+<span id="lexnlp-extract-common-annotations-geo-annotation-module"></span><h2>lexnlp.extract.common.annotations.geo_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.geo_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.geo_annotation.GeoAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.geo_annotation.</code><code class="sig-name descname">GeoAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', text: str = None, name: str = None, alias: str = None, name_en: str = None, source: str = None, entity_category: str = None, iso_3166_2: str = None, iso_3166_3: str = None, year: int = None, entity_id: int = None, entity_priority: int = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.geo_annotation.GeoAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.geo_annotation.GeoAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.geo_annotation.GeoAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.geo_annotation.GeoAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.geo_annotation.GeoAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.geo_annotation.GeoAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'geoentity'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.geo_annotation.GeoAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of GeoAnnotation like
+cp = GeoAnnotation(coords=(0, 100), value=‘101st Maple Street’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.law_annotation">
+<span id="lexnlp-extract-common-annotations-law-annotation-module"></span><h2>lexnlp.extract.common.annotations.law_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.law_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.law_annotation.LawAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.law_annotation.</code><code class="sig-name descname">LawAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = '', name: str = '', text: str = ''</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.law_annotation.LawAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.law_annotation.LawAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.law_annotation.LawAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.law_annotation.LawAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.law_annotation.LawAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.law_annotation.LawAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'law'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.law_annotation.LawAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of LawAnnotation like
+cp = LawAnnotation(name=’name’, coords=(0, 100), text=’text text’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.money_annotation">
+<span id="lexnlp-extract-common-annotations-money-annotation-module"></span><h2>lexnlp.extract.common.annotations.money_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.money_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.money_annotation.MoneyAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.money_annotation.</code><code class="sig-name descname">MoneyAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', text: str = None, amount: float = None, currency: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.money_annotation.MoneyAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.money_annotation.MoneyAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.money_annotation.MoneyAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.money_annotation.MoneyAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.money_annotation.MoneyAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.money_annotation.MoneyAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'money'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.money_annotation.MoneyAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of MoneyAnnotation like
+cp = MoneyAnnotation(coords=(0, 100), value=‘10 000 USD’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.percent_annotation">
+<span id="lexnlp-extract-common-annotations-percent-annotation-module"></span><h2>lexnlp.extract.common.annotations.percent_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.percent_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.percent_annotation.PercentAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.percent_annotation.</code><code class="sig-name descname">PercentAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', text: str = None, amount: float = None, sign: str = None, fraction: float = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.percent_annotation.PercentAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.percent_annotation.PercentAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.percent_annotation.PercentAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.percent_annotation.PercentAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.percent_annotation.PercentAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.percent_annotation.PercentAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'percent'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.percent_annotation.PercentAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of PercentAnnotation like
+cp = PercentAnnotation(coords=(0, 100), value=‘10 000 USD’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.phone_annotation">
+<span id="lexnlp-extract-common-annotations-phone-annotation-module"></span><h2>lexnlp.extract.common.annotations.phone_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.phone_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.phone_annotation.PhoneAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.phone_annotation.</code><code class="sig-name descname">PhoneAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', text: str = None, phone: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.phone_annotation.PhoneAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.phone_annotation.PhoneAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.phone_annotation.PhoneAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.phone_annotation.PhoneAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.phone_annotation.PhoneAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.phone_annotation.PhoneAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'phone'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.phone_annotation.PhoneAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of PhoneAnnotation (Social Secutiry Number) like
+cp = PhoneAnnotation(coords=(0, 100), phone=’+9 915 710 42 24’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.phrase_position_finder">
+<span id="lexnlp-extract-common-annotations-phrase-position-finder-module"></span><h2>lexnlp.extract.common.annotations.phrase_position_finder module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.phrase_position_finder" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.phrase_position_finder.PhrasePositionFinder">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.phrase_position_finder.</code><code class="sig-name descname">PhrasePositionFinder</code><a class="headerlink" href="#lexnlp.extract.common.annotations.phrase_position_finder.PhrasePositionFinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.phrase_position_finder.PhrasePositionFinder.find_phrase_in_source_text">
+<em class="property">static </em><code class="sig-name descname">find_phrase_in_source_text</code><span class="sig-paren">(</span><em class="sig-param">text: str, phrases: List[str], pos_start: int = 0, pos_end: int = 0</em><span class="sig-paren">)</span> &#x2192; List[Tuple[str, int, int]]<a class="headerlink" href="#lexnlp.extract.common.annotations.phrase_position_finder.PhrasePositionFinder.find_phrase_in_source_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Though phrase is taken from text, it could be changed - e.g.,
+extra or removed spaces…</p>
+<p>Returns a list of (phrase, phrase_start) tuples
+:param text: text where to find phrases ([phrases])
+:param phrases: words or phrases to be found inside text
+:param pos_start: where to start (in source text)
+:param pos_end: where to stop searching
+:return: [(‘phrase A’, 10, 18), … ]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.phrase_position_finder.PhrasePositionFinder.reg_space">
+<code class="sig-name descname">reg_space</code><em class="property"> = regex.Regex('\\s+', flags=regex.V0)</em><a class="headerlink" href="#lexnlp.extract.common.annotations.phrase_position_finder.PhrasePositionFinder.reg_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.phrase_position_finder.PhrasePositionFinder.space_symbols">
+<code class="sig-name descname">space_symbols</code><em class="property"> = {'\t', ' '}</em><a class="headerlink" href="#lexnlp.extract.common.annotations.phrase_position_finder.PhrasePositionFinder.space_symbols" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.ratio_annotation">
+<span id="lexnlp-extract-common-annotations-ratio-annotation-module"></span><h2>lexnlp.extract.common.annotations.ratio_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.ratio_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.ratio_annotation.RatioAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.ratio_annotation.</code><code class="sig-name descname">RatioAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', text: str = None, left: float = None, right: float = None, ratio: float = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.ratio_annotation.RatioAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.ratio_annotation.RatioAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.ratio_annotation.RatioAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.ratio_annotation.RatioAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.ratio_annotation.RatioAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.ratio_annotation.RatioAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'ratio'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.ratio_annotation.RatioAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of RatioAnnotation like
+cp = RatioAnnotation(name=’name’, coords=(0, 100), text=’text text’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.regulation_annotation">
+<span id="lexnlp-extract-common-annotations-regulation-annotation-module"></span><h2>lexnlp.extract.common.annotations.regulation_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.regulation_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.regulation_annotation.RegulationAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.regulation_annotation.</code><code class="sig-name descname">RegulationAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', name: str = '', text: str = None, source: str = '', country: str = ''</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.regulation_annotation.RegulationAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.regulation_annotation.RegulationAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.regulation_annotation.RegulationAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.regulation_annotation.RegulationAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.regulation_annotation.RegulationAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.regulation_annotation.RegulationAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'regulation'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.regulation_annotation.RegulationAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of RegulationAnnotation like
+cp = RegulationAnnotation(name=’name’, coords=(0, 100), text=’text text’)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.regulation_annotation.RegulationAnnotation.to_dictionary_legacy">
+<code class="sig-name descname">to_dictionary_legacy</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.regulation_annotation.RegulationAnnotation.to_dictionary_legacy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.ssn_annotation">
+<span id="lexnlp-extract-common-annotations-ssn-annotation-module"></span><h2>lexnlp.extract.common.annotations.ssn_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.ssn_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.ssn_annotation.SsnAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.ssn_annotation.</code><code class="sig-name descname">SsnAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', text: str = None, number: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.ssn_annotation.SsnAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.ssn_annotation.SsnAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.ssn_annotation.SsnAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.ssn_annotation.SsnAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.ssn_annotation.SsnAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.ssn_annotation.SsnAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'ssn'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.ssn_annotation.SsnAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of SsnAnnotation (Social Secutiry Number) like
+cp = SsnAnnotation(coords=(0, 100), value=‘1234 4321 1234’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.text_annotation">
+<span id="lexnlp-extract-common-annotations-text-annotation-module"></span><h2>lexnlp.extract.common.annotations.text_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.text_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.text_annotation.TextAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.text_annotation.</code><code class="sig-name descname">TextAnnotation</code><span class="sig-paren">(</span><em class="sig-param">name: str, locale: str, coords: Tuple[int, int], text: str = ''</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>It can be a CopyrightAnnotation, CourtAnnotation and so on…</p>
+<dl>
+<dt>Example:</dt><dd><p>cp = CopyrightAnnotation(name=’Siemens’, coords=(0, 100), text=’text text’)
+cp.company = ‘Siemens’
+cp.year_start = 1996
+s1 = cp.get_cite()  # ‘/copyright/Siemens/1996’</p>
+<p>cp.year_end = 2019
+cp.locale = ‘en’
+s2 = cp.get_cite()  # ‘/en/copyright/Siemens/1996/2019’</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.text_annotation.TextAnnotation.get_cite">
+<code class="sig-name descname">get_cite</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation.get_cite" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.text_annotation.TextAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.text_annotation.TextAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.text_annotation.TextAnnotation.get_extracted_text">
+<code class="sig-name descname">get_extracted_text</code><span class="sig-paren">(</span><em class="sig-param">full_text: str</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation.get_extracted_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.text_annotation.TextAnnotation.get_int_value">
+<em class="property">static </em><code class="sig-name descname">get_int_value</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">def_value=None</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation.get_int_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.text_annotation.TextAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = ''</em><a class="headerlink" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.text_annotation.TextAnnotation.safe_cast">
+<em class="property">static </em><code class="sig-name descname">safe_cast</code><span class="sig-paren">(</span><em class="sig-param">val</em>, <em class="sig-param">to_type</em>, <em class="sig-param">default=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation.safe_cast" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.text_annotation.TextAnnotation.to_dictionary">
+<code class="sig-name descname">to_dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation.to_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.trademark_annotation">
+<span id="lexnlp-extract-common-annotations-trademark-annotation-module"></span><h2>lexnlp.extract.common.annotations.trademark_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.trademark_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.trademark_annotation.TrademarkAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.trademark_annotation.</code><code class="sig-name descname">TrademarkAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', text: str = None, trademark: str = ''</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.trademark_annotation.TrademarkAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.trademark_annotation.TrademarkAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.trademark_annotation.TrademarkAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.trademark_annotation.TrademarkAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.trademark_annotation.TrademarkAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.trademark_annotation.TrademarkAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'trademark'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.trademark_annotation.TrademarkAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of TrademarkAnnotation like
+cp = TrademarkAnnotation(name=’name’, coords=(0, 100), trademark=’CZ’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations.url_annotation">
+<span id="lexnlp-extract-common-annotations-url-annotation-module"></span><h2>lexnlp.extract.common.annotations.url_annotation module<a class="headerlink" href="#module-lexnlp.extract.common.annotations.url_annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.common.annotations.url_annotation.UrlAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.common.annotations.url_annotation.</code><code class="sig-name descname">UrlAnnotation</code><span class="sig-paren">(</span><em class="sig-param">coords: Tuple[int, int], locale: str = 'en', text: str = None, url: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.common.annotations.url_annotation.UrlAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#lexnlp.extract.common.annotations.text_annotation.TextAnnotation" title="lexnlp.extract.common.annotations.text_annotation.TextAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.common.annotations.text_annotation.TextAnnotation</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.url_annotation.UrlAnnotation.get_cite_value_parts">
+<code class="sig-name descname">get_cite_value_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#lexnlp.extract.common.annotations.url_annotation.UrlAnnotation.get_cite_value_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.common.annotations.url_annotation.UrlAnnotation.get_dictionary_values">
+<code class="sig-name descname">get_dictionary_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#lexnlp.extract.common.annotations.url_annotation.UrlAnnotation.get_dictionary_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lexnlp.extract.common.annotations.url_annotation.UrlAnnotation.record_type">
+<code class="sig-name descname">record_type</code><em class="property"> = 'url'</em><a class="headerlink" href="#lexnlp.extract.common.annotations.url_annotation.UrlAnnotation.record_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an object of UrlAnnotation like
+cp = UrlAnnotation(name=’name’, coords=(0, 100), url=’www.google.com’)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.common.annotations">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lexnlp.extract.common.annotations" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">LexNLP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About LexNLP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lexnlp.html">LexNLP package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2020, ContraxSuite, LLC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/lexnlp.extract.common.annotations.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>lexnlp.nlp.en.segments package &#8212; LexNLP 1.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="lexnlp-nlp-en-segments-package">
+<h1>lexnlp.nlp.en.segments package<a class="headerlink" href="#lexnlp-nlp-en-segments-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-lexnlp.nlp.en.segments.pages">
+<span id="lexnlp-nlp-en-segments-pages-module"></span><h2>lexnlp.nlp.en.segments.pages module<a class="headerlink" href="#module-lexnlp.nlp.en.segments.pages" title="Permalink to this headline">¶</a></h2>
+<p>Page segmentation for English.</p>
+<p>This module implements page segmentation in English using simple
+machine learning classifiers.</p>
+<dl class="simple">
+<dt>Todo:</dt><dd><ul class="simple">
+<li><p>Standardize model (re-)generation</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.pages.build_page_break_features">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.pages.</code><code class="sig-name descname">build_page_break_features</code><span class="sig-paren">(</span><em class="sig-param">lines</em>, <em class="sig-param">line_id</em>, <em class="sig-param">line_window_pre</em>, <em class="sig-param">line_window_post</em>, <em class="sig-param">characters='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!&quot;#$%&amp;\'()*+</em>, <em class="sig-param">-./:;&lt;=&gt;?&#64;[\\]^_`{|}~ \t\n\r\x0b\x0c'</em>, <em class="sig-param">include_doc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.nlp.en.segments.pages.build_page_break_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a feature vector for a given line ID with given parameters.
+:param lines:
+:param line_id:
+:param line_window_pre:
+:param line_window_post:
+:param characters:
+:param include_doc:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.pages.get_pages">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.pages.</code><code class="sig-name descname">get_pages</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">window_pre=3</em>, <em class="sig-param">window_post=3</em>, <em class="sig-param">score_threshold=0.5</em><span class="sig-paren">)</span> &#x2192; Generator<a class="headerlink" href="#lexnlp.nlp.en.segments.pages.get_pages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get pages from text.
+:param text:
+:param window_pre:
+:param window_post:
+:param score_threshold:
+:return:</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.nlp.en.segments.paragraphs">
+<span id="lexnlp-nlp-en-segments-paragraphs-module"></span><h2>lexnlp.nlp.en.segments.paragraphs module<a class="headerlink" href="#module-lexnlp.nlp.en.segments.paragraphs" title="Permalink to this headline">¶</a></h2>
+<p>Paragraph segmentation for English.</p>
+<p>This module implements paragraph segmentation in English using simple
+machine learning classifiers.</p>
+<dl class="simple">
+<dt>Todo:</dt><dd><ul class="simple">
+<li><p>Standardize model (re-)generation</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.paragraphs.build_paragraph_break_features">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.paragraphs.</code><code class="sig-name descname">build_paragraph_break_features</code><span class="sig-paren">(</span><em class="sig-param">lines</em>, <em class="sig-param">line_id</em>, <em class="sig-param">line_window_pre</em>, <em class="sig-param">line_window_post</em>, <em class="sig-param">characters='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!&quot;#$%&amp;\'()*+</em>, <em class="sig-param">-./:;&lt;=&gt;?&#64;[\\]^_`{|}~ \t\n\r\x0b\x0c'</em>, <em class="sig-param">include_doc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.nlp.en.segments.paragraphs.build_paragraph_break_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a feature vector for a given line ID with given parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lines</strong> – </p></li>
+<li><p><strong>line_id</strong> – </p></li>
+<li><p><strong>line_window_pre</strong> – </p></li>
+<li><p><strong>line_window_post</strong> – </p></li>
+<li><p><strong>characters</strong> – </p></li>
+<li><p><strong>include_doc</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.paragraphs.get_paragraphs">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.paragraphs.</code><code class="sig-name descname">get_paragraphs</code><span class="sig-paren">(</span><em class="sig-param">text: str</em>, <em class="sig-param">window_pre=3</em>, <em class="sig-param">window_post=3</em>, <em class="sig-param">score_threshold=0.5</em>, <em class="sig-param">return_spans: bool = False</em><span class="sig-paren">)</span> &#x2192; Generator<a class="headerlink" href="#lexnlp.nlp.en.segments.paragraphs.get_paragraphs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get paragraphs.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.paragraphs.splitlines_with_spans">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.paragraphs.</code><code class="sig-name descname">splitlines_with_spans</code><span class="sig-paren">(</span><em class="sig-param">text: str</em><span class="sig-paren">)</span> &#x2192; Tuple[List[str], List[Tuple[int, int]]]<a class="headerlink" href="#lexnlp.nlp.en.segments.paragraphs.splitlines_with_spans" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.nlp.en.segments.sections">
+<span id="lexnlp-nlp-en-segments-sections-module"></span><h2>lexnlp.nlp.en.segments.sections module<a class="headerlink" href="#module-lexnlp.nlp.en.segments.sections" title="Permalink to this headline">¶</a></h2>
+<p>Section segmentation for English.</p>
+<p>This module implements section segmentation in English using simple
+machine learning classifiers.</p>
+<dl class="simple">
+<dt>Todo:</dt><dd><ul class="simple">
+<li><p>Standardize model (re-)generation</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="class">
+<dt id="lexnlp.nlp.en.segments.sections.SectionLevelParser">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.nlp.en.segments.sections.</code><code class="sig-name descname">SectionLevelParser</code><span class="sig-paren">(</span><em class="sig-param">sections_hierarchy=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.nlp.en.segments.sections.SectionLevelParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="lexnlp.nlp.en.segments.sections.SectionLevelParser.DEFAULT_SECTION_HIERARCHY">
+<code class="sig-name descname">DEFAULT_SECTION_HIERARCHY</code><em class="property"> = ['(?i:(appendix|exhibit|schedule|part|title)\\s+\\S+)', '(?i:subtitle\\s+\\S+)', '(?i:section\\s+\\S+)', '(?i:subsection\\s+\\S+)', '(?i:article\\s+\\S+)', '\\p{Lu}+(?:-\\d+(?:\\.\\d+)?)?', '[\\d\\.]+', '\\p{L}+(?:-\\d+(?:\\.\\d+)?)?', '\\([\\p{L}\\d]+\\)']</em><a class="headerlink" href="#lexnlp.nlp.en.segments.sections.SectionLevelParser.DEFAULT_SECTION_HIERARCHY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.nlp.en.segments.sections.SectionLevelParser.current_sections_hierarchy">
+<em class="property">property </em><code class="sig-name descname">current_sections_hierarchy</code><a class="headerlink" href="#lexnlp.nlp.en.segments.sections.SectionLevelParser.current_sections_hierarchy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.nlp.en.segments.sections.SectionLevelParser.detect">
+<code class="sig-name descname">detect</code><span class="sig-paren">(</span><em class="sig-param">title</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.nlp.en.segments.sections.SectionLevelParser.detect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.nlp.en.segments.sections.SectionLevelParser.get_from_default">
+<code class="sig-name descname">get_from_default</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.nlp.en.segments.sections.SectionLevelParser.get_from_default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.nlp.en.segments.sections.SectionLevelParser.get_from_detected">
+<code class="sig-name descname">get_from_detected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.nlp.en.segments.sections.SectionLevelParser.get_from_detected" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.sections.build_section_break_features">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.sections.</code><code class="sig-name descname">build_section_break_features</code><span class="sig-paren">(</span><em class="sig-param">lines</em>, <em class="sig-param">line_id</em>, <em class="sig-param">line_window_pre</em>, <em class="sig-param">line_window_post</em>, <em class="sig-param">characters='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!&quot;#$%&amp;\'()*+</em>, <em class="sig-param">-./:;&lt;=&gt;?&#64;[\\]^_`{|}~ \t\n\r\x0b\x0c'</em>, <em class="sig-param">include_doc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.nlp.en.segments.sections.build_section_break_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a feature vector for a given line ID with given parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lines</strong> – </p></li>
+<li><p><strong>line_id</strong> – </p></li>
+<li><p><strong>line_window_pre</strong> – </p></li>
+<li><p><strong>line_window_post</strong> – </p></li>
+<li><p><strong>characters</strong> – </p></li>
+<li><p><strong>include_doc</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.nlp.en.segments.sentences">
+<span id="lexnlp-nlp-en-segments-sentences-module"></span><h2>lexnlp.nlp.en.segments.sentences module<a class="headerlink" href="#module-lexnlp.nlp.en.segments.sentences" title="Permalink to this headline">¶</a></h2>
+<p>Sentence segmentation for English.</p>
+<p>This module implements sentence segmentation in English using simple
+machine learning classifiers.</p>
+<dl class="simple">
+<dt>Todo:</dt><dd><ul class="simple">
+<li><p>Standardize model (re-)generation</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.sentences.build_sentence_model">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.sentences.</code><code class="sig-name descname">build_sentence_model</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">extra_abbrevs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.nlp.en.segments.sentences.build_sentence_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a sentence model from text with optional
+extra abbreviations to include.
+:param text:
+:param extra_abbrevs:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.sentences.get_sentence_list">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.sentences.</code><code class="sig-name descname">get_sentence_list</code><span class="sig-paren">(</span><em class="sig-param">text</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.nlp.en.segments.sentences.get_sentence_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get sentences from text.
+:param text:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.sentences.get_sentence_span">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.sentences.</code><code class="sig-name descname">get_sentence_span</code><span class="sig-paren">(</span><em class="sig-param">text: str</em><span class="sig-paren">)</span> &#x2192; Generator[[Tuple[int, int, str], Any], Any]<a class="headerlink" href="#lexnlp.nlp.en.segments.sentences.get_sentence_span" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a text, returns a list of the (start, end) spans of sentences
+in the text.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.sentences.get_sentence_span_list">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.sentences.</code><code class="sig-name descname">get_sentence_span_list</code><span class="sig-paren">(</span><em class="sig-param">text</em><span class="sig-paren">)</span> &#x2192; List[Tuple[int, int, str]]<a class="headerlink" href="#lexnlp.nlp.en.segments.sentences.get_sentence_span_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a text, generates (start, end) spans of sentences
+in the text.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.sentences.normalize_text">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.sentences.</code><code class="sig-name descname">normalize_text</code><span class="sig-paren">(</span><em class="sig-param">text: str</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#lexnlp.nlp.en.segments.sentences.normalize_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple text pre-processing: replacing “not-quite unicode” symbols
+by their common equivalents for better parsing sentences with
+get_sentence_span function.
+:param text: “U.S. Person” means any Person
+:return: “U.S. Person” means any Person</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.sentences.post_process_sentence">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.sentences.</code><code class="sig-name descname">post_process_sentence</code><span class="sig-paren">(</span><em class="sig-param">text: str, sent_span: Tuple[int, int]</em><span class="sig-paren">)</span> &#x2192; Generator[[Tuple[int, int], Any], Any]<a class="headerlink" href="#lexnlp.nlp.en.segments.sentences.post_process_sentence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post-process sentence span detected by PunktSentenceTokenizer by additionally extracting
+titles, table of contents entries and other short strings stayed separately between empty lines
+into separate sentences.
+:param text:
+:param sent_span:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.sentences.pre_process_document">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.sentences.</code><code class="sig-name descname">pre_process_document</code><span class="sig-paren">(</span><em class="sig-param">text: str</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#lexnlp.nlp.en.segments.sentences.pre_process_document" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-process text of the specified document before splitting it to the sentences.
+Removes obsolete formatting, page-splitting markers, page numbers e.t.c.
+:param text:
+:return:</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.nlp.en.segments.titles">
+<span id="lexnlp-nlp-en-segments-titles-module"></span><h2>lexnlp.nlp.en.segments.titles module<a class="headerlink" href="#module-lexnlp.nlp.en.segments.titles" title="Permalink to this headline">¶</a></h2>
+<p>Title segmentation for English.</p>
+<p>This module implements title segmentation/location in English using simple
+machine learning classifiers.</p>
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.titles.build_document_title_features">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.titles.</code><code class="sig-name descname">build_document_title_features</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">window_pre=3</em>, <em class="sig-param">window_post=3</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.nlp.en.segments.titles.build_document_title_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a document title given file text.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.titles.build_model">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.titles.</code><code class="sig-name descname">build_model</code><span class="sig-paren">(</span><em class="sig-param">training_file_path</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.nlp.en.segments.titles.build_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a title extraction model given a training file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>training_file_path</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.titles.build_title_features">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.titles.</code><code class="sig-name descname">build_title_features</code><span class="sig-paren">(</span><em class="sig-param">lines</em>, <em class="sig-param">line_id</em>, <em class="sig-param">line_window_pre</em>, <em class="sig-param">line_window_post</em>, <em class="sig-param">characters='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!&quot;#$%&amp;\'()*+</em>, <em class="sig-param">-./:;&lt;=&gt;?&#64;[\\]^_`{|}~ \t\n\r\x0b\x0c'</em>, <em class="sig-param">include_doc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.nlp.en.segments.titles.build_title_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a feature vector for a given line ID with given parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lines</strong> – </p></li>
+<li><p><strong>line_id</strong> – </p></li>
+<li><p><strong>line_window_pre</strong> – </p></li>
+<li><p><strong>line_window_post</strong> – </p></li>
+<li><p><strong>characters</strong> – </p></li>
+<li><p><strong>include_doc</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.nlp.en.segments.utils">
+<span id="lexnlp-nlp-en-segments-utils-module"></span><h2>lexnlp.nlp.en.segments.utils module<a class="headerlink" href="#module-lexnlp.nlp.en.segments.utils" title="Permalink to this headline">¶</a></h2>
+<p>Utility methods for segmentation classifiers</p>
+<p>This module implements utility methods for segmentation, such as shared methods to generate
+document character distributions.</p>
+<p>Todo:</p>
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.utils.build_document_distribution">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.utils.</code><code class="sig-name descname">build_document_distribution</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">characters='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!&quot;#$%&amp;\'()*+</em>, <em class="sig-param">-./:;&lt;=&gt;?&#64;[\\]^_`{|}~ \t\n\r\x0b\x0c'</em>, <em class="sig-param">norm=True</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.nlp.en.segments.utils.build_document_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build document character distribution based on fixed character, optionally norming.
+:param text:
+:param characters:
+:param norm:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.nlp.en.segments.utils.build_document_line_distribution">
+<code class="sig-prename descclassname">lexnlp.nlp.en.segments.utils.</code><code class="sig-name descname">build_document_line_distribution</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">characters='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!&quot;#$%&amp;\'()*+</em>, <em class="sig-param">-./:;&lt;=&gt;?&#64;[\\]^_`{|}~ \t\n\r\x0b\x0c'</em>, <em class="sig-param">norm=True</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.nlp.en.segments.utils.build_document_line_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build document and line character distribution for section segmenting based on fixed character, optionally
+normalizing vector.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.nlp.en.segments">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lexnlp.nlp.en.segments" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">LexNLP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About LexNLP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lexnlp.html">LexNLP package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2020, ContraxSuite, LLC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/lexnlp.nlp.en.segments.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

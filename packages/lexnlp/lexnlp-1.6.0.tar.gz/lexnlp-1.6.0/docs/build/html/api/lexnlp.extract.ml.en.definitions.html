@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>lexnlp.extract.ml.en.definitions package &#8212; LexNLP 1.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="lexnlp-extract-ml-en-definitions-package">
+<h1>lexnlp.extract.ml.en.definitions package<a class="headerlink" href="#lexnlp-extract-ml-en-definitions-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="lexnlp.extract.ml.en.definitions.tests.html">lexnlp.extract.ml.en.definitions.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.ml.en.definitions.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.ml.en.definitions.tests.html#module-lexnlp.extract.ml.en.definitions.tests.test_layered_definition_detector">lexnlp.extract.ml.en.definitions.tests.test_layered_definition_detector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.extract.ml.en.definitions.tests.html#module-lexnlp.extract.ml.en.definitions.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-lexnlp.extract.ml.en.definitions.definition_phrase_detector">
+<span id="lexnlp-extract-ml-en-definitions-definition-phrase-detector-module"></span><h2>lexnlp.extract.ml.en.definitions.definition_phrase_detector module<a class="headerlink" href="#module-lexnlp.extract.ml.en.definitions.definition_phrase_detector" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.ml.en.definitions.definition_phrase_detector.DefinitionPhraseDetector">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.ml.en.definitions.definition_phrase_detector.</code><code class="sig-name descname">DefinitionPhraseDetector</code><a class="headerlink" href="#lexnlp.extract.ml.en.definitions.definition_phrase_detector.DefinitionPhraseDetector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="lexnlp.extract.ml.detector.html#lexnlp.extract.ml.detector.artifact_detector.ArtifactDetector" title="lexnlp.extract.ml.detector.artifact_detector.ArtifactDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.ml.detector.artifact_detector.ArtifactDetector</span></code></a></p>
+<p>Search for the phrase surrounding the term being defined</p>
+<p>Let the prase be &lt;agrees to serve the Company in such capacity during the
+term of employment (the “Employment Period”).</p>
+<p>… model_definition will find &lt;term of employment (the “Employment Period”)&gt;</p>
+<dl class="method">
+<dt id="lexnlp.extract.ml.en.definitions.definition_phrase_detector.DefinitionPhraseDetector.process_sample">
+<code class="sig-name descname">process_sample</code><span class="sig-paren">(</span><em class="sig-param">sample_df: pandas.core.frame.DataFrame</em>, <em class="sig-param">build_target_data: bool = False</em><span class="sig-paren">)</span> &#x2192; Union[numpy.ndarray, Tuple[numpy.ndarray, numpy.ndarray]]<a class="headerlink" href="#lexnlp.extract.ml.en.definitions.definition_phrase_detector.DefinitionPhraseDetector.process_sample" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.ml.en.definitions.definition_phrase_detector.DefinitionPhraseDetector.train_and_save">
+<code class="sig-name descname">train_and_save</code><span class="sig-paren">(</span><em class="sig-param">settings: lexnlp.extract.ml.detector.detecting_settings.DetectingSettings</em>, <em class="sig-param">train_file: str</em>, <em class="sig-param">train_size: int = -1</em>, <em class="sig-param">save_path: str = ''</em>, <em class="sig-param">compress: bool = False</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#lexnlp.extract.ml.en.definitions.definition_phrase_detector.DefinitionPhraseDetector.train_and_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a percent identification model using tokens.
+:param settings: Model settings
+:param train_file: File to load training samples from
+:param train_size: Number of records to use
+:param save_path: Output (pickle model) file path
+:param compress: Save compressed file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.ml.en.definitions.definition_phrase_detector.DefinitionPhraseDetector.train_and_save_on_dataframe">
+<code class="sig-name descname">train_and_save_on_dataframe</code><span class="sig-paren">(</span><em class="sig-param">settings: lexnlp.extract.ml.detector.detecting_settings.DetectingSettings</em>, <em class="sig-param">train_sample_df: pandas.core.frame.DataFrame</em>, <em class="sig-param">save_path: str = ''</em>, <em class="sig-param">compress: bool = False</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#lexnlp.extract.ml.en.definitions.definition_phrase_detector.DefinitionPhraseDetector.train_and_save_on_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.ml.en.definitions.definition_term_detector">
+<span id="lexnlp-extract-ml-en-definitions-definition-term-detector-module"></span><h2>lexnlp.extract.ml.en.definitions.definition_term_detector module<a class="headerlink" href="#module-lexnlp.extract.ml.en.definitions.definition_term_detector" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.ml.en.definitions.definition_term_detector.DefinitionTermDetector">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.ml.en.definitions.definition_term_detector.</code><code class="sig-name descname">DefinitionTermDetector</code><a class="headerlink" href="#lexnlp.extract.ml.en.definitions.definition_term_detector.DefinitionTermDetector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="lexnlp.extract.ml.detector.html#lexnlp.extract.ml.detector.artifact_detector.ArtifactDetector" title="lexnlp.extract.ml.detector.artifact_detector.ArtifactDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">lexnlp.extract.ml.detector.artifact_detector.ArtifactDetector</span></code></a></p>
+<dl class="method">
+<dt id="lexnlp.extract.ml.en.definitions.definition_term_detector.DefinitionTermDetector.process_sample">
+<code class="sig-name descname">process_sample</code><span class="sig-paren">(</span><em class="sig-param">sample_df: pandas.core.frame.DataFrame</em>, <em class="sig-param">build_target_data: bool = False</em><span class="sig-paren">)</span> &#x2192; Union[numpy.ndarray, Tuple[numpy.ndarray, numpy.ndarray]]<a class="headerlink" href="#lexnlp.extract.ml.en.definitions.definition_term_detector.DefinitionTermDetector.process_sample" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.ml.en.definitions.definition_term_detector.DefinitionTermDetector.train_and_save">
+<code class="sig-name descname">train_and_save</code><span class="sig-paren">(</span><em class="sig-param">settings: lexnlp.extract.ml.detector.detecting_settings.DetectingSettings</em>, <em class="sig-param">train_file: str</em>, <em class="sig-param">train_size: int = -1</em>, <em class="sig-param">save_path: str = ''</em>, <em class="sig-param">compress: bool = False</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#lexnlp.extract.ml.en.definitions.definition_term_detector.DefinitionTermDetector.train_and_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a percent identification model using tokens.
+:param settings: Model settings
+:param train_file: File to load training samples from
+:param train_size: Number of records to use
+:param save_path: Output (pickle model) file path
+:param compress: Save compressed file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.ml.en.definitions.definition_term_detector.DefinitionTermDetector.train_and_save_on_dataframe">
+<code class="sig-name descname">train_and_save_on_dataframe</code><span class="sig-paren">(</span><em class="sig-param">settings: lexnlp.extract.ml.detector.detecting_settings.DetectingSettings</em>, <em class="sig-param">train_sample_df: pandas.core.frame.DataFrame</em>, <em class="sig-param">save_path: str = ''</em>, <em class="sig-param">compress: bool = False</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#lexnlp.extract.ml.en.definitions.definition_term_detector.DefinitionTermDetector.train_and_save_on_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.ml.en.definitions.layered_definition_detector">
+<span id="lexnlp-extract-ml-en-definitions-layered-definition-detector-module"></span><h2>lexnlp.extract.ml.en.definitions.layered_definition_detector module<a class="headerlink" href="#module-lexnlp.extract.ml.en.definitions.layered_definition_detector" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.extract.ml.en.definitions.layered_definition_detector.LayeredDefinitionDetector">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.extract.ml.en.definitions.layered_definition_detector.</code><code class="sig-name descname">LayeredDefinitionDetector</code><a class="headerlink" href="#lexnlp.extract.ml.en.definitions.layered_definition_detector.LayeredDefinitionDetector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="lexnlp.extract.ml.en.definitions.layered_definition_detector.LayeredDefinitionDetector.get_annotations">
+<code class="sig-name descname">get_annotations</code><span class="sig-paren">(</span><em class="sig-param">sentence: str</em><span class="sig-paren">)</span> &#x2192; List[lexnlp.extract.common.annotations.definition_annotation.DefinitionAnnotation]<a class="headerlink" href="#lexnlp.extract.ml.en.definitions.layered_definition_detector.LayeredDefinitionDetector.get_annotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.ml.en.definitions.layered_definition_detector.LayeredDefinitionDetector.join_adjacent_definitions_labels">
+<em class="property">static </em><code class="sig-name descname">join_adjacent_definitions_labels</code><span class="sig-paren">(</span><em class="sig-param">labels_definitions</em>, <em class="sig-param">labels_terms</em>, <em class="sig-param">row_text</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.ml.en.definitions.layered_definition_detector.LayeredDefinitionDetector.join_adjacent_definitions_labels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.ml.en.definitions.layered_definition_detector.LayeredDefinitionDetector.load_compressed">
+<code class="sig-name descname">load_compressed</code><span class="sig-paren">(</span><em class="sig-param">file_path: str</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.ml.en.definitions.layered_definition_detector.LayeredDefinitionDetector.load_compressed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads archive with two model pickle files (model_definition,
+model_term)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.ml.en.definitions.layered_definition_detector.LayeredDefinitionDetector.train_on_doccano_jsonl">
+<code class="sig-name descname">train_on_doccano_jsonl</code><span class="sig-paren">(</span><em class="sig-param">save_file_path: str</em>, <em class="sig-param">exported_doc_path: str</em>, <em class="sig-param">text_column_name: str = 'text'</em>, <em class="sig-param">labels_column_name: str = 'labels'</em>, <em class="sig-param">label_term: str = 'term'</em>, <em class="sig-param">label_definition: str = 'definition'</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.ml.en.definitions.layered_definition_detector.LayeredDefinitionDetector.train_on_doccano_jsonl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.extract.ml.en.definitions.layered_definition_detector.LayeredDefinitionDetector.train_on_formatted_data">
+<code class="sig-name descname">train_on_formatted_data</code><span class="sig-paren">(</span><em class="sig-param">definition_frame: pandas.core.frame.DataFrame</em>, <em class="sig-param">term_frame: pandas.core.frame.DataFrame</em>, <em class="sig-param">save_file_path: str</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.extract.ml.en.definitions.layered_definition_detector.LayeredDefinitionDetector.train_on_formatted_data" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>definition_frame</strong> – dataframe, [ (row_text, [(start, end), (start, end)…], feature_mask]</p></li>
+<li><p><strong>term_frame</strong> – dataframe, [ (row_text, [(start, end), (start, end)…]]</p></li>
+<li><p><strong>save_file_path</strong> – path to store zipped model files (as one file)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.extract.ml.en.definitions">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lexnlp.extract.ml.en.definitions" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">LexNLP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About LexNLP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lexnlp.html">LexNLP package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2020, ContraxSuite, LLC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/lexnlp.extract.ml.en.definitions.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

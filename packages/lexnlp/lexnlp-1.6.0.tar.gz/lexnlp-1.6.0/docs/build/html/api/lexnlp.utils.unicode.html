@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>lexnlp.utils.unicode package &#8212; LexNLP 1.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="lexnlp-utils-unicode-package">
+<h1>lexnlp.utils.unicode package<a class="headerlink" href="#lexnlp-utils-unicode-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="lexnlp.utils.unicode.tests.html">lexnlp.utils.unicode.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.unicode.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.unicode.tests.html#module-lexnlp.utils.unicode.tests.test_unicode_lookup">lexnlp.utils.unicode.tests.test_unicode_lookup module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.unicode.tests.html#module-lexnlp.utils.unicode.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-lexnlp.utils.unicode.unicode_lookup">
+<span id="lexnlp-utils-unicode-unicode-lookup-module"></span><h2>lexnlp.utils.unicode.unicode_lookup module<a class="headerlink" href="#module-lexnlp.utils.unicode.unicode_lookup" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="lexnlp.utils.unicode.unicode_lookup.build_lookup_tables">
+<code class="sig-prename descclassname">lexnlp.utils.unicode.unicode_lookup.</code><code class="sig-name descname">build_lookup_tables</code><span class="sig-paren">(</span><em class="sig-param">fn_char_categories</em>, <em class="sig-param">fn_char_category_mapping</em>, <em class="sig-param">fn_char_top_category_mapping</em>, <em class="sig-param">table_source: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.unicode.unicode_lookup.build_lookup_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://www.unicode.org/reports/tr44/#General_Category">https://www.unicode.org/reports/tr44/#General_Category</a>
+<a class="reference external" href="https://www.unicode.org/reports/tr44/#General_Category_Values">https://www.unicode.org/reports/tr44/#General_Category_Values</a></p>
+<p>Table 12. General_Category Values</p>
+<p>Abbr        Long    Description
+Lu  Uppercase_Letter        an uppercase letter
+Ll  Lowercase_Letter        a lowercase letter
+Lt  Titlecase_Letter        a digraphic character, with first part uppercase
+LC  Cased_Letter    Lu | Ll | Lt
+Lm  Modifier_Letter a modifier letter
+Lo  Other_Letter    other letters, including syllables and ideographs
+L   Letter  Lu | Ll | Lt | Lm | Lo
+Mn  Nonspacing_Mark a nonspacing combining mark (zero advance width)
+Mc  Spacing_Mark    a spacing combining mark (positive advance width)
+Me  Enclosing_Mark  an enclosing combining mark
+M   Mark    Mn | Mc | Me
+Nd  Decimal_Number  a decimal digit
+Nl  Letter_Number   a letterlike numeric character
+No  Other_Number    a numeric character of other type
+N   Number  Nd | Nl | No
+Pc  Connector_Punctuation   a connecting punctuation mark, like a tie
+Pd  Dash_Punctuation        a dash or hyphen punctuation mark
+Ps  Open_Punctuation        an opening punctuation mark (of a pair)
+Pe  Close_Punctuation       a closing punctuation mark (of a pair)
+Pi  Initial_Punctuation     an initial quotation mark
+Pf  Final_Punctuation       a final quotation mark
+Po  Other_Punctuation       a punctuation mark of other type
+P   Punctuation     Pc | Pd | Ps | Pe | Pi | Pf | Po
+Sm  Math_Symbol     a symbol of mathematical use
+Sc  Currency_Symbol a currency sign
+Sk  Modifier_Symbol a non-letterlike modifier symbol
+So  Other_Symbol    a symbol of other type
+S   Symbol  Sm | Sc | Sk | So
+Zs  Space_Separator a space character (of various non-zero widths)
+Zl  Line_Separator  U+2028 LINE SEPARATOR only
+Zp  Paragraph_Separator     U+2029 PARAGRAPH SEPARATOR only
+Z   Separator       Zs | Zl | Zp
+Cc  Control a C0 or C1 control code
+Cf  Format  a format control character
+Cs  Surrogate       a surrogate code point
+Co  Private_Use     a private-use character
+Cn  Unassigned      a reserved unassigned code point or a noncharacter
+C   Other   Cc | Cf | Cs | Co | Cn</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.utils.unicode">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lexnlp.utils.unicode" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">LexNLP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About LexNLP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lexnlp.html">LexNLP package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2020, ContraxSuite, LLC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/lexnlp.utils.unicode.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

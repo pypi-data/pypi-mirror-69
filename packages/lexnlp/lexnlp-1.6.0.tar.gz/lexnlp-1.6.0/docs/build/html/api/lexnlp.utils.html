@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>lexnlp.utils package &#8212; LexNLP 1.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="lexnlp-utils-package">
+<h1>lexnlp.utils package<a class="headerlink" href="#lexnlp-utils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="lexnlp.utils.lines_processing.html">lexnlp.utils.lines_processing package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.lines_processing.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.lines_processing.html#module-lexnlp.utils.lines_processing.line_processor">lexnlp.utils.lines_processing.line_processor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.lines_processing.html#module-lexnlp.utils.lines_processing.parsed_text_corrector">lexnlp.utils.lines_processing.parsed_text_corrector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.lines_processing.html#module-lexnlp.utils.lines_processing.parsed_text_quality_estimator">lexnlp.utils.lines_processing.parsed_text_quality_estimator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.lines_processing.html#module-lexnlp.utils.lines_processing.phrase_finder">lexnlp.utils.lines_processing.phrase_finder module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.lines_processing.html#module-lexnlp.utils.lines_processing">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lexnlp.utils.tests.html">lexnlp.utils.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.tests.html#module-lexnlp.utils.tests.test_line_processor">lexnlp.utils.tests.test_line_processor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.tests.html#module-lexnlp.utils.tests.test_map">lexnlp.utils.tests.test_map module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.tests.html#module-lexnlp.utils.tests.test_parse_df">lexnlp.utils.tests.test_parse_df module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.tests.html#module-lexnlp.utils.tests.test_parsed_text_corrector">lexnlp.utils.tests.test_parsed_text_corrector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.tests.html#module-lexnlp.utils.tests.test_parsed_text_quality_estimator">lexnlp.utils.tests.test_parsed_text_quality_estimator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.tests.html#module-lexnlp.utils.tests.test_phrase_finder">lexnlp.utils.tests.test_phrase_finder module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.tests.html#module-lexnlp.utils.tests">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lexnlp.utils.unicode.html">lexnlp.utils.unicode package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.unicode.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lexnlp.utils.unicode.tests.html">lexnlp.utils.unicode.tests package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="lexnlp.utils.unicode.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="lexnlp.utils.unicode.tests.html#module-lexnlp.utils.unicode.tests.test_unicode_lookup">lexnlp.utils.unicode.tests.test_unicode_lookup module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="lexnlp.utils.unicode.tests.html#module-lexnlp.utils.unicode.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.unicode.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.unicode.html#module-lexnlp.utils.unicode.unicode_lookup">lexnlp.utils.unicode.unicode_lookup module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexnlp.utils.unicode.html#module-lexnlp.utils.unicode">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-lexnlp.utils.decorators">
+<span id="lexnlp-utils-decorators-module"></span><h2>lexnlp.utils.decorators module<a class="headerlink" href="#module-lexnlp.utils.decorators" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="lexnlp.utils.decorators.safe_failure">
+<code class="sig-prename descclassname">lexnlp.utils.decorators.</code><code class="sig-name descname">safe_failure</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.decorators.safe_failure" title="Permalink to this definition">¶</a></dt>
+<dd><p>return None on failure, either skip result if generator</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.utils.iterating_helpers">
+<span id="lexnlp-utils-iterating-helpers-module"></span><h2>lexnlp.utils.iterating_helpers module<a class="headerlink" href="#module-lexnlp.utils.iterating_helpers" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="lexnlp.utils.iterating_helpers.collapse_sequence">
+<code class="sig-prename descclassname">lexnlp.utils.iterating_helpers.</code><code class="sig-name descname">collapse_sequence</code><span class="sig-paren">(</span><em class="sig-param">sequence: collections.abc.Iterable, predicate: Callable[[Any, Any], Any], accumulator: Any = 0.0</em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#lexnlp.utils.iterating_helpers.collapse_sequence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.utils.iterating_helpers.count_sequence_matches">
+<code class="sig-prename descclassname">lexnlp.utils.iterating_helpers.</code><code class="sig-name descname">count_sequence_matches</code><span class="sig-paren">(</span><em class="sig-param">sequence: collections.abc.Iterable, predicate: Callable[Any, bool]</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#lexnlp.utils.iterating_helpers.count_sequence_matches" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.utils.map">
+<span id="lexnlp-utils-map-module"></span><h2>lexnlp.utils.map module<a class="headerlink" href="#module-lexnlp.utils.map" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.utils.map.Map">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.utils.map.</code><code class="sig-name descname">Map</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.map.Map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+<p>Example:
+m = Map(some_dict)</p>
+<dl class="method">
+<dt id="lexnlp.utils.map.Map.objectify">
+<code class="sig-name descname">objectify</code><span class="sig-paren">(</span><em class="sig-param">a_dict</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.map.Map.objectify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.utils.parse_df">
+<span id="lexnlp-utils-parse-df-module"></span><h2>lexnlp.utils.parse_df module<a class="headerlink" href="#module-lexnlp.utils.parse_df" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lexnlp.utils.parse_df.DataframeEntityParser">
+<em class="property">class </em><code class="sig-prename descclassname">lexnlp.utils.parse_df.</code><code class="sig-name descname">DataframeEntityParser</code><span class="sig-paren">(</span><em class="sig-param">dataframe</em>, <em class="sig-param">parse_columns</em>, <em class="sig-param">result_columns=None</em>, <em class="sig-param">preformed_entity=None</em>, <em class="sig-param">priority_sort_column=None</em>, <em class="sig-param">priority_sort_ascending=True</em>, <em class="sig-param">cell_values_separator=';'</em>, <em class="sig-param">unique_column_values=True</em>, <em class="sig-param">line_processor: lexnlp.utils.lines_processing.line_processor.LineProcessor = None</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.parse_df.DataframeEntityParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class that provides ability to extract entities from a text
+having some collection of entities formed as dataframe.
+By default it means that dataframe has UNIQUE values in those columns you use for search.
+Returns dict of start/end positions of found item in a text
+and other user-defined key-value pairs</p>
+<dl>
+<dt>Params:</dt><dd><ul class="simple">
+<li><p>dataframe: pandas.DataFrame with entities collection</p></li>
+<li><p>parse_columns: list or tuple - these columns will be used to search their values in a text</p></li>
+<li><p>result_columns: dict - map like {‘dataframe column name to take a value
+corresponding with extracted entity’: ‘new_column_name’}</p></li>
+<li><p>preformed_entity: dict - initial, static key-value pairs to use for each extracted entity</p></li>
+<li><p>priority_sort_column: str - column name to sort by and get first match
+if multiple results found, otherwise the first matched row will be used</p></li>
+<li><p>priority_sort_ascending: bool - sort order for priority_sort_column</p></li>
+<li><p>cell_values_separator: str or None - multiple values in datafame cell separated by
+that separator</p></li>
+<li><p>unique_column_values: bool - dataframe columns have unique values</p></li>
+</ul>
+</dd>
+<dt>E.g.:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parse_columns</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Kurztitel&#39;</span><span class="p">,</span> <span class="s1">&#39;Titel&#39;</span><span class="p">,</span> <span class="s1">&#39;Abkürzung&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result_columns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Titel&#39;</span><span class="p">:</span> <span class="s1">&#39;name&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preformed_entity</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;entity_type&#39;</span><span class="p">:</span> <span class="s1">&#39;Laws and Rules&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;BaFin&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="s1">&#39;country&#39;</span><span class="p">:</span> <span class="s1">&#39;Germany&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sort_column</span> <span class="o">=</span> <span class="s1">&#39;Titel&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">items</span> <span class="o">=</span> <span class="n">DataframeEntityParser</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">df</span><span class="p">,</span> <span class="n">parse_columns</span><span class="p">,</span> <span class="n">result_columns</span><span class="p">,</span> <span class="n">preformed_entity</span><span class="p">,</span> <span class="n">sort_column</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="lexnlp.utils.parse_df.DataframeEntityParser.SEARCH_PTN">
+<code class="sig-name descname">SEARCH_PTN</code><em class="property"> = '(?:^|\\W)({})(?:\\W|$)'</em><a class="headerlink" href="#lexnlp.utils.parse_df.DataframeEntityParser.SEARCH_PTN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.parse_df.DataframeEntityParser.get_collection_ptn">
+<code class="sig-name descname">get_collection_ptn</code><span class="sig-paren">(</span><em class="sig-param">collection</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.parse_df.DataframeEntityParser.get_collection_ptn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert list of values to regex pattern
+:param collection: list of entities to search in
+:return: compilled regex pattern</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.parse_df.DataframeEntityParser.get_entities">
+<code class="sig-name descname">get_entities</code><span class="sig-paren">(</span><em class="sig-param">text: str</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.parse_df.DataframeEntityParser.get_entities" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.parse_df.DataframeEntityParser.get_entities_from_text">
+<code class="sig-name descname">get_entities_from_text</code><span class="sig-paren">(</span><em class="sig-param">text: str</em><span class="sig-paren">)</span> &#x2192; Generator[[dict, None], None]<a class="headerlink" href="#lexnlp.utils.parse_df.DataframeEntityParser.get_entities_from_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.parse_df.DataframeEntityParser.get_entity_list">
+<code class="sig-name descname">get_entity_list</code><span class="sig-paren">(</span><em class="sig-param">text</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.parse_df.DataframeEntityParser.get_entity_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.parse_df.DataframeEntityParser.get_formed_entity">
+<code class="sig-name descname">get_formed_entity</code><span class="sig-paren">(</span><em class="sig-param">match</em>, <em class="sig-param">col_name</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.parse_df.DataframeEntityParser.get_formed_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get formed entity from matched row in dataframe
+:param match: re.match object
+:param col_name: df column name
+:return: dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lexnlp.utils.parse_df.DataframeEntityParser.get_single_result">
+<code class="sig-name descname">get_single_result</code><span class="sig-paren">(</span><em class="sig-param">rows</em><span class="sig-paren">)</span><a class="headerlink" href="#lexnlp.utils.parse_df.DataframeEntityParser.get_single_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>By default we mean that all values we filter by in dataframe are UNIQUE, so just take 1st
+Implement your own logic to choose from multiple matched dataframe rows</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.utils.parse_df.get_entities">
+<code class="sig-prename descclassname">lexnlp.utils.parse_df.</code><code class="sig-name descname">get_entities</code><span class="sig-paren">(</span><em class="sig-param">text: str, config: pandas.core.frame.DataFrame, parse_columns: Union[List[str], Tuple[str]], result_columns: Optional[dict] = None, preformed_entity: Optional[dict] = None, priority_sort_column: Optional[str] = None, priority_sort_ascending: bool = True, cell_values_separator: Optional[str] = ';', unique_column_values: bool = True</em><span class="sig-paren">)</span> &#x2192; Generator<a class="headerlink" href="#lexnlp.utils.parse_df.get_entities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple wrapper around DataframeEntityParser</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lexnlp.utils.parse_df.get_entity_list">
+<code class="sig-prename descclassname">lexnlp.utils.parse_df.</code><code class="sig-name descname">get_entity_list</code><span class="sig-paren">(</span><em class="sig-param">text: str, config: pandas.core.frame.DataFrame, parse_columns: Union[List[str], Tuple[str]], result_columns: Optional[dict] = None, preformed_entity: Optional[dict] = None, priority_sort_column: Optional[str] = None, priority_sort_ascending: bool = True, cell_values_separator: Optional[str] = ';', unique_column_values: bool = True</em><span class="sig-paren">)</span> &#x2192; List<a class="headerlink" href="#lexnlp.utils.parse_df.get_entity_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple wrapper around DataframeEntityParser</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lexnlp.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lexnlp.utils" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">LexNLP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About LexNLP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lexnlp.html">LexNLP package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2020, ContraxSuite, LLC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/lexnlp.utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
