@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}Anthill Admin Tool{% end %}</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/animate.css">
+    <link rel="shortcut icon" href="/static/images/favicon.png" />
+
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/js.cookie.js"></script>
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/bootbox.min.js"></script>
+    <script src="/static/js/bootstrap-notify.min.js"></script>
+
+    {% block headers %}{% end %}
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+</head>
+<body>
+
+{% if (current_user is not None) and (current_user.profile is not None) %}
+    {% set name = current_user.profile["name"] if "name" in current_user.profile else "Unknown" %}
+    {% if "avatar" in current_user.profile %}
+        {% set avatar = current_user.profile["avatar"] %}
+    {% else %}
+        {% set avatar = None %}
+    {% end %}
+    {% set auth = True %}
+{% else %}
+    {% set auth = False %}
+{% end %}
+
+<nav class="navbar navbar-inverse sidebar" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header navbar-header-fixed">
+            <button type="button" class="navbar-toggle navbar-button-fixed" data-toggle="collapse"
+                    data-target="#bs-sidebar-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="navbar-title">
+                    <a href="/">Anthill Platform<span style="font-size:16px;" class="pull-right hidden-xs showopacity">
+                        <img src="/static/images/logo.png"></span></a>
+                </li>
+
+                {% block navbar_left %}
+                    {%if hasattr(handler, "services_list") and handler.services_list %}
+                        {% for i, (_service_id, service) in enumerate(handler.services_list.items()) %}
+                            {% set location = service["location"] %}
+                            {% set service_metadata = service["metadata"] or {} %}
+
+                            {% set title = service_metadata.get("title", _service_id) %}
+                            {% set description = service_metadata.get("description", "") %}
+                            {% set icon = service_metadata.get("icon") %}
+
+                            <li
+                            {% if _service_id == handler.current_service %}
+                            class="active"
+                            {% end %} title="{{ description }}">
+                                <a href="/service/{{ _service_id }}/index">{{ title }}
+                                    <span style="font-size:16px;" class="pull-right hidden-xs showopacity">
+                                        {% if icon %}
+                                            <i class="fa fa-{{ icon }}" aria-hidden="true"></i>
+                                        {% end %}
+                                    </span>
+                                </a>
+                            </li>
+                        {% end %}
+                    {% end %}
+                {% end %}
+
+                {% if hasattr(handler, "gamespace_info") and handler.gamespace_info and hasattr(handler.gamespace_info, "title") %}
+                    {% set gamespace_title = handler.gamespace_info.title %}
+                {% else %}
+                    {% set gamespace_title = handler.gamespace %}
+                {% end %}
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="main">
+    {% block root2 %}
+
+    <ul id="service-breadcrumbs" class="breadcrumb list-inline">
+        {% block breadcrumbs %}{% end %}
+    </ul>
+    <ul class="nav nav-pills right-menu-fx">
+        {% if auth %}
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+            role="button" aria-haspopup="true" aria-expanded="false">
+                <span style="font-size:16px;" class="hidden-xs showopacity">
+                <i class="fa fa-user" aria-hidden="true"></i></span>
+                {{ name }}
+                {% set admin_scopes = sum(1 for scope in handler.token.scopes if scope.endswith('admin')) - 1 %}
+                {% if admin_scopes > 0 %}
+                <span class="label label-danger">{{ admin_scopes }}</span>
+                {% end %}
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                {% if avatar %}
+                <li align="center"><img src="{{ avatar }}" class="img-circle" width="100px"></li>
+                <li role="separator" class="divider"></li>
+                {% end %}
+
+
+                <li class="menu-info" align="center" data-container="body" data-popover="true"
+                    data-trigger="hover" data-placement="left"
+                    data-content="Time this access will expire. ">
+
+                    {% import datetime, anthill.common.access %}
+                    {{ datetime.timedelta(seconds=handler.token.expiration_date - anthill.common.access.utc_time()) }}
+                    <br>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li>
+                    {% import urllib, json %}
+                    <a href="/service/profile/profile?{{ urllib.parse.urlencode({'context': json.dumps({'account': handler.token.account})}) }}">
+                        <i class="fa fa-user-secret" aria-hidden="true"></i>
+                        Your profile
+                    </a>
+                </li>
+                {% if gamespace_title %}
+                <li class="menu-info" data-container="body" data-popover="true"
+                    data-trigger="hover" data-placement="left"
+                    data-content="Gamespace you are working in. Press to switch.">
+                    <a href="/gamespace">
+                        <i class="fa fa-folder-o" aria-hidden="true"></i>
+                        {{ gamespace_title }}
+
+                    </a>
+                </li>
+                {% end %}
+                <li role="separator" class="divider"></li>
+
+                <li class="menu-info" align="center" data-container="body" data-popover="true"
+                    data-trigger="hover" data-placement="left"
+                    data-content="List of scopes this account has access to now. A lot of 'admin' scopes considered dangerous. ">
+                    {% for scope in handler.token.scopes %}
+                    <span class="label {{ 'label-danger' if scope.endswith('admin') else 'label-default' }}">{{ scope }}</span>
+                    {% end %}
+                </li>
+
+                <script type="application/javascript">
+                    $(".menu-info").popover();
+                </script>
+
+                <li role="separator" class="divider"></li>
+                {% if "admin_audit_log" in handler.token.scopes %}
+                <li>
+                    <a href="/service/admin/audit">
+                        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                        Audit Log
+                    </a>
+                </li>
+                {% end %}
+                <li class="fa-spin-hover">
+                    <a href="?refresh=1"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh Service List</a>
+                </li>
+                <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Log out</a></li>
+            </ul>
+        </li>
+
+        {% end %}
+
+        <li>
+            <a href="/debug" target="_blank">
+                <span style="font-size:16px;" class="hidden-xs showopacity">
+                    <i class="fa fa-terminal" aria-hidden="true"></i></span>
+                Terminal
+            </a>
+        </li>
+
+
+    </ul>
+
+
+    {% block main %}{% end %}
+    {% block root %}{% end %}
+    {% end %}
+</div>
+
+</body>
+</html>
