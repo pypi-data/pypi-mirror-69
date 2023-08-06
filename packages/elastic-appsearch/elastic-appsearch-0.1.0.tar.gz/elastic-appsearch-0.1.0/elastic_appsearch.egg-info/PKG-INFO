@@ -1,0 +1,53 @@
+Metadata-Version: 2.1
+Name: elastic-appsearch
+Version: 0.1.0
+Summary: Elastic App Search API Client
+Home-page: https://github.com/sunnysid3up/elastic-appsearch
+Author: Sunny Kim
+Author-email: sunny.kim@berkeley.edu
+Maintainer: Sunny Kim
+Maintainer-email: sunny.kim@berkeley.edu
+License: MIT
+Description: # elastic-appsearch
+        
+        Elastic App Search API Client
+        
+        ### Installation
+        `pip install elastic-appsearch`
+        
+        ### Usage
+        
+        ```python
+        from elastic_appsearch import Client
+        
+        endpoint = 'app-search-api-endpoint'
+        key = 'private-key'
+        
+        c = Client(endpoint, key)
+        ```
+        
+        ##### Search
+        ```python
+        c.search('engine-name', 'sunny')
+        ```
+        
+        ##### Create a synonym
+        ```python
+        c.create_synonym('engine-name', ['hi', 'hello', 'hiya'])
+        ```
+        
+        ##### List all synonyms
+        ```python
+        c.get_synonyms('engine-name')
+        ```
+        
+Platform: any
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3
+Description-Content-Type: text/markdown
