@@ -1,0 +1,45 @@
+Metadata-Version: 2.1
+Name: connected-home
+Version: 0.0.3
+Summary: A teaching environment simulating a connected home.
+Home-page: UNKNOWN
+Author: Data-Centric Design Lab <lab@datacentricdesign.org>
+License: MIT
+Platform: UNKNOWN
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.7
+Description-Content-Type: text/markdown
+Requires-Dist: Flask (>=1.1.2)
+Requires-Dist: flask-socketio (>=4.3.0)
+Requires-Dist: flask-cors (>=3.0.8)
+Requires-Dist: gevent-websocket (>=0.10.1)
+
+# Connected Home -- API
+
+
+## Publish a new version of the api on PyPi
+
+First we need to install twine and bum
+
+```
+pip install twine bumpversion
+```
+
+Then, we use bumpversion to increment the new version. In the example below,
+change the version to the current one. Choose from major, minor or patch version.
+
+```
+cd ./api
+bumpversion --current-version 0.0.1 patch setup.py connected-home/__init__.py
+```
+
+```
+python setup.py sdist bdist_wheel
+```
+
+
+
+```
+python -m twine upload dist/*
+```
+
