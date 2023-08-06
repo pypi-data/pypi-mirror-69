@@ -1,0 +1,1391 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Equity Jenga Package &mdash; equity-jenga-api  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Getting Started" href="getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> equity-jenga-api
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-equity_jenga.api.auth">equity_jenga.api.auth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-equity_jenga.api.kyc">equity_jenga.api.kyc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-equity_jenga.api.exceptions">equity_jenga.api.exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-equity_jenga.api">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">equity-jenga-api</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Equity Jenga Package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="equity-jenga-package">
+<h1>Equity Jenga Package<a class="headerlink" href="#equity-jenga-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-equity_jenga.api.auth">
+<span id="equity-jenga-api-auth"></span><h2>equity_jenga.api.auth<a class="headerlink" href="#module-equity_jenga.api.auth" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="equity_jenga.api.auth.JengaAuth">
+<em class="property">class </em><code class="sig-prename descclassname">equity_jenga.api.auth.</code><code class="sig-name descname">JengaAuth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">authorization_token</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">private_key</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">merchant_code</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">env</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">sandbox_url</span><span class="o">=</span><span class="default_value">'https://sandbox.jengahq.io'</span></em>, <em class="sig-param"><span class="n">live_url</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/equity_jenga/api/auth.html#JengaAuth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#equity_jenga.api.auth.JengaAuth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="equity_jenga.api.auth.JengaAuth.signature">
+<code class="sig-name descname">signature</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request_hash_fields</span><span class="p">:</span> <span class="n">tuple</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/equity_jenga/api/auth.html#JengaAuth.signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#equity_jenga.api.auth.JengaAuth.signature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a String of concatenated values of the request fields with
+following order: as specificied by the API endpoint
+The resulting text is then signed with Private Key and Base64 encoded.</p>
+<p>Takes a tuple of request fields in the order that they should be
+concatenated, hashes them with SHA-256,signs the resulting hash and
+returns a Base64 encoded string of the resulting signature</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-equity_jenga.api.kyc">
+<span id="equity-jenga-api-kyc"></span><h2>equity_jenga.api.kyc<a class="headerlink" href="#module-equity_jenga.api.kyc" title="Permalink to this headline">¶</a></h2>
+<p>This web service enables your application to query the various registrar of persons in the various countries in East Africa.</p>
+<p>Currently available for Kenya and Rwanda only.</p>
+<p><a class="reference external" href="https://sandbox.jengahq.io/customer-test/v2/identity/verify">https://sandbox.jengahq.io/customer-test/v2/identity/verify</a></p>
+<dl class="py class">
+<dt id="equity_jenga.api.kyc.IDSearchVerification">
+<em class="property">class </em><code class="sig-prename descclassname">equity_jenga.api.kyc.</code><code class="sig-name descname">IDSearchVerification</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">authorization_token</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">private_key</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">merchant_code</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">env</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">sandbox_url</span><span class="o">=</span><span class="default_value">'https://sandbox.jengahq.io'</span></em>, <em class="sig-param"><span class="n">live_url</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/equity_jenga/api/kyc.html#IDSearchVerification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#equity_jenga.api.kyc.IDSearchVerification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#equity_jenga.api.auth.JengaAuth" title="equity_jenga.api.auth.JengaAuth"><code class="xref py py-class docutils literal notranslate"><span class="pre">equity_jenga.api.auth.JengaAuth</span></code></a></p>
+<dl class="py method">
+<dt id="equity_jenga.api.kyc.IDSearchVerification.authenticate">
+<code class="sig-name descname">authenticate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">merchantCode</span></em>, <em class="sig-param"><span class="n">documentNumber</span></em>, <em class="sig-param"><span class="n">countryCode</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/equity_jenga/api/kyc.html#IDSearchVerification.authenticate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#equity_jenga.api.kyc.IDSearchVerification.authenticate" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Params</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">MerchantCode</dt>
+<dd class="field-odd"><p>Your MerchantCode</p>
+</dd>
+<dt class="field-even">DocumentNumber</dt>
+<dd class="field-even"><p>Document Number to Verify</p>
+</dd>
+<dt class="field-odd">CountryCode</dt>
+<dd class="field-odd"><p>The Country Code</p>
+</dd>
+</dl>
+<p><strong>Returns</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Headers</dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Authorization</dt>
+<dd class="field-even"><p>string the bearer token used to access the API</p>
+</dd>
+<dt class="field-odd">Content-Type</dt>
+<dd class="field-odd"><p>string the content type of the payload</p>
+</dd>
+<dt class="field-even">Signature</dt>
+<dd class="field-even"><p>string
+A SHA-256 signature to proof that this request is coming from the
+merchant.
+Build a String of concatenated values of the request fields with
+the following order: merchantcode documentNumber countryCode.
+The resulting text is then signed with Private Key and Base64 encoded.</p>
+</dd>
+</dl>
+<p>Should return the headers to pass to the particular endpoint</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="equity_jenga.api.kyc.IDSearchVerification.verify">
+<code class="sig-name descname">verify</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">identity</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/equity_jenga/api/kyc.html#IDSearchVerification.verify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#equity_jenga.api.kyc.IDSearchVerification.verify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Params:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Identitiy</dt>
+<dd class="field-odd"><dl class="field-list simple">
+<dt class="field-odd">documentType</dt>
+<dd class="field-odd"><p>string the document type of the customer.  for example ID, PASSPORT, ALIENID</p>
+</dd>
+<dt class="field-even">firstName</dt>
+<dd class="field-even"><p>string first name as per identity document type</p>
+</dd>
+<dt class="field-odd">lastName</dt>
+<dd class="field-odd"><p>string last name as per identity document type</p>
+</dd>
+<dt class="field-even">dateOfBirth</dt>
+<dd class="field-even"><p>string optional date in YYYY-MM-DD format</p>
+</dd>
+<dt class="field-odd">documentNumber</dt>
+<dd class="field-odd"><p>string the document id number</p>
+</dd>
+<dt class="field-even">countryCode</dt>
+<dd class="field-even"><p>string the country in which the document relates to (only KE and RW enabled for now)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Example Reponse</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;identity&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;customer&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;fullName&quot;</span><span class="p">:</span> <span class="s2">&quot;John Doe &quot;</span><span class="p">,</span>
+            <span class="nt">&quot;firstName&quot;</span><span class="p">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;middlename&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;lastName&quot;</span><span class="p">:</span> <span class="s2">&quot;Doe&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;ShortName&quot;</span><span class="p">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;birthDate&quot;</span><span class="p">:</span> <span class="s2">&quot;1900-01-01T00:00:00&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;birthCityName&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;deathDate&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;faceImage&quot;</span><span class="p">:</span> <span class="s2">&quot;/9j/4AAQSkZJRgABAAEAYABgA+H8qr6n4e1O71SGFbV/sEOF3O6/N/eb71d/FGkaBVXaq9KfRRRRRUMsKSIdyr0r/9k=&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;occupation&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;nationality&quot;</span><span class="p">:</span> <span class="s2">&quot;Refugee&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;documentType&quot;</span><span class="p">:</span> <span class="s2">&quot;ALIEN ID&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;documentNumber&quot;</span><span class="p">:</span> <span class="s2">&quot;654321&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;documentSerialNumber&quot;</span><span class="p">:</span> <span class="s2">&quot;100500425&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;documentIssueDate&quot;</span><span class="p">:</span> <span class="s2">&quot;2002-11-29T12:00:00&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;documentExpirationDate&quot;</span><span class="p">:</span> <span class="s2">&quot;2004-11-28T12:00:00&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;IssuedBy&quot;</span><span class="p">:</span> <span class="s2">&quot;REPUBLIC OF KENYA&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;additionalIdentityDetails&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;documentNumber&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;documentType&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;issuedBy&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;address&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;provinceName&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="p">,</span>
+            <span class="nt">&quot;districtName&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;locationName&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;subLocationName&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;villageName&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-equity_jenga.api.exceptions">
+<span id="equity-jenga-api-exceptions"></span><h2>equity_jenga.api.exceptions<a class="headerlink" href="#module-equity_jenga.api.exceptions" title="Permalink to this headline">¶</a></h2>
+<p>Downstream Provider Error responses:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>900101</p></td>
+<td><p>Invalid merchant Cipher Text</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>900101</p></td>
+<td><p>Invalid merchant certificate</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>900101</p></td>
+<td><p>invalid merchant public key configuration – is empty</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>900101</p></td>
+<td><p>Invalid merchant public key configuration —Public key is null</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>900101</p></td>
+<td><p>Invalid merchant code provided</p></td>
+</tr>
+</tbody>
+</table>
+<p>Merchant Authorization:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Status</p></td>
+<td><p>Code</p></td>
+<td><p>Response Message</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>401101</p></td>
+<td><p>Unauthorized</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>401102</p></td>
+<td><p>Service Not available</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>401103</p></td>
+<td><p>Service Not available</p></td>
+</tr>
+</tbody>
+</table>
+<p>Merchant Account/ Profile Validation:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>104101</p></td>
+<td><p>Validation of account failed</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>104102</p></td>
+<td><p>Merchant daily transaction limit exceeded</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>104103</p></td>
+<td><p>Insufficient Funds</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>104104</p></td>
+<td><p>Invalid charge configuration</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>104105</p></td>
+<td><p>Server Error</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>104106</p></td>
+<td><p>Server error - could not save to database</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>104107</p></td>
+<td><p>Invalid merchant configuration - No billing account found</p></td>
+</tr>
+</tbody>
+</table>
+<p>RTGS:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>118102</p></td>
+<td><p>Service Not Available</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>118108</p></td>
+<td><p>The source account has insufficient balance amount</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>103101</p></td>
+<td><p>Invalid Account Type.</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>103102</p></td>
+<td><p>Invalid account number .</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>103104</p></td>
+<td><p>Insufficient funds.</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>103105</p></td>
+<td><p>Transfer Limit Exceeded .</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>103106</p></td>
+<td><p>Request Failed, please contact Bank.</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>103107</p></td>
+<td><p>Invalid Currency/Transaction Amount.</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>103108</p></td>
+<td><p>System Failure please retry .</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>103109</p></td>
+<td><p>System malfunction .</p></td>
+</tr>
+</tbody>
+</table>
+<p>Send Money - Within Equity Bank and Equitel</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400103</p></td>
+<td><p>Failed, invalid destination bank account</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400104</p></td>
+<td><p>Failed, insufficient funds</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400105</p></td>
+<td><p>Failed, general error</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400106</p></td>
+<td><p>Failed, destination bank error.</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400107</p></td>
+<td><p>Failed, destination bank error. Cut-over in progress</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400108</p></td>
+<td><p>Failed, destination bank error. System malfunction</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400109</p></td>
+<td><p>Failed, destination bank error. Duplicate transmission</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400111</p></td>
+<td><p>Failed, missing parameter in integration to gateway system</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400112</p></td>
+<td><p>Failed, could not process this request. System failure.</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400101</p></td>
+<td><p>Duplicate Transaction/ Payment Reference</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400113</p></td>
+<td><p>Failed, sender daily limit exceeded</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>103120</p></td>
+<td><p>Failed, banking service could not process the request</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400114</p></td>
+<td><p>Failed, unable to process request. Third party is unavailable</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400115</p></td>
+<td><p>Failed, unhandled error</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400116</p></td>
+<td><p>Failed, 12 digit transaction reference required</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>118110</p></td>
+<td><p>Failed, maximum transfer amount is 999,999 per transaction</p></td>
+</tr>
+</tbody>
+</table>
+<p>Pesalink</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>100116</p></td>
+<td><p>Failed, pesalink or destination bank error</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>100124</p></td>
+<td><p>Failed, invalid amount</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>100128</p></td>
+<td><p>Failed, pesalink or destination bank error</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>100130</p></td>
+<td><p>Failed, pesalink or destination bank error</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>100134</p></td>
+<td><p>Failed, amount less than minimum allowed</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>100207</p></td>
+<td><p>Failed, destination cannot be found for routing</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>100209</p></td>
+<td><p>Failed, pesalink or destination bank error</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>100210</p></td>
+<td><p>Failed, transaction timed out</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>100211</p></td>
+<td><p>Failed, pesalink or destination bank error</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>100232</p></td>
+<td><p>Failed, banking service could not process the request</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400101</p></td>
+<td><p>Duplicate Transaction/ Payment Reference</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>100222</p></td>
+<td><p>Failed, suspected fraud</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400102</p></td>
+<td><p>Failed, invalid destination bank account</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400103</p></td>
+<td><p>Failed, invalid destination bank account</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400104</p></td>
+<td><p>Failed, insufficient funds</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400105</p></td>
+<td><p>Failed, general error</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400106</p></td>
+<td><p>Failed, destination bank error.</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400107</p></td>
+<td><p>Failed, destination bank error. Cut-over in progress</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400108</p></td>
+<td><p>Failed, destination bank error. System malfunction</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400109</p></td>
+<td><p>Failed, destination bank error. Duplicate transmission</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400110</p></td>
+<td><p>Failed, bank not on pesalink</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400111</p></td>
+<td><p>Failed, missing parameter in integration to gateway system</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400112</p></td>
+<td><p>Failed, could not process this request. System failure.</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400113</p></td>
+<td><p>Failed, sender daily limit exceeded</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400114</p></td>
+<td><p>Failed, unable to process request. Third party is unavailable</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400115</p></td>
+<td><p>Failed, unhandled error</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400116</p></td>
+<td><p>Failed, 12 digit transaction reference required</p></td>
+</tr>
+</tbody>
+</table>
+<p>Purchase Airtime</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 91%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>107101</p></td>
+<td><p>Service Not available</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>107102</p></td>
+<td><p>Invalid Provider</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>107103</p></td>
+<td><p>Invalid Parameters</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>107104</p></td>
+<td><p>Invalid Mobile Number</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>107105</p></td>
+<td><p>Invalid Service Type</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>107106</p></td>
+<td><p>Invalid Amount</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>107107</p></td>
+<td><p>Payment reference Number should be 12 digits</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>107108</p></td>
+<td><p>Authentication Failed</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>107109</p></td>
+<td><p>The maximum amount allowed for transfers per transaction is KES 8000</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>107110</p></td>
+<td><p>Failed. Transaction has been reversed to your Account {account}. Ref.{reference}.</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>107111</p></td>
+<td><p>Dear Customer, we are unable to complete your request at this time. Kindly try again later. Reference Number {ref}</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>107112</p></td>
+<td><p>Failed.Transaction Ref.#RefNo# unsuccessful. Kindly call 100 for assistance</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400101</p></td>
+<td><p>Duplicate Transaction/ Payment Reference</p></td>
+</tr>
+</tbody>
+</table>
+<p>Send Money - To Mobile Wallet ( Airtel and M-PESA )</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 88%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400101</p></td>
+<td><p>Duplicate Transaction/ Payment Reference</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400104</p></td>
+<td><p>Failed, insufficient funds</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400105</p></td>
+<td><p>Failed, general error</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400112</p></td>
+<td><p>Failed, could not process this request. System failure.</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400113</p></td>
+<td><p>Failed, sender daily limit exceeded</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400114</p></td>
+<td><p>Failed, unable to process request. Third party is unavailable</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>400115</p></td>
+<td><p>Failed, unhandled error</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400116</p></td>
+<td><p>Failed, 12 digit transaction reference required</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>103120</p></td>
+<td><p>Failed, banking service could not process the request</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>105154</p></td>
+<td><p>Failed, we cannot process your request at the moment due to system failure at Airtel</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>105156</p></td>
+<td><p>Failed, the number is not registered for Airtel money</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>105157</p></td>
+<td><p>Failed, credit party customer type can’t be supported by the service</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>105158</p></td>
+<td><p>Failed, Maximum transfer amount is 70000 per transaction</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>105160</p></td>
+<td><p>Failed, invalid mobile wallet</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>118101</p></td>
+<td><p>Customer not registered for Equitel Mobile Banking</p></td>
+</tr>
+</tbody>
+</table>
+<p>Bill and Till Payments</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>102101</p></td>
+<td><p>Missing parameter</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>102102</p></td>
+<td><p>invalid Reference Number</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>102103</p></td>
+<td><p>Invalid Biller Code/Till Number</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>102104</p></td>
+<td><p>Invalid Bill Reference</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>102105</p></td>
+<td><p>Reversal Failed</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>102106</p></td>
+<td><p>Insufficient Balance, Invalid Account</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>102107</p></td>
+<td><p>System Failure please retry</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>102108</p></td>
+<td><p>Reversal Failed</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>102110</p></td>
+<td><p>Service Not available</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400101</p></td>
+<td><p>Duplicate Transaction/ Payment Reference</p></td>
+</tr>
+</tbody>
+</table>
+<p>Eazzypay Push</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>114101</p></td>
+<td><p>Merchant not registered for service</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>114102</p></td>
+<td><p>Amount is below minimum that is allowed for transaction.</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>114103</p></td>
+<td><p>The maximum amount limit is reached</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>114104</p></td>
+<td><p>Customer is not registered</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>114105</p></td>
+<td><p>Maximum daily amount per-day limit is reached for this payment</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>114106</p></td>
+<td><p>Maximum transactions per-day limit is reached for this payment</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>114107</p></td>
+<td><p>Invalid parameters. Kindly check with bank team</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>400101</p></td>
+<td><p>Duplicate Transaction/ Payment Reference</p></td>
+</tr>
+</tbody>
+</table>
+<p>Lipa na M-Pesa Online</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>117101</p></td>
+<td><p>Bad Request - Invalid TransactionType</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>117101</p></td>
+<td><p>Bad Request - Invalid Password</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>117101</p></td>
+<td><p>Bad Request - Invalid PartyB</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>117101</p></td>
+<td><p>Bad Request - Invalid CallBackURL</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>117101</p></td>
+<td><p>Bad Request - Invalid Remarks</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>117101</p></td>
+<td><p>Bad Request - Invalid PartyA</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>117101</p></td>
+<td><p>Bad Request - Invalid Amount</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>117102</p></td>
+<td><p>[MerchantValidate] - Wrong credentials</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>117102</p></td>
+<td><p>Request failed: Output data invalid</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>117104</p></td>
+<td><p>Error Occured: Spike Arrest Violation</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>500101</p></td>
+<td><p>Generic error. Please contact our support.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Get Payment Status</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>111101</p></td>
+<td><p>Failed. Invalid input parameters</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>111102</p></td>
+<td><p>Bad request - Transaction not found.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Refund Payment</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>113101</p></td>
+<td><p>Service Not available</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>113102</p></td>
+<td><p>Invalid request format</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>113103</p></td>
+<td><p>Invalid Transaction Status code for Reverse the Transaction</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>113104</p></td>
+<td><p>Service Not available</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>113105</p></td>
+<td><p>Due to technical problem we are not able to process your request</p></td>
+</tr>
+</tbody>
+</table>
+<p>Identity Verification</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 91%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>115101</p></td>
+<td><p>ID number used for search contains invalid symbols</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>115102</p></td>
+<td><p>Serial number used for search contains invalid symbols</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>115103</p></td>
+<td><p>At least one of search parameters should be filled</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>115104</p></td>
+<td><p>Search can’t be done if one of mandatory fields is empty. All input parameters should be filled</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>115105</p></td>
+<td><p>There is no record found in IPRS corresponding search parameters</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>115106</p></td>
+<td><p>Service Not available</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>115107</p></td>
+<td><p>Service Not available</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>115108</p></td>
+<td><p>Service Not available</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>115109</p></td>
+<td><p>Service Not available</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>115110</p></td>
+<td><p>Service Not available</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>115111</p></td>
+<td><p>Passport number contains illegal symbols</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>115112</p></td>
+<td><p>At least one of search parameters should be filled</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>115113</p></td>
+<td><p>Search can’t be done if one of mandatory fields is empty. All input parameters should be filled</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>115114</p></td>
+<td><p>User can’t invoke verification methods because he didn’t pass the authorization or don’t have sufficient privileges</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>115115</p></td>
+<td><p>Service Not available</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>115116</p></td>
+<td><p>The image sent doesn’t correspond to the fingerprint format</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>115117</p></td>
+<td><p>Service Not available</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>115118</p></td>
+<td><p>Service Not available</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>115119</p></td>
+<td><p>Service Not available</p></td>
+</tr>
+</tbody>
+</table>
+<p>Account Balance</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>8504</p></td>
+<td><p>No record could be retrieved</p></td>
+</tr>
+</tbody>
+</table>
+<p>Create Bill</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>106101</p></td>
+<td><p>Unauthorized</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>109101</p></td>
+<td><p>invalid charge configuration</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>109102</p></td>
+<td><p>invalid channel code</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>109103</p></td>
+<td><p>Bill already cleared</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>109104</p></td>
+<td><p>Invalid service configuration</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>109105</p></td>
+<td><p>Invalid charge channel configuration code</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>109106</p></td>
+<td><p>Invalid merchant Outlet code specified</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>109107</p></td>
+<td><p>Invalid merchant code</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>109108</p></td>
+<td><p>Invalid request data. Please check your payload</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>109109</p></td>
+<td><p>Service not available</p></td>
+</tr>
+</tbody>
+</table>
+<p>Credit &amp; Debit Card</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>101101</p></td>
+<td><p>Transaction could not be processed</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>101102</p></td>
+<td><p>Transaction declined – contact issuing bank</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>101103</p></td>
+<td><p>No reply from Processing Host</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>101104</p></td>
+<td><p>Card has expired</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>101105</p></td>
+<td><p>Insufficient credit</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>101106</p></td>
+<td><p>Error Communicating with Bank</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>101107</p></td>
+<td><p>Message Detail Error (Invalid PAN, Invalid Expiry Date)</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>101108</p></td>
+<td><p>Transaction declined –transaction type not supported</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>101109</p></td>
+<td><p>Bank Declined Transaction – Do Not Contact Bank</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>116101</p></td>
+<td><p>Payment Not Updated</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>109101</p></td>
+<td><p>invalid charge configuration</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>109102</p></td>
+<td><p>invalid channel code</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>109103</p></td>
+<td><p>Bill already cleared</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>109104</p></td>
+<td><p>Invalid service configuration</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>109105</p></td>
+<td><p>Invalid charge channel configuration code</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>109106</p></td>
+<td><p>Invalid merchant Outlet code specified</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>109107</p></td>
+<td><p>Invalid merchant code</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>109108</p></td>
+<td><p>Invalid request data. Please check your payload</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>109109</p></td>
+<td><p>Service not available</p></td>
+</tr>
+</tbody>
+</table>
+<p>Receive Payments - Mobile Wallets</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>114101</p></td>
+<td><p>Merchant not registered for service</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>114102</p></td>
+<td><p>Amount is below minimum that is allowed for transaction.</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>114103</p></td>
+<td><p>The maximum amount limit is reached</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>114104</p></td>
+<td><p>Customer is not registered</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>114105</p></td>
+<td><p>Maximum daily amount per-day limit is reached for this payment</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>114106</p></td>
+<td><p>Maximum transactions per-day limit is reached for this payment</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>114107</p></td>
+<td><p>Invalid parameters. Kindly check with bank team</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>111101</p></td>
+<td><p>Failed. Invalid input parameters.</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>111102</p></td>
+<td><p>Bad request - Transaction not found</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>116101</p></td>
+<td><p>Payment Not Updated</p></td>
+</tr>
+</tbody>
+</table>
+<p>Query Payment</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>112101</p></td>
+<td><p>Amount paid is less or more than bill amount</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>112102</p></td>
+<td><p>No transaction found for order ref</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>112103</p></td>
+<td><p>Bill not found</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>112104</p></td>
+<td><p>Invalid merchant code</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>112105</p></td>
+<td><p>invalid service map configuration</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>112106</p></td>
+<td><p>Due to technical problem we are not able to process your request</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>112107</p></td>
+<td><p>Invalid service configuration</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>112108</p></td>
+<td><p>Bill already cleared</p></td>
+</tr>
+</tbody>
+</table>
+<p>Query Bill</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 84%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>110101</p></td>
+<td><p>Invalid merchant code</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>110102</p></td>
+<td><p>Invalid request data. Please check your payload</p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p>110103</p></td>
+<td><p>bill doesn’t exist</p></td>
+</tr>
+</tbody>
+</table>
+<p>Generic Error</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="nt">&quot;response_status&quot;</span><span class="p">:</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span>
+<span class="nt">&quot;response_code&quot;</span><span class="p">:</span> <span class="s2">&quot;500101&quot;</span><span class="p">,</span>
+<span class="nt">&quot;response_msg&quot;</span><span class="p">:</span> <span class="s2">&quot;Generic error. Please contact our support.&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Target Error</p>
+<p>200 OK</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="nt">&quot;response_status&quot;</span><span class="p">:</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span>
+<span class="nt">&quot;response_code&quot;</span><span class="p">:</span> <span class="s2">&quot;{$.response code}&quot;</span><span class="p">,</span>
+<span class="nt">&quot;response_msg&quot;</span><span class="p">:</span> <span class="s2">&quot;{$.message}&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="py function">
+<dt id="equity_jenga.api.exceptions.handle_response">
+<code class="sig-prename descclassname">equity_jenga.api.exceptions.</code><code class="sig-name descname">handle_response</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">response</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/equity_jenga/api/exceptions.html#handle_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#equity_jenga.api.exceptions.handle_response" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-equity_jenga.api">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-equity_jenga.api" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Tralah M Brian
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
