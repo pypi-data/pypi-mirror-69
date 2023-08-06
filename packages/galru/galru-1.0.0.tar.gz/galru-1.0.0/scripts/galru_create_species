@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+import sys
+import argparse
+import os
+import pkg_resources
+sys.path.append('../')
+sys.path.append('./')
+from galru.GalruCreateSpecies import GalruCreateSpecies
+
+version = ''
+try:
+	version = pkg_resources.get_distribution("galru").version
+except pkg_resources.DistributionNotFound:
+	version = 'x.y.z'
+
+parser = argparse.ArgumentParser(
+	description = 'Given a species name, create a database',
+	usage = 'galru_create_database [options] "species"'
+    , formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+parser.add_argument('species', help='Species in quotes',  type=str)
+
+parser.add_argument('--output_directory', '-o', help='Output directory, defaults to species name in current directory', type=str)
+parser.add_argument('--threads', '-t',  help='No. of threads to use', type=int, default=1)
+
+parser.add_argument('--refseq_category','-c',  help='Sequencing technology', type=str, default='all', choices=['all','reference','representative'])
+parser.add_argument('--assembly_level', '-l',  help='Assembly level', type=str, default='complete', choices=['all', 'complete','chromosome', 'scaffold',  'contig'])
+parser.add_argument('--cdhit_seq_identity', '-i',  help='Sequence identity for CD-hit', type=float, default=0.99)
+parser.add_argument('--allow_missing_st', '-a', action='store_true', help='Use files with missing ST [%(default)s]', default = False)
+parser.add_argument('--debug', action='store_true', help='Turn on debugging and save intermediate files', default = False)
+parser.add_argument('--verbose', '-v', action='store_true', help='Turn on verbose output', default = False)
+parser.add_argument('--version', action='version', version=str(version))
+
+options = parser.parse_args()
+
+if options.debug:
+    import cProfile, pstats, io
+    pr = cProfile.Profile()
+    pr.enable()
+    
+    g = GalruCreateSpecies(options)
+    g.run()
+    
+    pr.disable()
+    s = io.StringIO()
+    sortby = 'cumulative'
+    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    ps.print_stats()
+    print(s.getvalue())
+else:
+    g = GalruCreateSpecies(options)
+    g.run()
+
