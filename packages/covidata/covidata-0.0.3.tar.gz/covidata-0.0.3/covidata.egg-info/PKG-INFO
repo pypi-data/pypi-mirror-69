@@ -1,0 +1,38 @@
+Metadata-Version: 2.1
+Name: covidata
+Version: 0.0.3
+Summary: Easily access NASA, ESA and JAXA data
+Home-page: https://github.com/lusmoura/Nasa-space-apps
+Author: Control-space
+Author-email: author@example.com
+License: UNKNOWN
+Description: # Covidata
+        
+        Easily access NASA, ESA and JAXA data
+        
+        ## Datasets
+        ### ESA
+            mortality and natality
+            coronavirus cases worldwide
+        
+        ### JAXA
+            greenhouse gases concentration
+        
+        ### NASA
+            landslides
+            atmospherical data
+        
+        ## Example
+        ```python
+        import covidata
+        os = covidata.esa.opendata
+        df = os.get()
+        print(df.head())
+        ```
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
