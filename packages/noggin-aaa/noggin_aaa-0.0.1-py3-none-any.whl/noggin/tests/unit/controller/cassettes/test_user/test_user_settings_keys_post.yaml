@@ -1,0 +1,857 @@
+interactions:
+- request:
+    body: user=admin&password=adminPassw0rd%21
+    headers:
+      Accept:
+      - text/plain
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '36'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Referer:
+      - https://ipa.example.com/ipa/session/login_password
+      User-Agent:
+      - python-requests/2.23.0
+    method: POST
+    uri: https://ipa.example.com/ipa/session/login_password
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAwMAAAAAAAAAAAA=
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '20'
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Mon, 20 Apr 2020 16:49:57 GMT
+      Keep-Alive:
+      - timeout=30, max=100
+      Server:
+      - Apache/2.4.43 (Fedora) OpenSSL/1.1.1d mod_wsgi/4.6.6 Python/3.7 mod_auth_gssapi/1.6.1
+      Set-Cookie:
+      - ipa_session=MagBearerToken=IHTPMcF7cpQDKfJOOt%2bkdAkAeMYpwc21D0fKIih%2fvv6F0j%2bLdsBqv4QCFlf6mn3Yx3BtOnuFMk9ZTWyH4X167ZJBaP3%2f%2fLOj33DkZShhgBoCjrKBKqvLy3fpGnTBGk3KAi7ekxgI56a%2b7u273OnZbJzjSee0BcVtBon0mxLYFCdFoppM3MUaVemshhueZa44;path=/ipa;httponly;secure;
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - DENY
+    status:
+      code: 200
+      message: Success
+- request:
+    body: '{"method": "ping", "params": [[], {}]}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '38'
+      Content-Type:
+      - application/json
+      Cookie:
+      - ipa_session=MagBearerToken=IHTPMcF7cpQDKfJOOt%2bkdAkAeMYpwc21D0fKIih%2fvv6F0j%2bLdsBqv4QCFlf6mn3Yx3BtOnuFMk9ZTWyH4X167ZJBaP3%2f%2fLOj33DkZShhgBoCjrKBKqvLy3fpGnTBGk3KAi7ekxgI56a%2b7u273OnZbJzjSee0BcVtBon0mxLYFCdFoppM3MUaVemshhueZa44
+      Referer:
+      - https://ipa.example.com/ipa
+      User-Agent:
+      - python-requests/2.23.0
+    method: POST
+    uri: https://ipa.example.com/ipa/session/json
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA0yQTWvDMAyG/4rxZZcQ+jHK2Glh9FBYWE5jMMZQYzcYYjtI9koI+e+TE7P2YJAl
+        Pa9eaZKoKfZBPotJUrQWcORYnppKkMZfjYIfGe/EY/lUHkpRNaf/1K7c7Q+yENJqIug0Mfo1yTAO
+        OolcAZ1xXWpwYJfUx0rWhihXMpqKSTo3CBftmYdfgYTzgb24UIiLR9ZUovV2gGDOpjdhXOpdBAQX
+        tFbskHgRVs8LPNC95+JmuvUqjd3uN5stfxUEWM+wYD8ZSMZWZJ6/Z+7TiB4562Lf89eoWzygca0Z
+        oE8QKDbxcvys6ubtWL6+12nmnehyTzn/AQAA//8DAOyF6AGCAQAA
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 20 Apr 2020 16:49:57 GMT
+      Keep-Alive:
+      - timeout=30, max=99
+      Server:
+      - Apache/2.4.43 (Fedora) OpenSSL/1.1.1d mod_wsgi/4.6.6 Python/3.7 mod_auth_gssapi/1.6.1
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - DENY
+    status:
+      code: 200
+      message: Success
+- request:
+    body: '{"method": "user_add", "params": [["dummy"], {"all": true, "givenname":
+      "Dummy", "sn": "User", "cn": "Dummy User", "mail": "dummy@example.com", "loginshell":
+      "/bin/bash", "userpassword": "dummy_password", "fascreationtime": "2020-04-20T16:49:57Z"}]}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '249'
+      Content-Type:
+      - application/json
+      Cookie:
+      - ipa_session=MagBearerToken=IHTPMcF7cpQDKfJOOt%2bkdAkAeMYpwc21D0fKIih%2fvv6F0j%2bLdsBqv4QCFlf6mn3Yx3BtOnuFMk9ZTWyH4X167ZJBaP3%2f%2fLOj33DkZShhgBoCjrKBKqvLy3fpGnTBGk3KAi7ekxgI56a%2b7u273OnZbJzjSee0BcVtBon0mxLYFCdFoppM3MUaVemshhueZa44
+      Referer:
+      - https://ipa.example.com/ipa
+      User-Agent:
+      - python-requests/2.23.0
+    method: POST
+    uri: https://ipa.example.com/ipa/session/json
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA4RU227aQBD9FcsvfQFizCWhUqTSlERVmoSqTVulidB6dzBb7N3tXgAX5d87uzaQ
+        SGnzxHgu58ycmWUbazCusPHbaPvUpAJ/fsYfXFlW0a0BHT+0ophxowpSCVLCS2EuuOWkMHXsNvhy
+        oNK8lCyzX0AtLYipw1aqGN0KtJHCW1LnRPA/xHIpSHHwcwEWY88dzsP6cmn4hlAqnbD+e6kzpbmg
+        XJGCuE3jspwuwSpZcFo1XkyoO2o+jFnsMOfE7EwMfDGLCy2duplPXXYJlfH+EtSN5jkXE2F1VYuh
+        iBP8twPOwnzz4wwoHUL7pJcO290ukHYGSa89SAf9JBklJyn0QqFvGenXUjPYKK6DAAEiTdIk6adJ
+        d9gfDYZ3u2yU0Ko1owsicvhfImysJoxY4pO28WyWEQPD/myG3/F4fJkkqgu0HK3Y2Whxd9FV2fL9
+        +ffJ+fXtZHP+aXk9/fp5fBo/PtQDl0SQHBiEiT0rFafM77iFRu4lMt5qlmFajJ7ChpSqAG9SWdb3
+        wVcgnh9U8Jt65P254BKohqCF5eULYx7vx9wvfA8b2no3+TG+mn6adM5urkKqazbD9qQ5Z8KVGVJ6
+        f7c/6A0TRD8OwZLw4glaM0tnNwgSUyKk4PRV4oUsgXGNxyYb6Y686+jQSCHxlswCiprxKOPiCJe1
+        2PX97y4VPmLQK/CjzfEtgucjZrY7KXRb7XbeJVSWZAdfCR5XzmdhfwHf3zEimvoPwG/FN3DYdAi+
+        suhHLF2RwnlRGrkDmTF4Qaa+RlupEF4TLbjIfUIjY/wNGXDvV9yYJtKUhrudfoyahKiWJVoTEwlp
+        I4O32YrmUiMmi7ARhfeT8YLbKsRzRzQRFoB1orExrkT0KKin35jIA69q4FaUdtLe0DNTyTxtt4eS
+        e0Hq17SN67JZU+Abq0sew3NB7JKEXcdjxoBFXrXovtbiPg4CgdbSr1S4ovD/H+xg7y/aAxCGfT67
+        Ka/ugbffOekg718AAAD//wMA4AIbFtoFAAA=
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 20 Apr 2020 16:49:57 GMT
+      Keep-Alive:
+      - timeout=30, max=98
+      Server:
+      - Apache/2.4.43 (Fedora) OpenSSL/1.1.1d mod_wsgi/4.6.6 Python/3.7 mod_auth_gssapi/1.6.1
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - DENY
+    status:
+      code: 200
+      message: Success
+- request:
+    body: '{"method": "session_logout", "params": [[], {}]}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '48'
+      Content-Type:
+      - application/json
+      Cookie:
+      - ipa_session=MagBearerToken=IHTPMcF7cpQDKfJOOt%2bkdAkAeMYpwc21D0fKIih%2fvv6F0j%2bLdsBqv4QCFlf6mn3Yx3BtOnuFMk9ZTWyH4X167ZJBaP3%2f%2fLOj33DkZShhgBoCjrKBKqvLy3fpGnTBGk3KAi7ekxgI56a%2b7u273OnZbJzjSee0BcVtBon0mxLYFCdFoppM3MUaVemshhueZa44
+      Referer:
+      - https://ipa.example.com/ipa
+      User-Agent:
+      - python-requests/2.23.0
+    method: POST
+    uri: https://ipa.example.com/ipa/session/json
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA0yPy2rDQAxFf0XMphtj8qKUrmpKFoWaZFUKpRTFo5oBe8ZI44Rg/O/V2AZ3p8e9
+        50qDYZK+ieYZhrX0fdNkYFoSwZpEJ1+DifeOtDI3ZO98bVTgsZ1GH8Tigi+dyLJZrGlZnN9gESi4
+        vRDDDQV8iCDkYwa/gZVpoQpth9FdXOPifdrXPTL6SGRzKET6Vulq4ivxg0ACX2dwBrt8t39MyVWw
+        KXa732y22lqMOD03234WQzpstozj96g6Yg68vu7sWnfsfOU6bJIJrR7xcvwsyvP7MX89lSnzH/SQ
+        P+UK/QMAAP//AwBCBmNsWAEAAA==
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 20 Apr 2020 16:49:57 GMT
+      Keep-Alive:
+      - timeout=30, max=97
+      Server:
+      - Apache/2.4.43 (Fedora) OpenSSL/1.1.1d mod_wsgi/4.6.6 Python/3.7 mod_auth_gssapi/1.6.1
+      Set-Cookie:
+      - ipa_session=;Max-Age=0;path=/ipa;httponly;secure;
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - DENY
+    status:
+      code: 200
+      message: Success
+- request:
+    body: user=dummy&new_password=dummy_password&old_password=dummy_password
+    headers:
+      Accept:
+      - text/plain
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '66'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.23.0
+    method: POST
+    uri: https://ipa.example.com/ipa/session/change_password
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA0TOUQqAIAwG4PdO4Qma9Tw8Q9AJTC0D02hGdPtmCT2MwfbtZ+jzFlSD3mnLLa85
+        ONVLKcbTGEeE8I0ahEqmZO9y0KlBE13psMJ4HRcn6DuZz8C4Y7NzUT5SXH57aaretgh1y+nFQs2G
+        96kHAAD//wMAiLUc4ZsAAAA=
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - text/html; charset=utf-8
+      Date:
+      - Mon, 20 Apr 2020 16:49:57 GMT
+      Keep-Alive:
+      - timeout=30, max=100
+      Server:
+      - Apache/2.4.43 (Fedora) OpenSSL/1.1.1d mod_wsgi/4.6.6 Python/3.7 mod_auth_gssapi/1.6.1
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - DENY
+      X-IPA-Pwchange-Result:
+      - ok
+    status:
+      code: 200
+      message: Success
+- request:
+    body: user=dummy&password=dummy_password
+    headers:
+      Accept:
+      - text/plain
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '34'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Referer:
+      - https://ipa.example.com/ipa/session/login_password
+      User-Agent:
+      - python-requests/2.23.0
+    method: POST
+    uri: https://ipa.example.com/ipa/session/login_password
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAwMAAAAAAAAAAAA=
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '20'
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Mon, 20 Apr 2020 16:49:57 GMT
+      Keep-Alive:
+      - timeout=30, max=100
+      Server:
+      - Apache/2.4.43 (Fedora) OpenSSL/1.1.1d mod_wsgi/4.6.6 Python/3.7 mod_auth_gssapi/1.6.1
+      Set-Cookie:
+      - ipa_session=MagBearerToken=2S7aJnXlr2ygmHmZ8Mx8DMMFLh7%2b2T4GlUQDrQ5cbfwxLCXooEyMPNLi0NBSijn7SRM9n89W0fxRCkfnIEhQv69pR%2bCWrIRpOYak08po%2bq7flyLCF4IjGOrH0L1znFGKUwVRLMSrgDtH85iN09XpO8vxjtE6QrzMiN5Dz891023uLed12mm6qLF1v1csKXS3;path=/ipa;httponly;secure;
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - DENY
+    status:
+      code: 200
+      message: Success
+- request:
+    body: '{"method": "ping", "params": [[], {}]}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '38'
+      Content-Type:
+      - application/json
+      Cookie:
+      - ipa_session=MagBearerToken=2S7aJnXlr2ygmHmZ8Mx8DMMFLh7%2b2T4GlUQDrQ5cbfwxLCXooEyMPNLi0NBSijn7SRM9n89W0fxRCkfnIEhQv69pR%2bCWrIRpOYak08po%2bq7flyLCF4IjGOrH0L1znFGKUwVRLMSrgDtH85iN09XpO8vxjtE6QrzMiN5Dz891023uLed12mm6qLF1v1csKXS3
+      Referer:
+      - https://ipa.example.com/ipa
+      User-Agent:
+      - python-requests/2.23.0
+    method: POST
+    uri: https://ipa.example.com/ipa/session/json
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA0yQTWvDMAyG/4rxZZcQ+jHK2Glh9FBYWE5jMMZQYzcYYjtI9koI+e+TE7P2YJAl
+        Pa9eaZKoKfZBPotJUrQWcORYnppKkMZfjYIfGe/EY/lUHkpRNaf/1K7c7Q+yENJqIug0Mfo1yTAO
+        OolcAZ1xXWpwYJfUx0rWhihXMpqKSTo3CBftmYdfgYTzgb24UIiLR9ZUovV2gGDOpjdhXOpdBAQX
+        tFbskHgRVs8LPNC95+JmuvUqjd3uN5stfxUEWM+wYD8ZSMZWZJ6/Z+7TiB4562Lf89eoWzygca0Z
+        oE+Q4muOL8fPqm7ejuXre51m3oku95TzHwAAAP//AwBI2e3iggEAAA==
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 20 Apr 2020 16:49:58 GMT
+      Keep-Alive:
+      - timeout=30, max=100
+      Server:
+      - Apache/2.4.43 (Fedora) OpenSSL/1.1.1d mod_wsgi/4.6.6 Python/3.7 mod_auth_gssapi/1.6.1
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - DENY
+    status:
+      code: 200
+      message: Success
+- request:
+    body: '{"method": "user_find", "params": [[], {"all": true, "no_members": false,
+      "sizelimit": 0, "whoami": true}]}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '107'
+      Content-Type:
+      - application/json
+      Cookie:
+      - ipa_session=MagBearerToken=2S7aJnXlr2ygmHmZ8Mx8DMMFLh7%2b2T4GlUQDrQ5cbfwxLCXooEyMPNLi0NBSijn7SRM9n89W0fxRCkfnIEhQv69pR%2bCWrIRpOYak08po%2bq7flyLCF4IjGOrH0L1znFGKUwVRLMSrgDtH85iN09XpO8vxjtE6QrzMiN5Dz891023uLed12mm6qLF1v1csKXS3
+      Referer:
+      - https://ipa.example.com/ipa
+      User-Agent:
+      - python-requests/2.23.0
+    method: POST
+    uri: https://ipa.example.com/ipa/session/json
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA4RU227UQAz9lVFeeNlLkr21lSpRQYUQVK2EihAIVZOJNxk6mQlz6W6o+u/Yk+yl
+        XJ/W8bGP7WPPPiYWXFA+OWOPB/PLYyI0/SavQ9N07NaBTb6OWFJK1yread7An2CppZdcuR67jb4K
+        hHF/Cl5zJyxwL432cuDL0zxN53maLeeni9XnGGeKbyC8UNz1NN60CbpbsM5osoytuJY/IhNXB7/U
+        4BF77ghUntKNk1suhAna0/e9LVortZAtVzxsB5eX4h58a5QU3eDFgL6j4cO5eseJE+1MBD64+o01
+        ob1e34TiHXSO/A2011ZWUl9qb7tetJYHLb8HkGWcb70qQIgljE9m+XKcZcDHBaSz8SJfzNP0ND3J
+        YRYTqWUsvzG2hG0rbRTgIOMqOz2WEaNRQt9uSlFzXf1d70o+gH6+4egPQ3/lsUeHpsCJyZ/NF7Nl
+        ilSrXT3BtdFScLVni7kvLz9dXN28v5y8ur6KoQ2X6giGLW9aBRNhmv2cu9X8h6n6V0euF2d/gLVp
+        oJQWV2lwFQRNyTU9DKgMbsrVoPr2poXU04K7OoLaDeejjLhHfI2HD3RZ+IzAPkB55GuAmjLru4ou
+        IpLR2jHO9e+KWiM9z2PxkdDnESRjqOJGpTgfpCGT1Hmi3P6Ez1iGtrdBC+5/qe0cr8D179p3LQmY
+        bLjVUld0k4OmyUcsiBd0JZ0bkCGVwIubt2wIYL3EbMMd08YzB9qP2NpY5CwZ9tXiJRZSSd9FvArc
+        cu0Bygm7cC40yM6iRPaFY0T80BOPWD7JZ8skDlVS2WyG6yN9uOfxL6pPuxsSqLE+5SlKgdwNj7tM
+        MkYCsoZ7UaMcT4iCtYYOQwel6N2VB3t/X5T6+2lhxFHF+eRkghV/AgAA//8DANW1Fhg7BQAA
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 20 Apr 2020 16:49:58 GMT
+      Keep-Alive:
+      - timeout=30, max=99
+      Server:
+      - Apache/2.4.43 (Fedora) OpenSSL/1.1.1d mod_wsgi/4.6.6 Python/3.7 mod_auth_gssapi/1.6.1
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - DENY
+    status:
+      code: 200
+      message: Success
+- request:
+    body: '{"method": "user_show", "params": [["dummy"], {"all": true, "raw": false}]}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '75'
+      Content-Type:
+      - application/json
+      Cookie:
+      - ipa_session=MagBearerToken=2S7aJnXlr2ygmHmZ8Mx8DMMFLh7%2b2T4GlUQDrQ5cbfwxLCXooEyMPNLi0NBSijn7SRM9n89W0fxRCkfnIEhQv69pR%2bCWrIRpOYak08po%2bq7flyLCF4IjGOrH0L1znFGKUwVRLMSrgDtH85iN09XpO8vxjtE6QrzMiN5Dz891023uLed12mm6qLF1v1csKXS3
+      Referer:
+      - https://ipa.example.com/ipa
+      User-Agent:
+      - python-requests/2.23.0
+    method: POST
+    uri: https://ipa.example.com/ipa/session/json
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA4RU227TQBD9FcsvvOTiONciVaKCCiGoWgkVIRCqxuuJs2S9u+wlian67+ysnTiV
+        CjxlPGeuZ87mMTVovXDp6+Tx3GQy/HxP3/m6bpJ7iyb9MUjSklstoJFQ40swl9xxELbF7qOvQqbs
+        S8Gq+InMMQG2hZ3SaXBrNFZJspSpQPLf4LiSIHo/l+gC9tzhqSylK8sPwJjy0tH31hTacMm4BgH+
+        0LkcZ1t0WgnOms4bAtqJug9rN8eaa7BHMwCf7ea9UV7fru988REbS/4a9a3hFZfX0pmmJUODl/yX
+        R17G/dbLAhlb4HA1zRfDyQRhWGA2Hc7z+SzLLrJVjtOYSCOH9ntlSjxobiIBsUSe5Vm2nFxMFrOL
+        +fLbMTpQ6PS+ZBuQFfaBszw7DwxbMIOxmOP13+M8L6Wvi7AvRUxm8+kiCwHLYzcGUknOQJxUUNJh
+        31x/vbq5+3Q9ent7c6zTo60U+A7lc+10/n93PB3wPx1r4OIMxgPUWuCIqTrCtiXxJMCNqrHkJpxc
+        hZMRNCbXuB9YqHBRu0HRlh0XXI4LsJsIStvJTCi2Dfg6CB+pLNiH4/2C2xl/9G6xcVD0Ph3eG5od
+        lmfZNRIRav1QkcZiWxJSiLPtC6QliNvLOOaAycsIktHNYwclu+yWJ5P2fwqpOxCe6OsuEptZCxXG
+        9/eYukZHeA9GcllRQEd4+iV0CLq54dZ2SJdK4NXdh6QLSNo7JnuwiVQusSjdIFkrE2qWSRhEB/0V
+        XHDXRLzyYEA6xHKUXFnr61A9iZyYVzahwru28CDJR/l0QZ2ZKqntZBo0QoSAg/iP1aY9dAk0WJvy
+        9BSPH3aGeGbphSA60Bhlum96rmVvnwR3YuuZ1ojLvststBqFLn8AAAD//wMApwLsrUkFAAA=
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 20 Apr 2020 16:49:58 GMT
+      Keep-Alive:
+      - timeout=30, max=98
+      Server:
+      - Apache/2.4.43 (Fedora) OpenSSL/1.1.1d mod_wsgi/4.6.6 Python/3.7 mod_auth_gssapi/1.6.1
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - DENY
+    status:
+      code: 200
+      message: Success
+- request:
+    body: '{"method": "user_mod", "params": [["dummy"], {"all": false, "no_members":
+      false, "raw": false, "rights": false, "ipasshpubkey": ["ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCtX/SK86GrOa0xUadeZVbDXCj6wseamJQTpvjzNdKLgIBuQnA2dnR+jBS54rxUzHD1In/yI9r1VXr+KVZG4ULHmSuP3Icl0SUiVs+u+qeHP77Fa9rnQaxxCFL7uZgDSGSgMx0XtiQUrcumlD/9mrahCefU0BIKfS6e9chWwJnDnPSpyWf0y0NpaGYqPaV6Ukg2Z5tBvei6ghBb0e9Tusg9dHGvpv2B23dCzps6s5WBYY2TqjTHAEuRe6xR0agtPUE1AZ/DvSBKgwEz6RXIFOtv/fnZ0tERh238+n2nohMZNo1QAtQ6I0U9Kx2gdAgHRaMN6GzmbThji/MLgKlIJPSh"],
+      "fasgpgkeyid": []}]}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '534'
+      Content-Type:
+      - application/json
+      Cookie:
+      - ipa_session=MagBearerToken=2S7aJnXlr2ygmHmZ8Mx8DMMFLh7%2b2T4GlUQDrQ5cbfwxLCXooEyMPNLi0NBSijn7SRM9n89W0fxRCkfnIEhQv69pR%2bCWrIRpOYak08po%2bq7flyLCF4IjGOrH0L1znFGKUwVRLMSrgDtH85iN09XpO8vxjtE6QrzMiN5Dz891023uLed12mm6qLF1v1csKXS3
+      Referer:
+      - https://ipa.example.com/ipa
+      User-Agent:
+      - python-requests/2.23.0
+    method: POST
+    uri: https://ipa.example.com/ipa/session/json
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA4RU23aiSBT9FRYvM7NMC6Ki9tOAGiWKURFjnO6VVUIBZaAgdcFLVv59qsBOZl5m
+        eOLsc619dtW7SiDlKVO/K+///OUoxDw7QCKsv9RWp9s2db1l9tSfd4qaAZRWeMiz7PInPIOsSGEz
+        yLPKjQpAaVLwwyu8VGHC+kYoUCzx2e3FFQxbl8AYS3NkrSxbwtZqyHaaN+ubE/II9LMPQrjfHka7
+        4dE8UQiyh9WmKI/XRTibx47NV9gyQrxuHG2v2yFn/zodtRysXZwBaW13pDHb7icdfz7NPL5sO0Gq
+        ez7a0gZvvMHpste7BwOCV+B8Ht7Pe3wfj7yJF7tnfcfQyicBz9KRNsgISIYw8nXbmUWeCQdB8nR6
+        wCO89IrLU6Rf9EUBJs9vS7A1/dfY2HeZXUJkxol90OFgw2k8CKeTsigN22iHw2tBTdp9sp+fjc3b
+        cTO1xnwNzfNaBzFb+uOWtddGpWfP4tP4aq53zv0jK7UI73U2XidGu9/ABs4Td7/IWyuLrUxH9wez
+        sxGHVjxdA3dhTq7ZYZMckebO41nqPCy9pNoIxdUefCr2Ke0YlRBjkMEKHskt3vD/2HqSZzBEBAYs
+        J/VeNQlp4Wd6mscI0wSmtTq0A8LaAdB6BqGoL81UyCs5FAThQOgl/RymltR4Z7nL+bg5fHSr0AjQ
+        gEDAUI4ZukUauqHrHUPM1xl0e/tfJQOAc4yC/y2JKQiCnGOW5sGriItASqE8JqAvUsCnnMiBGeG/
+        UCFnBg5f2KfIo6Lq400to2t+j9wn1nKy9q6Ld0cjnDbOzLGOPasfJu6DGzw2Vv1e39yaILaU329X
+        44/6XkHJfR69xCTndU3BDRdbo+rPDxFQgpTLM91IrFIoBTGkMvhdZZeicp8AwQjHMuDGgroVRQR7
+        LqL05rmlSqe1dJRbgFILQDkBquCcKRRidqdEORE1Q0Vc8UJs4YBSxC6VP+aAAMwgDJuKRSnPRHWR
+        REpIfqOKLFzWhe8Uo2m0Tdk5yEPZttUW4hJmCBioHp067eWWIAerUz4+KhGLM4NKeaqbhyhCMFQk
+        N8qPmo4fqio5goTkUr+Yp6l8jMKv/0+1fVL4L1VIgr9ad5r9pmj9NwAAAP//AwDicBcBIQUAAA==
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 20 Apr 2020 16:49:58 GMT
+      Keep-Alive:
+      - timeout=30, max=97
+      Server:
+      - Apache/2.4.43 (Fedora) OpenSSL/1.1.1d mod_wsgi/4.6.6 Python/3.7 mod_auth_gssapi/1.6.1
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - DENY
+    status:
+      code: 200
+      message: Success
+- request:
+    body: '{"method": "session_logout", "params": [[], {}]}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '48'
+      Content-Type:
+      - application/json
+      Cookie:
+      - ipa_session=MagBearerToken=2S7aJnXlr2ygmHmZ8Mx8DMMFLh7%2b2T4GlUQDrQ5cbfwxLCXooEyMPNLi0NBSijn7SRM9n89W0fxRCkfnIEhQv69pR%2bCWrIRpOYak08po%2bq7flyLCF4IjGOrH0L1znFGKUwVRLMSrgDtH85iN09XpO8vxjtE6QrzMiN5Dz891023uLed12mm6qLF1v1csKXS3
+      Referer:
+      - https://ipa.example.com/ipa
+      User-Agent:
+      - python-requests/2.23.0
+    method: POST
+    uri: https://ipa.example.com/ipa/session/json
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA0yPzUvEMBDF/5UhFy8l7IeIeLLIHgSLexJBRLLNWAL5KDPJLqX0fzdpC/X2Mu+9
+        32RGQcjJRvEE4yZ9srYC4ZBZdch58jWKOPSYlbgp8sZ3Ige8cvPoA4lN8I1hXp21Wsz6/AprIIPd
+        BQluisGHCIw+VvAbKDM1tMH1KpqLsSYOs98lRcpHRC2hZk4u03OJrkh3DAV8XcAVHOTh+FA2t0GX
+        tfvjbrfPT62imo9baj9roXxsqUzT95RzSBRoO93oTfdkfGt6ZUtJJ+eG59Nn3ZzfTvLlvSk7/0Hv
+        5aPM0D8AAAD//wMA5lpmj1gBAAA=
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 20 Apr 2020 16:49:58 GMT
+      Keep-Alive:
+      - timeout=30, max=99
+      Server:
+      - Apache/2.4.43 (Fedora) OpenSSL/1.1.1d mod_wsgi/4.6.6 Python/3.7 mod_auth_gssapi/1.6.1
+      Set-Cookie:
+      - ipa_session=;Max-Age=0;path=/ipa;httponly;secure;
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - DENY
+    status:
+      code: 200
+      message: Success
+- request:
+    body: user=admin&password=adminPassw0rd%21
+    headers:
+      Accept:
+      - text/plain
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '36'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Referer:
+      - https://ipa.example.com/ipa/session/login_password
+      User-Agent:
+      - python-requests/2.23.0
+    method: POST
+    uri: https://ipa.example.com/ipa/session/login_password
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAwMAAAAAAAAAAAA=
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '20'
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Mon, 20 Apr 2020 16:49:58 GMT
+      Keep-Alive:
+      - timeout=30, max=100
+      Server:
+      - Apache/2.4.43 (Fedora) OpenSSL/1.1.1d mod_wsgi/4.6.6 Python/3.7 mod_auth_gssapi/1.6.1
+      Set-Cookie:
+      - ipa_session=MagBearerToken=S7X3R%2bX61vebKZ4dpUtZ8b2yN0ARIqOsjkZk2WEs92o4WF1IU8UPX3bMCZjcVyDVczQV11CX5ubu%2box3fUjTyEgRTB8OpM3biv1h%2fFXjauF9tj2iH%2f1Tpwq8UXEQ3H5rJXhojQb07M8LTarq7akxeqWmh4AV4J2HooTjceVQDkvTdsA4LkAD4X%2fH01T2sTDd;path=/ipa;httponly;secure;
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - DENY
+    status:
+      code: 200
+      message: Success
+- request:
+    body: '{"method": "ping", "params": [[], {}]}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '38'
+      Content-Type:
+      - application/json
+      Cookie:
+      - ipa_session=MagBearerToken=S7X3R%2bX61vebKZ4dpUtZ8b2yN0ARIqOsjkZk2WEs92o4WF1IU8UPX3bMCZjcVyDVczQV11CX5ubu%2box3fUjTyEgRTB8OpM3biv1h%2fFXjauF9tj2iH%2f1Tpwq8UXEQ3H5rJXhojQb07M8LTarq7akxeqWmh4AV4J2HooTjceVQDkvTdsA4LkAD4X%2fH01T2sTDd
+      Referer:
+      - https://ipa.example.com/ipa
+      User-Agent:
+      - python-requests/2.23.0
+    method: POST
+    uri: https://ipa.example.com/ipa/session/json
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA0yQTWvDMAyG/4rxZZcQ+jHK2Glh9FBYWE5jMMZQYzcYYjtI9koI+e+TE7P2YJAl
+        Pa9eaZKoKfZBPotJUrQWcORYnppKkMZfjYIfGe/EY/lUHkpRNaf/1K7c7Q+yENJqIug0Mfo1yTAO
+        OolcAZ1xXWpwYJfUx0rWhihXMpqKSTo3CBftmYdfgYTzgb24UIiLR9ZUovV2gGDOpjdhXOpdBAQX
+        tFbskHgRVs8LPNC95+JmuvUqjd3uN5stfxUEWM+wYD8ZSMZWZJ6/Z+7TiB4562Lf89eoWzygca0Z
+        oE8QKDbxcvys6ubtWL6+12nmnehyTzn/AQAA//8DAOyF6AGCAQAA
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 20 Apr 2020 16:49:59 GMT
+      Keep-Alive:
+      - timeout=30, max=99
+      Server:
+      - Apache/2.4.43 (Fedora) OpenSSL/1.1.1d mod_wsgi/4.6.6 Python/3.7 mod_auth_gssapi/1.6.1
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - DENY
+    status:
+      code: 200
+      message: Success
+- request:
+    body: '{"method": "user_del", "params": [["dummy"], {"continue": false, "preserve":
+      false}]}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '85'
+      Content-Type:
+      - application/json
+      Cookie:
+      - ipa_session=MagBearerToken=S7X3R%2bX61vebKZ4dpUtZ8b2yN0ARIqOsjkZk2WEs92o4WF1IU8UPX3bMCZjcVyDVczQV11CX5ubu%2box3fUjTyEgRTB8OpM3biv1h%2fFXjauF9tj2iH%2f1Tpwq8UXEQ3H5rJXhojQb07M8LTarq7akxeqWmh4AV4J2HooTjceVQDkvTdsA4LkAD4X%2fH01T2sTDd
+      Referer:
+      - https://ipa.example.com/ipa
+      User-Agent:
+      - python-requests/2.23.0
+    method: POST
+    uri: https://ipa.example.com/ipa/session/json
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA0xQS2vDMAz+K8KXXUroY4yx00rXw2BlPY3BWoZaq8VgO0G2U0LJf5/UBNab9Ol7
+        SLoaplR8Ni9wvS9P6DxZKX/2/QRMi76QdsaWEDqzFyxQSnimpPDV5K5RgrkgRxfPRggRww36Ik6u
+        jhuX0jgZpTpcbt9hJEAs4UAMF0wQ6wyJYp7AqWbxtHCsQ4PZHZx3ubvNzwUZYyayFSxTKkHcRcQt
+        8UMCNW4H4wnMq/niSZOPtdXY2WI6nUlrMePt3kH2Owp0sUHS93qqeAfkTuE38pTJQhEF7IZ37IzR
+        JxFzzcKJxXtpnf2vG3bx6Br0aoFWNn1dfy832491tfrc6GJ3yY/VcyXJfwAAAP//AwC881l1mwEA
+        AA==
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 20 Apr 2020 16:49:59 GMT
+      Keep-Alive:
+      - timeout=30, max=98
+      Server:
+      - Apache/2.4.43 (Fedora) OpenSSL/1.1.1d mod_wsgi/4.6.6 Python/3.7 mod_auth_gssapi/1.6.1
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - DENY
+    status:
+      code: 200
+      message: Success
+- request:
+    body: '{"method": "session_logout", "params": [[], {}]}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '48'
+      Content-Type:
+      - application/json
+      Cookie:
+      - ipa_session=MagBearerToken=S7X3R%2bX61vebKZ4dpUtZ8b2yN0ARIqOsjkZk2WEs92o4WF1IU8UPX3bMCZjcVyDVczQV11CX5ubu%2box3fUjTyEgRTB8OpM3biv1h%2fFXjauF9tj2iH%2f1Tpwq8UXEQ3H5rJXhojQb07M8LTarq7akxeqWmh4AV4J2HooTjceVQDkvTdsA4LkAD4X%2fH01T2sTDd
+      Referer:
+      - https://ipa.example.com/ipa
+      User-Agent:
+      - python-requests/2.23.0
+    method: POST
+    uri: https://ipa.example.com/ipa/session/json
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA0yPy2rDQAxFf0XMphtj8qKUrmpKFoWaZFUKpRTFo5oBe8ZI44Rg/O/V2AZ3p8e9
+        50qDYZK+ieYZhrX0fdNkYFoSwZpEJ1+DifeOtDI3ZO98bVTgsZ1GH8Tigi+dyLJZrGlZnN9gESi4
+        vRDDDQV8iCDkYwa/gZVpoQpth9FdXOPifdrXPTL6SGRzKET6Vulq4ivxg0ACX2dwBrt8t39MyVWw
+        KXa732y22lqMOD03234WQzpstozj96g6Yg68vu7sWnfsfOU6bJIJrR7xcvwsyvP7MX89lSnzH/SQ
+        P+UK/QMAAP//AwBCBmNsWAEAAA==
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 20 Apr 2020 16:49:59 GMT
+      Keep-Alive:
+      - timeout=30, max=97
+      Server:
+      - Apache/2.4.43 (Fedora) OpenSSL/1.1.1d mod_wsgi/4.6.6 Python/3.7 mod_auth_gssapi/1.6.1
+      Set-Cookie:
+      - ipa_session=;Max-Age=0;path=/ipa;httponly;secure;
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - DENY
+    status:
+      code: 200
+      message: Success
+version: 1
