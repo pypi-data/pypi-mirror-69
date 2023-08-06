@@ -1,0 +1,24 @@
+Metadata-Version: 2.1
+Name: bhav
+Version: 1.0.2
+Summary: CLI to download End of day Stock data from BSE and NSE
+Home-page: https://gitlab.com/sw8fbar/bhav
+Author: Ajay Sharma
+Author-email: deal.ajay@gmail.com
+License: LICENSE.txt
+Platform: UNKNOWN
+Requires-Python: >=3
+Requires-Dist: Click
+Requires-Dist: requests
+Requires-Dist: python-dotenv
+
+bhav is a cli to download EOD stock data from the BSE / NSE indexes based on our experience fetching this data over the last decade
+
+run pip3 install bhav to install
+
+bhav bse --help for BSE download options
+bhav nse --help for NSE download options
+
+Most configuration options should help adjust to changes in the way these files are distributed by the excahnges. If the date column is not provided in the file, it will be automatically added.
+bhav config --help for configuration options
+
