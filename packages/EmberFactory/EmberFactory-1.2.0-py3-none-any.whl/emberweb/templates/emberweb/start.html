@@ -1,0 +1,52 @@
+{% set active_page = "index" %}
+{% extends 'base.html' %}
+{% block content %}
+<h1>Introduction</h1>
+<p>
+    <a href="{{ url_for('.examples_fil', filename='Basic-fmt-SRCCL.xlsx')}}" class="btn" style="float: right;">
+        <svg class="icon" aria-hidden="true" style="padding-right: 0.5em;">
+            <use xlink:href="{{ url_for('static', filename='icons.svg')}}#download"></use>
+        </svg>Basic format example
+    </a>
+    The application makes graphics by taking data from specifically formatted Excel sheets.
+    The detailed information on the input formats is provided in <a href="{{ url_for('.examples')}}">Examples</a>.
+    As a starting point, you may download the
+    '<a href="{{ url_for('.examples_fil', filename='Basic-fmt-SRCCL.xlsx')}}">Basic format</a>'
+    example. It is based on tables published in the supplementary
+    material of IPCC's <a href="https://www.ipcc.ch/srccl/download/">Special Report on Climate Change and Land</a>.
+</p>
+<p>
+    Examples can be used to test the application as well as as a template to provide your own data. To make graphs,
+    follow the simple procedure shown below.
+</p><p>
+Feedback is welcome, including on what you would like to have as input format, layout or other issues that you may
+    experience, or missing features.
+</p>
+<h1>Ember graph production</h1>
+<form enctype="multipart/form-data" id="fileUpload" action="{{ url_for('control.result')}}" method="post">
+  <fieldset class="innerframe">
+      <p style="margin-top:0">To start, upload your data here (first select the file, then upload and process):</p>
+      <p class="compact"><input type="file" name="file" class="btn" style="width: 335px; max-width: 72vw">
+      <p style="margin-bottom: 6px;">Color mode (except for the full flexibility format, which defines its own colors): </p>
+      <p style="text-align:left; margin-top: 0px;">
+          <input type="radio" id="RGB" name="csys" value="RGB" >
+            <label for="RGB" class="check" >RGB (best choice with some PDF viewers: use if the red in your embers looks 'dark'; colours from IPCC SRCCL fig. 7.2)</label><br>
+          <input type="radio" id="CMYK" name="csys" value="CMYK" checked="checked"><br>
+             <label for="CMYK" class="check" >CMYK (IPCC guidelines)</label>
+	  </p>
+      <p style="text-align:left" class="efbox">
+        <input type="checkbox" id="delfile" name="delfile" checked="checked" style="margin-top: -1px; vertical-align: middle;" >
+ 		 <label for="delfile" class="check">Delete all my data after use
+             (uncheck if you want to give the app maintainers access to your work to
+              potentially improve the Ember Factory; nothing would be public; if you leave it checked, your data will be
+              deleted after processing and the resulting diagram will be deleted when downloaded)</label><br>
+	   </p>
+      <p><input type="submit" value="Upload and produce ember diagram" class="btn" style="width: 350px; max-width: 75vw; margin-bottom:0px"></p>
+  </fieldset>
+</form>
+<p>
+Thanks for your visit!
+</p>
+(Main version: {{version}}; ember drawing code version [embermaker]: {{mkeversion}}).<br>
+Disclaimer: this is not a product of the IPCC (which is not responsible for projects or researches).
+{% endblock %}
