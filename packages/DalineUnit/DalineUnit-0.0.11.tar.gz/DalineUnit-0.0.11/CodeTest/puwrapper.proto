@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.daline.puwrapper";
+option java_outer_classname = "RequestProto";
+
+package puwrapper;
+
+// The pu request service definition.
+service PURequest {
+  rpc Request (RequestMsg) returns (RequestRetMsg) {}
+}
+
+// The request URL
+message RequestMsg{
+  string strReq = 1;
+}
+
+// The request result
+message RequestRetMsg {
+  string strRet = 1;
+}
