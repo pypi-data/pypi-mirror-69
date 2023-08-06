@@ -1,0 +1,3 @@
+# ratelang
+
+In planning phase ...
