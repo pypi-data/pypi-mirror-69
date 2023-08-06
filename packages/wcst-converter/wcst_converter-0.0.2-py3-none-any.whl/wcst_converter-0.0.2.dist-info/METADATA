@@ -1,0 +1,48 @@
+Metadata-Version: 2.1
+Name: wcst-converter
+Version: 0.0.2
+Summary: Convert WCST output reports to collapsed columns format
+Home-page: http://www.ericvanbuhler.net
+Author: Eric VanBuhler
+Author-email: eric.vanbuhler@gmail.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: numpy (==1.18.4)
+Requires-Dist: pandas (==1.0.3)
+
+# WCST Converter
+
+Convert WCST report output format to collapsed column format.
+
+## Setup
+
+Run `pip3 install wcst-converter` to install the tool.
+
+## Usage
+
+```
+python .\converter.py --help
+usage: wcst-converter [-h] [-i INPUT] [-d] [-v] [-V]
+
+Convert WCST reports to desired format
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i INPUT, --input INPUT
+                        Path to the input directory containing CSV reports
+  -d, --delete-old-cols
+                        Delete old columns
+  -v, --verbose         Print verbose logs
+  -V, --version         Print application version and exit
+```
+
+1. Save WCST reports to a directory on your system in CSV format.
+2. Enter the directory in file explorer and copy the file path from the control bar.
+3. In the PowerShell window with the environment activated, type the following: `python .\converter.py -i <path to input directory>`
+4. Converted CSV files will be saved in a directory named "converted-<timestamp>" in the input directory. Since the output directory has teh timestamp, you can run it multiple times and new output directories will be created for each run.
+
