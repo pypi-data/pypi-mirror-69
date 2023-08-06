@@ -1,0 +1,19 @@
+cargo-features = ["rename-dependency"]
+
+[package]
+name = "pr_request"
+version = "0.0.1"
+authors = ["liuhongru <liuhongru@liquidnetwork.com>"]
+edition = "2018"
+
+[lib]
+name = "pr_request"
+crate-type = ["cdylib"]
+
+[dependencies.pyo3]
+version = "0.10.1"
+features = ["extension-module"]
+
+[dependencies]
+reqwest = { version = "0.10", features = ["blocking", "json"] }
+serde_json = "1.0"
