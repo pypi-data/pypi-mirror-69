@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+
+import json
+import threading
+from os import path
+from subprocess import Popen
+
+import oneiot_core.env as env
+from apscheduler.events import *
+import oneiot_core.utils.EventBus as EventBus
+from apscheduler.schedulers.background import BlockingScheduler
+
+eventMap = {
+    2 ** 0: "EVENT_SCHEDULER_STARTED",
+    2 ** 1: "EVENT_SCHEDULER_SHUTDOWN",
+    2 ** 2: "EVENT_SCHEDULER_PAUSED",
+    2 ** 3: "EVENT_SCHEDULER_RESUMED",
+    2 ** 4: "EVENT_EXECUTOR_ADDED",
+    2 ** 5: "EVENT_EXECUTOR_REMOVED",
+    2 ** 6: "EVENT_JOBSTORE_ADDED",
+    2 ** 7: "EVENT_JOBSTORE_REMOVED",
+    2 ** 8: "EVENT_ALL_JOBS_REMOVED",
+    2 ** 9: "EVENT_JOB_ADDED",
+    2 ** 10: "EVENT_JOB_REMOVED",
+    2 ** 11: "EVENT_JOB_MODIFIED",
+    2 ** 12: "EVENT_JOB_EXECUTED",
+    2 ** 13: "EVENT_JOB_ERROR",
+    2 ** 14: "EVENT_JOB_MISSED",
+    2 ** 15: "EVENT_JOB_SUBMITTED",
+    2 ** 16: "EVENT_JOB_MAX_INSTANCES",
+}
+
+def verify_schedule_file(schedule):
+    return isinstance(schedule, list) and all([verify_schedule_item(x) for x in schedule])
+
+def verify_schedule_item(item):
+    if not isinstance(item, dict):
+        return False
+
+    result = "id" in item
+    result = result and "name" in item
+    result = result and "entrypoint" in item
+    result = result and "start_on_boot" in item
+
+    if not result:
+        return False
+
+    result = isinstance(item['id'], str)
+    result = result and isinstance(item["entrypoint"], list)
+    result = result and isinstance(item["entrypoint"], list)
+    result = result and isinstance(item["start_on_boot"], bool)
+
+    if not result:
+        return False
+
+    for entrypointItem in item["entrypoint"]:
+        if not isinstance(entrypointItem, str):
+            return False
+
+    return True
+
+uri = f'ws://0.0.0.0:{env.var("ONEIOT_C_PORT")}'
+eventBus = EventBus.EventBus(uri)
+eventBus.connect()
+
+schedulePath = path.expanduser("~") + '/.oneIot/schedule.json'
+if path.isfile(schedulePath):
+    schedule = json.load(open(schedulePath))
+else:
+    schedule = []
+
+#if not verify_schedule_file(schedule):
+#    exit("Error in schedule.json")
+
+def event_callback(event):
+    if isinstance(event, SchedulerEvent):
+        eventBus.send('core.schedule.schedulerEvent', {
+            'event': eventMap[event.code]
+        })
+    if isinstance(event, JobEvent):
+        item = jobIds[event.job_id]
+        eventBus.send('core.schedule.jobEvent', {
+            'id': item['id'],
+            'event': eventMap[event.code]
+        })
+
+scheduler = BlockingScheduler()
+
+jobIds = {}
+
+for item in schedule:
+    job = scheduler.add_job(Popen, args=[item['entrypoint']], trigger=item['trigger'], **item['trigger_args'])
+    jobIds[job.id] = item
+
+scheduler.add_listener(event_callback)
+
+try:
+    scheduler.start()
+finally:
+    eventBus.disconnect()
