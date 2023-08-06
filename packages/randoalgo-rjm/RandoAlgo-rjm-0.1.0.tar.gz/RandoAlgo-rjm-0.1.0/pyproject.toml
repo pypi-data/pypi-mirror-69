@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "RandoAlgo-rjm"
+version = "0.1.0"
+description = "A python package that allows users get random algorithm questions"
+authors = ["Rashidat Jimoh"]
+license = "MIT"
+readme= 'README.md'
+repository ='https://github.com/startng/forward--RandoAlgo-Rjay'
+
+packages= [
+    {include = './requestalgorithms.py'},
+    {include= './README.md'},
+    {include='./userplay.py'},
+    
+]
+[tool.poetry.dependencies]
+python = "^3"
+
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.scripts]
+RandAlgo='userplay:userLogin'
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
