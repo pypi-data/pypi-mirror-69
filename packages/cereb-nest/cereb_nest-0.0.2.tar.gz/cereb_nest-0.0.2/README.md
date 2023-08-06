@@ -1,0 +1,29 @@
+[![Build Status](https://travis-ci.com/dbbs-lab/cereb-nest.svg?branch=master)](https://travis-ci.com/dbbs-lab/cereb-nest)
+
+# cereb-nest
+
+Tested with:
+
+*branch master*: Ubuntu 18.04 and Red Hat Enterprise Linux Server 7.7 (Maipo), Python 3.7.3 and NEST Release 2.18.0
+
+
+### Installation instructions
+
+0. Install NEST following the instructions provided here (http://www.nest-simulator.org/)
+
+1. Export an Environment Variable containing the installation directory of NEST. E.g.:
+```
+export NEST_INSTALL_DIR=$HOME/nest-simulator-install
+```
+2. Clone this GitHub Repository in a directory outside NEST source and build directories. E.g.:
+```
+pip install cereb_nest
+```
+
+3. Every time you need the module, you can install it in this way:
+```
+import nest
+nest.Install("cerebmodule")
+```
+
+4. You can now use all the nodes and synapses contained in this NEST Module.
