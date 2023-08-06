@@ -1,0 +1,33 @@
+Metadata-Version: 2.1
+Name: cobbler
+Version: 3.1.2
+Summary: Network Boot and Update Server
+Home-page: https://cobbler.github.io
+Author: Team Cobbler
+Author-email: cobbler.project@gmail.com
+License: GPLv2+
+Platform: UNKNOWN
+Requires-Dist: mod-wsgi
+Requires-Dist: requests
+Requires-Dist: future
+Requires-Dist: pyyaml
+Requires-Dist: simplejson
+Requires-Dist: netaddr
+Requires-Dist: Cheetah3
+Requires-Dist: Django
+Requires-Dist: pymongo
+Requires-Dist: distro
+Requires-Dist: ldap3
+Requires-Dist: dnspython
+Requires-Dist: tornado
+Provides-Extra: lint
+Requires-Dist: pyflakes ; extra == 'lint'
+Requires-Dist: pycodestyle ; extra == 'lint'
+Provides-Extra: test
+Requires-Dist: pytest ; extra == 'test'
+Requires-Dist: pytest-cov ; extra == 'test'
+Requires-Dist: codecov ; extra == 'test'
+
+Cobbler is a network install server. Cobbler supports PXE, virtualized installs, and reinstalling existing Linux machines. The last two modes use a helper tool, 'koan', that integrates with cobbler. There is also a web interface 'cobbler-web'. Cobbler's advanced features include importing distributions from DVDs and rsync mirrors, automatic OS installation templating, integrated yum mirroring, and built-in DHCP/DNS Management. Cobbler has a XMLRPC API for integration with other applications.
+
+
