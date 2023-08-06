@@ -1,0 +1,93 @@
+Metadata-Version: 2.1
+Name: sruthi
+Version: 0.0.1
+Summary: SRU client for Python
+Home-page: https://github.com/metaodi/sruthi
+Author: Stefan Oderbolz
+Author-email: odi@metaodi.ch
+Maintainer: Stefan Oderbolz
+Maintainer-email: odi@metaodi.ch
+License: GPLv3
+Download-URL: https://github.com/metaodi/sruthi/archive/v0.0.1.zip
+Keywords: sru,search,retrieve,archive,library
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Requires-Dist: requests
+
+sruthi
+======
+
+**sru**\ thi is a client for python to make `SRU requests
+(Search/Retrieve via URL) <http://www.loc.gov/standards/sru/>`__.
+
+Contents
+--------
+
+-  `Usage <#usage>`__
+-  `Schemas <#schemas>`__
+
+Usage
+-----
+
+.. code:: python
+
+    import sruthi
+
+    records = sruthi.searchretrieve('https://suche.staatsarchiv.djiktzh.ch/SRU/', query='Zurich')
+
+    for record in records:
+        # print fields from schema
+        print(record['reference'])
+        print(record['title'])
+        print(record['date'])
+        print(record['extra']['link']) # extra record data is available at the 'extra' key
+
+.. code:: python
+
+    # you can get more information at each step
+    import sruthi
+
+    # note: records is an iterator
+    records = sruthi.searchretrieve'https://suche.staatsarchiv.djiktzh.ch/SRU/', query='Human')
+    print(records.cql)
+    print(records.sru_version)
+    print(records.count)
+
+    for record in records:
+        print(record)
+        print(record['schema'])
+
+.. code:: python
+
+    import sruthi
+
+    info = sruthi.explain('https://suche.staatsarchiv.djiktzh.ch/SRU/')
+    print(info.server)
+    print(info.database)
+    print(info.index)
+    print(info.schema)
+
+Schemas
+-------
+
+sruthi does not make any assumptions about the record data schema. The
+data is provided as-is (as a flattend dict). sruthi has been tested with
+the following schemas:
+
+-  `Dublin Core Record
+   Schema <http://www.loc.gov/standards/sru/recordSchemas/dc-schema.html>`__
+   (dc)
+-  `MARCXML: The MARC 21 XML
+   Schema <http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd>`__
+   (marcxml)
+-  `ISAD(G): General International Standard Archival Description, Second
+   edition <http://www.expertisecentrumdavid.be/xmlschemas/isad.xsd>`__
+   (isad)
+
+
