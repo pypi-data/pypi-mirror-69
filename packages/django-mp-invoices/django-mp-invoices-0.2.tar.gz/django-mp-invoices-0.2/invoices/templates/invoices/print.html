@@ -1,0 +1,75 @@
+
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+
+        h4 {
+            margin: 5px 0;
+        }
+
+        table {
+            width: 100%;
+            border: 1px solid #0a0a0a;
+            border-spacing: 0;
+        }
+
+        table td,
+        table th {
+            border: 1px solid #0a0a0a;
+        }
+
+        table th {
+            background-color: #c0c0c0;
+        }
+
+        table td {
+            padding-left: 3px;
+        }
+
+        .pull-right {
+            float: right;
+        }
+
+    </style>
+</head>
+<body style="padding: 0; margin: 0;">
+
+    <h4>
+        {{ invoice.model_name }} #{{ invoice.id }}
+        <span class="pull-right">
+            {% trans 'Date' %}:
+            {{ invoice.created|date:'d.m.Y' }}
+        </span>
+    </h4>
+
+    <table>
+        <thead>
+            <tr>
+                <th>{% trans 'Product' %}</th>
+                <th>{% trans 'Code' %}</th>
+                <th>{% trans 'Quantity' %}</th>
+                <th>{% trans 'Price' %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in invoice.items.all %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.product.code }}</td>
+                    <td>{{ item.qty }}</td>
+                    <td>{{ item.printable_price }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        window.print();
+    </script>
+</body>
+</html>
