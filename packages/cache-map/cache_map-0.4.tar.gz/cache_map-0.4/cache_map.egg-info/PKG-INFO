@@ -1,0 +1,78 @@
+Metadata-Version: 2.1
+Name: cache-map
+Version: 0.4
+Summary: Cache Mapping for Direct and LRU mapping.
+Home-page: UNKNOWN
+Author: Rahul Sunil
+Author-email: rahulsunil2@gmail.com
+License: UNKNOWN
+Description: # EXAMPLE CODE
+        
+        ```
+        c = int(input('Enter the cache memory size : '))
+        m = input('Enter the memory blocks : ')
+        
+        print("1. Direct Map\n2. LRU Map")
+        choice = int(input('Enter the choice : '))
+        
+        if choice == 1:
+        	# D I R E C T   M A P
+        	direct_map = cache_map.CacheMapping(c, m)
+        	direct_map.directMap()
+        	direct_map.display()
+        
+        elif choice == 2:
+        	# L R U   M A P
+        	LRU_map = cache_map.CacheMapping(c, m)
+        	LRU_map.mapLRU()
+        	LRU_map.display()
+        
+        else:
+        	print('Wrong Command')
+        ```
+        
+        # OUTPUT - DIRECT MAP
+        
+        ### Consider a direct mapped cache with 8 cache blocks (0-7). If the memory block requests are in the order - 3, 5, 2, 8, 0, 6, 3, 9, 16, 20, 17, 25, 18, 30, 24, 2, 63, 5, 82, 17, 24
+        ```
+        Enter the cache memory size : 8
+        Enter the memory blocks : 3 5 2 8 0 6 3 9 16 20 17 25 18 30 24 2 63 5 82 17 24
+        1. Direct Map
+        2. LRU Map
+        Enter the choice : 1
+        Hit :  3
+        Miss :  18
+        Memory size :  21
+        [8, 0, 16, 24]
+        [9, 17, 25, 17]
+        [2, 18, 2, 82]
+        [3]
+        [20]
+        [5]
+        [6, 30]
+        [63]
+        ```
+        
+        # OUTPUT - LRU MAP
+        
+        ### 7.Consider a fully associative cache with 8 cache blocks (0-7). The memory block requests are in the order - 4, 3, 25, 8, 19, 6, 25, 8, 16, 35, 45, 22, 8, 3, 16, 25, 7
+        ```
+        Enter the cache memory size : 8
+        Enter the memory blocks : 4 3 25 8 19 6 25 8 16 35 45 22 8 3 16 25 7
+        1. Direct Map
+        2. LRU Map
+        Enter the choice : 2
+        Hit :  5
+        Miss :  12
+        Memory size :  17
+        [4, 45]
+        [3, 22]
+        [25]
+        [8]
+        [19, 3]
+        [6, 7]
+        [16]
+        [35]
+        ```
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
