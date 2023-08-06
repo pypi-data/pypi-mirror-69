@@ -1,0 +1,69 @@
+Metadata-Version: 1.1
+Name: api_tackle
+Version: 0.2
+Summary: API Tackle - Simple Python REST API Framework
+Home-page: https://github.com/praekelt/api-tackle
+Author: bernardt@preakelt.com
+Author-email: bernardt@preakelt.com
+License: BSD 3-Clause License
+Description: API Tackle - Simple Python REST API Framework:
+        **********************************************
+         Simple Python REST API Framework ...
+        
+        
+        Quickstart
+        ----------
+        
+        See https://github.com/praekelt/api-tackle-example-app for an example of how to build an API-Tackle application.
+        
+        A simple wsgi example application looks like:
+        
+        .. code-block:: python
+        
+            """ WSGI Flask App for production hosting with e.g.: gunicorn --bind 0.0.0.0:80 -w 1 -t 120 wsgi """
+            import os
+            import logging
+        
+            from tackle.flask_utils import create_flask_app  # noqa
+            from tackle.flask_utils import setup_logging  # noqa
+            from tackle.prometheus_utils import create_prometheus_server  # noqa
+            from tackle.rest_api.wrapper_util import add_auth_token  # noqa
+        
+            from my_api.rest_api import get_path  # noqa
+        
+            create_prometheus_server(9100)
+        
+            setup_logging(requested_logging_path='~/.tackle/logs',
+                          include_prometheus=True)
+        
+            flask_app = create_flask_app(specification_dir=get_path() + '',
+                                         add_api=True,
+                                         swagger_ui=True,
+                                         database_url='sqlite://',
+                                         database_create_tables=True,
+                                         debug=False)
+        
+            # === Add some auth tokens to the DB ===
+            add_auth_token('tackleb6-12dd-4104-a7b6-f7d369ff5fec', "Default token e.g. internal hosting.")
+            # === ===
+        
+            logging.info(f"rest_wsgi_app.py: __name__ == {__name__}")
+            application = flask_app.app
+        
+            if __name__ == "__main__":
+                logging.info(f"rest_wsgi_app.py: __main__ Starting Flask app in Python __main__ .")
+                flask_app.run()
+        
+        
+        Building your own API
+        ---------------------
+        ...
+        
+        
+Keywords: REST API framework
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python :: 3
