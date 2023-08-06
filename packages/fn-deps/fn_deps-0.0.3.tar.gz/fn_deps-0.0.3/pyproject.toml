@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "fn_deps"
+version = "0.0.3"
+description = ""
+authors = ["James Saunders <james@businessoptics.biz>"]
+license = "MIT"
+# readme = "README.md"
+# include = ["fn_graph_studio/styles.css"]
+# documentation="https://fn-graph.readthedocs.io/"
+repository="https://github.com/BusinessOptics/fn_deps"
+homepage="https://github.com/BusinessOptics/fn_deps"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+gitpython = "^3.1.2"
+click = "^7.1.2"
+dephell = "^0.8.3"
+sh = "^1.13.1"
+
+[tool.poetry.dev-dependencies]
+black = {version = "^18.3-alpha.0", allow-prereleases = true}
+pylint = "^2.5.2"
+rope = "^0.17.0"
+
+
+[tool.poetry.scripts]
+fn_deps = "fn_deps:cli"
+
+[tool.dephell.main]
+from = {format = "poetry", path = "pyproject.toml"}
+to = {format = "setuppy", path = "setup.py"}
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
