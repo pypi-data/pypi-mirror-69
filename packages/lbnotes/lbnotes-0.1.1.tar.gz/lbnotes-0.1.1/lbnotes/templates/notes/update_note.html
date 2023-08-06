@@ -1,0 +1,59 @@
+{% extends "base/base.html" %}
+
+{% block title %}update note{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    {{ simplemde.css }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/notes/tag.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/notes/tag_chooser.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/notes/update_note.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% block info %}
+            {% include 'auth/snippets/info.html' %}
+            {% include 'auth/snippets/form_errors.html' %}
+        {% endblock %}
+        <form method="post" class="new-note-form">
+            {{ form.csrf_token }}
+            <div class="form-field">
+                <input class="form-control" type="text" name="title" value="{{ note.title }}" placeholder="title..." required>
+            </div>
+            <div class="form-field">
+                <textarea name="body" id="editor">{{ note.body }}</textarea>
+            </div>
+            {% for tag in tags %}
+                <input type="hidden" class="tag-hidden-field" name="tags" value="{{ tag.id }}">
+            {% endfor %}
+            <div class="form-field">
+                <div class="tag-icons-display">
+                    <span>tags: </span>
+                    {% for tag in tags %}
+                        {% include "notes/snippets/tag_removable.html" %}
+                    {% else %}
+                        <p>no tags</p>
+                    {% endfor %}
+                </div>
+                <a href="#" id="a-open-tag-chooser">add a tag</a>
+            </div>
+            <div class="form-field">
+                <input class="form-control btn btn-secondary" type="submit" value="update">
+            </div>
+        </form>
+        {% include 'notes/snippets/tag_chooser.html' %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ simplemde.js }}
+    {{ simplemde.load_id("editor") }}
+    <script>
+        const csrf_token = "{{ csrf_token() }}";
+    </script>
+    <script src="{{ url_for('static', filename='js/notes/tag_chooser.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="{{ url_for('static', filename='js/notes/update_note.js') }}"></script>
+{% endblock %}
