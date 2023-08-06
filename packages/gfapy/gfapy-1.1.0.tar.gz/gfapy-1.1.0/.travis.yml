@@ -1,0 +1,10 @@
+language: python
+python:
+  - "3.4"
+env:
+  - PYTHONHASHSEED=0
+install:
+  - pip install .
+  - pip install nose
+  - pip install Sphinx
+script: "make tests"
