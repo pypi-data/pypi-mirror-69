@@ -1,0 +1,47 @@
+{% extends "base/base.html" %}
+
+{% block title %}{{ note.title }}{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/notes/tag.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/notes/view_note.css') }}">
+{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        {% include 'auth/snippets/info.html' %}
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">{{ note.title }}</h3>
+                <h6 class="card-subtitle mb-2 text-muted">{{ note.created_at }}</h6>
+                
+                <p id="note-body" class="card-text">{{ note.body }}</p>
+
+                <div class="tag-icons-display">
+                    <span>tags: </span>
+                    {% for tag in note.tags %}
+                        {% include "notes/snippets/tag.html" %}
+                    {% else %}
+                        <p>no tags</p>
+                    {% endfor %}
+                </div>
+
+                {% if g.user and g.user._id == note.author_id %}
+                    <div class="operations">
+                        <a href="{{ url_for('notes.update_note', note_id=note.id) }}">update</a>
+                        <a href="{{ url_for('notes.delete_note_confirm', note_id=note.id) }}">delete</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block scripts %}
+    {{ super() }}
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="{{ url_for('static', filename='js/notes/view_note.js') }}"></script>
+{% endblock %}
