@@ -1,0 +1,108 @@
+# Tccbsmig
+Tccbsmig is designed to batch transfer all the data on an unencrypted CBS mounted on a CVM to an encrypted CBS for Tencent Cloud. To use it, you need to prepare a JSON file as an input, which includes your account SecrectID, SecrectKey, and all related CVM Instances and storages information.  
+
+For each disk needs to be encrypted, tccbsmig automatically calls CBS APIs to create a new encrypted CBS disk and mount it on the instance where unencrypted disk is attached, and then copies the data from unencrypted disk to the encrypted, and detaches the unencrypted disk after data transfer has been completed, and the new encrypted disk will be mounted at the same file path as the unencrypted disk in the end.
+
+# How to use tccbsmig
+usage: tccbsmig [-h] -f FILE [-V]
+
+# How to install tccbsmig on Linux
+1. Install the package use `pip`. On a Linux system, use `pip3` to install:  
+　`pip3 install tccbsmig`  
+.  
+2. On Linux `pip install ... ` put scripts into `~/.local/bin` and this is not on the default Debian or Ubuntu `$PATH`. To fix, you need to add `~/.local/bin` to your $PATH:  
+　`export PATH="$HOME/.local/bin:$PATH"`
+
+# How to prepare the JSON file
+Attributes' value share the same rules of the APIs that used in this program if applicable.  
+API used in this program:  
+CreateDisks: https://intl.cloud.tencent.com/document/api/362/16312  
+AttachDisks: https://intl.cloud.tencent.com/document/api/362/16313  
+DetachDisks: https://intl.cloud.tencent.com/document/api/362/16316
+
+
+***An example of qualified JSON file is on the end of this doc.***
+
+
+### JSON file structure explaination:
+　**Credentials** - this attribute is used to store credentials  
+　　   **SecrectID** - your account SecrectID  
+　　　　**SecrectKey** - your account SecrectKey  
+　**CBS_Cases** - stores all instances and block storages details  
+　　　　**Case_Name** - the name of each case. You can modify case's name to whatever you want.  
+　　　　　　　　**InstanceDetail** - instance Detail  
+　　　　　　　　　　　　**InstanceId** (String)- instance ID of your instance  
+　　　　　　　　　　　　**InstancePublicIP** (String)- public IP address of your instance  
+　　　　　　　　　　　　**InstanceName** (String)- your instance's name  
+　　　　　　　　　　　　**Region** (String)- the region your instance is in  
+　　　　　　　　　　　　**Zone** (String)- the availability zone your instance is in  
+　　　　　　　　　　　　**ProjectId** (*Int*)- the project ID of your instance  
+　　　　　　　　　　　　**Username** (String)- username that used to log in your instance  
+　　　　　　　　　　　　**SSHKeyPath** (String)- SSH Key file location  
+　　　　　　　　**CBSDetail** - CBS detail  
+　　　　　　　　　　　　**DiskId** (String)- the disk ID of your CBS  
+　　　　　　　　　　　　**DiskType** (String)- the disk type of your CBS  
+　　　　　　　　　　　　**DiskSize** (*Int*)- the size of your disk  
+　　　　　　　　　　　　**CBSPathOnCVM** (String)- mount point of your disk  
+　　　　　　　　　　　　**FileSystem** (String)- the file system your disk uses  
+　　　　　　　　　　　　**DiskName** (String)- your disk name  
+　　　　　　　　　　　　**Tags** (String)- tag of your disk. ***If you don't want to set this value, leave an empty string here.***   
+
+### JSON file example
+
+    {  
+      "Credentials":{  
+        "SecrectID":"AKID****************",  
+        "SecrectKey":"1nKc*****************"  
+      },  
+      "CBS_Cases":{  
+        "CBS_1":  
+        {  
+          "InstanceDetail":{  
+            "InstanceId": "ins-3u***yg1",  
+            "InstancePublicIP": "175.***.***.101",  
+            "InstanceName":"ebs-en-test",  
+            "Region": "ap-shanghai",  
+            "Zone": "ap-shanghai-3",  
+            "ProjectId": 111***1,  
+            "Username": "ubuntu",  
+            "SSHKeyPath": "/Path-to-SSHKey/SSHKey.dms"  
+          },  
+          "CBSDetail":{  
+            "DiskId": "disk-q9***f8n",  
+            "DiskType": "CLOUD_PREMIUM",  
+            "DiskSize": 50,  
+            "CBSPathOnCVM": "/data",  
+            "FileSystem":"ext4",  
+            "DiskName": "diskname",  
+            "Tags": ""  
+          }  
+        },  
+        "CBS_2":  
+        {  
+          "InstanceDetail":{  
+            "InstanceId": "ins-3b***6e8",  
+            "InstancePublicIP": "106.***.***.136",  
+            "InstanceName":"un-en-test",  
+            "Region": "ap-guangzhou",  
+            "Zone": "ap-guangzhou-3",  
+            "ProjectId": 111***1,  
+            "Username": "ubuntu",  
+            "SSHKeyPath": "/Path-to-SSHKey/SSHKey.dms"  
+          },  
+          "CBSDetail":{  
+            "DiskId": "disk-ef***3pe",  
+            "DiskType": "CLOUD_PREMIUM",  
+            "DiskSize": 30,  
+            "CBSPathOnCVM": "/data",  
+            "FileSystem":"ext4",  
+            "DiskName": "un-test",  
+            "Tags": "[{\"Key\":\"TagKey\",\"Value\":\"TagValue\"}]"  
+          }  
+        }  
+      }  
+    }  
+
+For more information about Tencent Cloud, please visit: https://intl.cloud.tencent.com  
+Cloud Virtual Machine: https://intl.cloud.tencent.com/product/cvm  
+Cloud Block Storage: https://intl.cloud.tencent.com/product/cbs  
