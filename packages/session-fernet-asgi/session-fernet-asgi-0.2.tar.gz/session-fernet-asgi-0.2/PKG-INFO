@@ -1,0 +1,31 @@
+Metadata-Version: 2.1
+Name: session-fernet-asgi
+Version: 0.2
+Summary: UNKNOWN
+Home-page: https://github.com/v7a/session-fernet-asgi
+Author: v7a
+License: MIT
+Project-URL: Source, https://github.com/v7a/session-fernet-asgi
+Project-URL: Tracker, https://github.com/v7a/session-fernet-asgi/issues
+Description: # ASGI session middleware
+        Provides an encrypted and signed session that is stored as a [Fernet](https://github.com/fernet/spec) token on the client.
+        
+        ## Contributing
+        Before committing, run the following and check if it succeeds:
+        ```sh
+        pip install --user -r requirements-dev.txt && \
+        black session_fernet_asgi.py && \
+        pylint session_fernet_asgi.py && \
+        pytest && \
+        coverage report --fail-under=100
+        ```
+        
+Keywords: middleware,asgi,session,fernet
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Internet :: WWW/HTTP :: WSGI :: Middleware
+Description-Content-Type: text/markdown
