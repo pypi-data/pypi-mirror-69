@@ -1,0 +1,35 @@
+Metadata-Version: 2.1
+Name: StealthFlow
+Version: 0.0.13
+Summary: Supporting Modules for MachineLearning.
+Home-page: https://github.com/p-geon/StealthFlow
+Author: StealthFlow
+Author-email: deeplearnerstealthflow@gmail.com
+License: MIT
+Keywords: stealthflow StealthFlow
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.6
+Description-Content-Type: text/markdown
+
+# StealthFlow
+
+## ResNeSt (TFlayer)
+
+see (JP): https://note.com/hyper_pigeon/n/n12988580739d
+
+`x = ResNeStBlock(radix=2, cardinality=2, bottleneck=64, ratio=4)(x)`
+
+## FID (4-D Tensor x2 -> FID score)
+
+see (JP): https://note.com/hyper_pigeon/n/n9c5643413cd7
+
+### Numpy
+
+`fid_score = FIDNumpy(batch_size=50, scaling=True, verbose=1)(images1, images2)`
+
+### TF
+
+`fid_score = FIDTF(batch_size=50, scaling=True, verbose=1)(images1, images2)`
+
+
