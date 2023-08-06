@@ -1,0 +1,22 @@
+{% extends 'document_catalogue/base.html' %}
+
+{% load mptt_tags %}
+
+{% block dc-content %}
+
+    <div class="pull-right">
+        {% include 'document_catalogue/include/doc_ordering.html' %}
+    </div>
+    {% include 'document_catalogue/include/breadcrumb.html' %}
+
+    <ul class="dc-document-list list-group">
+        {% include 'document_catalogue/include/dropzone.html' %}
+
+        {% if document_list|length > 0 %}
+            {% include "document_catalogue/include/documents.html" %}
+        {% endif %}
+    </ul>
+
+    {% include 'document_catalogue/include/categories.html' with categories=category.get_descendants %}
+
+{% endblock %}
