@@ -1,0 +1,121 @@
+Metadata-Version: 2.1
+Name: abc-storage
+Version: 0.1.0
+Summary: This service implements storage of abc project
+Home-page: https://github.com/Hedgehogues/abc-storage
+Author: Egor Urvanov
+Author-email: hedgehogues@bk.ru
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
+Requires-Dist: loguru (==0.4.1)
+Requires-Dist: starlette (==0.13.2)
+Requires-Dist: vault-client (==0.3.2)
+Requires-Dist: prometheus-client (==0.7.1)
+Requires-Dist: flask (==1.1.2)
+Requires-Dist: eve (==1.1.1)
+Requires-Dist: pytest
+Requires-Dist: pytest-asyncio (==0.12.0)
+Requires-Dist: eve-healthcheck (==0.3.0)
+Requires-Dist: eve-swagger (==0.0.11)
+Requires-Dist: flasgger (==0.9.4)
+Requires-Dist: flask-cors (==3.0.8)
+Requires-Dist: python-clients (==0.12.1)
+Requires-Dist: faker
+
+# abs-storage
+
+## Installing
+
+Before work with our storage, you need to install:
+
+    sudo apt-get install docker.io make docker-compose
+
+Make and docker is not required features. This tools is needed for more useful development. We recommend to use Anaconda
+or another environment manager for safety system interpreter. You can download Anaconda 
+[here](https://www.anaconda.com/). After installing Anaconda please create new environment:
+
+    conda create --name abc-storage python=3.7
+    conda activate
+
+## Starting 
+
+Before starting please install all python package dependencies:
+
+    make deps
+
+We have three mode of starting:
+
+- full subsystem
+- development
+- make
+
+### docker-compose full
+
+We use docker-compose for local development and starting you service and environment. If you want to start full 
+subsystem, you need to do this:
+
+    make run-full 
+
+After that our service and environment is started. If you want to start our service the first time, docker container 
+with service is built. Other container is pulled.
+
+If you want to start service not first time, maybe you need rebuilt service for apply last changes:
+
+    make run-rebuild
+
+### development
+
+For development, you can use only environment:
+
+    make run-env
+
+After that, it starts all dependencies services. Now, you can run our service in your IDE for development.    
+
+### make 
+
+For fast start our service we use command:
+
+    make run 
+
+## Environment variables
+
+Our service takes all environments variables from config: `deployments/.envs/local.env`. More about it you can read into
+this file: `abc_storage/__service/config.py`. You can add new variables there and here: `deployments/.envs/local.env`.
+
+We separates variables by namespaces, therefore we set prefix before variable name. You can see in files, which we 
+denote above. 
+
+## Testing
+
+We have three mode of testing:
+
+- unit testing
+- integration testing
+- all: unit and integration testing
+
+We have three commands:
+
+    make test-integration
+
+Before starting integration tests (above) you need to start environment:
+
+    make run-env
+
+Unit tests:
+
+    make test-unit
+
+All tests:
+
+    make test
+
+## Notice
+
+We use makefile as interface for communicate our application with our systems by command line while development and
+deployments
+
+
+
