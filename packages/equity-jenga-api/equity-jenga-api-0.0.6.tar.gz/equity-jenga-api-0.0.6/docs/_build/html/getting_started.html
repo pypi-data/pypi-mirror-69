@@ -1,0 +1,309 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Getting Started &mdash; equity-jenga-api  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Equity_Jenga Package" href="api.html" />
+    <link rel="prev" title="Welcome to equity-jenga-api’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> equity-jenga-api
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#first-things-first">First Things First</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#generating-an-openssl-private-public-key-pair">Generating an openSSL private/public key pair.</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-apis">Using The APIs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-jengarequest-objects">Creating JengaRequest objects</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">equity-jenga-api</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Getting Started</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/getting_started.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip install equity-jenga-api
+</pre></div>
+</div>
+</div>
+<div class="section" id="first-things-first">
+<h2>First Things First<a class="headerlink" href="#first-things-first" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="generating-an-openssl-private-public-key-pair">
+<h3>Generating an openSSL private/public key pair.<a class="headerlink" href="#generating-an-openssl-private-public-key-pair" title="Permalink to this headline">¶</a></h3>
+<p>Since <strong>v2</strong> of the API, JengaHQ now requires some APIs to include signatures as a security measure.
+This signatures are usually generated by signing some request fields with a private key.
+In order to use JengaHQ you’ll have to upload your public key to the developer console on JengaHQ after you generate your key pair.</p>
+<p>This Library provides a CLI command to help you generate those keys.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The generated keys will be stored in your home directory under the <em>.JengaAPI/keys/</em> folder and this is where by default the Library looks for your private key when initiating JengaRequest Objects.</p>
+</div>
+<p>After Installation, Generate Your Keys using the following command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ jenga_gen_key_pair
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Then copy the <cite>~/.JengaApi/keys/publickey.pem</cite> to your developer console on JengaHq.</p>
+</div>
+</div>
+</div>
+<div class="section" id="using-the-apis">
+<h2>Using The APIs<a class="headerlink" href="#using-the-apis" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="creating-jengarequest-objects">
+<h3>Creating JengaRequest objects<a class="headerlink" href="#creating-jengarequest-objects" title="Permalink to this headline">¶</a></h3>
+<p>By Design all API classes provided inherit from the <cite>equity_jenga.api.auth.JengaAuth</cite> class which takes the following parameters:</p>
+<dl class="py class">
+<dt id="equity_jenga.api.auth.JengaAuth">
+<em class="property">class </em><code class="sig-prename descclassname">equity_jenga.api.auth.</code><code class="sig-name descname">JengaAuth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">authorization_token</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">merchant_code</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">env</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">private_key</span><span class="o">=</span><span class="default_value">'/home/african/.JengaApi/keys/privatekey.pem'</span></em>, <em class="sig-param"><span class="n">sandbox_url</span><span class="o">=</span><span class="default_value">'https://sandbox.jengahq.io'</span></em>, <em class="sig-param"><span class="n">live_url</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/equity_jenga/api/auth.html#JengaAuth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#equity_jenga.api.auth.JengaAuth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Jenga Base Authentication Class</p>
+<p><strong>Params</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Authorization_token:</dt>
+<dd class="field-odd"><p>the bearer token used to access the API, i.e  apiKey</p>
+</dd>
+<dt class="field-even">Merchant_code:</dt>
+<dd class="field-even"><p>the merchant code provided by JengaHQ</p>
+</dd>
+<dt class="field-odd">Private_key:</dt>
+<dd class="field-odd"><p>the path to the merchant private key default is “~/.JengaAPI/keys/privatekey.pem”</p>
+</dd>
+<dt class="field-even">Env:</dt>
+<dd class="field-even"><p>the environment in which  the API is to be used either <em>sandbox</em> or <em>production</em></p>
+</dd>
+<dt class="field-odd">Sandbox_url:</dt>
+<dd class="field-odd"><p>the url used to access the Sandbox API</p>
+</dd>
+<dt class="field-even">Live_url:</dt>
+<dd class="field-even"><p>the url used to access the Production API</p>
+</dd>
+</dl>
+<p><strong>Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">equity_jenga</span> <span class="kn">import</span> <span class="n">api</span>
+<span class="n">jengabase</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">JengaApi</span><span class="p">(</span>
+<span class="n">authorization_token</span><span class="o">=</span><span class="s2">&quot;Bearer TofFGUeU9y448idLCKVAe35LmAtL&quot;</span><span class="p">,</span>
+<span class="n">merchant_code</span><span class="o">=</span><span class="s2">&quot;4144142283&quot;</span><span class="p">,</span>
+<span class="n">env</span><span class="o">=</span><span class="s2">&quot;sandbox&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># Similarly for all classes Inheriting from JengaAuth</span>
+<span class="n">acc_Bal</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">account_services</span><span class="o">.</span><span class="n">balances</span><span class="o">.</span><span class="n">AccountBalance</span><span class="p">(</span>
+<span class="n">authorization_token</span><span class="o">=</span><span class="s2">&quot;Bearer TofFGUeU9y448idLCKVAe35LmAtL&quot;</span><span class="p">,</span>
+<span class="n">merchant_code</span><span class="o">=</span><span class="s2">&quot;4144142283&quot;</span><span class="p">,</span>
+<span class="n">env</span><span class="o">=</span><span class="s2">&quot;sandbox&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># Get Available Balances</span>
+<span class="n">available_bal</span><span class="o">=</span><span class="n">acc_Bal</span><span class="o">.</span><span class="n">available</span><span class="p">(</span><span class="n">countryCode</span><span class="o">=</span><span class="s1">&#39;KE&#39;</span><span class="p">,</span><span class="n">accountId</span><span class="o">=</span><span class="s2">&quot;0011547896523&quot;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">available_bal</span><span class="p">)</span>
+<span class="c1"># Opening and Closing Balances</span>
+<span class="n">opening_and_closing_bal</span><span class="o">=</span><span class="n">acc_Bal</span><span class="o">.</span><span class="n">get_opening_and_closing</span><span class="p">(</span><span class="n">accountId</span><span class="o">=</span><span class="s2">&quot;0011547896523&quot;</span><span class="n">countryCode</span><span class="o">=</span><span class="s1">&#39;KE&#39;</span><span class="p">,</span><span class="n">date</span><span class="o">=</span><span class="s2">&quot;2020-03-21&quot;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">opening_and_closing_bal</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="equity_jenga.api.auth.JengaAuth.signature">
+<code class="sig-name descname">signature</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request_hash_fields</span><span class="p">:</span> <span class="n">tuple</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/equity_jenga/api/auth.html#JengaAuth.signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#equity_jenga.api.auth.JengaAuth.signature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a String of concatenated values of the request fields with
+following order: as specificied by the API endpoint
+The resulting text is then signed with Private Key and Base64 encoded.</p>
+<p>Takes a tuple of request fields in the order that they should be
+concatenated, hashes them with SHA-256,signs the resulting hash and
+returns a Base64 encoded string of the resulting signature</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api.html" class="btn btn-neutral float-right" title="Equity_Jenga Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to equity-jenga-api’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Tralah M Brian
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
