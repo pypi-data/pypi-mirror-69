@@ -1,0 +1,25 @@
+#+BEGIN_SRC python
+  %%html
+  <p><a href="https://github.com/mwouts/jupytext", style="color: rgb(0,0,255)">Jupytext</a> on GitHub</p>
+#+END_SRC
+
+#+BEGIN_SRC python
+  %%latex
+  $\frac{\pi}{2}$
+#+END_SRC
+
+#+BEGIN_SRC python
+  %load_ext rpy2.ipython
+#+END_SRC
+
+#+BEGIN_SRC python
+  %%R
+  library(ggplot2)
+  ggplot(data=data.frame(x=c('A', 'B'), y=c(5, 2)), aes(x,weight=y)) + geom_bar()
+#+END_SRC
+
+#+BEGIN_SRC python
+  %matplotlib inline
+  import pandas as pd
+  pd.Series({'A':5, 'B':2}).plot(figsize=(3,2), kind='bar')
+#+END_SRC
