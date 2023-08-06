@@ -1,0 +1,30 @@
+Metadata-Version: 2.1
+Name: distribeauty
+Version: 1.0.5
+Summary: Gaussian and Binomial distributions
+Home-page: UNKNOWN
+Author: Bexultan Alimzhanov
+Author-email: bexultan.alimzhanov@nu.edu.kz
+License: UNKNOWN
+Description-Content-Type: text/markdown
+Platform: UNKNOWN
+
+# Distribeauty
+
+Simple python package, capable of calculating and plotting the probability distribution functions for both Gaussian and Binomial distributions. For a mathematical background you can refer to [Gaussian](https://www.mathsisfun.com/data/standard-normal-distribution.html) and [Binomial](https://www.mathsisfun.com/data/binomial-distribution.html) links accordingly
+
+## Dependencies
+- `matplotlib` (can be installed via `pip install matplotlib`, if you are using different package manager, refer to the instruction)
+- `unittest` for testing
+
+## List of methods and brief description
+
+- `calculate_mean()` and `calculate_stdev()` simply calculates both mean and standard deviation of your data accordingly
+- `plot_histogram()`  and `plot_histogram_pdf(n_spaces)`  are method to output a histogram of the instance variable data using  `matplotlib.pyplot` library and method to plot the normalized histogram of the data and a plot of the probability density function along the same range accordingly (`n_spaces` refer to a number of data points, for **Binomial** use `plot_bar()` and `plot_bar_pdf()`
+- `pdf(x)` probability density function calculator
+- `read_data_file(file_name)` inherits from `GeneralDistribution` class to read the data
+- `replace_stats_with_data()` **Binomial** exclusive function to to calculate probability of the positive outcome and number of trials from the data set
+
+## Tests
+Utilize the test.py script included in the package in order to test the functions functionality.
+
