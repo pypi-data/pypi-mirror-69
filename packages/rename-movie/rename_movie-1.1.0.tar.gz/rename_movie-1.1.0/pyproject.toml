@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "rename_movie"
+version = "1.1.0"
+description = "Rename and organize movies"
+authors = ["Dima Koskin <dmksknn@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+isle = "^0.6.0"
+macos-tags = "^1.5.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.4.2"
+isort = "^4.3.21"
+pylint = "^2.5.2"
+black = "^19.10b0"
+
+[tool.poetry.scripts]
+rename-movie = 'rename_movie:main'
+rnmv = 'rename_movie:main'
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 88
+
+[tool.black]
+line-length = 88
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
