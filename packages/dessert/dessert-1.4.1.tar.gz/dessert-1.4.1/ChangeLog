@@ -1,0 +1,541 @@
+CHANGES
+=======
+
+1.4.1
+-----
+
+* Remove import of \_pytest (fixes #12)
+* change requirement from attr to attrs
+* Add 'attr' dependency requirement
+
+1.4.0
+-----
+
+*  Add atomicwrites to requirements
+* Update code according to pytest 5.2.1
+* Switch to PBR & Drop support for python version < 3.5
+
+1.3.4
+-----
+
+* Bump version
+* Update Travis YAML, drop 3.3-3.4
+* Pass filename to ast.parse()
+* Fix README
+* Fix README
+* Remove pytest-capturelog from deps
+* Switched broken pypip.in badges to shields.io
+
+1.3.3
+-----
+
+* Bump version
+
+1.3.2
+-----
+
+* Fix argument passing for format\_explanation
+
+1.3.1
+-----
+
+* Bump version
+* Change API name to disable/enable\_message\_introspection
+
+1.3.0
+-----
+
+* Bump version
+* Add test to disable\_introspection feature
+* Remove pypy from travis
+* Allow disabling introspection
+
+1.2.0
+-----
+
+* Bump version
+* Development docs
+* Add integration tests for messages
+* Add DEVELOPMENT docs
+* Added 'Paweł Adamczak' to AUTHORS
+* Added 'Possible exit codes' section to docs (#2239)
+* Move CHANGELOG entry for #2276 to 3.0.8
+* Add AUTHORS & CHANGELOG
+* Change ValueError to io.UnsupportedOperation in capture.py. Resolves issue #2276
+* Mention the src layout as recommended practice
+* Post 3.0.7 release handling
+* Add more information to test-layout docs as discussed during PR
+* Clarify that record\_xml\_property is experimental, not junitxml
+* Include release 3.0.7 announce in index.rst
+* Update regendoc
+* Bump to version 3.0.7 and update CHANGELOG
+* Fix typo
+* Attempt to clarify the confusion regarding \_\_init\_\_ files and unique test names
+* Fix trailing whitespace in terminal output
+* assert.rst: typographical correction
+* added in the correct alphabitcal order
+* added in the correct alphabitcal order
+* Allow py37-nightly to fail on Travis
+* added link to changelog
+* added to authors and changelog
+* fixed internal error on unprintable raised AssertionErrors
+* Improve docs for yield-fixture and with statement a bit
+* junitxml: Fix double system-out tags per testcase
+* Simplify travis.yml with tox environment variables
+* Add note documenting #2257
+* Correct typo
+* Fix typo in docs "textures" -> "fixtures"
+* Spelling fixes
+* Python 3.6 invalid escape sequence deprecation fixes
+* Improve pytest\_plugins docs
+* Update changelog
+* Fix docs
+* Update docs as requested
+* Safer sys.modules delete
+* Mention next training event
+
+1.1.0
+-----
+
+* --override-ini now correctly overrides some fundamental options like "python\_files"
+* Ignore errors raised from descriptors when collecting fixtures
+* Remove an unneeded \`except KeyboardInterrupt\`
+* Test for \`pytest.mark.xfail\` with non-Python Item
+* Update authors/history
+* Do not asssume \`Item.obj\` in 'skipping' plugin
+* extract a \_handle\_skip method, secure PY2 branch
+* Replace 'raise StopIteration' usages in the code by 'return's in accordance to PEP-479
+* fixing code-style, keep flake8 happy
+* Allow to skip unittests if --pdb active
+* Fix reference
+* Discourage users from using this all the time
+* Fix release date for 3.0.6
+* Add py37-nightly to travis
+* Add py36 identifier
+* bump version to next dev
+* take off author\_email after pypi rejects
+* fix copy+paste error, its supposed to be 3.0.6
+* rerun regendoc with correct install
+* generate the release announcement
+* fix the xfail docstring typo at the actual docstring + regendoc
+* regendoc
+* bump version
+* fix devpi test for doctesting env
+* update changelog as suggested
+* remove unused import
+* comment out compatproperty deprecations
+* Assert statements of the pytester plugin again benefit from assertion rewriting
+* Fix pytester internal plugin to work correctly with latest versions of zope.interface
+* Ignore flycheck files
+* rewrite: support for osx
+* Drop support for 2.6, add 3.6
+* Fix marker example on "linux" platform
+* Revert "Test dessert is working"
+* Test dessert is working
+* Remove mention of --assert=reinterp in documentation
+* Refactor plugin specs handling into an isolated function
+* Consider plugins loaded by PYTEST\_PLUGINS for assertion rewrite
+* Fail assert\_outcomes() on missing terminal report Currently if the terminal report of testdir.runpytest() is missing, assert\_outcomes() on its output fails because parseoutcomes() returns an unexpected value (None). It's better to fail parseoutcomes() directly
+* Ensure the LICENSE is included in built wheels
+* rewrite: support for osx
+* Add py36 to test on AppVeyor
+* Switch monkeypatch fixture to yield syntax
+* Fix CHANGELOG.rst
+* Update AUTHORS, CHANGELOG
+* 'xfail' markers without a condition no longer rely on the underlying \`Item\` deriving from \`PyobjMixin\`
+* Fix typos
+* Sort issues and user references in CHANGELOG
+* Move module error compatibility code to \_pytest.compat
+* Test Python 3.6 on Travis CI
+* Tests: Check for ModuleNotFoundError on Python 3.6+
+* Fixed #2148 - parse directory names properly when args contains ::
+* Allow trial environments to fail on CI for now
+* Update AUTHORS and CHANGELOG.rst
+* Improve error message when pytest.warns fail
+* Fix wrong fixture name. Closes #2143
+* Explicitly add setuptools to install\_requires
+* Avoid importing asyncio directly because that in turn initializes logging (#8)
+* Add CHANGELOG entry for #2129
+* Move compat tests to a single file using testdir
+* Use inspect to properly detect generators. Fixes #2129
+* Mention that Python also adds CWD to sys.path using python -m
+* Also update yield teardown for Issue #687
+* fix #2118 - rework Node.\_getcustomclass and Node compat properties
+* Add release dates to CHANGELOG entry
+* Bump version to 3.0.6.dev0
+* Regendocs for 3.0.5
+* Add release announcement for 3.0.5
+* Use a simple \`\`+-\`\` ASCII string in the string representation of pytest.approx In Python 2
+* Fix broken tests
+* Remove unnecessary dependency
+* bump version
+* Fix merge issues (missing code)
+* Remove erroneous code ignoring assertions with messages
+* Regendocs
+* Add announce doc
+* Finalize CHANGELOG for 2.9.1
+* Bump version to 2.9.1
+* Update talks page
+* added TODO comment to remove the parametrized workaround
+* added CHANGELOG and AUTHORS entry
+* allow parametrized nodes to be specified from command line
+* doc: fix argument order for pytest\_load\_initial\_conftests
+* Fix 'check' in markdown for github templates
+* Use testscollected to make xdist happy
+* Copy over name and path attributes to the re-raised exception
+* Improve error message when a plugin fails to import
+* When a regex pattern contains bytes instead of a string use escape\_encode to turn it into a string before further processing. Thanks @nicoddemus for the review and tips!
+* Add test when using native strings with non-ascii chars
+* Fix decoding issue while formatting SyntaxErrors during collection
+* pytest.fail with non-ascii characters raises an internal pytest error
+* Mention that pytest\_addoption may be used from conftest files
+* issue469: junit parsing nodeid, add method test
+* issue469: add fix junit double colon split issue
+* Reformat versions and header levels in CHANGELOG file
+* Minor README tweaks (markup, phrasing)
+* Add 2.9.1.dev1 to CHANGELOG
+* Bump version to 2.9.1.dev1
+* Add company name to flub in sprint attendees
+* Fix reference to \_CallOutcome in docs
+* Fix typo in CHANGELOG
+* Regendocs
+* Release announcement for 2.9.0
+* Finalize CHANGELOG
+* Bump version to 2.9.0
+* junit: allow multiple properties with same name
+* Add company name to @hackebrot in sprint attendees
+* Update changelog with traceback style docs fix
+* Add auto to tb styles (new default since v2.6)
+* Fix a typo in the docstring for mark.MarkGenerator
+* Simplify IndexError test
+* catch IndexError exceptions when getting exception source location
+* Add test for unconditional skip with reason
+* LastFailed now creates .cache only when needed. Fixes #1342
+* Fix rst syntax
+* Small typo in CHANGELOG
+* Add CHANGELOG entry for #1355
+* Add strict option to xfail, making tests which XPASS to actually fail the suite
+* Add bool type to addini
+* update release process to ensure correct usage of base branches and propper finalization
+* update participants
+* re-introduce topics
+* some layout refinements
+* adapt the header text based on a discussion with bruno
+* give the header contrast
+* Fix tox doc task
+* add links for the funding campaign in the header and sidebar
+* fix formatting utf-8 error explanation
+* fix issue #1366 by showing a note on the --fulltrace option
+* remove superflous file
+* fix names once again
+* Also fix Brianna's name
+* Fix names properly
+* Fix CHANGELOG entry to new format
+* Fix #1290: Py3.5's @ operator/assertion rewriting
+* fix brianna's name once again
+* fix EUR->USD
+* add a link to lieve indiegogo campaign in the pytest sprint page
+* - preliminary sprint page, not yet linked through the header - also removed plugins\_index call from tox.ini "doc" env because it's not there
+* correct merge misstake in appveyor.yml
+* merge latest master into features as well
+* merge from master
+* Test with pypy and enable coveralls in AppVeyor
+* fixed name
+* a few refinements
+* Dummy change to test readthedocs hook
+* bump version
+* Travis
+* Require new emport in dependencies
+* Automatic pypi deployment
+* When activating dessert, take precedence over other meta\_path entries
+* Test dessert is working
+* Add 3.5 to Travis
+* Fix tox config
+* Python 3.4+ compatibility
+* [doc] Fixed indentation
+* issue1035 Override inspect.isclass for python 2.6
+* issue1035 add test for classes setting \_\_getattr\_\_
+* Add empty 2.8.3.dev section to CHANGELOG
+* Fix contents.rst
+* start 2.8.3 development
+* Add 2.8.2 release annoucement
+* Update plugin\_index
+* Prepare 2.8.2 release
+* typo fix, changed position of context manager notes
+* Fix problems when mixing autouse fixtures and doctest modules
+* Add a reminder on HOWTORELEASE to update plugins\_index
+* plugins\_index was still generating ".txt" files, so it was effectively being ignored
+* Move "note" to the end of the main text
+* pyflakes fix
+* Add a note about usage of the context manager
+* Detect dynamic code explicitly in filter\_traceback
+* Move imports outside \_escape\_bytes as suggested in review
+* Use a variable for the skipif marker as suggested by @nicoddemus
+* Implement skipif marker for slow test based on pytest.config
+* Remove pytest\_runtest\_setup from conftest.py
+* Edit examples again to use hookimpl
+* Correct hook examples in docs
+* fix docstring for cache fixture regarding \`\`/\`\` on keys
+* add entries for #1085 and #1087 to the CHANGELOG
+* Fix internal error when filtering tracebacks where one entry was generated by an exec() statement
+* Fix SystemError when using unicode\_escape on Python 3
+* Fix encoding errors for parametrized tests with unicode parameters in py2
+* fix flaky get\_user fallback tests
+* remove unclear todo that irritates in the online docs
+* start 2.8.2 development
+* avoid pullrequest picture and fix bugfix/feature target info. I could not get the pullrequest picture to be included correctly in both latex and html sphinx builders due to the "include" directive from doc/en/contributing.rst
+* hide some parts from generating latexpdf
+* - fix a flaky test on py35-xdist by calling   importlib.invalidate\_caches()
+* Add missing nodeid on pytest\_logwarning call in addhook
+* Show known environment variables in py.test --help
+* Remove print left by accident
+* Moved more detailed options on how to disable a plugin to plugins.rst
+* Check \`deprecated\_call\` specific to deprecation
+* \`deprecated\_call\` detects pending warnings again
+* simplify by removing the single-call "exclude\_pytest\_names" function
+* add changelog entry for fix #1073
+* seems like pypy's callable builtin calls \_\_getattr\_\_ so we do the check later
+* add changelog note for fix #704
+* Vendor pluggy-0.3.1
+* Add docs on how to disable cache provider
+* Remove duplicate line
+* (w)warnings -> (w)pytest-warnings in "-r chars" help
+* Add docstring to cache fixture
+* Update CHANGELOG
+* escape bytes when creating ids for parametrized values
+* Write failing test for parametrized tests with unmarshable parameters
+* skip chmod using cache access warning tests on windows
+* Don't hardcode 'std' for captured stdout/stderr
+* add an acceptance test for cache write errors
+* Added minor documentation change
+* update changelog
+* Minor typo in CHANGELOG
+* handle access errors when writing cache files silently as pytest warning, fixes #1039
+* Fix git checkout command in CONTRIBUTING.rst
+* fix changelog
+* start bugfix changelog on master
+* #877 - reencoding causes typeerrors on python2
+* Move WarningsChecker import in test to a local import to workaround flakes issue
+* fix docs folder name in HOWTORELEASE
+* Added \`warns\` to assert warnings are thrown
+* Added myself to AUTHORS
+* Remove remnants from pytest
+* Sync with pytest/master
+* Use shields.io badge for coveralls
+* Use pypi version badge from shields.io
+* appveyor badge
+* appveyor scripts
+* appveyor integration
+* pass coveralls env
+* pass coveralls env
+* add travis badge
+* Remove hgignore and hgtags files
+* split travis jobs
+* use travis containers
+* Update sidebar links from Bitbucket to GitHub
+* Update CONTRIBUTING documentation with GitHub instructions
+* Change links from bitbucket to GitHub
+* Merged in RonnyPfannschmidt/pytest/regendoc-upgrade (pull request #303)
+* use regendoc normalization and regenerate docs
+* make regendoc a direct requirement
+* sort AUTHORS and add Janne
+* add Janne\`s changes to CHANGELOG
+* Merged in jpvanhal/pytest/include-setup-teardown-duration-in-junitxml (pull request #287)
+* Merged in issue735 (pull request #302)
+* Close branch issue735
+* use NameConstant node when it exists (fixes #735)
+* port typo fix
+* fix typo
+* fix issue741: make running output from testdir.run copy/pasteable
+* Merged in nicoddemus/pytest/issue-741-pytester-output (pull request #293)
+* add changelog for latest merge
+* Merged in The-Compiler/pytest (pull request #298)
+* Close branch pytest-2.7
+* Merged in flub/pytest (pull request #299)
+* Use platform.python\_version() to show Python version number
+* Merged in flub/pytest (pull request #297)
+* add in missing finalizer to doc example
+* Ignore emacs' .dir-locals.el file
+* Fix monkeypatch.setenv with string and raising=False
+* Add how to upload a wheel and tag the release
+* Added tag 2.7.1 for changeset edc1d080bab5
+* Regenerate docs using 2.7.1
+* Fix rest formatting and set final version number
+* Remove unused link
+* More updates/fixes to release process
+* Set 2.7.1 version number
+* remove adopt pytest note
+* remove adopt message
+* Make "running" output from testdir.run copy/pastable
+* another try at ignoring cx\_freeze during other tox envs
+* try to ignore cx\_freeze from regular pytest runs and see if travis is happy
+* make default depend on just published py/pluggy releases
+* Merged in hpk42/pytest-patches/plug30 (pull request #291)
+* use new pluggy api (now at 0.3.0) for adding hookcall monitoring and reraise real keyboard interrupts during inline pytest runs to allow for better stopping of the pytest tests
+* Merged in hpk42/pytest-patches/pluggy1 (pull request #290)
+* - make sure sub pytest runs use the same basetemp - depend on pluggy < 0.3
+* adapt to pluggy naming, rename pytest.hookspec\_opts to pytest.hookspec,s ame with hookimpl\_opts
+* Merged default into pluggy1
+* merge
+* - some more adaptation to most recent pluggy API - avoid using pluggin underscore api - show pluggy version in header
+* merge default
+* Update to pytest revision f78c26828b71
+* Merged in famousgarkin/pytest/famousgarkin/monkeypatchchdir-docstring-punctuation-1430453576841 (pull request #288)
+* merging pytest-2.7
+* Doc typo
+* Include setup and teardown in junitxml test durations
+* monkeypatch.chdir docstring punctuation
+* Use current regendocs location
+* Some more tweaks of how to release
+* Fix collapse false to look at unescaped braces only
+* Merged in hpk42/pytest-patches/testrefactor (pull request #284)
+* use runpytest() instead of runpytest\_inprocess if a test can run as subprocess as well
+* merge
+* streamline pytester API majorly:
+* - refine lsof checking - make runpytest() create an inline testing process instead of   a subprocess one
+* - make API between runpytest() and inline\_run() more similar - shift a number of tests to become inline\_run() tests
+* Merged in hpk42/pytest-patches/plugtestfix (pull request #283)
+* make test suite more tolerable against xdist causing warnings itself (which it does currently)
+* Merged in hpk42/pytest-patches/more\_plugin (pull request #282)
+* simplify load\_setuptools\_entrypoints and refine comments/docstrings
+* deprecate and warn about \_\_multicall\_\_ usage in hooks, refine docs about hook ordering, make hookwrappers respect tryfirst/trylast
+* actually revert back to using older simpler method for subset hook calling.  It is slightly more inefficient but easier to implement and read
+* merge contribution fix
+* Merged in contributing-fix (pull request #281)
+* Close branch contributing-fix
+* re-add tryfirst/trylast marker documentation, mark it as to be removed
+* move consider\_setuptools\_entrypoints to core pluginmanager
+* fix some doc strings
+* introduce a new subset\_hook\_caller instead of remove make\_hook\_caller and adapat and refine conftest/global plugin management accordingly
+* specialize make\_hook\_caller to work with a subset of the registered plugins
+* ensure proper get\_name references
+* simplify plugins bookkeeping further, refine API
+* simplify addition of method and scanning of plugins
+* simplify tracing mechanics by simply going through an indirection
+* avoid direct circular reference between config and pluginmanager
+* fix issue732: make sure removed plugins remove all hook callers
+* make pytest\_plugin\_registered a historic hook
+* Streamline data structures
+* properly perform hook calls with extra methods
+* introduce historic hook spec which will memorize calls to a hook in order to call them on later registered plugins
+* split plugin documentation into "using" and "writing plugins", referencing each other.  Also add tryfirst/trylast examples
+* add documented hookimpl\_opts and hookspec\_opts decorators so that one doesn't have to use pytest.mark or function-attribute setting anymore
+* remove \_do\_register indirection between PluginManager and PytestPluginManager
+* also incrementally remove plugins from hook callers
+* incrementally update hook call lists instead of regenerating the whole list on each registered plugin
+* allow to register plugins with hooks that are only added later
+* Merged in hpk42/pytest-patches/plugin\_no\_pytest (pull request #278)
+* Remove duplicated step in CONTRIBUTING
+* remove useless check
+* minimize HookCaller attributes: avoid passing in hookrelay to HookCallers
+* remove some redundancy when parsing import spec
+* streamline and document handling of builtin module special casing
+* merge default
+* merge cxfreeze fix
+* Merged in nicoddemus/pytest/cx\_freeze\_ubuntu (pull request #280)
+* Merged in hpk42/pytest-patches/reintroduce\_pytest\_fixture (pull request #279)
+* Fix py27-cxfreeze tox environment
+* accomodate Floris' comments. (The reason was i just reinstanted the old code :)
+* reintroduced \_pytest fixture of the pytester plugin which is used at least by pytest-xdist
+* reshuffle pluginmanager methods and add some docstrings
+* shuffle PluginManager method order to first have the public API and then the internal
+* remove shutdown logic from PluginManager and add a add\_cleanup() API for the already existing cleanup logic of the config object. This simplifies lifecycle management as we don't keep two layers of shutdown functions and also simplifies the pluginmanager interface
+* slight cleanup of plugin register() functionality
+* merge conftest management into PytestPluginManager
+* avoid undocumented special casing of "pytest\_" prefix
+* simplify exception capturing
+* move bookkeeping of conftest plugins in core pluginmanager to PytestPluginManager
+* avoid prepend to register api as it's redundant wrt to hooks
+* minimize HookRelay to become a pure container, refactor initialization and tests of plugin management to be a bit better split between pytest and pytest-independent bits
+* remove redundant py check as our setup.py excludes py <=1.4 already
+* Merged in hpk42/pytest-patches/nodrone (pull request #277)
+* strike drone badge as it doesn't make sense on PYPI (where the README is rendered)
+* Merged in hpk42/pytest-patches/prefer\_installed (pull request #275)
+* pytester: add method \`\`TmpTestdir.delete\_loaded\_modules()\`\` , and call it from \`\`inline\_run()\`\` to allow temporary modules to be reloaded
+* fix regendoc repository location on requirements-docs.txt
+* merge fix of issue553 on pytest-2.7
+* Merged in getsourcelines-error-issue-553-pytest2.7 (pull request #273)
+* Close branch getsourcelines-error-issue-553-pytest2.7
+* change test module importing behaviour to append to sys.path instead of prepending.  This better allows to run test modules against installated versions of a package even if the package under test has the same import root.  In this example::
+* Merged in hpk42/pytest-patches/systemexit (pull request #274)
+* backport Y->y fix from floris
+* fixed regression to 2.6.4 which surfaced e.g. in lost stdout capture printing when tests raised SystemExit
+* Handle inspect.getsourcelines failures in FixtureLookupError
+* Use capital Y as the tests look for that
+* Merged in issue660 (pull request #268)
+* Close branch issue660
+* Add wheel support in the changelog
+* Do imports at the head of the file
+* Some docstrings for the pytester plugin
+* Rename function and add nice docstring
+* Make argpase a dependency for python 3.0 and 3.1 too
+* Test for setuptools 0.7.2, turns out there's no 0.7 release on pypi
+* Improve version test (use pkg\_resources to compare versions). Also log failures to stderr
+* Add support for building proper wheels (universal and proper dependency evnironment markers for argparse/colorama if setuptools is new-ish)
+* add me as author of PR
+* merge pytest-2.7 branch
+* shift default to 2.8.0.dev
+* add changelog entries
+* Merged in release-checklist (pull request #266)
+* Close branch release-checklist
+* Merged in yield-experimental-docs (pull request #267)
+* Close branch yield-experimental-docs
+* Brought back discussion session
+* Fixed straightforward spelling
+* Removed "discussion" session
+* Reviewed wording about yield being a "new" feature
+* Removed note about yield fixtures being experimental
+* more streamlining of release checklist
+* - avoid setting of versions and targets in conf.py and Makefile   as discussed on pytest-dev
+* fix issue660: properly report fixture scope mismatches independent from fixture argument ordering
+* refine release process according to Bruno's feedback
+* add a release checklist
+* bump versions to dev, including changing the doc-install target to "dev" instead of "latest"
+* Added tag 2.7.0 for changeset 7ed701fa2fb5
+* bump verrsion to python2.7, fix a too precise test for windows, regen docs
+* revert verbosity
+* correct config
+* add verbosity to the tests
+* fix pep257
+* merge almarklein/default
+* merge pfctdayelise/issue463
+* merge with default
+* update changelog
+* Change docstring style
+* Raise specific MarkerError rather than generic ValueError
+* duplicate assignment
+* merge
+* fix issue435: make reload() work when assert rewriting is active. Thanks Daniel Hahler
+* Change string format syntax from {} to {0} for py2.6
+* address reviewer comments
+* Storing sys.last\_traceback: test, docs and changelog
+* allow postmortem debugging on failed test
+* Mention requirement for licensing information
+* add a project someone reported a while ago
+* remove default-verbose running
+* Merged in parametrized-fixture-override (pull request #257)
+* Close branch parametrized-fixture-override
+* Merged in blueyed/pytest/strip-docstrings-from-fixtures (pull request #260)
+* Fix \`reload()\` with modules handled via \`python\_files\`
+* Merged in eks/pytest/issue616 (pull request #258)
+* Sync with py.test 3896:1d2fa202e54c
+
+1.0.1
+-----
+
+* bump version
+* Silence dessert.rewrite logger to errors-only
+* Add Python 3.4 to test matrix
+
+1.0.0
+-----
+
+* Fix travis build
+* README
+* Initial version
+* Makefile
+* License and README
+* Remove unnecessary parts
+* Sync with pytest 3612:9a891617d5a2
+* Sync with pytest 3612:9a891617d5a2
+* Initial version
