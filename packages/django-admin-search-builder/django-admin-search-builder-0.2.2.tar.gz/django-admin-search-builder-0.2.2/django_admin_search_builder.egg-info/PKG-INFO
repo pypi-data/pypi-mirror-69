@@ -1,0 +1,68 @@
+Metadata-Version: 2.1
+Name: django-admin-search-builder
+Version: 0.2.2
+Summary: Django Admin Search Builder
+Home-page: https://github.com/UniversitaDellaCalabria/django-admin-search-builder
+Author: Giuseppe De Marco
+Author-email: giuseppe.demarco@unical.it
+License: Apache Software License
+Description: # django-admin-search-builder
+        Django app that makes you able to build advanced queries via admin filters UI
+        
+        This Application aims to give you the faster and easier way to build and run advanced queries through the Django Admin ModelAdmin User Interface, using Django's ORM. See the example project and the gallery.
+        
+        ### Setup
+        
+        ````
+        pip install django-admin-search-builder
+        ````
+        
+        in `settings.INSTALLED_APPS` add
+        ````
+            'admin_adv_search_builder',
+        ````
+        
+        in your ModelAdmin, use the following example
+        ````
+        from admin_adv_search_builder.filters import AdvancedSearchBuilder
+        from django.contrib import admin
+        
+        from . models import Identity
+        
+        
+        @admin.register(Identity)
+        class IdentityAdmin(admin.ModelAdmin):
+            list_filter   = (AdvancedSearchBuilder,)
+        ````
+        
+        #### Example
+        
+        ````
+        pip install -r requirements.xt
+        
+        cd example
+        ./manage.py migrate
+        ./manage.py createsuperuser
+        ./manage.py loaddata identity_dumps.json
+        ./manage.py runserver
+        ````
+        
+        #### Gallery
+        ![Alt text](images/1.png)
+        
+        
+        #### Authors
+        
+        Giuseppe De Marco
+        
+Platform: UNKNOWN
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 2.0
+Classifier: Framework :: Django :: 3.0
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Description-Content-Type: text/markdown
