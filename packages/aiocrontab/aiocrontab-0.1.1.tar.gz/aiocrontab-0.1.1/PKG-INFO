@@ -1,0 +1,51 @@
+Metadata-Version: 2.1
+Name: aiocrontab
+Version: 0.1.1
+Summary: Crontab implementation in asyncio 
+License: MIT
+Author: Bhavesh Praveen
+Author-email: bhavespraveen.dev@gmail.com
+Requires-Python: >=3.7,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Requires-Dist: croniter (>=0.3.31,<0.4.0)
+Requires-Dist: typing_extensions; python_version >= "3.7" and python_version < "3.8"
+Description-Content-Type: text/markdown
+
+# AIOCRONTAB
+
+Sample project to "flex" my asyncio skills.
+
+
+### Usage
+
+```python
+import time
+
+import aiocrontab
+
+
+@aiocrontab.register("*/5 * * * *")
+def print_every_five_mminutes():
+    print(f"{time.ctime()}: Hello World!!!!!")
+
+@aiocrontab.register("* * * * *")
+def print_every_mminute():
+    print(f"{time.ctime()}: Hello World!")
+
+
+aiocrontab.run()
+```
+
+**TODO**
+
+- [ ] support for diff timezones
+- [ ] support for async task
+- [x] take logger as dependency
+- [ ] Add more meaningful tests
+- [x] fix mypy errors
+- [ ] document the codebase
+- [ ] document usage in readme
+
