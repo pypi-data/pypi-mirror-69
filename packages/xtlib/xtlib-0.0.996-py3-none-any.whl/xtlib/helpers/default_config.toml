@@ -1,0 +1,217 @@
+#-------------------------------------------------------------------------------------------------------------------
+# config.toml: configuration file for XT.  
+#
+#    The contents of this file contain the default settings for how XT should run your various ML apps on various machines 
+#    (local machine, remote boxes, and Azure Batch).  Many of the settings can be overridden by the various XT command 
+#    options (see "xt help commands" for more details).
+#
+#    Detailed instructions for getting started with this config file are available in the "XT Configuration" document.
+#-------------------------------------------------------------------------------------------------------------------
+
+[core]
+# specifies the default STORE and COMPUTE for XT
+store-type = "azure-store"              # use "file-store" for FILE-based STORE, "azure-store" for Azure storage
+file-store-path = "~/.xt/xt-store"      # the local/shared directory for FILE-based STORE
+box = "local"                           # default box to run job on
+pool = ""                               # default pool of boxes (or 'azure-batch') to run job on
+username = ""                           # used to log the user associated with runs created by the current user
+
+[azure]
+# use the Azure portal (https://azure.microsoft.com/en-us/features/azure-portal/, use your Microsoft login/alias):
+#   - to create a storage service instance for XT to use
+#   - to create a batch service instance for XT to use
+
+# Azure Storage service for XT     (Azure portal: select the storage instance, select the "keys" vertical tab)
+storage-name = "xxxxxxx"
+storage-key = "xxxxxxx"
+
+# Azure Batch service for XT  (Azure portal: select the batch instance, select the "keys" vertical tab)
+batch-name = "xxxxx"
+batch-key = "xxxxxx"
+batch-url = "xxxxxx"
+
+# Azure batch settings
+vm-size = "Standard_NC6"            # type of computer to use.  "Standard_NC6" is a good GPU option to start with.
+azure-image = "dsvm"                # defined below, in the [azure-images] section
+nodes = 1                           # default number of azure-batch nodes
+low-pri = 0                         # default # of low-priority (preemptable) nodes
+
+[azure-container-registry]
+login-server = "xxxxxx"
+username = "xxxxxxx"
+password = "xxxxxxx"
+login = true                        # when true, xt will log docker into ACR before the docker run is executed
+
+[azure-images]
+dsvm = {offer="linux-data-science-vm-ubuntu", publisher="microsoft-dsvm", sku="linuxdsvmubuntu", node-agent-sku-id="batch.node.ubuntu 16.04", version = "latest"}
+ubuntu18 = {publisher="Canonical", offer="UbuntuServer", sku="18.04-LTS", node-agent-sku-id="batch.node.ubuntu 18.04", version = "latest"}
+
+[azure-aml]
+# not currently used
+subscription-id = 'xxxxxxx'         # the Azure subscription id you want to use VM management
+resource-group = 'xxxxxx'           # this is the group that new AML workspaces and VM's will be created within
+location = 'xxxxx'                  # the Azure location where the workspaces/VM's are located (e.g., "eastus")
+
+[azure-active-directory]
+# not currently used
+client-id = "xxxxxx"
+secret = 'xxxxxxx'
+tenant = 'xxxxxxxx' 
+
+[general]
+workspace = "ws1"                   # name of current workspace 
+before-files = ["**"]               # specifies input files (for capture to STORE and deployment to compute nodes)
+after-files = ["*", "output/*"]     # specifies output files (for capture from compute node to STORE)
+run-cache-dir = "~/.xt/runs-cache"  # where we cache run information (SUMMARY and ALLRUNS)
+log = true                # specifies if experiments are logged to STORE
+capture = "all"           # specifies which files of experiment are captured (none, before, after, all)
+xtlib-capture = false     # upload XTLIB sources files for each run and use for controller and ML app
+scrape = true             # specifies if stdout is scraped for hyperparameters and metrics
+notes = "none"            # control when user is prompted for notes (none, before, after, all)
+framework = "pytorch"     # XT will try to use this framework when generating code
+attach = true             # when true, xt will automatically attach to output of first run of new job
+auto-start = false        # when true, the controller is automatically started on 'status' cmd
+diagnostics = false       # when true, print diagnostic msgs as XT is run
+raise = false             # show stack trace for errors
+tqdm-enabled = false      # when true, use tqdm progress bar for downloading files
+omit = [".git", "__pycache__"]    # directories and files to omit when capturing before/after files
+
+[hp-search]
+arg-prefix = "--"               # prefix for hp search generated cmdline args
+hx-metric = "reward"            # name of score to study in Hyperparameter Explorer
+hx-cache-dir = "c:/hx_cache"    # directory hx uses for caching experiment runs 
+aggregate-dest = "job"          # set to "job", "experiment", or "none"
+search-type = "random"          # default search type
+
+[reports]
+sort = "name"                   # default column sort for experiment list (name, value, status, duration)
+reverse = false                 # if experiment sort should be reversed in order    
+max-width = 30                  # max width of any column
+precision = 3                   # number of fractional digits to display for float values
+uppercase-hdr   = true            # show column names in uppercase letters
+right-align-numeric = true      # right align columns that contain int/float values
+truncate-with-ellipses = true   # if true, "..." added at end of truncated column headers/values
+
+# standard column names:
+#   - app (the application associated with the run - from [apps] section below)
+#   - box (the box_name that the app ran on)
+#   - description (text description associated with the run)
+#   - duration (how long the app has been queue or running)
+#   - ended (the date/time the app finished running)
+#   - experiment (the experiment associated with the run - from [apps] section below)
+#   - exit-code (integer value returned when ML app exited)
+#   - from-host (the hostname of the computer where the run was launched)
+#   - job (the job_id associated with the run)
+#   - name (run name)
+#   - path (full path of ML program file being run)
+#   - target (base name of ML program file being run)
+#   - pool (the pool_name used by the run)
+#   - repeat (the repeat value specified for the run)    
+#   - started (the date/time the app was queued or started running)
+#   - status (status of the run)
+#   - username (the username that launched the run)
+#   - workspace (workspace the run was created within)
+#   - restarts (number of restarts for the run, as with azure-batch low-priority nodes)
+
+# "report-cols" defines the columns to show (and their order) for the "list runs" cmd.  The columns listed 
+# should be a standard column (see above list) or a custom hyperparameter or metric.  From this list, only the columns 
+# that are available from the selected runs (standard cols, hyperparameters, and metrics) will be shown.
+report-cols = ["name", "app", "experiment", "target", "description", "box", "status", "lr", "momentum", "optimizer", 
+    "step", "epoch", "steps", "epochs", "train-loss", "train-acc", 
+    "dev-loss", "dev-acc", "dev-em", "dev-f1", "test-loss", "test-acc", "duration"]
+
+[metrics]
+# these entries define how to roll-up metrics from a run (using the min, max, last, or mean) into a single
+# value that is logged and used by the "list exper" command.  They can also specify the expected bounds of the
+# metric (used by the Hyperparameter Explorer tool).
+#
+# you can edit this to add your own metrics.  roll-up values should be one of: min, max, last, mean.
+train-loss = {roll-up="min", bounds=[0,1]}
+train-ppl = {roll-up="min"}
+train-acc = {roll-up="max", bounds=[0,1]}
+train-em = {roll-up="max", bounds=[0,1]}
+train-f1 = {roll-up="max", bounds=[0,1]}
+
+dev-loss = {roll-up="min", bounds=[0,1]}
+dev-ppl = {roll-up="min"}
+dev-acc = {roll-up="max", bounds=[0,1]}
+dev-em = {roll-up="max", bounds=[0,1]}
+dev-f1 = {roll-up="max", bounds=[0,1]}
+
+test-acc = {roll-up="max", bounds=[0,1]}
+test-loss = {roll-up="min", bounds=[0,1]}
+test-error = {roll-up="min", bounds=[0,1]}
+test-em = {roll-up="max", bounds=[0,1]}
+test-f1 = {roll-up="max", bounds=[0,1]}
+
+reward = {roll-up="mean"}
+
+[boxes]
+# These section let you define boxes for running your experiments.
+# here are some examples - replace these with your own local ML boxes and Azure provisioned VM's.
+#
+# REQUIREMENTS:
+# they will need to have ports 22 and 18861 open for incoming messages to work with XT.  
+
+# boxes used for both COMPUTE and XT client app (for these, name must be the HOSTNAME of the machine)
+my-desktop-hostname = {address="username@52.170.38.34", os="windows", box-class="windows", max-runs=1}
+my-laptop-hostname = {address="username@52.170.38.22", os="windows", box-class="windows", max-runs=1}
+my-home-hostname = {address="username@52.170.38.78", os="windows", box-class="windows", max-runs=1}
+
+# for COMPUTE boxes (for these, name can be a friendly name you create for use with XT)
+vm1 = {address="username@52.170.38.14", os="linux", box-class="linux", max-runs=1}
+vm15 = {address="username@104.211.38.125", os="linux", box-class="linux", max-runs=1}
+vm100 = {address="username@40.76.209.50", os="linux", box-class="linux", max-runs=1}
+vm101 = {address="username@137.117.99.158", os="linux", box-class="linux", max-runs=1}
+
+[pools]
+# these are groups of boxes run, used to launch a job on multiple boxes at once.  You can also 
+# define azure-batch pools, with a specified number of nodes.
+gpu-pool = ["vm1", "vm15"]
+vm100-pool = ["vm100", "vm101"]
+azure-1x = {service="azure-batch", vm-size="Standard_NC6", vm-image="dsvm", nodes=1, low-pri=0}
+azure-2x = {service="azure-batch", vm-size="Standard_NC6", vm-image="dsvm", nodes=2, low-pri=0}
+azure-2x-low = {service="azure-batch", vm-size="Standard_NC6", vm-image="dsvm", nodes=0, low-pri=2}
+
+[box-class.windows]
+
+[box-class.linux]
+shell-launch-prefix = "/bin/sh --login"
+
+[box-class.dsvm]
+shell-launch-prefix = "/bin/sh --login"
+
+[apps]
+# apps define a mapping from the ML programs you run (by matching a subset of their "match-path" from below) to 
+# information about the environment needed to run.  Create an [apps.xxx] section for each of your ML apps
+# that you will run (replace the "xxx" with a simple name for your app).  Each app section should define:
+#
+#   - match-path: a (subset of) the path to your app
+#   - experiment: the experiment name to associate with runs of your app
+#   - prep.xxx: a script to prepare the box your app will run on.  "xxx" is the box-class of the box.
+#   - parent-prep.xxx: a script to prepare the box for multiple instances of your app (if specified, runs before prep.xxx).
+
+# this is an example of how to define a ML app for XT (feel free to edit or delete)
+[apps.example-app]
+match-path = "example-app.py"
+experiment = "example-exper"
+prep.windows = ["call conda activate my-conda"]
+prep.linux = ["conda activate my-conda"]   
+parent-prep.dsvm = ["conda activate py36",  "pip install --user -r requirements.txt", "python example-app.py --download-only"]
+prep.dsvm = ["conda activate py36"]
+
+# this is for the XT controller app (do not remove)
+[apps.xt-controller]
+match-path = "xtlib/controller.py"
+experiment = "na"
+prep.windows = ["call conda activate $CURRENT_CONDA_ENV"]
+prep.linux = ["conda activate py36"]   
+prep.dsvm = ["conda activate py36", "pip install --user xtlib"]
+
+# this is for all apps not matched to the above (do not remove)
+[apps.default]
+match-path = ""
+experiment = "default-exper"
+prep.windows = ["call conda activate $CURRENT_CONDA_ENV"]
+prep.linux = ["conda activate py36"]   
+prep.dsvm = ["conda activate py36"]
