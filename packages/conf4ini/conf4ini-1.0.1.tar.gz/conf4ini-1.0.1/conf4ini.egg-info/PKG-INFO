@@ -1,0 +1,54 @@
+Metadata-Version: 2.1
+Name: conf4ini
+Version: 1.0.1
+Summary: a simple config reader for *.ini files
+Home-page: https://github.com/tony-is-coding/conf4ini
+Author: tony-is-coding
+Author-email: newbiwtan@163.com
+Maintainer: tony-is-coding
+License: UNKNOWN
+Description: gen4id
+        ======
+        
+        Installation
+        >>>>>>>>>>>>>
+        
+        .. code-block::
+        
+            pip install conf4ini
+        
+        Usage
+        >>>>>>>>
+        
+        .. code-block::
+        
+            from pathlib import Path
+            from pprint import pprint
+        
+            from conf4ini import Config
+        
+            # not specified path
+            conf_no_path = Config()
+            pprint(conf_no_path)
+        
+            with specified the settings path
+            conf_with_path = Config(Path(__file__).resolve().parent / 'dev')
+            pprint(conf_with_path)
+        
+        
+        More
+        >>>>>>>>>
+        
+        To Be Continue ....
+        
+        
+        
+        
+        
+        
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Provides-Extra: docs
