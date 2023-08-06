@@ -1,0 +1,72 @@
+Metadata-Version: 2.1
+Name: ezFlashCLI
+Version: 0.0.6
+Summary: Command line tool to manipulate microcontroller flash
+Home-page: https://github.com/ezflash/ezFlashCLI.git
+Author: zflash
+Author-email: info@ezflash.org
+License: MIT license
+Keywords: flash,programmer
+Platform: UNKNOWN
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+
+# ezFlashCLI
+
+[![Build Status](https://travis-ci.org/ezflash/ezFlashCLI.svg?branch=master)](https://travis-ci.org/ezflash/ezFlashCLI)
+[![Documentation Status](https://readthedocs.org/projects/ezflashcli/badge/?version=latest)](https://ezflashcli.readthedocs.io/en/latest/?badge=latest)
+
+Command line tools to flash Dialog Smartbond™ device family. 
+
+The tool relies on Segger J-Link™ library to control the Smartbond SWD interface. The J-Link probe is available on all Smartbond development kits. 
+
+For more details, please look at our [Documentation](https://ezflashcli.readthedocs.io/)
+
+## Supported platforms
+
+* macOS
+* windows 10
+
+## Supported devices
+
+* DA14531
+* DA1469x:
+    * DA14691
+    * DA14695
+    * DA14697
+    * DA14699
+
+## Installation
+
+```
+> pip install ezFlashCLI
+```
+## Example
+
+### erase Flash
+```
+> ezFlashCLI erase_flash
+```
+
+### Read Flash
+```
+> ezFlashCLI read_flash 0x0 128
+```
+### Program Flash
+```
+> ezFlashCLI write_image <path to bin file>
+```   
+The tool will automatically make the bin file bootable if needed
+
+
+
+
+
