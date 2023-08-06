@@ -1,0 +1,35 @@
+Metadata-Version: 2.1
+Name: XBRLAssembler
+Version: 0.2
+Summary: An assembler for XBRL Documents into pandas
+Home-page: https://gitlab.com/Reggles44/xbrlassembler
+Author: Reggles
+Author-email: reginaldbeakes@gmail.com
+License: UNKNOWN
+Description: # XBRL Assembler
+        [![pipeline status](https://gitlab.com/Reggles44/xbrlassembler/badges/master/pipeline.svg)](https://gitlab.com/Reggles44/xbrlassembler/-/commits/master)
+        [![coverage report](https://gitlab.com/Reggles44/xbrlassembler/badges/master/coverage.svg)](https://gitlab.com/Reggles44/xbrlassembler/-/commits/master)
+        
+        ``XBRLAssembelr`` is a parsing library for putting xbrldocuments from the sec together into ``pandas.Dataframe``.
+        
+        ## Installation
+        
+        Use the package manager [pip](https://pip.pypa.io/en/stable/) to install XBRLAssembler.
+        
+        ```bash
+        pip install xbrlassembler
+        ```
+        
+        ## Usage
+        
+        ```python
+        from xbrlassembler import XBRLAssembler, FinancialStatement
+        assembler = XBRLAssembler(xbrlafiles)
+        income_statement = assembler.get(FinancialStatement.INCOME_STATEMENT)
+        balance_sheet = assembler.get(FinancialStatement.BALANCE_SHEET)
+        ```
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
