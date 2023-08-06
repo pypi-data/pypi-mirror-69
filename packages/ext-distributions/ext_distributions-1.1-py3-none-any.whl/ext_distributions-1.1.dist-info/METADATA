@@ -1,0 +1,58 @@
+Metadata-Version: 2.1
+Name: ext-distributions
+Version: 1.1
+Summary: Gaussian distributions and Binomial distributions
+Home-page: UNKNOWN
+Author: ishan
+Author-email: ishan2198@hotmail.com
+License: UNKNOWN
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
+
+##ext-distributions
+
+Package currently supports calculation and visualization of binomial and gaussian distributions 
+
+## Installation
+
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install ext_distributions.
+
+```bash
+pip install ext-distributions
+```
+
+## Usage Gaussian distribution
+
+```python
+from ext_distributions import Gaussian
+
+gaussian = Gaussian()
+gaussian.read_data_file('filename')#The txt file should have one number (float) per line
+gaussian.plot_histogram()#Output's a histogram of current data file
+gaussian.plot_histogram_pdf()#plot the normalized histogram of the data and a plot of the probability density function along the same range
+```
+
+## Usage Binomial distribution
+
+```python
+from ext_distributions import Binomial
+
+binomial = Binomial()
+binomial.read_data_file('filename')#The txt file should should contain only 0 or 1 per line(1=positive case)
+binomial.replace_stats_with_data()#updates mean and standard deviation(do use it after reading a text file)
+binomial.plot_bar()#Output's a bargraph of current data file
+binomial.plot_bar_pdf()#Plot's the pdf of the binomial distribution
+```
+
+## Usage Other
+```python
+#Adding of two gaussian objects
+gaussian_three = gaussian_one + gaussian_two
+
+#Adding of two binomial objects with same probability(p) value
+binomial_three = binomial_one + binomial_two
+```
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
+
