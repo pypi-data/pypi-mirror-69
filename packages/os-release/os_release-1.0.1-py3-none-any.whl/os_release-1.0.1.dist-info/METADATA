@@ -1,0 +1,52 @@
+Metadata-Version: 2.1
+Name: os-release
+Version: 1.0.1
+Summary: A module for reading systemd's os-release information on modern Linux distributions.
+Home-page: https://github.com/zegelin/py-os-release
+Author: Adam Zegelin
+Author-email: adam@zegelin.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Topic :: Database
+Description-Content-Type: text/markdown
+Requires-Dist: arpeggio
+Provides-Extra: docs
+Requires-Dist: sphinx ; extra == 'docs'
+Requires-Dist: sphinx-autodoc-typehints ; extra == 'docs'
+Requires-Dist: sphinx-paramlinks ; extra == 'docs'
+Requires-Dist: sphinx-rtd-theme ; extra == 'docs'
+
+# os-release
+
+[![PyPI](https://img.shields.io/pypi/v/os-release)](https://pypi.org/project/os-release)
+[![Documentation Status](https://readthedocs.org/projects/python-os-release/badge/?version=latest)](https://python-os-release.readthedocs.io/en/latest/?badge=latest)
+
+_os-release_ is a simple Python module for reading systemd's `os-release` information on modern Linux distributions.
+
+It parses the contents of systemd's `os-release`
+([os-release(5)](https://www.freedesktop.org/software/systemd/man/os-release.html)) files:
+`/etc/os-release` or `/usr/lib/os-release`.
+
+## Installation
+
+_os-release_ is available on [PyPI](https://pypi.org/project/os-release).
+
+Add it to your projects `setup.py` `install_requires`:
+
+    install_requires=['os-release']
+
+or install it directly via `pip`:
+
+    $ pip install os-release
+
+Alternatively, clone this Git repository and run:
+
+    $ python setup.py install
+
+## Documentation:
+
+Documentation for _os-release_ is available on [Read the Docs](https://python-os-release.readthedocs.io/en/latest/).
+
