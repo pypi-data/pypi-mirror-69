@@ -1,0 +1,40 @@
+Metadata-Version: 2.1
+Name: paperscrollsdk
+Version: 1.0.0
+Summary: A simple wrapper for VK game PaperScroll!
+Home-page: https://github.com/KotRikD/paper-scroll-sdk-py
+Author: KotRik
+Author-email: supadmin@kotrik.ru
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
+
+﻿# PaperScroll SDK для Python3.6+
+**PaperScroll SDK для Python3.6+** простая реализация методов API PaperScroll
+
+[Документация PaperScroll API](https://paperscroll.docs.apiary.io)
+
+### Установка
+
+```js
+$ pip install paperscrollsdk
+```
+
+### Пример использования
+
+```python
+from paperscrollsdk import PaperScroll
+
+paperClient = PaperScroll(merchant_id, "access_token")
+paperApi = paperClient.getApi()
+
+someMerchants = paperApi.getMerchants()
+print(someMerchants)
+```
+
+### Баги и PR
+Репозиторий открыт для изменений! Если вы заметили какую-то ошибку связанную с кодом, откройте ***Issue*** и если знаете, как эту ошибку решить, открывайте ***Pull Request***
+
