@@ -1,0 +1,73 @@
+Metadata-Version: 2.1
+Name: django-analyses
+Version: 0.1.0
+Summary: A reusable Django app to manage analyses.
+Home-page: https://github.com/TheLabbingProject/django_analyses
+Author: Zvi Baratz
+Author-email: baratzz@pm.me
+License: AGPLv3
+Keywords: django research analysis pipeline
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django :: 2.2
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Description-Content-Type: text/markdown
+Requires-Dist: Django (==3.*)
+Requires-Dist: djangorestframework (~=3.11)
+Requires-Dist: django-environ (~=0.4)
+Requires-Dist: django-extensions (~=2.2)
+Requires-Dist: django-filter (~=2.2)
+Requires-Dist: django-model-utils (~=4.0)
+Requires-Dist: numpy (~=1.18)
+Requires-Dist: psycopg2-binary (~=2.8)
+Provides-Extra: dev
+Requires-Dist: black (==19.10b0) ; extra == 'dev'
+Requires-Dist: coverage (~=4.5) ; extra == 'dev'
+Requires-Dist: factory-boy (~=2.12) ; extra == 'dev'
+Requires-Dist: flake8 (~=3.7) ; extra == 'dev'
+Requires-Dist: ipython (~=7.10) ; extra == 'dev'
+Requires-Dist: numpy (~=1.18) ; extra == 'dev'
+Requires-Dist: pytest (~=5.3) ; extra == 'dev'
+Requires-Dist: sphinx (~=3.0) ; extra == 'dev'
+Requires-Dist: sphinx-rtd-theme (~=0.4) ; extra == 'dev'
+
+[![PyPI version](https://img.shields.io/pypi/v/django-analyses.svg)](https://pypi.python.org/pypi/django-analyses/)
+[![PyPI status](https://img.shields.io/pypi/status/django-analyses.svg)](https://pypi.python.org/pypi/django-analyses/)
+[![TheLabbingProject](https://circleci.com/gh/TheLabbingProject/django_analyses.svg?style=shield)](https://app.circleci.com/pipelines/github/TheLabbingProject/django-analyses)
+[![Documentation Status](https://readthedocs.org/projects/django-analyses/badge/?version=latest)](http://django-analyses.readthedocs.io/?badge=latest)
+[![codecov.io](https://codecov.io/gh/TheLabbingProject/django_analyses/coverage.svg?branch=master)](https://codecov.io/github/TheLabbingProject/django_analyses?branch=master)
+
+# django-analyses
+
+A reusable Django app to manage analyses.
+
+## Quick start
+
+1. Add "django_analyses" to your INSTALLED_APPS setting:
+
+<pre>
+    INSTALLED_APPS = [
+        ...
+        'django_analyses',
+    ]
+</pre>
+
+2. Include the `analyses` URLconf in your prject urls.py:
+
+<pre>
+    path("api/", include("django_analyses.urls", namespace="analyses")),
+</pre>
+
+3. Run `python manage.py migrate` to create the analyses models.
+
+4. Start the development server and visit http://127.0.0.1:8000/admin/.
+
+5. Visit http://127.0.0.1:8000/api/analyses/.
+
+
