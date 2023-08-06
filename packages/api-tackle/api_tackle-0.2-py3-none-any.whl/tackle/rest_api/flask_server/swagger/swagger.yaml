@@ -1,0 +1,96 @@
+swagger: "2.0"
+
+info:
+  description: This is an example swagger spec.
+  version: 0.1.dev1
+  title: Example API
+  contact:
+    name: Bernardt Duvenhage, Feersum engine
+    url: www.feersum.io
+    email: bernardt@feersum.io
+
+host: 127.0.0.1:7100
+basePath: /
+
+schemes:
+  - https
+#  - http
+
+consumes:
+- application/json
+produces:
+- application/json
+
+# Global security (applies to all operations):
+securityDefinitions:
+   APIKeyHeader_old:
+     type: apiKey
+     x-apikeyInfoFunc: tackle.rest_api.flask_server.controllers.controller_util.api_key_auth
+     in: header
+     name: AUTH_TOKEN
+   APIKeyHeader:
+     type: apiKey
+     x-apikeyInfoFunc: tackle.rest_api.flask_server.controllers.controller_util.api_key_auth
+     in: header
+     name: X-Auth-Token
+
+security:
+- APIKeyHeader_old: []
+- APIKeyHeader: []
+
+tags:
+- name: health
+  description: An enpoint to check if the service is alive and well.
+
+
+paths:
+###################################
+###################################
+########
+## health root
+########
+  /health:
+    parameters:
+    - $ref: '#/parameters/caller'
+
+    get:
+      tags:
+      - health
+      summary: An endpoint to check if the service is alive and well.
+      x-swagger-router-controller: tackle.rest_api.flask_server.controllers
+      operationId: health_controller.get_status
+      description: Check if the service is alive and well.
+      responses:
+        200:
+          description: service is healthy
+        400:
+          description: bad request
+        401:
+          $ref: "#/responses/UnauthorizedError"
+
+
+###################################
+# Descriptions of common parameters
+###################################
+parameters:
+  caller:
+    in: header
+    name: X-CALLER
+    type: string
+    required: false
+
+
+##################################
+# Descriptions of common responses
+##################################
+responses:
+  UnauthorizedError:
+    description: API key is missing or invalid
+    headers:
+      WWW_Authenticate:
+        type: string
+
+####################################
+# Descriptions of common definitions
+####################################
+definitions:
