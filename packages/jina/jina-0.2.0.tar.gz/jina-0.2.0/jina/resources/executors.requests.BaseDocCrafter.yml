@@ -1,0 +1,6 @@
+on:
+  ControlRequest:
+    - !ControlReqDriver {}
+  [SearchRequest, TrainRequest, IndexRequest]:
+    - !MIMEDriver {}
+    - !DocCraftDriver {}
