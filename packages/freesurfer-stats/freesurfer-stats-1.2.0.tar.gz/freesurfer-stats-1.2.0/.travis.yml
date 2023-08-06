@@ -1,0 +1,72 @@
+language: python
+
+python:
+- 3.5
+- 3.6
+- 3.7
+- 3.7-dev
+- 3.8
+- 3.8-dev
+
+# required for python >= 3.7
+dist: xenial
+
+env:
+# https://pypi.org/project/pandas/#history
+- PANDAS_VERSION=
+- PANDAS_VERSION=1.*
+- PANDAS_VERSION=0.25.*
+- PANDAS_VERSION=0.24.*
+- PANDAS_VERSION=0.23.*
+- PANDAS_VERSION=0.22.*
+- PANDAS_VERSION=0.21.*
+
+# https://travis-ci.org/fphammerle/freesurfer-volume-reader/builds/525556257
+matrix:
+  exclude:
+  # https://travis-ci.org/github/fphammerle/freesurfer-stats/jobs/683777317#L208
+  # https://github.com/pandas-dev/pandas/commit/18efcb27361478daa3118079ecb166c733691ecb#diff-2eeaed663bd0d25b7e608891384b7298R814
+  - python: 3.5
+    env: PANDAS_VERSION=1.*
+  - python: 3.7
+    env: PANDAS_VERSION=0.21.*
+  - python: 3.7
+    env: PANDAS_VERSION=0.22.*
+  - python: 3.7-dev
+    env: PANDAS_VERSION=0.21.*
+  - python: 3.7-dev
+    env: PANDAS_VERSION=0.22.*
+  # >/tmp/pip-install-g4jx0np4/numpy/_configtest.c:6: undefined reference to `exp'
+  # https://travis-ci.org/github/fphammerle/freesurfer-stats/jobs/683704331#L437
+  - python: 3.8
+    env: PANDAS_VERSION=0.21.*
+  # https://travis-ci.org/github/fphammerle/freesurfer-stats/jobs/683704330#L437
+  - python: 3.8
+    env: PANDAS_VERSION=0.22.*
+  - python: 3.8-dev
+    env: PANDAS_VERSION=0.21.*
+  - python: 3.8-dev
+    env: PANDAS_VERSION=0.22.*
+
+install:
+- pip install pipenv
+- pipenv sync --dev
+# ModuleNotFoundError: No module named 'importlib_metadata'
+# https://github.com/WanzenBug/pylint-import-requirements/issues/17
+- if python3 -c 'import sys; sys.exit(sys.version_info < (3, 8))'; then
+  pipenv graph;
+  pipenv install --dev importlib-metadata;
+  fi
+- if [ ! -z "$PANDAS_VERSION" ]; then
+    pipenv install --selective-upgrade "pandas==$PANDAS_VERSION";
+  fi
+- pipenv graph
+
+script:
+- pipenv run pylint --load-plugins=pylint_import_requirements freesurfer_stats
+- pipenv run pylint tests/*
+- pipenv run pytest --cov=freesurfer_stats --cov-report=term-missing --cov-fail-under=100
+
+after_success:
+- pip install coveralls
+- coveralls
