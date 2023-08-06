@@ -1,0 +1,16 @@
+######## rabbitmq | python
+qtype: qpython
+
+# cloudamqp | localhost. for rabbitmq creds
+server: localhost
+
+# number of workers plus buffer. makes workers independent of scheduling but cannot change tasks once in workerq.
+max_workerq: 10
+
+# may want to keep one for foreground OR reduce further to save connections
+max_workers: 8
+
+# pythonq ports. change if clash
+taskq_port: 4001
+workerq_port: 4002
+eventq_port: 4003
