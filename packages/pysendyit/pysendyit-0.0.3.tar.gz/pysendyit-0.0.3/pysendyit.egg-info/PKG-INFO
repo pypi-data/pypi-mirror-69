@@ -1,0 +1,44 @@
+Metadata-Version: 2.1
+Name: pysendyit
+Version: 0.0.3
+Summary: Un-Official Sendyit Python wrapper
+Home-page: https://github.com/0x6f736f646f/sendit-python
+Author: Rodney Osodo
+Author-email: blackd0t@protonmail.com
+License: MIT
+Description: # sendit-python
+        Python wrapper for Sendy's API. https://www.sendyit.com/
+        
+        ![Testing](https://github.com/0x6f736f646f/sendyit-python/workflows/Testing/badge.svg)
+        ![Creating a Release](https://github.com/0x6f736f646f/sendyit-python/workflows/Creating%20a%20Release/badge.svg)
+        ![Upload Python Package](https://github.com/0x6f736f646f/sendyit-python/workflows/Upload%20Python%20Package/badge.svg)
+        # Installation
+        ```sh
+        pip install pysendyit
+        ```
+        
+        Usage
+        -----
+        ```python
+        from pysendyit import Sendy
+        s = Sendy(base_url='http://your_sendy_url')
+        
+        # subscription
+        s.subscribe(name='John Doe', email='email@to.subscribe', list_id='the_list_id', 
+            custom_field1='custom_value1', custom_value2='custom_value2')
+        
+        # unsubscription
+        s.unsubscribe(email='email@to.unsubscribe', list_id='the_list_id')
+        ```
+        
+Keywords: pysendyit sendy wrapper api
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
